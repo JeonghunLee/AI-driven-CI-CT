@@ -1,0 +1,78 @@
+name: Continuous Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: Runner label selector
+        required: true
+        default: Default
+        type: choice
+        options: [Default, Windows, Linux]
+  issues:
+    types: [opened, edited]
+
+jobs:
+  prepare:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'test-request')
+    runs-on: ubuntu-latest
+    outputs:
+      run_ct: ${{ steps.select.outputs.run_ct }}
+      runs_on: ${{ steps.select.outputs.runs_on }}
+    steps:
+      - name: Select CT and runner labels
+        id: select
+        shell: bash
+        run: |
+          TEST_TYPE="pytest / CT"
+          RUNNER="${{ github.event.inputs.runner || 'Default' }}"
+
+          if [ "${{ github.event_name }}" = "issues" ]; then
+            BODY="${{ github.event.issue.body }}"
+            if ! echo "$BODY" | grep -qi "pytest / CT"; then
+              TEST_TYPE="skip"
+            fi
+            if echo "$BODY" | awk '/### Runner/{flag=1; next} /^### /{flag=0} flag' | grep -qi "Windows"; then
+              RUNNER="Windows"
+            elif echo "$BODY" | awk '/### Runner/{flag=1; next} /^### /{flag=0} flag' | grep -qi "Linux"; then
+              RUNNER="Linux"
+            fi
+          fi
+
+          if [ "$TEST_TYPE" = "skip" ]; then
+            echo "run_ct=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_ct=true" >> "$GITHUB_OUTPUT"
+          fi
+
+          case "$RUNNER" in
+            Windows) echo 'runs_on=["self-hosted","windows"]' >> "$GITHUB_OUTPUT" ;;
+            Linux) echo 'runs_on=["self-hosted","linux"]' >> "$GITHUB_OUTPUT" ;;
+            *) echo 'runs_on=["self-hosted"]' >> "$GITHUB_OUTPUT" ;;
+          esac
+
+  continuous-test:
+    needs: prepare
+    if: needs.prepare.outputs.run_ct == 'true'
+    runs-on: ${{ fromJson(needs.prepare.outputs.runs_on) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run pytest CT
+        run: pytest -q tests/pytest/test_cases --junitxml=reports/raw/ct-junit.xml
+      - name: Upload CT artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: continuous-test-${{ github.run_id }}
+          path: |
+            reports/raw
+            reports/logs
+            reports/json

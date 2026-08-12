@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: AI-driven CI/CT usage
+    url: https://github.com/JeonghunLee/AI-driven-CI-CT
+    about: Use Test Request issue form to run CI/CT tests.

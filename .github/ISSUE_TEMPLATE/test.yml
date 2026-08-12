@@ -1,0 +1,100 @@
+name: Test Request
+description: Request Unit Test or pytest/CT execution
+labels: ["test-request"]
+body:
+  - type: dropdown
+    id: test_type
+    attributes:
+      label: Test Type
+      options:
+        - Unit Test
+        - pytest / CT
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_category
+    attributes:
+      label: Test Category
+      options:
+        - Communication
+        - Timing
+        - Functional
+        - Performance
+        - Stability
+        - Regression
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_equipment
+    attributes:
+      label: Test Equipment
+      options:
+        - None
+        - FPGA
+        - Saleae
+        - Digilent
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_interface
+    attributes:
+      label: Test Interface
+      options:
+        - None
+        - USB
+        - UART
+        - JTAG
+        - Network
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_function
+    attributes:
+      label: Test Function
+      options:
+        - Connection
+        - Read / Write
+        - Timing
+        - Throughput
+        - Latency
+        - Stability
+        - Custom
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runner
+    attributes:
+      label: Runner
+      options:
+        - Default
+        - Windows
+        - Linux
+    validations:
+      required: true
+
+  - type: input
+    id: target_dut
+    attributes:
+      label: Target / DUT
+      placeholder: DUT name or id
+
+  - type: textarea
+    id: test_parameter
+    attributes:
+      label: Test Parameter
+      placeholder: key=value, JSON, or plain text
+
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: Expected Result
+
+  - type: textarea
+    id: additional_option
+    attributes:
+      label: Additional Option

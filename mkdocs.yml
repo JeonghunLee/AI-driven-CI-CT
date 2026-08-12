@@ -1,0 +1,5 @@
+site_name: AI-driven CI/CT Report
+docs_dir: docs
+nav:
+  - Test:
+      - Overview: test/index.md

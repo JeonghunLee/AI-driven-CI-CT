@@ -1,0 +1,78 @@
+name: Unit Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: Runner label selector
+        required: true
+        default: Default
+        type: choice
+        options: [Default, Windows, Linux]
+  issues:
+    types: [opened, edited]
+
+jobs:
+  prepare:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'test-request')
+    runs-on: ubuntu-latest
+    outputs:
+      run_unit: ${{ steps.select.outputs.run_unit }}
+      runs_on: ${{ steps.select.outputs.runs_on }}
+    steps:
+      - name: Select unit test and runner labels
+        id: select
+        shell: bash
+        run: |
+          TEST_TYPE="Unit Test"
+          RUNNER="${{ github.event.inputs.runner || 'Default' }}"
+
+          if [ "${{ github.event_name }}" = "issues" ]; then
+            BODY="${{ github.event.issue.body }}"
+            if ! echo "$BODY" | grep -qi "Unit Test"; then
+              TEST_TYPE="skip"
+            fi
+            if echo "$BODY" | awk '/### Runner/{flag=1; next} /^### /{flag=0} flag' | grep -qi "Windows"; then
+              RUNNER="Windows"
+            elif echo "$BODY" | awk '/### Runner/{flag=1; next} /^### /{flag=0} flag' | grep -qi "Linux"; then
+              RUNNER="Linux"
+            fi
+          fi
+
+          if [ "$TEST_TYPE" = "skip" ]; then
+            echo "run_unit=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_unit=true" >> "$GITHUB_OUTPUT"
+          fi
+
+          case "$RUNNER" in
+            Windows) echo 'runs_on=["self-hosted","windows"]' >> "$GITHUB_OUTPUT" ;;
+            Linux) echo 'runs_on=["self-hosted","linux"]' >> "$GITHUB_OUTPUT" ;;
+            *) echo 'runs_on=["self-hosted"]' >> "$GITHUB_OUTPUT" ;;
+          esac
+
+  unit-test:
+    needs: prepare
+    if: needs.prepare.outputs.run_unit == 'true'
+    runs-on: ${{ fromJson(needs.prepare.outputs.runs_on) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run unit tests
+        run: pytest -q tests/unittest/python --junitxml=reports/raw/unit-junit.xml
+      - name: Upload unit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-${{ github.run_id }}
+          path: |
+            reports/raw
+            reports/logs
+            reports/json
