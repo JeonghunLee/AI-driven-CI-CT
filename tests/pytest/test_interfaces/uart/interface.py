@@ -1,4 +1,6 @@
 class UARTInterface:
+    """Loopback mock for CT scaffolding: reads return the most recent write."""
+
     def __init__(self, baudrate: int = 921600):
         self.baudrate = baudrate
         self.connected = False

@@ -22,13 +22,15 @@ jobs:
     steps:
       - name: Select unit test and runner labels
         id: select
+        env:
+          BODY: ${{ github.event.issue.body || '' }}
+          RUNNER_INPUT: ${{ github.event.inputs.runner || 'Default' }}
         shell: bash
         run: |
           TEST_TYPE="Unit Test"
-          RUNNER="${{ github.event.inputs.runner || 'Default' }}"
+          RUNNER="$RUNNER_INPUT"
 
           if [ "${{ github.event_name }}" = "issues" ]; then
-            BODY="${{ github.event.issue.body }}"
             if ! echo "$BODY" | grep -qi "Unit Test"; then
               TEST_TYPE="skip"
             fi

@@ -1,4 +1,11 @@
 def ollama_first_analysis(result: dict, parsed_logs: dict) -> dict:
+    """Stub Ollama-first analyzer used for initial repository bootstrap.
+
+    Escalation policy in this stub:
+    - PASS => no escalation.
+    - FAIL with one error => low-complexity failure (no escalation).
+    - FAIL with two or more errors => complex failure (Codex escalation).
+    """
     status = result.get("status", "FAIL")
     errors = parsed_logs.get("errors", [])
 

@@ -5,7 +5,7 @@ from tools.ollama.analyzer import ollama_first_analysis
 from tools.result_normalizer.normalize import normalize_result
 
 
-def test_result_pipeline_generates_issue_markdown():
+def test_result_pipeline_generates_issue_markdown_without_escalation():
     raw_result = {
         "test_id": "CT-UART-001",
         "execution_id": "20260812-001",
