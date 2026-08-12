@@ -1,0 +1,65 @@
+name: Continuous Test
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      test_id:
+        description: Test ID
+        required: true
+        default: CT-UART-001
+      runner:
+        description: Runner selector (Default, Windows, Linux)
+        required: true
+        default: Default
+
+jobs:
+  continuous-test:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'run-test'
+    runs-on: self-hosted
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      issues: write
+    env:
+      TEST_ID: ${{ inputs.test_id || 'CT-UART-001' }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: python -m pip install -r requirements.txt
+      - name: Read test request
+        id: request
+        run: python -m tools.issue_parser
+      - name: Run unit tests
+        if: steps.request.outputs.test_type == 'Unit Test'
+        run: python -m pytest tests/unittest -s --junitxml=reports/raw/unit-junit.xml
+      - name: Normalize unit-test result
+        if: always() && steps.request.outputs.test_type == 'Unit Test'
+        run: python -m tools.result_normalizer reports/raw/unit-junit.xml --test-id UNIT-TEST
+      - name: Run mock CT
+        if: steps.request.outputs.test_type != 'Unit Test'
+        run: python -m pytest tests/pytest/test_cases/timing/test_uart_timing.py -m ct -s
+      - name: Analyze and generate reports
+        if: always()
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_SHA: ${{ github.sha }}
+          RUNNER_NAME: ${{ runner.name }}
+        run: python -m tools.pipeline --latest --docs
+      - name: Comment on request issue
+        if: always() && github.event.issue.number
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m tools.github_reporter --latest --issue "${{ env.ISSUE_NUMBER }}"
+      - name: Upload CT evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.TEST_ID }}-${{ github.run_id }}
+          path: |
+            reports/
+            docs/test/ct/
+          if-no-files-found: warn

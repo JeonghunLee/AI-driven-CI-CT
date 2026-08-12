@@ -1,0 +1,26 @@
+name: Unit Test
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit-test:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pytest tests/unittest --junitxml=reports/raw/unit-junit.xml
+      - name: Normalize unit-test result
+        if: always()
+        run: python -m tools.result_normalizer reports/raw/unit-junit.xml --test-id UNIT-TEST
+      - name: Upload unit-test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-${{ github.run_id }}
+          path: reports/
+          if-no-files-found: warn
