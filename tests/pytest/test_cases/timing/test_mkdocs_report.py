@@ -1,4 +1,6 @@
-from tools.mkdocs_reporter.generator import render_mkdocs_report
+from pathlib import Path
+
+from tools.mkdocs_reporter.generator import render_mkdocs_report, write_mkdocs_report
 
 
 def test_render_mkdocs_report_contains_sections():
@@ -21,3 +23,10 @@ def test_render_mkdocs_report_contains_sections():
     assert "# CT-UART-001" in report
     assert "## AI Analysis" in report
     assert "GitHub Issue" in report
+
+
+def test_write_mkdocs_report_writes_expected_file(tmp_path: Path):
+    report_path = write_mkdocs_report(str(tmp_path), "timing", "CT-UART-001", "# sample")
+
+    assert report_path.endswith("docs/test/ct/timing/CT-UART-001.md")
+    assert Path(report_path).read_text(encoding="utf-8") == "# sample"

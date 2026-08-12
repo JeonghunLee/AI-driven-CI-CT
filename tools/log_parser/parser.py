@@ -8,7 +8,7 @@ def parse_log_summary(log_text: str) -> dict:
         if "ERROR" in upper:
             errors.append(line)
             important.append(line)
-        elif "WARNING" in upper or "WARN" in upper:
+        elif "WARN" in upper:
             warnings.append(line)
             important.append(line)
 
