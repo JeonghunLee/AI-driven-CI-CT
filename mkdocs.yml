@@ -1,3 +1,105 @@
 site_name: AI-driven CI/CT
 site_description: Test results and execution history
 docs_dir: docs
+
+#
+#  Repository information
+#  (주의: release 시 표시됨) 
+repo_url: https://github.com/JeonghunLee/AI-driven-CI-CT
+repo_name: JeonghunLee/AI-driven-CI-CT
+
+nav:
+  - Home: index.md
+
+
+plugins:
+  - search
+  - mermaid2
+  - offline
+
+# Material theme configuration
+# https://squidfunk.github.io/mkdocs-material/
+theme:
+  name: material
+  language: ko
+  
+  # My Site Logo and Favicon  
+  logo: imgs/logo.jpg     # my logo
+  favicon: imgs/logo.jpg  # my favicon  
+
+
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+  features:
+    - toc.follow
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.tooltips
+    - content.code.copy
+    #- toc.integrate         # 이 줄이 TOC(Table of Contents)를 왼쪽 내비(sidebar)로 통합해줌 
+
+markdown_extensions:
+  - admonition              # 
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji     
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - md_in_html  
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML
+# mermaid2 version 11.12.0  
+  - https://unpkg.com/mermaid@11.12.0/dist/mermaid.min.js
+# mermaid2 setup   
+  - javascripts/mermaid-init.js  
+
+extra_css:
+#
+# My custom css files to override default styles of mkdocs-material theme
+#
+  - stylesheets/1_basic.css
+  - stylesheets/2_toc.css  
+  - stylesheets/3_admonition.css  
+  - stylesheets/4_numbering.css   
+
+
+copyright: >
+  © 2026 Jeonghun Lee. <br>
+  All rights reserved.
