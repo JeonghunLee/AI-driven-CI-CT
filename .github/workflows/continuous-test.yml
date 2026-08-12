@@ -12,6 +12,8 @@ on:
   issues:
     types: [opened, edited]
 
+permissions: {}
+
 jobs:
   prepare:
     if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'test-request')
@@ -57,6 +59,8 @@ jobs:
     needs: prepare
     if: needs.prepare.outputs.run_ct == 'true'
     runs-on: ${{ fromJson(needs.prepare.outputs.runs_on) }}
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python
