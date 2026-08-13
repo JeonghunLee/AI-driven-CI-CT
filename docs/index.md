@@ -108,6 +108,7 @@ flowchart TD
 - Foreground server task: `Local LLM: Run Ollama Server (Foreground)`
 - Setup child server: None
 - Server lifecycle: Foreground task ownership
+- Existing server: Reuse / exit `0`
 
 ## 3. VS Code 환경 구성
 

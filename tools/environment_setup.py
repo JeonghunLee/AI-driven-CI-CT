@@ -156,6 +156,10 @@ def serve_ollama(platform: str = "config") -> None:
     platform = selected_platform(platform)
     if not _is_local_endpoint(url):
         raise RuntimeError(f"Cannot start a local Ollama server for remote endpoint: {url}")
+    if _ollama_ready(url):
+        print(f"Ollama server already running: {url}", flush=True)
+        _refresh_check_file()
+        return
     executable = _ollama_executable(platform) or _install_ollama(platform)
     print(f"+ {executable} serve", flush=True)
     print("Ollama is running in the foreground. Stop this task to stop the server.", flush=True)

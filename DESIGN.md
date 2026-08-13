@@ -447,6 +447,7 @@ reports/markdown/<test-id>/<execution-id>/result.md
 | Setup task | No child server | Task completion |
 | Existing Ollama server | External process | No control |
 | VS Code Ollama server task | Foreground process task | VS Code task termination |
+| VS Code task + existing server | Endpoint reuse | Exit `0` |
 
 Model config schema:
 

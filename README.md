@@ -158,6 +158,7 @@ config/
 | Existing server | Reuse | Preserve |
 | Setup task | No server start | Foreground server required |
 | VS Code foreground task | Explicit start | Task stop |
+| Foreground task + existing server | Duplicate start blocked | Exit `0` |
 | Ollama unavailable | Deterministic fallback | Markdown generation |
 
 ## 결과 구조
