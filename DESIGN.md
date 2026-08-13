@@ -1,172 +1,229 @@
-GitHub 기반의 **AI-driven CI/CT 자동화 시스템**을 구성해줘.
+# AI-driven Continuous Testing Architecture
 
-핵심 목표는 다음과 같다.
+## 1. Overview
 
-* GitHub를 전체 테스트 자동화의 중심으로 사용한다.
-* GitHub Actions + Self-hosted Runner 기반으로 테스트를 실행한다.
-* Windows/Linux Self-hosted Runner를 모두 지원 가능한 구조로 만든다.
-* 테스트는 **Unit Test와 pytest 기반 CT**로 구분한다.
-* pytest CT는 **Test Equipment와 Test Interface**를 분리한다.
-* AI는 **Ollama + Codex** 두 계층으로 구성한다.
-* **Codex 사용량을 줄이기 위해 Ollama를 우선 사용한다.**
-* GitHub Issue는 사용자가 Test 설정을 선택하고 결과를 받는 UI로 사용한다.
-* Test Result, Measurement, Log를 모두 저장한다.
-* Test 결과는 GitHub Issue와 MkDocs에 자동 반영한다.
-* Raw Log와 Measurement 파일은 GitHub Actions Artifact로 보존한다.
-* Jenkins와 Continue는 사용하지 않는다.
+이 프로젝트는 **VS Code + Python `.venv` 기반의 개발/테스트 환경**을 중심으로 구성한다.
+
+Continuous Testing(CT)은 특정 CI 서버나 Runner 자체를 의미하지 않는다.  
+각 개발/실행 환경에서 테스트를 수행하고, 결과와 로그를 분석한 뒤 Markdown으로 기록하여 **MkDocs와 Pandoc을 통해 문서화하는 흐름**을 CT의 핵심으로 정의한다.
+
+핵심 구성은 다음과 같다.
+
+- VS Code
+- Python `.venv`
+- VS Code Testing
+- VS Code Run and Debug
+- unittest
+- pytest
+- Test Equipment
+- Test Interfaces
+- Ollama + DeepSeek
+- Codex
+- Markdown
+- MkDocs
+- Pandoc
+- GitHub
+- GitHub Actions
+- Optional Self-hosted Runner
 
 ---
 
-# 1. Overall Architecture
+## 2. Overall Architecture
 
-전체 구조는 다음을 기준으로 한다.
-
-```text id="8wprcq"
-                    Developer
-                        │
-                        ▼
-                     GitHub
-             ┌──────────┼───────────┐
-             │          │           │
-         Repository    Issue        PR
-                        │
-                        ▼
-                 GitHub Actions
-                        │
-                        ▼
-                Self-hosted Runner
-                        │
-             ┌──────────┴───────────┐
-             │                      │
-         Unit Test              pytest / CT
-                                    │
-                     ┌──────────────┴──────────────┐
-                     │                             │
-              Test Equipment                Test Interface
-                     │                             │
-            FPGA / Saleae / Digilent       USB/UART/JTAG/Network
-                     │                             │
-                     └─────────────┬───────────────┘
-                                   ▼
-                                  DUT
-                                   │
-                                   ▼
-                              Test Result
-                                   │
-                         ┌─────────┴─────────┐
-                         │                   │
-                      result.json          Raw Log
-                         │                   │
-                         └─────────┬─────────┘
-                                   ▼
-                                Ollama
-                                   │
-                    ┌──────────────┼──────────────┐
-                    ▼              ▼              ▼
-               GitHub Issue      MkDocs         Artifact
-                    │
-                    │ Complex Failure
-                    ▼
-                  Codex
+```text
+┌──────────────────────────────────────────────────────────────┐
+│                           VS Code                            │
+│                                                              │
+│   ┌────────────────┐   ┌────────────────┐   ┌─────────────┐ │
+│   │    Testing     │   │ Run and Debug  │   │  AI Agent   │ │
+│   │                │   │                │   │             │ │
+│   │ unittest       │   │ App / Tool     │   │ Ollama      │ │
+│   │ pytest         │   │ Interface      │   │   ↓         │ │
+│   │ Run / Debug    │   │ Breakpoint     │   │ DeepSeek    │ │
+│   └───────┬────────┘   └───────┬────────┘   └──────┬──────┘ │
+│           │                    │                   │         │
+│           └────────────────────┼───────────────────┘         │
+│                                │                             │
+│                             .venv                            │
+│                 Python Execution Environment                 │
+└────────────────────────────────┼─────────────────────────────┘
+                                 │
+                                 ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    Continuous Testing                        │
+│                                                              │
+│   ┌─────────────────────┐      ┌──────────────────────────┐  │
+│   │      Unit Test      │      │        pytest / CT       │  │
+│   │                     │      │                          │  │
+│   │ Python              │      │ Test Cases               │  │
+│   │ C / C++             │      │  ├─ Communication        │  │
+│   │ Firmware            │      │  ├─ Timing               │  │
+│   │ Mock                │      │  ├─ Functional           │  │
+│   └─────────────────────┘      │  ├─ Performance          │  │
+│                                │  ├─ Stability            │  │
+│                                │  └─ Regression           │  │
+│                                │                          │  │
+│                                │ Test Equipment           │  │
+│                                │  ├─ FPGA                 │  │
+│                                │  ├─ Saleae               │  │
+│                                │  └─ Digilent             │  │
+│                                │                          │  │
+│                                │ Test Interfaces          │  │
+│                                │  ├─ USB                  │  │
+│                                │  ├─ UART                 │  │
+│                                │  ├─ JTAG                 │  │
+│                                │  └─ Network              │  │
+│                                └────────────┬─────────────┘  │
+└─────────────────────────────────────────────┼────────────────┘
+                                              │
+                                              ▼
+                                  ┌──────────────────────┐
+                                  │ Test Execution Data  │
+                                  │                      │
+                                  │ PASS / FAIL          │
+                                  │ Measurement          │
+                                  │ stdout / stderr      │
+                                  │ Equipment Log        │
+                                  │ Interface Log        │
+                                  │ Warning              │
+                                  └──────────┬───────────┘
+                                             │
+                                             ▼
+┌──────────────────────────────────────────────────────────────┐
+│                  Ollama + DeepSeek                           │
+│                                                              │
+│   DeepSeek 역할                                              │
+│                                                              │
+│   ├─ TEST Analysis                                           │
+│   ├─ Log Analysis                                            │
+│   ├─ Source Review                                           │
+│   ├─ Warning Analysis                                        │
+│   └─ TEST Result Documentation                               │
+│                                                              │
+│             복잡한 수정 / Root Cause가 필요한 경우            │
+│                            │                                 │
+│                            ▼                                 │
+│                          Codex                               │
+└────────────────────────────┬─────────────────────────────────┘
+                             │
+                             ▼
+                    ┌───────────────────┐
+                    │     Markdown      │
+                    │                   │
+                    │   Test Result     │
+                    │   Log Summary     │
+                    │   Warning         │
+                    │   Analysis        │
+                    │   Source Review   │
+                    └─────────┬─────────┘
+                              │
+                ┌─────────────┼──────────────┐
+                │             │              │
+                ▼             ▼              ▼
+           ┌─────────┐   ┌─────────┐    ┌──────────┐
+           │ MkDocs  │   │ Pandoc  │    │  GitHub  │
+           │         │   │         │    │  Issue   │
+           │ Web Doc │   │ DOCX    │    │ Result   │
+           │ History │   │ PDF     │    │ Summary  │
+           │ Report  │   │ HTML    │    │          │
+           └─────────┘   └─────────┘    └──────────┘
 ```
 
 ---
 
-# 2. AI Architecture
+## 3. VS Code 중심 개발 환경
 
-두 개의 AI 계층을 사용한다.
+VS Code를 Local Development 및 Test Front-end로 사용한다.
 
-## Ollama
+### 3.1 VS Code Testing
 
-Ollama를 **Default / Primary AI**로 사용한다.
+VS Code Testing / Test Explorer는 다음 용도로 사용한다.
 
-목적은 Codex 사용량을 줄이는 것이다.
+- unittest 검색 및 실행
+- pytest 검색 및 실행
+- 개별 Test Case 실행
+- Test Result 확인
+- Test Debug
+- 실패 Test 재실행
+- Test Coverage 확인
 
-Ollama가 우선 수행할 작업:
+```text
+VS Code Testing
+├─ unittest
+└─ pytest
+   ├─ communication
+   ├─ timing
+   ├─ functional
+   ├─ performance
+   ├─ stability
+   └─ regression
+```
 
-* Test Result 분석
-* Raw Log 분석
-* Error / Warning 추출
-* PASS / FAIL Summary
-* Failure Classification
-* Markdown 생성
-* GitHub Issue Result 생성
-* MkDocs Test Report 생성
-* 반복적인 Test Code 생성
-* 간단한 코드 분석
-* 기존 Test History 비교
-* Regression Pattern 분석
-* Local/private processing
+### 3.2 Run and Debug
 
-기본 정책:
+VS Code Run and Debug는 Test 자체보다 다음 개발/디버깅에 사용한다.
 
-```text id="autb7x"
-Task
- │
- ▼
-Ollama
- │
- ├── 해결 가능 ───────► 완료
- │
- └── 해결 불가능
-           │
-           ▼
-         Codex
+- Application Debug
+- Test Tool Debug
+- Test Interface Debug
+- Equipment Controller Debug
+- Breakpoint
+- Variable Inspection
+- Call Stack 확인
+- UART / USB / JTAG / Network 제어 프로그램 디버깅
+
+```text
+Run and Debug
+├─ Application
+├─ Test Tool
+├─ Equipment Controller
+└─ Test Interface
 ```
 
 ---
 
-## Codex
+## 4. Python `.venv`
 
-Codex는 **Escalation Agent**로 사용한다.
+모든 Python 관련 도구와 테스트는 프로젝트 Local `.venv`를 사용한다.
 
-다음 경우에만 Codex를 사용한다.
+System Python은 가급적 `.venv` 생성 용도로만 사용하고, 실제 Python 실행은 `.venv` 내부 Interpreter를 사용한다.
 
-* 복잡한 Source Code 분석
-* 여러 Source File 수정
-* Root Cause Analysis
-* Architecture 변경
-* 복잡한 Test Case 생성
-* Refactoring
-* 반복 Failure
-* Ollama confidence가 낮은 경우
-* Ollama가 원인을 판단하지 못한 경우
-
-즉:
-
-```text id="w3w0mg"
-Ollama = Default AI
-Codex  = Advanced / Escalation AI
+```text
+System Python
+     │
+     ▼
+python -m venv .venv
+     │
+     ▼
+.venv
+├─ unittest
+├─ pytest
+├─ pyserial
+├─ pyusb
+├─ requests
+├─ MkDocs
+├─ Report Tools
+└─ Ollama Integration Scripts
 ```
+
+VS Code의 다음 기능도 모두 동일한 `.venv`를 사용하도록 한다.
+
+- Python Interpreter
+- Testing
+- Run and Debug
+- pytest
+- unittest
+- Report Generator
+- MkDocs
+- Ollama Integration Script
 
 ---
 
-# 3. GitHub 기반 구조
+## 5. Test Architecture
 
-GitHub를 Single Source of Truth로 사용한다.
+테스트는 크게 두 영역으로 구성한다.
 
-사용 항목:
-
-```text id="n691c5"
-GitHub
-├── Repository
-├── Issue
-├── Pull Request
-├── GitHub Actions
-├── Self-hosted Runner
-├── Artifact
-└── Test History
-```
-
-별도의 Jenkins 서버는 사용하지 않는다.
-
----
-
-# 4. Test Architecture
-
-Test는 크게 두 영역으로 분리한다.
-
-```text id="oi15om"
+```text
 tests/
 ├── unittest/
 └── pytest/
@@ -174,11 +231,11 @@ tests/
 
 ---
 
-# 5. Unit Test
+## 6. Unit Test
 
-Unit Test 영역은 Python뿐만 아니라 다른 Software/Firmware까지 확장 가능하게 한다.
+Unit Test는 Software 자체의 단위 검증을 담당한다.
 
-```text id="h6pbwk"
+```text
 tests/
 └── unittest/
     ├── python/
@@ -187,24 +244,24 @@ tests/
     └── common/
 ```
 
-목적:
+주요 목적:
 
-* Function Test
-* Class Test
-* Module Test
-* Algorithm Test
-* Mock Test
-* Hardware-independent Test
+- Function Test
+- Class Test
+- Module Test
+- Algorithm Test
+- Mock Test
+- Hardware-independent Test
+
+Python에만 한정하지 않고 C/C++ 및 Firmware Test까지 확장 가능한 구조로 유지한다.
 
 ---
 
-# 6. pytest / Continuous Testing
+## 7. pytest / Continuous Testing
 
-pytest는 Integration / Functional / Hardware CT를 담당한다.
+pytest는 Integration, Functional, Hardware/Interface 기반 Test를 담당한다.
 
-다음 세 영역으로 나눈다.
-
-```text id="db4mta"
+```text
 tests/
 └── pytest/
     ├── test_cases/
@@ -212,13 +269,9 @@ tests/
     └── test_interfaces/
 ```
 
----
+### 7.1 Test Cases
 
-# 7. Test Cases
-
-실제 Test Scenario는 별도 관리한다.
-
-```text id="ow2b3i"
+```text
 test_cases/
 ├── communication/
 ├── timing/
@@ -228,17 +281,13 @@ test_cases/
 └── regression/
 ```
 
-Test Case에는 실제 테스트 Logic만 작성한다.
+Test Case에는 실제 Test Logic을 작성한다.
 
-Equipment 제어 구현이나 Interface 연결 구현을 Test Case 내부에 직접 넣지 않는다.
+Equipment 연결이나 Interface 초기화 코드는 Test Case와 분리한다.
 
----
+### 7.2 Test Equipment
 
-# 8. Test Equipment
-
-외부 측정 장비 또는 Programmable Test Hardware를 관리한다.
-
-```text id="r5r00v"
+```text
 test_equipments/
 ├── fpga/
 ├── saleae/
@@ -247,48 +296,26 @@ test_equipments/
 
 역할:
 
-### FPGA
+- FPGA
+  - DUT
+  - Pattern Generator
+  - Protocol Generator
+  - Frame Generator
+  - Timing Generator
+- Saleae
+  - Protocol Capture
+  - Timing Measurement
+  - UART/SPI Analysis
+  - Jitter Analysis
+- Digilent
+  - Voltage
+  - Waveform
+  - Power Sequence
+  - Analog/Digital Measurement
 
-```text id="telnvb"
-FPGA as DUT
-또는
-FPGA as Test Equipment
-```
+### 7.3 Test Interfaces
 
-예:
-
-* Pattern Generator
-* Protocol Generator
-* Frame Generator
-* Timing Generator
-
-### Saleae
-
-예:
-
-* UART timing
-* SPI timing
-* Protocol capture
-* Jitter
-* Signal analysis
-
-### Digilent
-
-예:
-
-* Voltage
-* Waveform
-* Power sequence
-* Analog measurement
-* Digital measurement
-
----
-
-# 9. Test Interface
-
-DUT와 연결하거나 제어하기 위한 Transport / Interface Layer를 분리한다.
-
-```text id="5dd6gw"
+```text
 test_interfaces/
 ├── usb/
 ├── uart/
@@ -296,494 +323,267 @@ test_interfaces/
 └── network/
 ```
 
-지원:
+지원 Interface:
 
-```text id="cm6ebw"
-USB
-UART
-JTAG
-Network
-```
+- USB
+- UART
+- JTAG
+- Network
 
-구현 예:
+대표 구현:
 
-* UART → pyserial
-* USB → PyUSB / Vendor API
-* JTAG → OpenOCD / Vendor CLI/API
-* Network → socket / HTTP / SSH / TCP / UDP
-
-가능한 경우 다음과 같은 공통 API를 사용한다.
-
-```python id="6jh8nk"
-connect()
-disconnect()
-read()
-write()
-execute()
-```
-
-단 Interface 특성상 필요하지 않은 API는 억지로 구현하지 않는다.
+- UART → pyserial
+- USB → PyUSB / Vendor API
+- JTAG → OpenOCD / Vendor CLI / API
+- Network → socket / HTTP / SSH / TCP / UDP
 
 ---
 
-# 10. Equipment와 Interface 분리
+## 8. Test Equipment와 Test Interface 분리
+
+Test Equipment는 **무엇으로 측정하거나 제어하는가**를 의미한다.
+
+Test Interface는 **어떻게 DUT와 통신하는가**를 의미한다.
+
+예를 들어 UART Timing Test:
+
+```text
+             pytest Test Case
+                    │
+        ┌───────────┴───────────┐
+        │                       │
+ Test Interface          Test Equipment
+        │                       │
+       UART                   Saleae
+        │                       │
+        └────────► DUT ◄────────┘
+```
+
+UART를 이용해 DUT를 제어하고, Saleae를 이용해 실제 신호를 측정한다.
+
+---
+
+## 9. Test Result / Log / Measurement
+
+각 Test 실행은 최소 다음 세 종류의 데이터를 생성한다.
+
+```text
+Test Execution
+├─ Result
+├─ Log
+└─ Measurement
+```
+
+### Result
+
+- PASS / FAIL
+- Test ID
+- Execution Time
+- Environment
+- Commit
+- Configuration
+
+### Log
+
+- stdout
+- stderr
+- Test Log
+- Equipment Log
+- Interface Log
+- Warning
+- Error / Stack Trace
+
+### Measurement
 
 예:
 
-UART Timing CT
-
-```text id="jtv72k"
-                  pytest
-                     │
-          ┌──────────┴──────────┐
-          │                     │
-      Interface              Equipment
-          │                     │
-         UART                 Saleae
-          │                     │
-          └────────► DUT ◄──────┘
-```
-
-UART로 DUT에 명령을 보내고 Saleae로 실제 UART Signal을 측정한다.
-
-pytest에서 결과를 검증한다.
-
-```python id="8hzlgp"
-assert baudrate_error < 0.02
-assert jitter < allowed_jitter
-```
+- Timing
+- Latency
+- Jitter
+- Throughput
+- Baudrate
+- Voltage
+- Frequency
+- Packet Loss
+- CRC Error
 
 ---
 
-# 11. pytest Fixture
+## 10. DeepSeek 역할
 
-Hardware 및 Interface 초기화는 fixture를 이용한다.
+Ollama를 Local LLM Runtime으로 사용하고, **DeepSeek를 Primary Local LLM Model**로 사용한다.
 
-```python id="k7nesv"
-@pytest.fixture
-def uart():
-    interface = UARTInterface(...)
-    interface.connect()
+DeepSeek는 다음 다섯 가지 역할을 담당한다.
 
-    yield interface
-
-    interface.disconnect()
+```text
+Ollama Runtime
+└── DeepSeek
+    ├── TEST Analysis
+    ├── Log Analysis
+    ├── Source Review
+    ├── Warning Analysis
+    └── TEST Result Documentation
 ```
 
-```python id="k1wuzm"
-@pytest.fixture
-def saleae():
-    equipment = SaleaeController(...)
-    equipment.connect()
+### TEST Analysis
 
-    yield equipment
+- unittest / pytest 결과 분석
+- PASS / FAIL 분석
+- 실패 Pattern 분석
+- Regression 여부 판단 보조
 
-    equipment.disconnect()
+### Log Analysis
+
+- Error 추출
+- Warning 추출
+- Stack Trace 분석
+- 반복 Error Pattern 분석
+- Equipment / Interface Log 분석
+
+### Source Review
+
+- 변경 Source Review
+- 잠재 Bug 분석
+- 예외 처리 누락 분석
+- Test Coverage 누락 분석
+- 코드 위험 요소 분석
+
+### Warning Analysis
+
+- Compiler Warning
+- pytest Warning
+- Runtime Warning
+- Static Analysis Warning
+
+Warning을 중요도에 따라 분류할 수 있도록 한다.
+
+예:
+
+```text
+Critical
+Important
+Low
 ```
 
-Test Case에서는 장비 초기화/종료 코드가 최대한 보이지 않게 한다.
+### TEST Result Documentation
+
+DeepSeek는 Test Result와 Log 분석 결과를 Markdown으로 정리한다.
+
+주요 내용:
+
+- Test Summary
+- Test Configuration
+- PASS / FAIL
+- Measurement
+- Statistics
+- Important Log
+- Warning
+- Failure Analysis
+- Source Review
+- AI Summary
 
 ---
 
-# 12. GitHub Issue Template
+## 11. Codex 역할
 
-Issue Template은 복잡하게 만들지 않는다.
+Codex는 기본 분석 도구가 아니라 **Escalation Agent**로 사용한다.
 
-**하나의 Test Request Issue Form을 기본으로 사용한다.**
+DeepSeek에서 처리하기 어려운 경우에만 사용한다.
 
-```text id="6550ib"
-.github/
-└── ISSUE_TEMPLATE/
-    ├── test.yml
-    └── config.yml
+```text
+DeepSeek
+   │
+   ├─ 해결 가능 → 완료
+   │
+   └─ 복잡한 문제
+           │
+           ▼
+         Codex
 ```
 
-Issue는 Test Documentation 작성 도구가 아니라 **Test 설정 UI**로 사용한다.
+Codex 사용 대상:
 
-사용자가 선택할 항목:
+- 복잡한 Root Cause Analysis
+- Multi-file Code Modification
+- Refactoring
+- Architecture 변경
+- 복잡한 Test Case 생성
+- Source Code Fix
+- DeepSeek가 해결하지 못한 문제
 
-```text id="3iihvq"
-Test Type
-├── Unit Test
-└── pytest / CT
-
-Test Category
-├── Communication
-├── Timing
-├── Functional
-├── Performance
-├── Stability
-└── Regression
-
-Test Equipment
-├── None
-├── FPGA
-├── Saleae
-└── Digilent
-
-Test Interface
-├── None
-├── USB
-├── UART
-├── JTAG
-└── Network
-
-Test Function
-├── Connection
-├── Read / Write
-├── Timing
-├── Throughput
-├── Latency
-├── Stability
-└── Custom
-
-Runner
-├── Default
-├── Windows
-└── Linux
-```
-
-필요한 경우에만 추가 입력한다.
-
-```text id="m20k3f"
-Target / DUT
-Test Parameter
-Expected Result
-Additional Option
-```
+목표는 **DeepSeek를 적극 활용하여 Codex 사용량을 최소화하는 것**이다.
 
 ---
 
-# 13. Issue 기반 실행
+## 12. Markdown-first Documentation
 
-사용자 Workflow는 단순하게 유지한다.
+CT 결과의 사람이 읽는 기본 문서 포맷은 Markdown으로 한다.
 
-```text id="2ouh30"
-Issue 생성
-     │
-     ▼
-Test 항목 선택
-     │
-     ▼
-GitHub Actions
-     │
-     ▼
-Self-hosted Runner
-     │
-     ▼
-Test 실행
-     │
-     ▼
-결과 수신
-```
-
-즉 사용자는:
-
-> Issue 생성 → 필요한 Test 설정 선택 → 결과 확인
-
-만 하면 된다.
-
----
-
-# 14. GitHub Actions
-
-Workflow는 최소 두 개로 구성한다.
-
-```text id="2dc665"
-.github/
-└── workflows/
-    ├── unit-test.yml
-    └── continuous-test.yml
-```
-
-기본적으로 Self-hosted Runner를 사용한다.
-
-```yaml id="w3qf5j"
-runs-on: self-hosted
-```
-
-향후 GitHub Runner Label을 이용할 수 있도록 한다.
-
-```yaml id="e6h3x2"
-runs-on:
-  - self-hosted
-  - hw-test
-```
-
-필요한 Label 예:
-
-```text id="fdweks"
-windows
-linux
-fpga
-saleae
-digilent
-```
-
-특정 OS나 장비 Label을 초기부터 강제하지 않는다.
-
----
-
-# 15. Test Output
-
-각 Test 실행에서는 세 종류의 결과를 생성한다.
-
-```text id="f3wn86"
+```text
 Test
- │
- ├── Result
- ├── Log
- └── Measurement
+ ↓
+Result + Log + Measurement
+ ↓
+DeepSeek Analysis
+ ↓
+Markdown
 ```
 
 예:
 
-```text id="o22brh"
-PASS / FAIL
-
-Log
-├── stdout
-├── stderr
-├── equipment log
-└── interface log
-
-Measurement
-├── timing
-├── latency
-├── jitter
-├── throughput
-└── 기타 측정값
+```text
+reports/
+└── CT-UART-001/
+    ├── result.md
+    ├── test.log
+    ├── stdout.log
+    ├── stderr.log
+    └── measurement.csv
 ```
+
+`result.md`에는 다음 정보를 기록한다.
+
+- Test ID
+- Test Description
+- Test Environment
+- Test Equipment
+- Test Interface
+- Test Result
+- PASS / FAIL
+- Measurement
+- Statistics
+- Important Logs
+- Warnings
+- DeepSeek Analysis
+- Source Review
+- Commit / Revision
+- Execution Date
 
 ---
 
-# 16. Result Normalizer
+## 13. MkDocs
 
-Test Framework별 결과 형식이 달라도 최종 결과는 표준화한다.
+MkDocs는 Markdown Test Result를 Web Documentation으로 제공한다.
 
-```text id="33c27r"
-unittest ─┐
-          │
-pytest ───┼──► Result Normalizer
-          │
-Tools ────┘
-                │
-                ▼
-            result.json
+```text
+Markdown
+   │
+   ▼
+MkDocs
+   │
+   ├─ Test Report
+   ├─ Test History
+   ├─ Regression History
+   └─ Searchable Documentation
 ```
-
-`result.json`을 Test 결과의 Single Source of Truth로 사용한다.
 
 예:
 
-```json id="ltvhrq"
-{
-  "test_id": "CT-UART-001",
-  "execution_id": "20260812-001",
-  "status": "FAIL",
-  "category": "timing",
-  "duration": 12.42,
-  "interface": "UART",
-  "equipment": "Saleae",
-  "commit": "abcdef1",
-  "runner": "hw-runner-01",
-
-  "metrics": {
-    "expected_baudrate": 921600,
-    "measured_baudrate": 921502,
-    "error": 0.00011,
-    "jitter": 0.028
-  },
-
-  "statistics": {
-    "mean": 921510,
-    "median": 921520,
-    "min": 920900,
-    "max": 922100,
-    "stddev": 285
-  },
-
-  "logs": {
-    "main": "test.log",
-    "stdout": "stdout.log",
-    "stderr": "stderr.log",
-    "equipment": "equipment.log"
-  }
-}
-```
-
----
-
-# 17. Log 관리
-
-각 Test 실행마다 Log를 반드시 보존한다.
-
-```text id="81i8g2"
-logs/
-└── <test-id>/
-    └── <execution-id>/
-        ├── test.log
-        ├── stdout.log
-        ├── stderr.log
-        ├── equipment.log
-        ├── interface.log
-        └── result.json
-```
-
-필요하면 추가:
-
-```text id="8zgc44"
-measurement.csv
-uart.log
-usb.log
-jtag.log
-network.log
-saleae.csv
-waveform.*
-```
-
----
-
-# 18. GitHub Artifact
-
-Raw Log 및 Measurement Data는 GitHub Actions Artifact로 저장한다.
-
-예:
-
-```text id="x9y2d4"
-CT-UART-001-20260812-001/
-├── result.json
-├── test.log
-├── stdout.log
-├── stderr.log
-├── equipment.log
-├── interface.log
-└── measurement.csv
-```
-
-Test FAIL 여부와 관계없이 Artifact가 저장되도록 한다.
-
-GitHub Actions에서 `if: always()` 또는 동등한 방식으로 구성한다.
-
----
-
-# 19. Ollama Result Processing
-
-테스트 종료 후 Ollama가 결과를 우선 분석한다.
-
-```text id="89np1a"
-result.json
-    +
-Raw Log
-    │
-    ▼
-  Ollama
-    │
-    ├── PASS / FAIL Summary
-    ├── Error 추출
-    ├── Warning 추출
-    ├── Failure Classification
-    ├── Important Log 추출
-    ├── Result Summary
-    ├── Issue Comment 생성
-    └── MkDocs 생성
-```
-
-Raw Log 전체를 LLM에 던지기 전에 프로그램적으로 처리 가능한 정보는 먼저 Parsing한다.
-
-예:
-
-* Timestamp
-* Error code
-* Warning
-* Metric
-* Measurement
-* Stack Trace
-
-이를 통해 Ollama 처리량도 줄인다.
-
----
-
-# 20. GitHub Issue Result
-
-Test가 완료되면 기존 Issue에 자동 Comment를 추가한다.
-
-Issue에는 Raw Log 전체를 넣지 않는다.
-
-예:
-
-```text id="z8kvly"
-## Test Result
-
-Result: FAIL
-
-Test
-- Type: CT
-- Category: Timing
-- Interface: UART
-- Equipment: Saleae
-
-Measurement
-- Expected Baudrate: 921600
-- Measured Baudrate: 921502
-- Error: 0.011 %
-- Jitter: 2.8 %
-
-Statistics
-- Mean: ...
-- Median: ...
-- Min: ...
-- Max: ...
-- Std Dev: ...
-
-Failure
-- UART jitter threshold exceeded
-
-AI Analysis
-- Ollama generated summary
-
-Logs
-- Artifact available
-- Detailed MkDocs report available
-
-Commit: abcdef1
-Runner: hw-runner-01
-Execution ID: 20260812-001
-```
-
-즉 Issue에는:
-
-```text id="to43l6"
-Test 설정
-+
-PASS / FAIL
-+
-주요 Measurement
-+
-Statistics
-+
-Log Summary
-+
-Ollama Analysis
-+
-Artifact / MkDocs 위치
-```
-
-를 보여준다.
-
----
-
-# 21. MkDocs Test Report
-
-MkDocs는 상세 Test Documentation 및 History를 담당한다.
-
-```text id="s6jqla"
+```text
 docs/
 └── test/
     ├── index.md
-    │
     ├── unit/
-    │
     └── ct/
         ├── communication/
         ├── timing/
@@ -793,125 +593,196 @@ docs/
         └── regression/
 ```
 
-Test Report 예:
+---
 
-```text id="3ow71a"
-docs/test/ct/timing/CT-UART-001.md
+## 14. Pandoc
+
+Pandoc은 Markdown Test Result를 공식 문서 포맷으로 변환하는 데 사용한다.
+
+```text
+result.md
+   │
+   └── Pandoc
+         ├─ DOCX
+         ├─ PDF
+         └─ HTML
 ```
 
-페이지에는 다음을 포함한다.
+즉 하나의 Markdown 결과를 기준으로 Web 문서와 제출 문서를 모두 생성할 수 있도록 한다.
 
-```text id="qu6dsj"
-Test ID
-Test Configuration
+---
+
+## 15. GitHub Issue
+
+GitHub Issue는 복잡한 Test 문서 작성 도구가 아니라 **Test 설정 및 결과 확인 UI**로 사용한다.
+
+사용자는 Issue에서 필요한 설정만 선택한다.
+
+예:
+
+```text
+Test Type
+├─ Unit Test
+└─ pytest / CT
+
+Test Category
+├─ Communication
+├─ Timing
+├─ Functional
+├─ Performance
+├─ Stability
+└─ Regression
+
 Test Equipment
+├─ None
+├─ FPGA
+├─ Saleae
+└─ Digilent
+
 Test Interface
-Test Parameter
-Expected Result
-PASS / FAIL
+├─ None
+├─ USB
+├─ UART
+├─ JTAG
+└─ Network
 
-Measurement
-Statistics
-Execution Time
+Test Function
+├─ Connection
+├─ Read / Write
+├─ Timing
+├─ Throughput
+├─ Latency
+├─ Stability
+└─ Custom
+```
 
-Important Log
-Error / Warning Summary
+Test 완료 후 Issue에는 핵심 결과를 기록한다.
 
-Ollama Analysis
+- PASS / FAIL
+- 주요 Measurement
+- Warning Summary
+- DeepSeek Summary
+- MkDocs 문서 위치
+- Raw Log / Artifact 위치
 
-GitHub Issue
-Commit
-Runner
-Execution ID
+Raw Log 전체를 Issue에 붙이지 않는다.
 
-Test History
+---
+
+## 16. GitHub Automation Layer
+
+GitHub Actions는 CT 그 자체가 아니라 **자동 실행을 위한 Orchestration Layer**로 사용한다.
+
+```text
+GitHub
+├─ Repository
+├─ Issue
+├─ Pull Request
+└─ GitHub Actions
+```
+
+GitHub-hosted Runner를 일반 자동화에 사용할 수 있다.
+
+Self-hosted Runner는 Optional로 둔다.
+
+---
+
+## 17. Optional Self-hosted Runner
+
+Self-hosted Runner는 필수 요소가 아니다.
+
+주로 다음과 같은 CI/CD 또는 특수 환경 자동화가 필요한 경우 사용한다.
+
+- 특정 Compiler / SDK
+- Vendor Tool
+- Firmware Build
+- Package
+- Deploy
+- 내부 Network
+- 특정 USB/JTAG 장비 접근
+- Machine-specific Environment
+
+```text
+GitHub Actions
+      │
+      ├─ GitHub-hosted Runner
+      │      └─ General CI / Test
+      │
+      └─ Self-hosted Runner
+             └─ Optional CI/CD / Special Environment
+```
+
+즉:
+
+```text
+CT = Test + Analysis + Documentation
+
+Self-hosted Runner = Optional Execution Environment
 ```
 
 ---
 
-# 22. Test History
+## 18. VS Code Project Configuration
 
-MkDocs에서 Test History도 관리할 수 있도록 한다.
+프로젝트에는 VS Code 설정을 포함한다.
 
-```text id="4sez23"
-CT-UART-001
-├── Latest Result
-├── History
-└── Trend
+```text
+.vscode/
+├── settings.json
+├── launch.json
+└── tasks.json
 ```
 
-최소 기록:
+### settings.json
 
-```text id="svwy5r"
-Date
-Execution ID
-Commit
-PASS / FAIL
-Duration
-Mean
-Median
-Min
-Max
-Std Dev
-Measurement
-Runner
-Issue
-```
+주요 목적:
 
-향후 Regression 분석이 가능하도록 한다.
+- `.venv` Python Interpreter
+- pytest discovery
+- unittest / pytest 설정
+- Testing 연동
+
+### launch.json
+
+주요 목적:
+
+- Run and Debug
+- Application Debug
+- Test Tool Debug
+- Equipment Controller Debug
+- Interface Debug
+
+### tasks.json
+
+주요 목적:
+
+- 반복적인 Test 실행
+- pytest Command
+- MkDocs Build
+- Pandoc Build
+- Report Generation
+- Tool 실행
 
 ---
 
-# 23. Codex Escalation
+## 19. Recommended Repository Structure
 
-Ollama에서 다음 조건이 발생한 경우에만 Codex 사용을 고려한다.
-
-```text id="44jlwu"
-Ollama
-  │
-  ├── 해결 가능
-  │      └── Done
-  │
-  └── 해결 불가능
-          │
-          ▼
-        Codex
-```
-
-Codex 호출 조건:
-
-```text id="dpjmyn"
-Complex Failure
-Repeated Failure
-Root Cause Unknown
-Source Code Fix Required
-Multi-module Failure
-Architecture Change Required
-Developer Explicit Request
-```
-
-Codex 사용량 최소화가 설계 목표다.
-
----
-
-# 24. Repository Structure
-
-최종 Repository 구조는 다음을 기준으로 한다.
-
-```text id="7mihtk"
+```text
 .
+├── .vscode/
+│   ├── settings.json
+│   ├── launch.json
+│   └── tasks.json
+│
 ├── .github/
-│   │
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── test.yml
 │   │   └── config.yml
-│   │
 │   └── workflows/
-│       ├── unit-test.yml
-│       └── continuous-test.yml
+│
+├── .venv/
 │
 ├── tests/
-│   │
 │   ├── unittest/
 │   │   ├── python/
 │   │   ├── c_cpp/
@@ -919,7 +790,6 @@ Codex 사용량 최소화가 설계 목표다.
 │   │   └── common/
 │   │
 │   └── pytest/
-│       │
 │       ├── test_cases/
 │       │   ├── communication/
 │       │   ├── timing/
@@ -942,23 +812,19 @@ Codex 사용량 최소화가 설계 목표다.
 │       └── conftest.py
 │
 ├── tools/
-│   ├── result_normalizer/
 │   ├── log_parser/
-│   ├── ollama/
+│   ├── deepseek/
 │   ├── github_reporter/
 │   ├── mkdocs_reporter/
-│   └── codex_escalation/
+│   └── pandoc_reporter/
 │
 ├── reports/
-│   ├── raw/
-│   ├── json/
-│   └── logs/
+│   ├── logs/
+│   ├── measurements/
+│   └── markdown/
 │
 ├── docs/
 │   └── test/
-│       ├── index.md
-│       ├── unit/
-│       └── ct/
 │
 ├── mkdocs.yml
 ├── pytest.ini
@@ -966,87 +832,84 @@ Codex 사용량 최소화가 설계 목표다.
 └── README.md
 ```
 
----
+`.venv/`는 Local Runtime Directory이며 Git에는 포함하지 않는다.
 
-# 25. Initial Implementation
+`.gitignore`에 반드시 추가한다.
 
-처음에는 실제 모든 Hardware API를 구현하지 않는다.
-
-다음 순서로 구현한다.
-
-1. Repository Skeleton
-2. GitHub Issue Form
-3. GitHub Actions Self-hosted Workflow
-4. Unit Test Sample
-5. pytest Sample
-6. Mock UART Interface
-7. Mock Saleae Equipment
-8. UART Timing Mock CT
-9. Result Normalizer
-10. `result.json`
-11. Logging system
-12. Artifact upload
-13. Ollama Result Analyzer
-14. GitHub Issue Result Reporter
-15. MkDocs Report Generator
-16. Test History
-17. Codex Escalation Interface
-
----
-
-# 26. Final Workflow
-
-최종 사용자 Workflow는 다음과 같다.
-
-```text id="lbucq5"
-GitHub Issue 생성
-        │
-        ▼
-Test 설정 선택
-        │
-        ▼
-GitHub Actions
-        │
-        ▼
-Self-hosted Runner
-        │
-        ├── Unit Test
-        │
-        └── pytest / CT
-                │
-                ▼
-        Result + Log + Measurement
-                │
-                ▼
-             result.json
-                │
-                ▼
-              Ollama
-                │
-       ┌────────┼─────────┐
-       ▼        ▼         ▼
-    Issue     MkDocs    Artifact
-    Result    Report    Raw Logs
-       │
-       │ Complex Failure
-       ▼
-     Codex
+```text
+.venv/
 ```
 
-최종 역할은 다음과 같이 정의한다.
+---
 
-* **GitHub Issue** = Test 설정 + 실행 요청 + 핵심 결과
-* **GitHub Actions** = CI/CT Orchestration
-* **Self-hosted Runner** = 실제 Test 실행
-* **unittest** = Software Unit Test
-* **pytest** = Integration / Functional / Hardware CT
-* **Test Equipment** = FPGA / Saleae / Digilent
-* **Test Interface** = USB / UART / JTAG / Network
-* **result.json** = Test Result Single Source of Truth
-* **Log** = Debug 및 추적을 위한 Raw Evidence
-* **GitHub Artifact** = Raw Log / Measurement 저장
-* **Ollama** = 기본 AI 분석 및 Report 생성
-* **Codex** = 복잡한 분석 및 코드 수정용 Escalation Agent
-* **MkDocs** = 상세 Test Report / History / Trend
+## 20. Final Workflow
 
-구조를 과도하게 복잡하게 만들지 말고 **GitHub + Self-hosted Runner + Ollama First + Codex Escalation**이라는 원칙을 유지해줘.
+```text
+VS Code
+  │
+  ├─ Testing
+  ├─ Run and Debug
+  └─ AI Agent
+       │
+       ▼
+     .venv
+       │
+       ▼
+unittest / pytest
+       │
+       ▼
+Test Result
++ Log
++ Measurement
++ Warning
+       │
+       ▼
+Ollama + DeepSeek
+       │
+       ├─ TEST Analysis
+       ├─ Log Analysis
+       ├─ Source Review
+       ├─ Warning Analysis
+       └─ TEST Result Documentation
+       │
+       ▼
+    Markdown
+       │
+ ┌─────┼────────────┐
+ ▼     ▼            ▼
+MkDocs Pandoc    GitHub Issue
+ │      │
+Web    DOCX/PDF
+Docs
+
+복잡한 문제
+     │
+     ▼
+   Codex
+```
+
+---
+
+## 21. Core Principles
+
+1. VS Code를 Local Development 및 Test Front-end로 사용한다.
+2. 모든 Python 실행은 프로젝트 `.venv`를 사용한다.
+3. VS Code Testing과 Run and Debug를 적극 활용한다.
+4. Unit Test와 pytest CT를 분리한다.
+5. Test Equipment와 Test Interface를 분리한다.
+6. CT는 특정 Runner나 CI Server에 종속되지 않는다.
+7. DeepSeek를 Test / Log / Warning / Source Review / Documentation의 Primary LLM으로 사용한다.
+8. Ollama를 DeepSeek의 Local Runtime으로 사용한다.
+9. Codex는 복잡한 문제 해결용 Escalation Agent로 사용한다.
+10. Test 결과는 Markdown-first 방식으로 기록한다.
+11. MkDocs는 Web Documentation을 담당한다.
+12. Pandoc은 DOCX/PDF/HTML 문서 생성을 담당한다.
+13. GitHub Issue는 Test 설정과 핵심 결과 확인에 사용한다.
+14. GitHub Actions는 자동 실행용 Orchestration Layer로만 사용한다.
+15. Self-hosted Runner는 CI/CD 또는 특수 환경 실행이 필요한 경우에만 Optional로 사용한다.
+
+---
+
+## 22. Architecture Summary
+
+> **VS Code-centered Continuous Testing using project-local Python venv, VS Code Testing and Run and Debug, DeepSeek-assisted test/log/source/warning analysis, Markdown-first documentation, MkDocs/Pandoc reporting, and optional GitHub automation.**
