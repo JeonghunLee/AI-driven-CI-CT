@@ -81,10 +81,10 @@ Source: `.vscode/launch.json`
 
 | Order | Configuration | Runtime | Entry point | Purpose |
 |---:|---|---|---|---|
-| 1 | `Setup 1: Select Operating System` | Task delegation | `tools.configuration set-os` | OS config update |
-| 2 | `Setup 2: Install Python Virtual Environment` | Task delegation | `preLaunchTask` | `.venv` creation, dependency installation |
-| 3 | `Setup 3: Install Ollama and Local LLM` | Task delegation | `preLaunchTask` | Ollama installation, selected model pull |
-| 4 | `Check 1: Refresh Environment Check File` | Task delegation | `preLaunchTask` | Environment check |
+| 1 | `SETUP 1: Select Operating System` | Task delegation | `tools.configuration select-os` | OS config update |
+| 2 | `SETUP 2: Install Python Virtual Environment` | Task delegation | `preLaunchTask` | `.venv` creation, dependency installation |
+| 3 | `SETUP 3: Install Ollama and Local LLM` | Task delegation | `preLaunchTask` | Ollama installation, selected model pull |
+| 4 | `CHECK 1: Refresh Environment Check File` | Task delegation | `preLaunchTask` | Environment check |
 | 5 | `Run 3: Extension Module` | `.venv` Python | `tools.extension_runner` | Future module execution |
 | 6 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_result --docs` | Latest result analysis, Markdown generation |
 | 7 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
@@ -189,7 +189,7 @@ Source: `.vscode/settings.json`
 | pytest path 1 | `tests/pytest` |
 | pytest path 2 | `tests/unittest` |
 | unittest implementation | Standard `unittest.TestCase` |
-| Separate unittest execution | `TEST 3: Run unittest Suite` task |
+| unittest execution | VS Code Testing / pytest |
 | VS Code pytest cache | `-p no:cacheprovider` |
 
 ```text
@@ -213,16 +213,17 @@ Source: `.vscode/tasks.json`
 
 | Group | Task |
 |---|---|
-| Setup | `Setup 1: Select Operating System` |
-| Setup | `Setup 2: Install Python Virtual Environment` |
-| Setup | `Setup 3: Install Ollama and Local LLM` |
-| Check | `Check: Refresh Environment Check File` |
-| Runtime | `Local LLM: Run Ollama Server (Foreground)` |
-| TEST 1 | `TEST 1: Run All with pytest` |
-| TEST 2 | `TEST 2: Run Continuous Tests` |
-| TEST 3 | `TEST 3: Run unittest Suite` |
-| Report | `Report: Generate Latest Markdown` |
-| Report | `Report: Convert Latest Markdown to HTML` |
+| SETUP | `SETUP 1: Select Operating System` |
+| SETUP | `SETUP 2: Install Python Virtual Environment` |
+| SETUP | `SETUP 3: Install Ollama and Local LLM` |
+| CHECK | `CHECK 1: Refresh Environment Check File` |
+| CHECK | `CHECK 2: Show Environment Configuration` |
+| CHECK | `CHECK 3: Run Ollama Server (Foreground)` |
+| TEST CASE | `TEST CASE: ALL` |
+| TEST CASE | `TEST CASE: TEST ID` |
+| REPORT | `REPORT: Generate Latest Markdown` |
+| REPORT | `REPORT: Convert Latest Markdown to HTML` |
+| REPORT | `REPORT: Convert Latest Markdown to DOCX` |
 | MkDocs | `MkDocs: Serve Locally` |
 | MkDocs | `MkDocs: Serve on Network` |
 | MkDocs | `MkDocs: Build` |

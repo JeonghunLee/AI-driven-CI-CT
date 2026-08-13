@@ -85,9 +85,8 @@ python -m tools.environment_setup python --platform config
 
 | TEST Task | Scope | VS Code group |
 |---|---|---|
-| `TEST 1: Run All with pytest` | All | Default test |
-| `TEST 2: Run Continuous Tests` | CT | Test |
-| `TEST 3: Run unittest Suite` | unittest | Test |
+| `TEST CASE: ALL` | All registered TEST cases | Default test |
+| `TEST CASE: TEST ID` | Prompted `test_id` | Test |
 
 ## 테스트와 리포트
 

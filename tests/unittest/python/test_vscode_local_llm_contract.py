@@ -16,10 +16,10 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
 
     def test_launch_setup_delegates_to_foreground_tasks(self) -> None:
         expected = {
-            "Setup 1: Select Operating System": "Setup 1: Select Operating System",
-            "Setup 2: Install Python Virtual Environment": "Setup 2: Install Python Virtual Environment",
-            "Setup 3: Install Ollama and Local LLM": "Setup 3: Install Ollama and Local LLM",
-            "Check 1: Refresh Environment Check File": "Check: Refresh Environment Check File",
+            "SETUP 1: Select Operating System": "SETUP 1: Select Operating System",
+            "SETUP 2: Install Python Virtual Environment": "SETUP 2: Install Python Virtual Environment",
+            "SETUP 3: Install Ollama and Local LLM": "SETUP 3: Install Ollama and Local LLM",
+            "CHECK 1: Refresh Environment Check File": "CHECK 1: Refresh Environment Check File",
         }
         configurations = {item["name"]: item for item in self.launch["configurations"]}
         for name, task in expected.items():
@@ -33,7 +33,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
     def test_python_setup_uses_platform_picker(self) -> None:
         task = next(
             item for item in self.tasks["tasks"]
-            if item["label"] == "Setup 2: Install Python Virtual Environment"
+            if item["label"] == "SETUP 2: Install Python Virtual Environment"
         )
         self.assertEqual(
             task["args"],
@@ -43,7 +43,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
     def test_task_setup_uses_internal_model_config(self) -> None:
         setup = next(
             item for item in self.tasks["tasks"]
-            if item["label"] == "Setup 3: Install Ollama and Local LLM"
+            if item["label"] == "SETUP 3: Install Ollama and Local LLM"
         )
         self.assertEqual(
             setup["args"],
@@ -54,7 +54,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
     def test_ollama_server_task_is_foreground_process(self) -> None:
         task = next(
             item for item in self.tasks["tasks"]
-            if item["label"] == "Local LLM: Run Ollama Server (Foreground)"
+            if item["label"] == "CHECK 3: Run Ollama Server (Foreground)"
         )
         self.assertEqual(task["type"], "process")
         self.assertNotIn("isBackground", task)
@@ -64,11 +64,11 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         )
 
     def test_vscode_json_contains_no_os_metadata(self) -> None:
-        self.assertNotIn("inputs", self.tasks)
+        self.assertEqual([item["id"] for item in self.tasks["inputs"]], ["testCaseId"])
         for configuration in self.launch["configurations"]:
             expected_python = (
                 "python"
-                if configuration["name"].startswith(("Setup 1", "Setup 2"))
+                if configuration["name"].startswith(("SETUP 1", "SETUP 2"))
                 else "${config:python.defaultInterpreterPath}"
             )
             self.assertEqual(configuration["python"], expected_python)
@@ -78,7 +78,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         for task in self.tasks["tasks"]:
             expected_command = (
                 "python"
-                if task["label"].startswith(("Setup 1", "Setup 2"))
+                if task["label"].startswith(("SETUP 1", "SETUP 2"))
                 else "${config:python.defaultInterpreterPath}"
             )
             self.assertEqual(task["command"], expected_command)
@@ -94,11 +94,11 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
     def test_setup_1_uses_system_python(self) -> None:
         launch = next(
             item for item in self.launch["configurations"]
-            if item["name"] == "Setup 1: Select Operating System"
+            if item["name"] == "SETUP 1: Select Operating System"
         )
         task = next(
             item for item in self.tasks["tasks"]
-            if item["label"] == "Setup 1: Select Operating System"
+            if item["label"] == "SETUP 1: Select Operating System"
         )
         self.assertEqual(launch["python"], "python")
         self.assertEqual(task["command"], "python")
@@ -117,19 +117,23 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             ["-p", "no:cacheprovider", "tests/pytest", "tests/unittest"],
         )
 
-    def test_test_tasks_use_numbered_test_group(self) -> None:
-        tasks = [item for item in self.tasks["tasks"] if item["label"].startswith("TEST ")]
+    def test_test_case_tasks_support_all_and_test_id(self) -> None:
+        tasks = [item for item in self.tasks["tasks"] if item["label"].startswith("TEST CASE:")]
         self.assertEqual(
             [item["label"] for item in tasks],
             [
-                "TEST 1: Run All with pytest",
-                "TEST 2: Run Continuous Tests",
-                "TEST 3: Run unittest Suite",
+                "TEST CASE: ALL",
+                "TEST CASE: TEST ID",
             ],
         )
         self.assertTrue(tasks[0]["group"]["isDefault"])
         self.assertFalse(tasks[1]["group"]["isDefault"])
-        self.assertFalse(tasks[2]["group"]["isDefault"])
+        self.assertIn("${input:testCaseId}", tasks[1]["args"])
+
+    def test_report_tasks_include_html_and_docx(self) -> None:
+        labels = {item["label"] for item in self.tasks["tasks"]}
+        self.assertIn("REPORT: Convert Latest Markdown to HTML", labels)
+        self.assertIn("REPORT: Convert Latest Markdown to DOCX", labels)
 
 
 if __name__ == "__main__":

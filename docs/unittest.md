@@ -41,4 +41,4 @@ flowchart TD
 
 - Testing path: `tests/unittest`
 - Implementation: `unittest.TestCase`
-- Task: `TEST 3: Run unittest Suite`
+- VS Code Testing: pytest adapter

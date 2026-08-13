@@ -38,9 +38,8 @@ flowchart TD
 
 ### VS Code 실행
 
-- Run and Debug: `Setup 2: Install Python Virtual Environment`
-- Task: `Setup 2: Install Python Virtual Environment`
-- Task: `Setup 2: Install Python Virtual Environment`
+- Run and Debug: `SETUP 2: Install Python Virtual Environment`
+- Task: `SETUP 2: Install Python Virtual Environment`
 - Setup module: `python -m tools.environment_setup python`
 
 ## 2. Ollama 환경 구성
@@ -100,12 +99,12 @@ flowchart TD
 
 ### VS Code 실행
 
-- Run and Debug: `Setup 3: Install Ollama and Local LLM`
-- Task: `Setup 3: Install Ollama and Local LLM`
+- Run and Debug: `SETUP 3: Install Ollama and Local LLM`
+- Task: `SETUP 3: Install Ollama and Local LLM`
 - Setup module: `python -m tools.environment_setup ollama [--model <model>]`
-- Check task: `Check: Refresh Environment Check File`
-- Check launch: `Check 1: Refresh Environment Check File`
-- Foreground server task: `Local LLM: Run Ollama Server (Foreground)`
+- Check task: `CHECK 1: Refresh Environment Check File`
+- Check launch: `CHECK 1: Refresh Environment Check File`
+- Foreground server task: `CHECK 3: Run Ollama Server (Foreground)`
 - Setup child server: None
 - Server lifecycle: Foreground task ownership
 - Existing server: Reuse / exit `0`
@@ -125,16 +124,16 @@ flowchart TD
 
 | Configuration | 기능 |
 |---|---|
-| `Setup 1: Select Operating System` | `config/config.json` OS update |
-| `Setup 2: Install Python Virtual Environment` | Python setup Task delegation |
-| `Setup 3: Install Ollama and Local LLM` | Ollama setup Task delegation |
+| `SETUP 1: Select Operating System` | `config/config.json` OS update |
+| `SETUP 2: Install Python Virtual Environment` | Python setup Task delegation |
+| `SETUP 3: Install Ollama and Local LLM` | Ollama setup Task delegation |
 
 | Setup 1 runtime | Rule |
 |---|---|
 | Launch / Task Python | `python` |
 | Virtual environment | System Python re-exec |
 | System environment | Direct execution |
-| `Check 1: Refresh Environment Check File` | Environment check Task delegation |
+| `CHECK 1: Refresh Environment Check File` | Environment check Task delegation |
 | `Run 3: Extension Module` | 확장 모듈 `main()` 실행 |
 | `Test Result: Generate Latest Markdown` | 최근 TEST 결과 Markdown 생성 |
 | `Debug: Current Python File` | 현재 Python 파일 디버그 |

@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Setup 1: Select Operating System",
+            "label": "SETUP 1: Select Operating System",
             "type": "process",
             "command": "python",
             "args": [
@@ -18,7 +18,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Setup 2: Install Python Virtual Environment",
+            "label": "SETUP 2: Install Python Virtual Environment",
             "type": "process",
             "command": "python",
             "args": [
@@ -29,7 +29,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Setup 3: Install Ollama and Local LLM",
+            "label": "SETUP 3: Install Ollama and Local LLM",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -40,7 +40,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Check 1: Refresh Environment Check File",
+            "label": "CHECK 1: Refresh Environment Check File",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -51,7 +51,18 @@
             "problemMatcher": []
         },
         {
-            "label": "Local LLM: Run Ollama Server (Foreground)",
+            "label": "CHECK 2: Show Environment Configuration",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "tools.configuration",
+                "config"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "CHECK 3: Run Ollama Server (Foreground)",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -67,12 +78,15 @@
             "problemMatcher": []
         },
         {
-            "label": "TEST 1: Run All with pytest",
+            "label": "TEST CASE: ALL",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "pytest"
+                "pytest",
+                "-p",
+                "no:cacheprovider",
+                "tests/pytest/test_cases"
             ],
             "group": {
                 "kind": "test",
@@ -81,36 +95,17 @@
             "problemMatcher": []
         },
         {
-            "label": "TEST 2: Run Continuous Tests",
+            "label": "TEST CASE: TEST ID",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
                 "pytest",
-                "tests/pytest",
-                "-m",
-                "ct",
-                "-s"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "TEST 3: Run unittest Suite",
-            "type": "process",
-            "command": "${config:python.defaultInterpreterPath}",
-            "args": [
-                "-m",
-                "unittest",
-                "discover",
-                "-v",
-                "-s",
-                "tests/unittest",
                 "-p",
-                "test_*.py"
+                "no:cacheprovider",
+                "tests/pytest/test_cases",
+                "--test-id",
+                "${input:testCaseId}"
             ],
             "group": {
                 "kind": "test",
@@ -119,7 +114,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Report: Generate Latest Markdown",
+            "label": "REPORT: Generate Latest Markdown",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -130,7 +125,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Report: Convert Latest Markdown to HTML",
+            "label": "REPORT: Convert Latest Markdown to HTML",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -139,6 +134,19 @@
                 "--latest",
                 "--format",
                 "html"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "REPORT: Convert Latest Markdown to DOCX",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "tools.pandoc_reporter",
+                "--latest",
+                "--format",
+                "docx"
             ],
             "problemMatcher": []
         },
@@ -185,6 +193,14 @@
                 "build",
                 "--strict"
             ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "testCaseId",
+            "type": "promptString",
+            "description": "TEST ID",
+            "default": "CT-UART-001"
         }
     ]
 }

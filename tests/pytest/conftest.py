@@ -25,6 +25,10 @@ EQUIPMENT_CATALOG = Path(__file__).resolve().parent / "test_equipments" / "catal
 INTERFACE_CATALOG = Path(__file__).resolve().parent / "test_interfaces" / "catalog.json"
 
 
+def pytest_addoption(parser: pytest.Parser) -> None:
+    parser.addoption("--test-id", action="store", help="Run one registered CT TEST ID")
+
+
 def load_test_case_catalog() -> dict[str, dict[str, Any]]:
     payload = json.loads(TEST_CASE_CATALOG.read_text(encoding="utf-8"))
     entries = payload.get("test_cases", [])
@@ -57,10 +61,23 @@ def load_tool_catalog(path: Path) -> dict[str, dict[str, Any]]:
     return catalog
 
 
-def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
+def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
     catalog = load_test_case_catalog()
     interfaces = load_tool_catalog(INTERFACE_CATALOG)
     equipments = load_tool_catalog(EQUIPMENT_CATALOG)
+    selected_test_id = config.getoption("--test-id", default=None)
+    if selected_test_id:
+        if selected_test_id not in catalog:
+            raise pytest.UsageError(f"Unknown TEST ID: {selected_test_id}")
+        selected = [
+            item
+            for item in items
+            if (marker := item.get_closest_marker("ct")) is not None
+            and marker.kwargs.get("test_id") == selected_test_id
+        ]
+        deselected = [item for item in items if item not in selected]
+        config.hook.pytest_deselected(items=deselected)
+        items[:] = selected
     for item in items:
         marker = item.get_closest_marker("ct")
         if marker is None:
