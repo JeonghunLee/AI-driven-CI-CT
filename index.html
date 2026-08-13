@@ -51,7 +51,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Home
+              Overview
             
           </span>
 </div>
@@ -145,7 +145,7 @@
 <span class="md-ellipsis">
     
   
-    Home
+    Overview
   
 
     
@@ -156,7 +156,7 @@
 <span class="md-ellipsis">
     
   
-    Home
+    Overview
   
 
     
@@ -255,6 +255,15 @@
 </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        플랫폼 선택
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#vs-code_1">
 <span class="md-ellipsis">
       
@@ -277,7 +286,7 @@
 <nav aria-label="3. VS Code 환경 구성" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_6">
+<a class="md-nav__link" href="#_7">
 <span class="md-ellipsis">
       
         설정 파일
@@ -290,6 +299,15 @@
 <span class="md-ellipsis">
       
         Run and Debug
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cross-platform-python">
+<span class="md-ellipsis">
+      
+        Cross-platform Python
       
     </span>
 </a>
@@ -431,7 +449,7 @@
 <span class="md-ellipsis">
     
   
-    TEST
+    TEST Architecture
   
 
     
@@ -443,7 +461,7 @@
 <span class="md-nav__icon md-icon"></span>
             
   
-    TEST
+    TEST Architecture
   
 
           </label>
@@ -481,7 +499,7 @@
 <span class="md-ellipsis">
     
   
-    TEST_RESULTS
+    TEST RESULTS
   
 
     
@@ -493,7 +511,7 @@
 <span class="md-nav__icon md-icon"></span>
             
   
-    TEST_RESULTS
+    TEST RESULTS
   
 
           </label>
@@ -626,6 +644,15 @@
 </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        플랫폼 선택
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#vs-code_1">
 <span class="md-ellipsis">
       
@@ -648,7 +675,7 @@
 <nav aria-label="3. VS Code 환경 구성" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#_6">
+<a class="md-nav__link" href="#_7">
 <span class="md-ellipsis">
       
         설정 파일
@@ -661,6 +688,15 @@
 <span class="md-ellipsis">
       
         Run and Debug
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cross-platform-python">
+<span class="md-ellipsis">
+      
+        Cross-platform Python
       
     </span>
 </a>
@@ -878,7 +914,7 @@
 </tr>
 <tr>
 <td>Primary model</td>
-<td><code>deepseek-r1:7b</code></td>
+<td><code>config/config.json</code> / <code>OLLAMA_MODEL</code></td>
 </tr>
 <tr>
 <td>Default endpoint</td>
@@ -890,7 +926,23 @@
 </tr>
 <tr>
 <td>Model variable</td>
-<td><code>DEEPSEEK_MODEL</code></td>
+<td><code>OLLAMA_MODEL</code></td>
+</tr>
+<tr>
+<td>Project config</td>
+<td><code>config/config.json</code></td>
+</tr>
+<tr>
+<td>Environment check</td>
+<td><code>config/check.json</code></td>
+</tr>
+<tr>
+<td>Model selection</td>
+<td><code>ollama.selected_model</code></td>
+</tr>
+<tr>
+<td>Installed inventory</td>
+<td><code>python -m tools.configuration check</code></td>
 </tr>
 <tr>
 <td>Offline fallback</td>
@@ -909,11 +961,12 @@
     B -- Yes --&gt; D[Server Health Check]
     C --&gt; D
     D --&gt; E{Server Ready?}
-    E -- No --&gt; F[ollama serve]
+    E -- No --&gt; F[Temporary ollama serve]
     E -- Yes --&gt; G[Model Check]
     F --&gt; G
-    G --&gt; H[ollama pull deepseek-r1:7b]
-    H --&gt; I[DeepSeek Ready]</code></pre>
+    G --&gt; H[ollama pull selected model]
+    H --&gt; I[Stop Setup-owned Server]
+    I --&gt; J[Local LLM Model Ready]</code></pre>
 <h3 id="os">OS 설치 방식</h3>
 <table>
 <thead>
@@ -937,14 +990,55 @@
 </tr>
 </tbody>
 </table>
+<h3 id="_6">플랫폼 선택</h3>
+<table>
+<thead>
+<tr>
+<th>선택값</th>
+<th>동작</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto</code></td>
+<td>현재 운영체제 자동 감지</td>
+</tr>
+<tr>
+<td><code>config</code></td>
+<td><code>config/config.json</code>의 <code>os</code> 사용</td>
+</tr>
+<tr>
+<td><code>windows</code></td>
+<td>Windows + winget</td>
+</tr>
+<tr>
+<td><code>linux</code></td>
+<td>Linux + official installer</td>
+</tr>
+<tr>
+<td><code>macos</code></td>
+<td>macOS + Homebrew</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>VS Code input: <code>setupPlatform</code></li>
+<li>Host mismatch: setup 중단</li>
+<li>Default: <code>config</code></li>
+</ul>
 <h3 id="vs-code_1">VS Code 실행</h3>
 <ul>
-<li>Run and Debug: <code>Setup 2: Install Ollama and DeepSeek</code></li>
-<li>Task: <code>Setup: Install Ollama and Pull DeepSeek</code></li>
-<li>Setup module: <code>python -m tools.environment_setup ollama --model deepseek-r1:7b</code></li>
+<li>Run and Debug: <code>Setup 2: Install Ollama and Local LLM</code></li>
+<li>Task: <code>Setup: Install Ollama and Pull Local LLM</code></li>
+<li>Setup module: <code>python -m tools.environment_setup ollama [--model &lt;model&gt;]</code></li>
+<li>Check launch: <code>Check 1: Refresh Environment Check File</code></li>
+<li>Check task: <code>Check: Refresh Environment Check File</code></li>
+<li>Foreground server task: <code>Local LLM: Run Ollama Server (Foreground)</code></li>
+<li>Setup-owned server: setup completion or failure 시 자동 종료</li>
+<li>Existing server: setup에서 종료하지 않음</li>
 </ul>
 <h2 id="3-vs-code">3. VS Code 환경 구성</h2>
-<h3 id="_6">설정 파일</h3>
+<h3 id="_7">설정 파일</h3>
 <div class="highlight"><pre><span></span><code>.vscode/
 ├── settings.json
 ├── launch.json
@@ -964,8 +1058,12 @@
 <td><code>.venv</code> 생성 및 Python dependency 설치</td>
 </tr>
 <tr>
-<td><code>Setup 2: Install Ollama and DeepSeek</code></td>
-<td>Ollama 설치, 서버 실행, DeepSeek pull</td>
+<td><code>Setup 2: Install Ollama and Local LLM</code></td>
+<td>Ollama 설치, 임시 서버 실행, 선택 모델 pull, 임시 서버 종료</td>
+</tr>
+<tr>
+<td><code>Check 1: Refresh Environment Check File</code></td>
+<td>OS, Python, Ollama, 설치 모델 점검 파일 갱신</td>
 </tr>
 <tr>
 <td><code>Run 3: Extension Module</code></td>
@@ -982,6 +1080,33 @@
 <tr>
 <td><code>Debug: Current pytest File</code></td>
 <td>현재 pytest 파일 디버그</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cross-platform-python">Cross-platform Python</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설정</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default interpreter</td>
+<td><code>${workspaceFolder}/.venv</code></td>
+</tr>
+<tr>
+<td>Launch interpreter</td>
+<td><code>${command:python.interpreterPath}</code></td>
+</tr>
+<tr>
+<td>Task interpreter</td>
+<td><code>${command:python.interpreterPath}</code></td>
+</tr>
+<tr>
+<td>MkDocs execution</td>
+<td><code>python -m mkdocs</code></td>
 </tr>
 </tbody>
 </table>
@@ -1007,7 +1132,7 @@
 </tr>
 <tr>
 <td>Setup</td>
-<td>Ollama + DeepSeek</td>
+<td>Ollama + Local LLM</td>
 </tr>
 <tr>
 <td>Test</td>
@@ -1117,7 +1242,7 @@
     B --&gt; E[Latest Result Selection]
     C --&gt; E
     D --&gt; E
-    E --&gt; F[Ollama + DeepSeek]
+    E --&gt; F[Ollama + Local LLM]
     F --&gt; G[Markdown Report]
     G --&gt; H[reports/markdown]
     G --&gt; I[test_result/markdown/latest.md]
@@ -1190,7 +1315,7 @@
 <h3 id="report-generation">Report Generation</h3>
 <div class="highlight"><pre><span></span><code>python -m test_result --docs
 ├── Latest result selection
-├── DeepSeek analysis
+├── Local LLM analysis
 ├── Canonical Markdown generation
 ├── Execution snapshot creation
 ├── Latest TEST page update
