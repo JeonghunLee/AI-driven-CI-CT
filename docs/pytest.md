@@ -11,6 +11,13 @@
 | Stability | Repetition, duration, recovery |
 | Regression | Previous failure and baseline comparison |
 
+## Communication CT
+
+| Test ID | Interface | Scope |
+|---|---|---|
+| `CT-USB-001` | USB | Bulk loopback / packetization / integrity |
+| `CT-NETWORK-001` | Network | Packet loopback / latency / integrity |
+
 ## Structure
 
 ```text

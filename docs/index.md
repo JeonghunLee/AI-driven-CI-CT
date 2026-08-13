@@ -181,6 +181,12 @@ flowchart TD
 
 ## 4. TEST 구조도
 
+| Interface | Test ID | Measurement |
+|---|---|---|
+| UART | `CT-UART-001` | baudrate, error, jitter |
+| USB | `CT-USB-001` | bytes, packets, integrity |
+| Network | `CT-NETWORK-001` | bytes, packets, latency, integrity |
+
 ### Repository Structure
 
 ```text

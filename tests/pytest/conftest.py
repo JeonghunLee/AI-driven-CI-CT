@@ -9,6 +9,8 @@ import pytest
 
 from tests.pytest.test_equipments.saleae import MockSaleaeController
 from tests.pytest.test_interfaces.uart import MockUARTInterface
+from tests.pytest.test_interfaces.usb import MockUSBInterface
+from tests.pytest.test_interfaces.network import MockNetworkInterface
 from tools.result_normalizer import ResultRecord, ResultStore
 
 
@@ -27,6 +29,22 @@ def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo[object]):
 @pytest.fixture
 def uart() -> MockUARTInterface:
     interface = MockUARTInterface()
+    interface.connect()
+    yield interface
+    interface.disconnect()
+
+
+@pytest.fixture
+def usb() -> MockUSBInterface:
+    interface = MockUSBInterface()
+    interface.connect()
+    yield interface
+    interface.disconnect()
+
+
+@pytest.fixture
+def network() -> MockNetworkInterface:
+    interface = MockNetworkInterface()
     interface.connect()
     yield interface
     interface.disconnect()

@@ -236,6 +236,12 @@ Source: `.vscode/tasks.json`
 
 ## 6. Test Architecture
 
+| Interface | Mock | CT ID | Category |
+|---|---|---|---|
+| UART | `MockUARTInterface` | `CT-UART-001` | timing |
+| USB | `MockUSBInterface` | `CT-USB-001` | communication |
+| Network | `MockNetworkInterface` | `CT-NETWORK-001` | communication |
+
 ```text
 tests/
 ├── pytest/
