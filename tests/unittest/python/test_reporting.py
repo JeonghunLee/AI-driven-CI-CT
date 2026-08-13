@@ -1,11 +1,18 @@
-from tools.github_reporter import render_comment
+import unittest
+
 from tools.deepseek import Analysis
+from tools.github_reporter import render_comment
 from tools.result_normalizer import ResultRecord
 
 
-def test_issue_comment_contains_summary_and_evidence() -> None:
-    result = ResultRecord("CT-001", "FAIL", "timing", 1.25, metrics={"jitter": 0.03})
-    comment = render_comment(result, Analysis("Threshold exceeded", "timing", 0.9, "test"))
-    assert "**Result: FAIL**" in comment
-    assert "Threshold exceeded" in comment
-    assert "jitter: 0.03" in comment
+class ReportingTests(unittest.TestCase):
+    def test_issue_comment_contains_summary_and_evidence(self) -> None:
+        result = ResultRecord("CT-001", "FAIL", "timing", 1.25, metrics={"jitter": 0.03})
+        comment = render_comment(result, Analysis("Threshold exceeded", "timing", 0.9, "test"))
+        self.assertIn("**Result: FAIL**", comment)
+        self.assertIn("Threshold exceeded", comment)
+        self.assertIn("jitter: 0.03", comment)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -21,7 +21,7 @@ VS Code와 프로젝트 로컬 Python `.venv`를 중심으로 Unit Test 및 pyte
 
 ## 환경 준비
 
-Windows PowerShell 기준입니다. VS Code의 `VENV create and install` task로도 실행할 수 있습니다.
+Windows PowerShell 기준입니다. VS Code의 `Setup: Create Python Virtual Environment` task로도 실행할 수 있습니다.
 
 ```powershell
 python -m venv .venv
@@ -30,6 +30,26 @@ python -m venv .venv
 ```
 
 VS Code가 `.venv\Scripts\python.exe`를 선택하면 Test Explorer에서 전체 테스트와 개별 테스트를 실행하거나 디버깅할 수 있습니다.
+
+### VS Code Run and Debug
+
+Run and Debug에는 다음 실행 구성이 있습니다.
+
+1. `Setup 1: Install Python Virtual Environment`: `.venv` 생성 후 `requirements.txt`를 설치합니다.
+2. `Setup 2: Install Ollama and DeepSeek`: Ollama가 없으면 OS 패키지 관리자로 설치하고 서버를 시작한 뒤 `deepseek-r1:7b`를 pull합니다.
+3. `Run 3: Extension Module`: `main()`을 제공하는 Python 모듈을 실행하는 확장용 진입점입니다.
+4. `Test Result: Generate Latest Markdown`: 테스트를 재실행하지 않고 가장 최근 결과로 Markdown을 만듭니다.
+
+확장 실행은 `tools/extensions/example.py`를 새 모듈로 교체하고 `.vscode/launch.json`의 `--module` 값만 변경하면 됩니다.
+
+### VS Code Testing
+
+VS Code Python 확장은 pytest와 unittest를 동시에 활성화하면 pytest만 실행하므로, Test Explorer에서는 pytest adapter가 다음 두 디렉터리를 함께 검색하도록 구성했습니다.
+
+- pytest: `tests/pytest`
+- unittest: `tests/unittest`
+
+따라서 Testing 트리에는 `pytest`와 `unittest` 디렉터리가 각각 나타납니다. unittest 코드는 표준 `unittest.TestCase`로 작성되어 있어 Test Explorer의 pytest 실행과 `Test: Run unittest Suite` task의 unittest discovery 양쪽에서 사용할 수 있습니다.
 
 ## 테스트와 리포트
 
@@ -41,13 +61,13 @@ VS Code가 `.venv\Scripts\python.exe`를 선택하면 Test Explorer에서 전체
 .\.venv\Scripts\python.exe -m pytest tests/pytest -m ct -s
 
 # 최신 실행을 DeepSeek로 분석하고 Markdown 생성
-.\.venv\Scripts\python.exe -m tools.pipeline
+.\.venv\Scripts\python.exe -m test_result
 
 # Markdown을 생성하고 docs/test에도 게시
-.\.venv\Scripts\python.exe -m tools.pipeline --docs
+.\.venv\Scripts\python.exe -m test_result --docs
 
 # 변경 소스도 함께 리뷰
-.\.venv\Scripts\python.exe -m tools.pipeline --docs --source-review
+.\.venv\Scripts\python.exe -m test_result --docs --source-review
 ```
 
 Ollama 기본 주소는 `http://127.0.0.1:11434`, 기본 모델은 `deepseek-r1:7b`입니다.
@@ -81,6 +101,18 @@ reports/
 ```
 
 사람이 읽는 기준 결과는 `reports/markdown/.../result.md`입니다. JSON은 테스트 실행과 도구 사이의 machine-readable 중간 데이터로만 사용합니다.
+
+`python -m test_result`를 실행하면 이 canonical 보고서를 생성한 뒤 가장 최근 사본을 `test_result/markdown/latest.md`에도 넣습니다.
+
+```text
+python -m test_result --docs
+└── docs/test/<scope>/<category>/
+    ├── <test-id>.md
+    └── <test-id>/
+        ├── <execution-id-1>.md
+        ├── <execution-id-2>.md
+        └── <execution-id-N>.md
+```
 
 ## Pandoc 변환
 

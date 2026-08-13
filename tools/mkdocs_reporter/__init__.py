@@ -41,13 +41,28 @@ class MarkdownReporter:
 
     def publish(self, source: Path, result: ResultRecord) -> Path:
         if result.category.lower() == "unit":
-            target = self.docs_root / "test" / "unit" / f"{result.test_id}.md"
+            latest_target = self.docs_root / "test" / "unit" / f"{result.test_id}.md"
         else:
             category = result.category.lower().replace(" ", "-")
-            target = self.docs_root / "test" / "ct" / category / f"{result.test_id}.md"
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
-        return target
+            latest_target = self.docs_root / "test" / "ct" / category / f"{result.test_id}.md"
+        execution_dir = latest_target.with_suffix("")
+        execution_dir.mkdir(parents=True, exist_ok=True)
+
+        canonical_dir = self.store.root / "markdown" / result.test_id
+        for canonical in canonical_dir.glob("*/result.md"):
+            execution_id = canonical.parent.name
+            (execution_dir / f"{execution_id}.md").write_text(
+                canonical.read_text(encoding="utf-8"), encoding="utf-8"
+            )
+
+        snapshots = sorted(execution_dir.glob("*.md"), key=lambda path: path.stem, reverse=True)
+        links = "\n".join(f"- [{path.stem}]({result.test_id}/{path.name})" for path in snapshots)
+        latest_content = source.read_text(encoding="utf-8")
+        latest_target.write_text(
+            f"{latest_content}\n## Execution documents\n\n{links or '- None'}\n",
+            encoding="utf-8",
+        )
+        return execution_dir / f"{result.execution_id}.md"
 
     def render(self, result: ResultRecord, analysis: Analysis, important_logs: list[str] | None = None) -> str:
         history = self._history(result.test_id)

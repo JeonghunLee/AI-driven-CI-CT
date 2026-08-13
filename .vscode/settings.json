@@ -4,7 +4,8 @@
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "python.testing.pytestArgs": [
-    "tests"
+    "tests/pytest",
+    "tests/unittest"
   ],
   "python.testing.cwd": "${workspaceFolder}",
   "python.analysis.extraPaths": [

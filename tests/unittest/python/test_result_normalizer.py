@@ -1,28 +1,32 @@
 import json
+import unittest
 from pathlib import Path
-
-import pytest
 
 from tools.result_normalizer import ResultRecord, ResultStore, from_junit
 
 
-def test_result_store_creates_canonical_result_and_logs() -> None:
-    test_root = Path("reports/test-artifacts/unit-result-store")
-    record = ResultRecord("UT-NORMALIZER-001", "pass", "functional", 0.1)
-    path = ResultStore(test_root).save(record)
-    assert json.loads(path.read_text())["status"] == "PASS"
-    assert ResultStore(test_root).latest() == path
-    assert (path.parent / "test.log").exists()
-    assert (test_root / "measurements" / record.test_id / record.execution_id / "measurement.csv").exists()
+class ResultNormalizerTests(unittest.TestCase):
+    def test_result_store_creates_canonical_result_and_logs(self) -> None:
+        test_root = Path("reports/test-artifacts/unit-result-store")
+        record = ResultRecord("UT-NORMALIZER-001", "pass", "functional", 0.1)
+        path = ResultStore(test_root).save(record)
+        self.assertEqual(json.loads(path.read_text())["status"], "PASS")
+        self.assertEqual(ResultStore(test_root).latest(), path)
+        self.assertTrue((path.parent / "test.log").exists())
+        self.assertTrue(
+            (test_root / "measurements" / record.test_id / record.execution_id / "measurement.csv").exists()
+        )
+
+    def test_result_rejects_unknown_status(self) -> None:
+        with self.assertRaisesRegex(ValueError, "unsupported"):
+            ResultRecord("UT-001", "maybe", "functional", 0.0)
+
+    def test_junit_normalization(self) -> None:
+        record = from_junit("tests/fixtures/junit.xml", "UNIT-SAMPLE")
+        self.assertEqual(record.status, "FAIL")
+        self.assertEqual(record.metrics, {"tests": 2, "failures": 1, "errors": 0, "skipped": 0})
+        self.assertAlmostEqual(record.duration, 0.3)
 
 
-def test_result_rejects_unknown_status() -> None:
-    with pytest.raises(ValueError, match="unsupported"):
-        ResultRecord("UT-001", "maybe", "functional", 0.0)
-
-
-def test_junit_normalization() -> None:
-    record = from_junit("tests/fixtures/junit.xml", "UNIT-SAMPLE")
-    assert record.status == "FAIL"
-    assert record.metrics == {"tests": 2, "failures": 1, "errors": 0, "skipped": 0}
-    assert record.duration == pytest.approx(0.3)
+if __name__ == "__main__":
+    unittest.main()

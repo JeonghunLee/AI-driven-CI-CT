@@ -12,4 +12,6 @@ reports/measurements/*
 reports/markdown/*
 reports/test-artifacts/
 reports/raw/
+test_result/markdown/*.md
 !reports/**/.gitkeep
+!test_result/markdown/.gitkeep

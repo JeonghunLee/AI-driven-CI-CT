@@ -1,8 +1,13 @@
-import pytest
+import unittest
 
 from tools.pandoc_reporter import convert
 
 
-def test_pandoc_rejects_unknown_format() -> None:
-    with pytest.raises(ValueError, match="unsupported"):
-        convert("missing.md", "odt")
+class PandocReporterTests(unittest.TestCase):
+    def test_pandoc_rejects_unknown_format(self) -> None:
+        with self.assertRaisesRegex(ValueError, "unsupported"):
+            convert("missing.md", "odt")
+
+
+if __name__ == "__main__":
+    unittest.main()

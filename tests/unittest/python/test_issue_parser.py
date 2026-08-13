@@ -1,8 +1,11 @@
+import unittest
+
 from tools.issue_parser import parse_issue_body
 
 
-def test_parse_issue_form_markdown() -> None:
-    body = """### Test Type
+class IssueParserTests(unittest.TestCase):
+    def test_parse_issue_form_markdown(self) -> None:
+        body = """### Test Type
 
 pytest / CT
 
@@ -10,4 +13,8 @@ pytest / CT
 
 Timing
 """
-    assert parse_issue_body(body) == {"Test Type": "pytest / CT", "Test Category": "Timing"}
+        self.assertEqual(parse_issue_body(body), {"Test Type": "pytest / CT", "Test Category": "Timing"})
+
+
+if __name__ == "__main__":
+    unittest.main()

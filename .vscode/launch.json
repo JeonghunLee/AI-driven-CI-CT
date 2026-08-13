@@ -2,43 +2,69 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Current File (.venv)",
+      "name": "Setup 1: Install Python Virtual Environment",
       "type": "debugpy",
       "request": "launch",
+      "python": "python",
+      "module": "tools.environment_setup",
+      "args": ["python"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Setup 2: Install Ollama and DeepSeek",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "module": "tools.environment_setup",
+      "args": ["ollama", "--model", "deepseek-r1:7b"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Run 3: Extension Module",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "module": "tools.extension_runner",
+      "args": ["--module", "tools.extensions.example"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Test Result: Generate Latest Markdown",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "module": "test_result",
+      "args": ["--docs"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Debug: Current Python File",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
       "program": "${file}",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
     },
     {
-      "name": "pytest: Current Test File",
+      "name": "Debug: Current pytest File",
       "type": "debugpy",
       "request": "launch",
+      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
       "module": "pytest",
       "args": ["${file}", "-s", "-vv"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": false
-    },
-    {
-      "name": "CT: UART Timing",
-      "type": "debugpy",
-      "request": "launch",
-      "module": "pytest",
-      "args": ["tests/pytest/test_cases/timing/test_uart_timing.py", "-m", "ct", "-s", "-vv"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": false
-    },
-    {
-      "name": "Tool: Analysis and Markdown Report",
-      "type": "debugpy",
-      "request": "launch",
-      "module": "tools.pipeline",
-      "args": ["--docs"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": true
     }
   ]
 }

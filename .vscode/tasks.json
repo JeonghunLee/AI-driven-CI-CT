@@ -2,13 +2,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "VENV create and install",
+            "label": "Setup: Create Python Virtual Environment",
             "type": "shell",
-            "command": "python -m venv .venv; .\\.venv\\Scripts\\python.exe -m pip install -r requirements.txt",
+            "command": "python",
+            "args": ["-m", "tools.environment_setup", "python"],
             "problemMatcher": []
         },
         {
-            "label": "VENV pytest all",
+            "label": "Setup: Install Ollama and Pull DeepSeek",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": ["-m", "tools.environment_setup", "ollama", "--model", "deepseek-r1:7b"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Test: Run All with pytest",
             "type": "shell",
             "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
             "args": ["-m", "pytest"],
@@ -16,7 +24,7 @@
             "problemMatcher": []
         },
         {
-            "label": "VENV pytest CT",
+            "label": "Test: Run Continuous Tests",
             "type": "shell",
             "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
             "args": ["-m", "pytest", "tests/pytest", "-m", "ct", "-s"],
@@ -24,21 +32,29 @@
             "problemMatcher": []
         },
         {
-            "label": "VENV generate test report",
+            "label": "Test: Run unittest Suite",
             "type": "shell",
             "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-            "args": ["-m", "tools.pipeline", "--docs"],
+            "args": ["-m", "unittest", "discover", "-v", "-s", "tests/unittest", "-p", "test_*.py"],
+            "group": "test",
             "problemMatcher": []
         },
         {
-            "label": "VENV Pandoc HTML",
+            "label": "Report: Generate Latest Markdown",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": ["-m", "test_result", "--docs"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Report: Convert Latest Markdown to HTML",
             "type": "shell",
             "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
             "args": ["-m", "tools.pandoc_reporter", "--latest", "--format", "html"],
             "problemMatcher": []
         },
         {
-            "label": "VENV mkdoc serve Local",
+            "label": "MkDocs: Serve Locally",
             "type": "shell",
             "command": "powershell",
             "args": [
@@ -49,7 +65,7 @@
             ]
         },
         {
-            "label": "VENV mkdoc serve Remote",
+            "label": "MkDocs: Serve on Network",
             "type": "shell",
             "command": "powershell",
             "args": [
@@ -60,7 +76,7 @@
             ]
         },
         {
-            "label": "VENV mkdoc build",
+            "label": "MkDocs: Build",
             "type": "shell",
             "command": "powershell",
             "args": [
@@ -71,7 +87,7 @@
             ]
         },
         {
-            "label": "VENV mkdoc build strict",
+            "label": "MkDocs: Build Strict",
             "type": "shell",
             "command": "powershell",
             "args": [
