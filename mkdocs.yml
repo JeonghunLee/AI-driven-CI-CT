@@ -10,6 +10,12 @@ repo_name: JeonghunLee/AI-driven-CI-CT
 
 nav:
   - Home: index.md
+  - TEST:
+    - Pytest: pytest.md
+    - Unittest: unittest.md
+  - TEST_RESULTS:
+    - Pytest: pytest_results.md
+    - Unittest: unittest_results.md
 
 
 plugins:

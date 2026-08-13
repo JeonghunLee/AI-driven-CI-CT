@@ -293,8 +293,10 @@ Execution rule:
 - Optional MkDocs latest copy: `--docs`
 - MkDocs execution snapshot: append-only
 - Previous canonical reports: snapshot backfill
-- MkDocs root index: automatic regeneration
-- Nested `docs/test/index.md`: prohibited
+- MkDocs system index: manual
+- MkDocs pytest result index: automatic regeneration
+- MkDocs unittest result index: automatic regeneration
+- MkDocs navigation: manual `mkdocs.yml` configuration
 - Optional source review: `--source-review`
 
 ```text
@@ -314,7 +316,8 @@ reports/markdown/<test-id>/<execution-id>/result.md
           ├── <test-id>.md                    # Latest
           └── <test-id>/<execution-id>.md     # Per execution
       │
-      └── docs/index.md                       # Auto-generated catalog
+      ├── docs/pytest_results.md              # Auto-generated pytest catalog
+      └── docs/unittest_results.md            # Auto-generated unittest catalog
 ```
 
 ## 9. Markdown Report Schema
@@ -389,7 +392,9 @@ DeepSeek
 | Global latest Markdown | Canonical Markdown | `test_result/markdown/latest.md` |
 | MkDocs latest page | Canonical Markdown | `docs/test/.../<test-id>.md` |
 | MkDocs execution page | Canonical Markdown | `docs/test/.../<test-id>/<execution-id>.md` |
-| MkDocs root index | Published page scan | `docs/index.md` |
+| MkDocs system index | System architecture | `docs/index.md` |
+| MkDocs pytest result index | Published CT page scan | `docs/pytest_results.md` |
+| MkDocs unittest result index | Published unit page scan | `docs/unittest_results.md` |
 | DOCX | Canonical Markdown | Pandoc output |
 | PDF | Canonical Markdown | Pandoc output |
 | HTML | Canonical Markdown | Pandoc output |
@@ -464,8 +469,12 @@ Excluded from GitHub Issue:
 │   ├── measurements/
 │   └── markdown/
 ├── docs/
-│   ├── index.md                     # Auto-generated catalog
-│   └── test/                        # No nested index.md
+│   ├── index.md                     # Manual system overview
+│   ├── pytest.md                    # pytest system description
+│   ├── unittest.md                  # unittest system description
+│   ├── pytest_results.md            # Auto-generated pytest catalog
+│   ├── unittest_results.md          # Auto-generated unittest catalog
+│   └── test/                        # Latest and execution reports
 ├── DESIGN.md
 ├── mkdocs.yml
 ├── pytest.ini

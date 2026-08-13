@@ -31,6 +31,9 @@ class MarkdownReporterTests(unittest.TestCase):
         reports_root = "reports/test-artifacts/multi-execution-reports"
         docs_root = "reports/test-artifacts/multi-execution-docs"
         reporter = MarkdownReporter(reports_root, docs_root)
+        root_index = Path(docs_root) / "index.md"
+        root_index.parent.mkdir(parents=True, exist_ok=True)
+        root_index.write_text("# System Overview", encoding="utf-8")
         analysis = Analysis("Stable", "passed", 1.0, "test")
         first = ResultRecord("CT-MD-HISTORY", "PASS", "timing", 0.1, execution_id="20260101-000001")
         second = ResultRecord("CT-MD-HISTORY", "FAIL", "timing", 0.2, execution_id="20260101-000002")
@@ -48,11 +51,14 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertIn("## Execution documents", latest)
         self.assertIn("20260101-000001", latest)
         self.assertIn("20260101-000002", latest)
-        index = (Path(docs_root) / "index.md").read_text(encoding="utf-8")
-        self.assertIn("| timing | `CT-MD-HISTORY` |", index)
-        self.assertIn("20260101-000001", index)
-        self.assertIn("20260101-000002", index)
-        self.assertFalse((Path(docs_root) / "test" / "index.md").exists())
+        pytest_index = (Path(docs_root) / "pytest_results.md").read_text(encoding="utf-8")
+        unittest_index = (Path(docs_root) / "unittest_results.md").read_text(encoding="utf-8")
+        self.assertIn("| timing | `CT-MD-HISTORY` |", pytest_index)
+        self.assertIn("(test/ct/timing/CT-MD-HISTORY.md)", pytest_index)
+        self.assertIn("20260101-000001", pytest_index)
+        self.assertIn("20260101-000002", pytest_index)
+        self.assertIn("# unittest Results", unittest_index)
+        self.assertEqual(root_index.read_text(encoding="utf-8"), "# System Overview")
 
 
 if __name__ == "__main__":

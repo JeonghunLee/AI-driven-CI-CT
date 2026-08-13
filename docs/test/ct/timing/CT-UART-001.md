@@ -38,19 +38,19 @@
 
 ## DeepSeek analysis
 
-DeepSeek returned no summary
+CT-UART-001 passed in 0.001s.
 
-- **Classification:** `timing_test`
-- **Confidence:** 0.50
-- **Analyzer:** `ollama/deepseek-r1:7b`
+- **Classification:** `passed`
+- **Confidence:** 1.00
+- **Analyzer:** `deterministic-fallback`
 
 ### Failure analysis
 
-{'interface': 'UART', 'equipment': 'Saleae', 'failure_type': 'jitter', 'description': 'Timing measurements show significant deviation from expected baudrate.', 'severity': 'High', 'source': 'local'}
+Not applicable
 
 ### Source review
 
-{}
+Not requested
 
 ## Test history
 

@@ -106,13 +106,13 @@ reports/
 
 ```text
 python -m test_result --docs
-├── docs/index.md
-└── docs/test/<scope>/<category>/
-    ├── <test-id>.md
-    └── <test-id>/
-        ├── <execution-id-1>.md
-        ├── <execution-id-2>.md
-        └── <execution-id-N>.md
+└── docs/test/
+    └── <scope>/<category>/
+        ├── <test-id>.md
+        └── <test-id>/
+            ├── <execution-id-1>.md
+            ├── <execution-id-2>.md
+            └── <execution-id-N>.md
 ```
 
 ## Pandoc 변환

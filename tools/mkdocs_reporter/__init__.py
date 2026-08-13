@@ -62,14 +62,15 @@ class MarkdownReporter:
             f"{latest_content}\n## Execution documents\n\n{links or '- None'}\n",
             encoding="utf-8",
         )
-        self.update_index()
+        self.update_indexes()
         return execution_dir / f"{result.execution_id}.md"
 
-    def update_index(self) -> Path:
+    def update_indexes(self) -> tuple[Path, Path]:
         test_root = self.docs_root / "test"
         ct_rows: list[str] = []
         unit_rows: list[str] = []
-        execution_rows: list[tuple[str, str]] = []
+        ct_execution_rows: list[tuple[str, str]] = []
+        unit_execution_rows: list[tuple[str, str]] = []
 
         for path in sorted(test_root.rglob("*.md")):
             relative = path.relative_to(test_root)
@@ -84,37 +85,48 @@ class MarkdownReporter:
                 test_id = Path(parts[1]).stem
                 count = len(list(path.with_suffix("").glob("*.md")))
                 unit_rows.append(f"| `{_safe(test_id)}` | [Open]({link}) | {count} |")
-            elif (parts[0] == "ct" and len(parts) == 4) or (parts[0] == "unit" and len(parts) == 3):
-                execution_rows.append((Path(parts[-1]).stem, link))
+            elif parts[0] == "ct" and len(parts) == 4:
+                ct_execution_rows.append((Path(parts[-1]).stem, link))
+            elif parts[0] == "unit" and len(parts) == 3:
+                unit_execution_rows.append((Path(parts[-1]).stem, link))
 
-        recent = "\n".join(
+        ct_recent = "\n".join(
             f"- [`{execution_id}`]({link})"
-            for execution_id, link in sorted(execution_rows, key=lambda item: item[0], reverse=True)[:20]
+            for execution_id, link in sorted(ct_execution_rows, key=lambda item: item[0], reverse=True)[:20]
         ) or "- None"
-        index = f"""# AI-driven CI/CT
+        unit_recent = "\n".join(
+            f"- [`{execution_id}`]({link})"
+            for execution_id, link in sorted(unit_execution_rows, key=lambda item: item[0], reverse=True)[:20]
+        ) or "- None"
+        pytest_index = f"""# pytest Results
 
-## Test Reports
-
-### Continuous Tests
+## Continuous Tests
 
 | Category | Test ID | Latest | Executions |
 |---|---|---|---:|
 {chr(10).join(ct_rows) or '| - | - | - | 0 |'}
 
-### Unit Tests
+## Recent Executions
+
+{ct_recent}
+"""
+        unittest_index = f"""# unittest Results
+
+## Unit Tests
 
 | Test ID | Latest | Executions |
 |---|---|---:|
 {chr(10).join(unit_rows) or '| - | - | 0 |'}
 
-### Recent Executions
+## Recent Executions
 
-{recent}
+{unit_recent}
 """
-        destination = self.docs_root / "index.md"
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(index, encoding="utf-8")
-        return destination
+        pytest_destination = self.docs_root / "pytest_results.md"
+        unittest_destination = self.docs_root / "unittest_results.md"
+        pytest_destination.write_text(pytest_index, encoding="utf-8")
+        unittest_destination.write_text(unittest_index, encoding="utf-8")
+        return pytest_destination, unittest_destination
 
     def render(self, result: ResultRecord, analysis: Analysis, important_logs: list[str] | None = None) -> str:
         history = self._history(result.test_id)
