@@ -2,27 +2,47 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Setup 1: Install Python Virtual Environment",
+      "name": "Setup 1: Select Operating System",
       "type": "debugpy",
       "request": "launch",
       "python": "${command:python.interpreterPath}",
       "windows": {"python": "python"},
       "linux": {"python": "python3"},
       "osx": {"python": "python3"},
-      "module": "tools.environment_setup",
-      "args": ["python", "--platform", "${input:setupPlatform}"],
-      "console": "integratedTerminal",
+      "module": "tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "Setup 1: Select Operating System",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
     },
     {
-      "name": "Setup 2: Install Ollama and Local LLM",
+      "name": "Setup 2: Install Python Virtual Environment",
       "type": "debugpy",
       "request": "launch",
       "python": "${command:python.interpreterPath}",
-      "module": "tools.environment_setup",
-      "args": ["ollama", "--platform", "${input:setupPlatform}"],
-      "console": "integratedTerminal",
+      "windows": {"python": "python"},
+      "linux": {"python": "python3"},
+      "osx": {"python": "python3"},
+      "module": "tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "Setup 2: Install Python Virtual Environment",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Setup 3: Install Ollama and Local LLM",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${command:python.interpreterPath}",
+      "module": "tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "Setup 3: Install Ollama and Local LLM",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
     },
@@ -32,8 +52,10 @@
       "request": "launch",
       "python": "${command:python.interpreterPath}",
       "module": "tools.configuration",
-      "args": ["check"],
-      "console": "integratedTerminal",
+      "args": ["config"],
+      "preLaunchTask": "Check: Refresh Environment Check File",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
     },
@@ -79,15 +101,6 @@
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": false
-    }
-  ],
-  "inputs": [
-    {
-      "id": "setupPlatform",
-      "type": "pickString",
-      "description": "Select the operating system for environment setup",
-      "options": ["config", "auto", "windows", "linux", "macos"],
-      "default": "config"
     }
   ]
 }

@@ -1,14 +1,12 @@
 from __future__ import annotations
 
 import argparse
-from contextlib import contextmanager
 import json
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
-import time
 from pathlib import Path
 from urllib.error import URLError
 from urllib.parse import urlparse
@@ -106,45 +104,6 @@ def _ollama_ready(url: str) -> bool:
         return False
 
 
-def _stop_process(process: subprocess.Popen[bytes]) -> None:
-    if process.poll() is not None:
-        return
-    process.terminate()
-    try:
-        process.wait(timeout=10)
-    except subprocess.TimeoutExpired:
-        process.kill()
-        process.wait(timeout=10)
-
-
-@contextmanager
-def _ollama_server(executable: str, url: str):
-    if _ollama_ready(url):
-        yield
-        return
-    flags = 0
-    if os.name == "nt":
-        flags = subprocess.CREATE_NO_WINDOW  # type: ignore[attr-defined]
-    process = subprocess.Popen(
-        [executable, "serve"],
-        cwd=ROOT,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        creationflags=flags,
-    )
-    try:
-        for _ in range(30):
-            if _ollama_ready(url):
-                yield
-                return
-            if process.poll() is not None:
-                raise RuntimeError("Ollama server stopped before it became ready")
-            time.sleep(1)
-        raise RuntimeError("Ollama server did not become ready within 30 seconds")
-    finally:
-        _stop_process(process)
-
-
 def _is_local_endpoint(url: str) -> bool:
     return (urlparse(url).hostname or "").lower() in {"127.0.0.1", "localhost", "::1"}
 
@@ -169,12 +128,12 @@ def setup_ollama(model: str | None = None, platform: str = "config") -> None:
     platform = selected_platform(platform)
     print(f"Setup platform: {platform}", flush=True)
     if _is_local_endpoint(url):
-        executable = _ollama_executable(platform) or _install_ollama(platform)
-        with _ollama_server(executable, url):
-            _setup_model(url, model)
-        return
+        _ollama_executable(platform) or _install_ollama(platform)
     if not _ollama_ready(url):
-        raise RuntimeError(f"Remote Ollama is not reachable: {url}")
+        raise RuntimeError(
+            f"Ollama is not reachable: {url}. "
+            "Start 'Local LLM: Run Ollama Server (Foreground)' and retry."
+        )
     _setup_model(url, model)
 
 

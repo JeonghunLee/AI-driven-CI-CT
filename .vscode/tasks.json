@@ -2,20 +2,30 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Setup: Create Python Virtual Environment",
+            "label": "Setup 1: Select Operating System",
             "type": "process",
             "command": "${command:python.interpreterPath}",
-            "args": ["-m", "tools.environment_setup", "python", "--platform", "${input:setupPlatform}"],
+            "args": ["-m", "tools.configuration", "set-os", "--os", "${input:targetOS}"],
             "windows": {"command": "python"},
             "linux": {"command": "python3"},
             "osx": {"command": "python3"},
             "problemMatcher": []
         },
         {
-            "label": "Setup: Install Ollama and Pull Local LLM",
+            "label": "Setup 2: Install Python Virtual Environment",
             "type": "process",
             "command": "${command:python.interpreterPath}",
-            "args": ["-m", "tools.environment_setup", "ollama", "--platform", "${input:setupPlatform}"],
+            "args": ["-m", "tools.environment_setup", "python", "--platform", "config"],
+            "windows": {"command": "python"},
+            "linux": {"command": "python3"},
+            "osx": {"command": "python3"},
+            "problemMatcher": []
+        },
+        {
+            "label": "Setup 3: Install Ollama and Local LLM",
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "tools.environment_setup", "ollama", "--platform", "config"],
             "problemMatcher": []
         },
         {
@@ -29,7 +39,7 @@
             "label": "Local LLM: Run Ollama Server (Foreground)",
             "type": "process",
             "command": "${command:python.interpreterPath}",
-            "args": ["-m", "tools.environment_setup", "serve", "--platform", "${input:setupPlatform}"],
+            "args": ["-m", "tools.environment_setup", "serve", "--platform", "config"],
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated",
@@ -119,11 +129,11 @@
     ],
     "inputs": [
         {
-            "id": "setupPlatform",
+            "id": "targetOS",
             "type": "pickString",
-            "description": "Select the operating system for environment setup",
-            "options": ["config", "auto", "windows", "linux", "macos"],
-            "default": "config"
+            "description": "Select the operating system stored in config/config.json",
+            "options": ["auto", "windows", "linux", "macos"],
+            "default": "auto"
         }
     ]
 }

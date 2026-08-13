@@ -26,14 +26,18 @@ CT = Test + Analysis + Documentation
 ```text
 VS Code
 ├── Run and Debug
-│   ├── Python .venv Setup
-│   ├── Ollama + Local LLM Setup
+│   ├── Setup Task Delegation
+│   ├── Check Task Delegation
 │   ├── Extension Module
-│   └── Latest Markdown Report
+│   ├── Latest Markdown Report
+│   ├── Current Python Debug
+│   └── Current pytest Debug
 ├── Testing
 │   ├── tests/pytest
 │   └── tests/unittest
 └── Tasks
+    ├── Setup / Check
+    ├── Foreground Ollama Server
     ├── Test
     ├── Report
     ├── MkDocs
@@ -77,17 +81,25 @@ Source: `.vscode/launch.json`
 
 | Order | Configuration | Runtime | Entry point | Purpose |
 |---:|---|---|---|---|
-| 1 | `Setup 1: Install Python Virtual Environment` | System Python | `tools.environment_setup python` | `.venv` creation, dependency installation |
-| 2 | `Setup 2: Install Ollama and Local LLM` | `.venv` Python | `tools.environment_setup ollama` | Ollama installation, temporary server, selected model pull, owned-process cleanup |
-| 3 | `Check 1: Refresh Environment Check File` | `.venv` Python | `tools.configuration check` | OS, Python, Ollama, model inventory check |
-| 4 | `Run 3: Extension Module` | `.venv` Python | `tools.extension_runner` | Future module execution |
-| 5 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_result --docs` | Latest result analysis, Markdown generation |
-| 6 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
-| 7 | `Debug: Current pytest File` | `.venv` Python | pytest current file | Test debugging |
+| 1 | `Setup 1: Select Operating System` | Task delegation | `tools.configuration set-os` | OS config update |
+| 2 | `Setup 2: Install Python Virtual Environment` | Task delegation | `preLaunchTask` | `.venv` creation, dependency installation |
+| 3 | `Setup 3: Install Ollama and Local LLM` | Task delegation | `preLaunchTask` | Ollama installation, selected model pull |
+| 4 | `Check 1: Refresh Environment Check File` | Task delegation | `preLaunchTask` | Environment check |
+| 5 | `Run 3: Extension Module` | `.venv` Python | `tools.extension_runner` | Future module execution |
+| 6 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_result --docs` | Latest result analysis, Markdown generation |
+| 7 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
+| 8 | `Debug: Current pytest File` | `.venv` Python | pytest current file | Test debugging |
+
+| Launch constraint | Value |
+|---|---|
+| Setup entry | Task delegation |
+| Check entry | Task delegation |
+| Background process | None |
+| Setup location | `.vscode/tasks.json` |
 
 | Setup input | Options | Default | Validation |
 |---|---|---|---|
-| `setupPlatform` | `config`, `auto`, `windows`, `linux`, `macos` | `config` | Configured/selected OS = host OS |
+| `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `config/config.json` |
 
 | VS Code Python path | Value |
 |---|---|
@@ -122,19 +134,16 @@ Ollama executable check
     └── Linux: official installer
           │
           ▼
-Temporary Ollama server startup
+Foreground Ollama server check
           │
-          ▼
-ollama pull <selected-model>
-          │
-          ▼
-Owned server process cleanup
+          ├── Ready: ollama pull <selected-model>
+          └── Not ready: setup stop
 ```
 
 | Server state before setup | Setup behavior | Server state after setup |
 |---|---|---|
 | Running | Reuse | Running; external ownership |
-| Stopped | Temporary start | Stopped; setup ownership |
+| Stopped | Setup stop | Stopped |
 | Remote endpoint | Health check only | Unchanged |
 
 | Platform | Installer | Requirement |
@@ -193,8 +202,9 @@ Source: `.vscode/tasks.json`
 
 | Group | Task |
 |---|---|
-| Setup | `Setup: Create Python Virtual Environment` |
-| Setup | `Setup: Install Ollama and Pull Local LLM` |
+| Setup | `Setup 1: Select Operating System` |
+| Setup | `Setup 2: Install Python Virtual Environment` |
+| Setup | `Setup 3: Install Ollama and Local LLM` |
 | Check | `Check: Refresh Environment Check File` |
 | Runtime | `Local LLM: Run Ollama Server (Foreground)` |
 | Test | `Test: Run All with pytest` |
@@ -389,7 +399,7 @@ reports/markdown/<test-id>/<execution-id>/result.md
 
 | Process | Execution mode | Stop rule |
 |---|---|---|
-| Setup-owned Ollama server | Temporary child process | Setup completion or failure |
+| Setup task | No child server | Task completion |
 | Existing Ollama server | External process | No control |
 | VS Code Ollama server task | Foreground process task | VS Code task termination |
 
@@ -584,7 +594,7 @@ Excluded from GitHub Issue:
 ## 15. Final Workflow
 
 ```text
-Run and Debug: Environment Setup
+Tasks: Environment Setup
               │
               ▼
             .venv

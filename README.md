@@ -38,20 +38,26 @@
 python -m tools.environment_setup python --platform config
 ```
 
-### VS Code Run and Debug
+### VS Code 실행 구분
 
-| Order | Configuration | 기능 |
-|---:|---|---|
-| 1 | `Setup 1: Install Python Virtual Environment` | `.venv` + dependencies |
-| 2 | `Setup 2: Install Ollama and Local LLM` | Ollama + selected model |
-| 3 | `Check 1: Refresh Environment Check File` | `config/check.json` 갱신 |
-| 4 | `Run 3: Extension Module` | Extension `main()` |
-| 5 | `Test Result: Generate Latest Markdown` | Latest result report |
-
-| Platform input | 값 |
+| 영역 | 포함 항목 |
 |---|---|
-| Default | `config` |
-| Options | `config`, `auto`, `windows`, `linux`, `macos` |
+| Run and Debug | Setup, check, extension, report, current Python, current pytest |
+| Tasks | Python setup, Ollama setup, environment check, foreground server |
+| Launch background process | None |
+
+| Run and Debug Setup | 실행 방식 |
+|---|---|
+| Setup 1 | OS selection → `config/config.json` |
+| Setup 2 | `preLaunchTask` → Python setup Task |
+| Setup 3 | `preLaunchTask` → Ollama setup Task |
+| Check 1 | `preLaunchTask` → Environment check Task |
+| Launch completion | `tools.configuration config` → immediate exit |
+
+| Setup 1 OS input | 값 |
+|---|---|
+| Default | `auto` |
+| Options | `auto`, `windows`, `linux`, `macos` |
 | Config source | `config/config.json` → `os` |
 | Host mismatch | Setup stop |
 | VS Code Python | `${command:python.interpreterPath}` |
@@ -132,7 +138,7 @@ config/
 | Ollama server state | Setup behavior | Completion behavior |
 |---|---|---|
 | Existing server | Reuse | Preserve |
-| Setup-owned server | Temporary start | Stop |
+| Setup task | No server start | Foreground server required |
 | VS Code foreground task | Explicit start | Task stop |
 | Ollama unavailable | Deterministic fallback | Markdown generation |
 

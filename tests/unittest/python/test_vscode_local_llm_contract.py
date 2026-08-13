@@ -13,40 +13,40 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         self.assertIn(self.config["os"], ["auto", "windows", "linux", "macos"])
         self.assertTrue(self.config["ollama"]["selected_model"])
 
-    def test_launch_setup_uses_internal_model_config(self) -> None:
-        setup = next(
-            item for item in self.launch["configurations"]
-            if item["name"] == "Setup 2: Install Ollama and Local LLM"
-        )
-        self.assertEqual(
-            setup["args"],
-            ["ollama", "--platform", "${input:setupPlatform}"],
-        )
-        self.assertTrue(any("Check File" in item["name"] for item in self.launch["configurations"]))
+    def test_launch_setup_delegates_to_foreground_tasks(self) -> None:
+        expected = {
+            "Setup 1: Select Operating System": "Setup 1: Select Operating System",
+            "Setup 2: Install Python Virtual Environment": "Setup 2: Install Python Virtual Environment",
+            "Setup 3: Install Ollama and Local LLM": "Setup 3: Install Ollama and Local LLM",
+            "Check 1: Refresh Environment Check File": "Check: Refresh Environment Check File",
+        }
+        configurations = {item["name"]: item for item in self.launch["configurations"]}
+        for name, task in expected.items():
+            configuration = configurations[name]
+            self.assertEqual(configuration["preLaunchTask"], task)
+            self.assertEqual(configuration["module"], "tools.configuration")
+            self.assertEqual(configuration["args"], ["config"])
+            self.assertNotEqual(configuration["module"], "tools.environment_setup")
+        self.assertNotIn("inputs", self.launch)
 
     def test_python_setup_uses_platform_picker(self) -> None:
-        launch = next(
-            item for item in self.launch["configurations"]
-            if item["name"] == "Setup 1: Install Python Virtual Environment"
-        )
         task = next(
             item for item in self.tasks["tasks"]
-            if item["label"] == "Setup: Create Python Virtual Environment"
+            if item["label"] == "Setup 2: Install Python Virtual Environment"
         )
-        self.assertEqual(launch["args"], ["python", "--platform", "${input:setupPlatform}"])
         self.assertEqual(
             task["args"],
-            ["-m", "tools.environment_setup", "python", "--platform", "${input:setupPlatform}"],
+            ["-m", "tools.environment_setup", "python", "--platform", "config"],
         )
 
     def test_task_setup_uses_internal_model_config(self) -> None:
         setup = next(
             item for item in self.tasks["tasks"]
-            if item["label"] == "Setup: Install Ollama and Pull Local LLM"
+            if item["label"] == "Setup 3: Install Ollama and Local LLM"
         )
         self.assertEqual(
             setup["args"],
-            ["-m", "tools.environment_setup", "ollama", "--platform", "${input:setupPlatform}"],
+            ["-m", "tools.environment_setup", "ollama", "--platform", "config"],
         )
         self.assertTrue(any("Check File" in item["label"] for item in self.tasks["tasks"]))
 
@@ -59,17 +59,14 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         self.assertNotIn("isBackground", task)
         self.assertEqual(
             task["args"],
-            ["-m", "tools.environment_setup", "serve", "--platform", "${input:setupPlatform}"],
+            ["-m", "tools.environment_setup", "serve", "--platform", "config"],
         )
 
     def test_platform_picker_supports_all_hosts(self) -> None:
-        expected = ["config", "auto", "windows", "linux", "macos"]
-        launch_input = next(item for item in self.launch["inputs"] if item["id"] == "setupPlatform")
-        task_input = next(item for item in self.tasks["inputs"] if item["id"] == "setupPlatform")
-        self.assertEqual(launch_input["options"], expected)
+        expected = ["auto", "windows", "linux", "macos"]
+        task_input = next(item for item in self.tasks["inputs"] if item["id"] == "targetOS")
         self.assertEqual(task_input["options"], expected)
-        self.assertEqual(launch_input["default"], "config")
-        self.assertEqual(task_input["default"], "config")
+        self.assertEqual(task_input["default"], "auto")
 
     def test_python_commands_do_not_use_windows_venv_paths(self) -> None:
         for configuration in self.launch["configurations"]:

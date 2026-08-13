@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from tools import configuration
 
@@ -13,6 +13,18 @@ class ConfigurationTests(unittest.TestCase):
         value = json.loads(Path("config/config.json").read_text(encoding="utf-8"))
         self.assertIn(value["os"], configuration.SUPPORTED_OS)
         self.assertTrue(value["ollama"]["selected_model"])
+
+    def test_set_configured_os_preserves_ollama_config(self) -> None:
+        path = Mock()
+        directory = Mock()
+        source = {"version": 1, "os": "auto", "ollama": {"selected_model": "model:test"}}
+        with patch("tools.configuration.CONFIG_PATH", path), patch(
+            "tools.configuration.CONFIG_DIR", directory
+        ), patch("tools.configuration.load_config", return_value=source):
+            configuration.set_configured_os("linux")
+        written = json.loads(path.write_text.call_args.args[0])
+        self.assertEqual(written["os"], "linux")
+        self.assertEqual(written["ollama"]["selected_model"], "model:test")
 
     @patch("tools.configuration._command_version", return_value="ollama version test")
     @patch(

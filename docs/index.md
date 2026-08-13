@@ -38,8 +38,9 @@ flowchart TD
 
 ### VS Code 실행
 
-- Run and Debug: `Setup 1: Install Python Virtual Environment`
-- Task: `Setup: Create Python Virtual Environment`
+- Run and Debug: `Setup 2: Install Python Virtual Environment`
+- Task: `Setup 2: Install Python Virtual Environment`
+- Task: `Setup 2: Install Python Virtual Environment`
 - Setup module: `python -m tools.environment_setup python`
 
 ## 2. Ollama 환경 구성
@@ -69,12 +70,10 @@ flowchart TD
     B -- Yes --> D[Server Health Check]
     C --> D
     D --> E{Server Ready?}
-    E -- No --> F[Temporary ollama serve]
+    E -- No --> F[Setup Stop]
     E -- Yes --> G[Model Check]
-    F --> G
     G --> H[ollama pull selected model]
-    H --> I[Stop Setup-owned Server]
-    I --> J[Local LLM Model Ready]
+    H --> I[Local LLM Model Ready]
 ```
 
 ### OS 설치 방식
@@ -95,20 +94,20 @@ flowchart TD
 | `linux` | Linux + official installer |
 | `macos` | macOS + Homebrew |
 
-- VS Code input: `setupPlatform`
+- VS Code input: `targetOS`
 - Host mismatch: setup 중단
 - Default: `config`
 
 ### VS Code 실행
 
-- Run and Debug: `Setup 2: Install Ollama and Local LLM`
-- Task: `Setup: Install Ollama and Pull Local LLM`
+- Run and Debug: `Setup 3: Install Ollama and Local LLM`
+- Task: `Setup 3: Install Ollama and Local LLM`
 - Setup module: `python -m tools.environment_setup ollama [--model <model>]`
-- Check launch: `Check 1: Refresh Environment Check File`
 - Check task: `Check: Refresh Environment Check File`
+- Check launch: `Check 1: Refresh Environment Check File`
 - Foreground server task: `Local LLM: Run Ollama Server (Foreground)`
-- Setup-owned server: setup completion or failure 시 자동 종료
-- Existing server: setup에서 종료하지 않음
+- Setup child server: None
+- Server lifecycle: Foreground task ownership
 
 ## 3. VS Code 환경 구성
 
@@ -125,13 +124,19 @@ flowchart TD
 
 | Configuration | 기능 |
 |---|---|
-| `Setup 1: Install Python Virtual Environment` | `.venv` 생성 및 Python dependency 설치 |
-| `Setup 2: Install Ollama and Local LLM` | Ollama 설치, 임시 서버 실행, 선택 모델 pull, 임시 서버 종료 |
-| `Check 1: Refresh Environment Check File` | OS, Python, Ollama, 설치 모델 점검 파일 갱신 |
+| `Setup 1: Select Operating System` | `config/config.json` OS update |
+| `Setup 2: Install Python Virtual Environment` | Python setup Task delegation |
+| `Setup 3: Install Ollama and Local LLM` | Ollama setup Task delegation |
+| `Check 1: Refresh Environment Check File` | Environment check Task delegation |
 | `Run 3: Extension Module` | 확장 모듈 `main()` 실행 |
 | `Test Result: Generate Latest Markdown` | 최근 TEST 결과 Markdown 생성 |
 | `Debug: Current Python File` | 현재 Python 파일 디버그 |
 | `Debug: Current pytest File` | 현재 pytest 파일 디버그 |
+
+| Launch constraint | 값 |
+|---|---|
+| Setup / Check | `preLaunchTask` delegation |
+| Background process | None |
 
 ### Cross-platform Python
 

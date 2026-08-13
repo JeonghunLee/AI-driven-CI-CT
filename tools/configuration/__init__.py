@@ -42,6 +42,16 @@ def configured_os() -> str:
     return value
 
 
+def set_configured_os(value: str) -> Path:
+    if value not in SUPPORTED_OS:
+        raise ValueError(f"Invalid configured OS: {value!r}")
+    config = load_config()
+    config["os"] = value
+    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    CONFIG_PATH.write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return CONFIG_PATH
+
+
 def detected_os() -> str:
     if sys.platform == "win32":
         return "windows"
@@ -136,5 +146,6 @@ __all__ = [
     "configured_os",
     "detected_os",
     "load_config",
+    "set_configured_os",
     "write_check",
 ]
