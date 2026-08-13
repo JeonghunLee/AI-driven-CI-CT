@@ -1,4 +1,5 @@
 import json
+import importlib
 import unittest
 from pathlib import Path
 
@@ -22,8 +23,13 @@ class TestCaseCatalogTests(unittest.TestCase):
         )
         interface_ids = {item["tool_id"] for item in interface_value["tools"]}
         equipment_ids = {item["tool_id"] for item in equipment_value["tools"]}
-        self.assertEqual(interface_ids, {"uart", "usb", "network"})
-        self.assertEqual(equipment_ids, {"saleae", "digilent"})
+        self.assertEqual(interface_ids, {"uart", "usb", "network", "jtag"})
+        self.assertEqual(equipment_ids, {"saleae", "digilent", "fpga"})
+        for item in interface_value["tools"] + equipment_value["tools"]:
+            self.assertEqual(set(item["implementations"]), {"mock", "hil"})
+            for implementation in item["implementations"].values():
+                module = importlib.import_module(implementation["module"])
+                self.assertTrue(hasattr(module, implementation["class"]))
 
     def test_test_cases_reference_registered_tools(self) -> None:
         cases = json.loads(
@@ -43,6 +49,9 @@ class TestCaseCatalogTests(unittest.TestCase):
         }
         for case in cases:
             self.assertIn(case["interface_tool"], interfaces)
+            self.assertIn(case["test_mode"], {"mock", "hil"})
+            self.assertNotIn("interface_mode", case)
+            self.assertNotIn("equipment_mode", case)
             if case["equipment_tool"] is not None:
                 self.assertIn(case["equipment_tool"], equipments)
 

@@ -36,8 +36,6 @@ class UARTMeasurement:
 
 
 class MockSaleaeController:
-    """Logic-analyzer mock producing repeatable baudrate samples."""
-
     def __init__(self, uart: MockUARTInterface, sample_offsets: tuple[int, ...] | None = None) -> None:
         self.uart = uart
         self.sample_offsets = sample_offsets or (-110, -60, -15, 20, 55, 90)
@@ -58,4 +56,3 @@ class MockSaleaeController:
         samples = tuple(float(expected + value) for value in self.sample_offsets)
         jitter = (max(samples) - min(samples)) / expected
         return UARTMeasurement(expected, samples, jitter)
-

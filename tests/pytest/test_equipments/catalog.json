@@ -4,16 +4,26 @@
     {
       "tool_id": "saleae",
       "name": "Saleae",
-      "module": "tests.pytest.test_equipments.saleae",
-      "class": "MockSaleaeController",
-      "mode": "mock"
+      "implementations": {
+        "mock": {"module": "tests.pytest.test_equipments.saleae.mock", "class": "MockSaleaeController"},
+        "hil": {"module": "tests.pytest.test_equipments.saleae.hil", "class": "HILSaleaeController"}
+      }
     },
     {
       "tool_id": "digilent",
       "name": "Digilent",
-      "module": "tests.pytest.test_equipments.digilent",
-      "class": "MockDigilentController",
-      "mode": "mock"
+      "implementations": {
+        "mock": {"module": "tests.pytest.test_equipments.digilent.mock", "class": "MockDigilentController"},
+        "hil": {"module": "tests.pytest.test_equipments.digilent.hil", "class": "HILDigilentController"}
+      }
+    },
+    {
+      "tool_id": "fpga",
+      "name": "FPGA",
+      "implementations": {
+        "mock": {"module": "tests.pytest.test_equipments.fpga.mock", "class": "MockFPGAController"},
+        "hil": {"module": "tests.pytest.test_equipments.fpga.hil", "class": "HILFPGAController"}
+      }
     }
   ]
 }

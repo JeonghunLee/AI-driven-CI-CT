@@ -26,6 +26,7 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertIn("## Local LLM analysis", text)
         self.assertIn("## Warnings", text)
         self.assertIn("## Test history", text)
+        self.assertIn("**Test mode:** mock", text)
 
     def test_mkdocs_publish_preserves_each_execution(self) -> None:
         reports_root = "reports/test-artifacts/multi-execution-reports"

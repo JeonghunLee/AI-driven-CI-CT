@@ -1,4 +1,5 @@
 """Network interface implementations belong here."""
-from .mock_network import MockNetworkInterface, NetworkPacket
+from .hil import HILNetworkInterface
+from .mock import MockNetworkInterface, NetworkPacket
 
-__all__ = ["MockNetworkInterface", "NetworkPacket"]
+__all__ = ["HILNetworkInterface", "MockNetworkInterface", "NetworkPacket"]

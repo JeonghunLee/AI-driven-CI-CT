@@ -251,8 +251,18 @@ Source: `.vscode/tasks.json`
 
 | Tool registry | Path | IDs |
 |---|---|---|
-| Equipment | `tests/pytest/test_equipments/catalog.json` | `saleae`, `digilent` |
-| Interface | `tests/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `network` |
+| Equipment | `tests/pytest/test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
+| Interface | `tests/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
+
+| Mode | Tool path | Result field |
+|---|---|---|
+| Mock | `<tool>/mock/` | `mock` |
+| HIL | `<tool>/hil/` | `hil` |
+| No equipment | None | `none` |
+
+| Selection | Derived result fields |
+|---|---|
+| `test_cases/catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
 
 ```text
 tests/
@@ -264,15 +274,22 @@ tests/
 │   │   ├── performance/
 │   │   ├── stability/
 │   │   └── regression/
+│   ├── fixtures/
+│   │   ├── fixture_001_uart.py
+│   │   ├── fixture_002_uart_saleae.py
+│   │   ├── fixture_003_usb_digilent.py
+│   │   ├── fixture_004_jtag_fpga.py
+│   │   ├── fixture_005_full_hil.py
+│   │   └── fixture_006_network.py
 │   ├── test_equipments/
-│   │   ├── fpga/
-│   │   ├── saleae/
-│   │   └── digilent/
+│   │   ├── fpga/{mock,hil}/
+│   │   ├── saleae/{mock,hil}/
+│   │   └── digilent/{mock,hil}/
 │   ├── test_interfaces/
-│   │   ├── usb/
-│   │   ├── uart/
-│   │   ├── jtag/
-│   │   └── network/
+│   │   ├── usb/{mock,hil}/
+│   │   ├── uart/{mock,hil}/
+│   │   ├── jtag/{mock,hil}/
+│   │   └── network/{mock,hil}/
 │   └── conftest.py
 └── unittest/
     ├── python/

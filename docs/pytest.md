@@ -24,22 +24,50 @@
 |---|---|
 | File | `tests/pytest/test_cases/catalog.json` |
 | Key | `test_id` |
+| Mode selection | `test_mode` |
+| Derived modes | `interface_mode`, `equipment_mode` |
 | Validation | pytest collection hook |
 | Missing / mismatch | Collection error |
 
 | Registry | Tools |
 |---|---|
-| `test_equipments/catalog.json` | Saleae, Digilent |
-| `test_interfaces/catalog.json` | UART, USB, Network |
+| `test_equipments/catalog.json` | FPGA, Saleae, Digilent |
+| `test_interfaces/catalog.json` | USB, UART, JTAG, Network |
 
 ## Structure
 
 ```text
-tests/pytest/
-├── test_cases/
-├── test_equipments/
-├── test_interfaces/
-└── conftest.py
+tests/
+├── pytest/
+│   ├── test_cases/
+│   │   ├── communication/
+│   │   ├── timing/
+│   │   ├── functional/
+│   │   ├── performance/
+│   │   ├── stability/
+│   │   └── regression/
+│   ├── fixtures/
+│   │   ├── fixture_001_uart.py
+│   │   ├── fixture_002_uart_saleae.py
+│   │   ├── fixture_003_usb_digilent.py
+│   │   ├── fixture_004_jtag_fpga.py
+│   │   ├── fixture_005_full_hil.py
+│   │   └── fixture_006_network.py
+│   ├── test_equipments/
+│   │   ├── fpga/{mock,hil}/
+│   │   ├── saleae/{mock,hil}/
+│   │   └── digilent/{mock,hil}/
+│   ├── test_interfaces/
+│   │   ├── usb/{mock,hil}/
+│   │   ├── uart/{mock,hil}/
+│   │   ├── jtag/{mock,hil}/
+│   │   └── network/{mock,hil}/
+│   └── conftest.py
+└── unittest/
+    ├── python/
+    ├── c_cpp/
+    ├── firmware/
+    └── common/
 ```
 
 ## Execution Model

@@ -21,6 +21,26 @@ class ResultNormalizerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported"):
             ResultRecord("UT-001", "maybe", "functional", 0.0)
 
+    def test_result_rejects_unknown_test_mode(self) -> None:
+        with self.assertRaisesRegex(ValueError, "test_mode"):
+            ResultRecord("UT-001", "PASS", "functional", 0.0, test_mode="invalid")
+
+    def test_result_preserves_mock_hil_modes(self) -> None:
+        result = ResultRecord(
+            "CT-MODE-001",
+            "PASS",
+            "functional",
+            0.1,
+            test_mode="hil",
+            interface="JTAG",
+            interface_mode="hil",
+            equipment="FPGA",
+            equipment_mode="hil",
+        )
+        self.assertEqual(result.to_dict()["test_mode"], "hil")
+        self.assertEqual(result.to_dict()["interface_mode"], "hil")
+        self.assertEqual(result.to_dict()["equipment_mode"], "hil")
+
     def test_junit_normalization(self) -> None:
         record = from_junit("tests/fixtures/junit.xml", "UNIT-SAMPLE")
         self.assertEqual(record.status, "FAIL")

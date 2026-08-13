@@ -1,4 +1,4 @@
-from .mock_uart import MockUARTInterface, Transmission
+from .hil import HILUARTInterface
+from .mock import MockUARTInterface, Transmission
 
-__all__ = ["MockUARTInterface", "Transmission"]
-
+__all__ = ["HILUARTInterface", "MockUARTInterface", "Transmission"]

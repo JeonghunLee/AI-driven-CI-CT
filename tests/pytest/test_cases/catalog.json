@@ -5,6 +5,7 @@
       "test_id": "CT-UART-001",
       "module": "tests/pytest/test_cases/timing/test_uart_timing.py",
       "category": "timing",
+      "test_mode": "mock",
       "interface_tool": "uart",
       "equipment_tool": "saleae"
     },
@@ -12,6 +13,7 @@
       "test_id": "CT-USB-001",
       "module": "tests/pytest/test_cases/communication/test_usb_loopback.py",
       "category": "communication",
+      "test_mode": "mock",
       "interface_tool": "usb",
       "equipment_tool": "digilent"
     },
@@ -19,6 +21,7 @@
       "test_id": "CT-NETWORK-001",
       "module": "tests/pytest/test_cases/communication/test_network_loopback.py",
       "category": "communication",
+      "test_mode": "mock",
       "interface_tool": "network",
       "equipment_tool": null
     }

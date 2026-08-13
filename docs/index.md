@@ -189,8 +189,17 @@ flowchart TD
 
 | Tool group | Registry | Tools |
 |---|---|---|
-| Equipment | `test_equipments/catalog.json` | Saleae, Digilent |
-| Interface | `test_interfaces/catalog.json` | UART, USB, Network |
+| Equipment | `test_equipments/catalog.json` | FPGA, Saleae, Digilent |
+| Interface | `test_interfaces/catalog.json` | USB, UART, JTAG, Network |
+
+| Mode | Directory | Result |
+|---|---|---|
+| Mock | `mock/` | `test_mode/interface_mode/equipment_mode = mock` |
+| HIL | `hil/` | `test_mode/interface_mode/equipment_mode = hil` |
+
+| Selection | Derived |
+|---|---|
+| `test_cases/catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
 
 ### Repository Structure
 
@@ -204,15 +213,22 @@ tests/
 │   │   ├── performance/
 │   │   ├── stability/
 │   │   └── regression/
+│   ├── fixtures/
+│   │   ├── fixture_001_uart.py
+│   │   ├── fixture_002_uart_saleae.py
+│   │   ├── fixture_003_usb_digilent.py
+│   │   ├── fixture_004_jtag_fpga.py
+│   │   ├── fixture_005_full_hil.py
+│   │   └── fixture_006_network.py
 │   ├── test_equipments/
-│   │   ├── fpga/
-│   │   ├── saleae/
-│   │   └── digilent/
+│   │   ├── fpga/{mock,hil}/
+│   │   ├── saleae/{mock,hil}/
+│   │   └── digilent/{mock,hil}/
 │   ├── test_interfaces/
-│   │   ├── usb/
-│   │   ├── uart/
-│   │   ├── jtag/
-│   │   └── network/
+│   │   ├── usb/{mock,hil}/
+│   │   ├── uart/{mock,hil}/
+│   │   ├── jtag/{mock,hil}/
+│   │   └── network/{mock,hil}/
 │   └── conftest.py
 └── unittest/
     ├── python/

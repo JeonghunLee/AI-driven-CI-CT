@@ -5,7 +5,12 @@ from tests.pytest.test_equipments.saleae import MockSaleaeController
 from tests.pytest.test_interfaces.uart import MockUARTInterface
 
 
-@pytest.mark.ct(test_id="CT-UART-001", category="timing", interface="UART", equipment="Saleae")
+@pytest.mark.ct(
+    test_id="CT-UART-001",
+    category="timing",
+    interface="UART",
+    equipment="Saleae",
+)
 def test_uart_timing(
     uart: MockUARTInterface, saleae: MockSaleaeController, ct_result: CTResultRecorder
 ) -> None:

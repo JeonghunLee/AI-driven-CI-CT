@@ -5,7 +5,12 @@ from tests.pytest.test_interfaces.usb import MockUSBInterface
 from tests.pytest.test_equipments.digilent import MockDigilentController
 
 
-@pytest.mark.ct(test_id="CT-USB-001", category="communication", interface="USB", equipment="Digilent")
+@pytest.mark.ct(
+    test_id="CT-USB-001",
+    category="communication",
+    interface="USB",
+    equipment="Digilent",
+)
 def test_usb_bulk_loopback(
     usb: MockUSBInterface,
     digilent: MockDigilentController,

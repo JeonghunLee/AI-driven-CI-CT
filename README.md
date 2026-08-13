@@ -223,8 +223,28 @@ reports/
 
 | Tool registry | Tool IDs |
 |---|---|
-| `test_interfaces/catalog.json` | `uart`, `usb`, `network` |
-| `test_equipments/catalog.json` | `saleae`, `digilent` |
+| `test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
+| `test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
+
+| Tool implementation | 구분 |
+|---|---|
+| `<tool>/mock/` | Mock |
+| `<tool>/hil/` | Hardware-in-the-loop |
+
+| Mode | Field | Source |
+|---|---|---|
+| TEST | `test_mode` | `test_cases/catalog.json` |
+| Interface | `interface_mode` | `test_mode` |
+| Equipment | `equipment_mode` | `test_mode` / `none` |
+
+| Fixture | Combination |
+|---|---|
+| `fixture_001_uart.py` | UART mock |
+| `fixture_002_uart_saleae.py` | UART mock + Saleae mock |
+| `fixture_003_usb_digilent.py` | USB mock + Digilent mock |
+| `fixture_004_jtag_fpga.py` | JTAG mock + FPGA mock |
+| `fixture_005_full_hil.py` | Full HIL gate |
+| `fixture_006_network.py` | Network mock |
 
 | TEST Program | Interface Tool | Equipment Tool |
 |---|---|---|

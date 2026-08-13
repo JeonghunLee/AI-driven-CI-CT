@@ -15,6 +15,14 @@ def _items(values: dict[str, Any]) -> str:
     return "\n".join(f"- **{_safe(key)}:** {_safe(value)}" for key, value in values.items()) or "- None"
 
 
+def _report_mode(path: Path) -> str:
+    prefix = "- **Test mode:**"
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith(prefix):
+            return line.removeprefix(prefix).strip()
+    return "unknown"
+
+
 class MarkdownReporter:
     """Create the canonical human-readable report and optionally publish it to MkDocs."""
 
@@ -80,11 +88,15 @@ class MarkdownReporter:
                 category, filename = parts[1], parts[2]
                 test_id = Path(filename).stem
                 count = len(list(path.with_suffix("").glob("*.md")))
-                ct_rows.append(f"| {_safe(category)} | `{_safe(test_id)}` | [Open]({link}) | {count} |")
+                mode = _report_mode(path)
+                ct_rows.append(
+                    f"| {_safe(category)} | `{_safe(test_id)}` | {_safe(mode)} | [Open]({link}) | {count} |"
+                )
             elif parts[0] == "unit" and len(parts) == 2:
                 test_id = Path(parts[1]).stem
                 count = len(list(path.with_suffix("").glob("*.md")))
-                unit_rows.append(f"| `{_safe(test_id)}` | [Open]({link}) | {count} |")
+                mode = _report_mode(path)
+                unit_rows.append(f"| `{_safe(test_id)}` | {_safe(mode)} | [Open]({link}) | {count} |")
             elif parts[0] == "ct" and len(parts) == 4:
                 ct_execution_rows.append((Path(parts[-1]).stem, link))
             elif parts[0] == "unit" and len(parts) == 3:
@@ -102,9 +114,9 @@ class MarkdownReporter:
 
 ## Continuous Tests
 
-| Category | Test ID | Latest | Executions |
-|---|---|---|---:|
-{chr(10).join(ct_rows) or '| - | - | - | 0 |'}
+| Category | Test ID | Mode | Latest | Executions |
+|---|---|---|---|---:|
+{chr(10).join(ct_rows) or '| - | - | - | - | 0 |'}
 
 ## Recent Executions
 
@@ -114,9 +126,9 @@ class MarkdownReporter:
 
 ## Unit Tests
 
-| Test ID | Latest | Executions |
-|---|---|---:|
-{chr(10).join(unit_rows) or '| - | - | 0 |'}
+| Test ID | Mode | Latest | Executions |
+|---|---|---|---:|
+{chr(10).join(unit_rows) or '| - | - | - | 0 |'}
 
 ## Recent Executions
 
@@ -147,8 +159,11 @@ class MarkdownReporter:
 - **Description:** {_safe(result.description)}
 - **Environment:** {_safe(result.environment)}
 - **Configuration:** {_safe(dict(result.configuration))}
+- **Test mode:** {_safe(result.test_mode)}
 - **Equipment:** {_safe(result.equipment)}
+- **Equipment mode:** {_safe(result.equipment_mode)}
 - **Interface:** {_safe(result.interface)}
+- **Interface mode:** {_safe(result.interface_mode)}
 - **Result:** **{result.status}**
 - **Execution time:** {result.duration:.3f} seconds
 - **Execution date:** {_safe(result.timestamp)}

@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass
 
-from ..base import TestInterface
+from ...base import TestInterface
 
 
 @dataclass(frozen=True)

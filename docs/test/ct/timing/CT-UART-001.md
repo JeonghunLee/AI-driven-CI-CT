@@ -4,14 +4,17 @@
 
 - **Description:** test_uart_timing
 - **Environment:** local
-- **Configuration:** {'category': 'timing', 'interface': 'UART', 'equipment': 'Saleae'}
+- **Configuration:** {'category': 'timing', 'test_mode': 'mock', 'interface': 'UART', 'interface_mode': 'mock', 'equipment': 'Saleae', 'equipment_mode': 'mock'}
+- **Test mode:** mock
 - **Equipment:** Saleae
+- **Equipment mode:** mock
 - **Interface:** UART
+- **Interface mode:** mock
 - **Result:** **PASS**
-- **Execution time:** 0.000 seconds
-- **Execution date:** 2026-08-13T06:02:42.833947+00:00
+- **Execution time:** 0.001 seconds
+- **Execution date:** 2026-08-13T06:48:38.485012+00:00
 - **Commit / revision:** `local`
-- **Execution ID:** `20260813-060242-833931`
+- **Execution ID:** `20260813-064838-484993`
 
 ## Measurement
 
@@ -38,7 +41,7 @@
 
 ## Local LLM analysis
 
-CT-UART-001 passed in 0.000s.
+CT-UART-001 passed in 0.001s.
 
 - **Classification:** `passed`
 - **Confidence:** 1.00
@@ -56,6 +59,15 @@ Not requested
 
 | Date | Execution ID | Commit | Result | Duration (s) | Environment |
 |---|---|---|---|---:|---|
+| 2026-08-13T06:48:38.485012+00:00 | 20260813-064838-484993 | local | PASS | 0.001 | local |
+| 2026-08-13T06:48:25.019953+00:00 | 20260813-064825-019945 | local | PASS | 0.000 | local |
+| 2026-08-13T06:46:29.721508+00:00 | 20260813-064629-721500 | local | PASS | 0.000 | local |
+| 2026-08-13T06:45:33.359298+00:00 | 20260813-064533-359290 | local | PASS | 0.000 | local |
+| 2026-08-13T06:17:27.227692+00:00 | 20260813-061727-227682 | local | PASS | 0.000 | local |
+| 2026-08-13T06:11:46.908271+00:00 | 20260813-061146-908261 | local | PASS | 0.000 | local |
+| 2026-08-13T06:09:04.582773+00:00 | 20260813-060904-582765 | local | PASS | 0.000 | local |
+| 2026-08-13T06:08:16.464914+00:00 | 20260813-060816-464899 | local | PASS | 0.000 | local |
+| 2026-08-13T06:07:40.255682+00:00 | 20260813-060740-255672 | local | PASS | 0.000 | local |
 | 2026-08-13T06:02:42.833947+00:00 | 20260813-060242-833931 | local | PASS | 0.000 | local |
 | 2026-08-13T05:59:35.113837+00:00 | 20260813-055935-113822 | local | PASS | 0.001 | local |
 | 2026-08-13T05:57:11.146272+00:00 | 20260813-055711-146257 | local | PASS | 0.000 | local |
@@ -107,6 +119,7 @@ Not requested
 
 ## Execution documents
 
+- [20260813-064838-484993](CT-UART-001/20260813-064838-484993.md)
 - [20260813-060242-833931](CT-UART-001/20260813-060242-833931.md)
 - [20260813-024005-771843](CT-UART-001/20260813-024005-771843.md)
 - [20260813-023202-059324](CT-UART-001/20260813-023202-059324.md)

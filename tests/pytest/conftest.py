@@ -9,12 +9,15 @@ from typing import Any
 
 import pytest
 
-from tests.pytest.test_equipments.saleae import MockSaleaeController
-from tests.pytest.test_equipments.digilent import MockDigilentController
-from tests.pytest.test_interfaces.uart import MockUARTInterface
-from tests.pytest.test_interfaces.usb import MockUSBInterface
-from tests.pytest.test_interfaces.network import MockNetworkInterface
 from tools.result_normalizer import ResultRecord, ResultStore
+from tests.pytest.fixtures.fixture_001_uart import uart
+from tests.pytest.fixtures.fixture_002_uart_saleae import saleae
+from tests.pytest.fixtures.fixture_003_usb_digilent import digilent, usb
+from tests.pytest.fixtures.fixture_004_jtag_fpga import fpga, jtag
+from tests.pytest.fixtures.fixture_005_full_hil import full_hil
+from tests.pytest.fixtures.fixture_006_network import network
+
+__all__ = ["digilent", "fpga", "full_hil", "jtag", "network", "saleae", "uart", "usb"]
 
 ROOT = Path(__file__).resolve().parents[2]
 TEST_CASE_CATALOG = Path(__file__).resolve().parent / "test_cases" / "catalog.json"
@@ -73,10 +76,17 @@ def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
         entry = catalog[test_id]
         interface_tool = entry.get("interface_tool")
         equipment_tool = entry.get("equipment_tool")
+        test_mode = entry.get("test_mode")
+        interface_mode = test_mode
+        equipment_mode = test_mode if equipment_tool is not None else "none"
         if interface_tool not in interfaces:
             raise pytest.UsageError(f"Unknown interface tool for {test_id}: {interface_tool}")
         if equipment_tool is not None and equipment_tool not in equipments:
             raise pytest.UsageError(f"Unknown equipment tool for {test_id}: {equipment_tool}")
+        if interface_mode not in interfaces[interface_tool].get("implementations", {}):
+            raise pytest.UsageError(f"Unknown interface mode for {test_id}: {interface_mode}")
+        if equipment_tool is not None and equipment_mode not in equipments[equipment_tool].get("implementations", {}):
+            raise pytest.UsageError(f"Unknown equipment mode for {test_id}: {equipment_mode}")
         if marker.kwargs.get("interface") != interfaces[interface_tool].get("name"):
             raise pytest.UsageError(f"Interface marker mismatch for {test_id}")
         expected_equipment = equipments[equipment_tool]["name"] if equipment_tool else "None"
@@ -97,50 +107,14 @@ def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo[object]):
 
 
 @pytest.fixture
-def uart() -> MockUARTInterface:
-    interface = MockUARTInterface()
-    interface.connect()
-    yield interface
-    interface.disconnect()
-
-
-@pytest.fixture
-def usb() -> MockUSBInterface:
-    interface = MockUSBInterface()
-    interface.connect()
-    yield interface
-    interface.disconnect()
-
-
-@pytest.fixture
-def network() -> MockNetworkInterface:
-    interface = MockNetworkInterface()
-    interface.connect()
-    yield interface
-    interface.disconnect()
-
-
-@pytest.fixture
-def saleae(uart: MockUARTInterface) -> MockSaleaeController:
-    equipment = MockSaleaeController(uart)
-    equipment.connect()
-    yield equipment
-    equipment.disconnect()
-
-
-@pytest.fixture
-def digilent(usb: MockUSBInterface) -> MockDigilentController:
-    equipment = MockDigilentController(usb)
-    equipment.connect()
-    yield equipment
-    equipment.disconnect()
-
-
-@pytest.fixture
 def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
     marker = request.node.get_closest_marker("ct")
     if marker is None:
         raise RuntimeError("ct_result can only be used by a test marked with @pytest.mark.ct")
+    test_id = marker.kwargs.get("test_id", request.node.name.upper())
+    entry = load_test_case_catalog().get(test_id)
+    if entry is None:
+        raise RuntimeError(f"Unregistered CT test_id: {test_id}")
     recorder = CTResultRecorder()
     started = perf_counter()
     yield recorder
@@ -149,16 +123,21 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
     if report is not None and report.skipped:
         status = "SKIP"
     values = marker.kwargs
+    test_mode = entry["test_mode"]
+    equipment = values.get("equipment", "None")
     result_path = ResultStore().save(ResultRecord(
-        test_id=values.get("test_id", request.node.name.upper()),
+        test_id=test_id,
         status=status,
         category=values.get("category", "functional"),
         duration=perf_counter() - started,
         description=values.get("description", request.node.name),
         environment=os.getenv("CI", "local"),
         configuration={key: value for key, value in values.items() if key not in {"test_id", "description"}},
+        test_mode=test_mode,
         interface=values.get("interface", "None"),
-        equipment=values.get("equipment", "None"),
+        interface_mode=test_mode,
+        equipment=equipment,
+        equipment_mode=test_mode if equipment != "None" else "none",
         commit=os.getenv("GITHUB_SHA", "local")[:7],
         runner=os.getenv("RUNNER_NAME", "local"),
         metrics=recorder.metrics,

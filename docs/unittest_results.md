@@ -2,9 +2,9 @@
 
 ## Unit Tests
 
-| Test ID | Latest | Executions |
-|---|---|---:|
-| - | - | 0 |
+| Test ID | Mode | Latest | Executions |
+|---|---|---|---:|
+| - | - | - | 0 |
 
 ## Recent Executions
 

@@ -4,7 +4,7 @@ from collections import deque
 from dataclasses import dataclass
 from time import monotonic
 
-from ..base import TestInterface
+from ...base import TestInterface
 
 
 @dataclass(frozen=True)
@@ -15,8 +15,6 @@ class Transmission:
 
 
 class MockUARTInterface(TestInterface):
-    """Deterministic UART loopback used when no DUT is connected."""
-
     def __init__(self, port: str = "MOCK", baudrate: int = 921_600) -> None:
         if baudrate <= 0:
             raise ValueError("baudrate must be positive")
@@ -46,4 +44,3 @@ class MockUARTInterface(TestInterface):
             raise RuntimeError("UART is not connected")
         count = len(self._rx) if size < 0 else min(size, len(self._rx))
         return bytes(self._rx.popleft() for _ in range(count))
-

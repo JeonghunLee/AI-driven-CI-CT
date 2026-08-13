@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass
 
-from ..base import TestInterface
+from ...base import TestInterface
 
 
 @dataclass(frozen=True)
@@ -15,10 +15,8 @@ class USBTransfer:
 
 class MockUSBInterface(TestInterface):
     def __init__(self, endpoint: int = 1, max_packet_size: int = 64) -> None:
-        if endpoint <= 0:
-            raise ValueError("endpoint must be positive")
-        if max_packet_size <= 0:
-            raise ValueError("max_packet_size must be positive")
+        if endpoint <= 0 or max_packet_size <= 0:
+            raise ValueError("endpoint and max_packet_size must be positive")
         self.endpoint = endpoint
         self.max_packet_size = max_packet_size
         self.connected = False

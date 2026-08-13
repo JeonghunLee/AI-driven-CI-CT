@@ -4,23 +4,34 @@
     {
       "tool_id": "uart",
       "name": "UART",
-      "module": "tests.pytest.test_interfaces.uart",
-      "class": "MockUARTInterface",
-      "mode": "mock"
+      "implementations": {
+        "mock": {"module": "tests.pytest.test_interfaces.uart.mock", "class": "MockUARTInterface"},
+        "hil": {"module": "tests.pytest.test_interfaces.uart.hil", "class": "HILUARTInterface"}
+      }
     },
     {
       "tool_id": "usb",
       "name": "USB",
-      "module": "tests.pytest.test_interfaces.usb",
-      "class": "MockUSBInterface",
-      "mode": "mock"
+      "implementations": {
+        "mock": {"module": "tests.pytest.test_interfaces.usb.mock", "class": "MockUSBInterface"},
+        "hil": {"module": "tests.pytest.test_interfaces.usb.hil", "class": "HILUSBInterface"}
+      }
     },
     {
       "tool_id": "network",
       "name": "Network",
-      "module": "tests.pytest.test_interfaces.network",
-      "class": "MockNetworkInterface",
-      "mode": "mock"
+      "implementations": {
+        "mock": {"module": "tests.pytest.test_interfaces.network.mock", "class": "MockNetworkInterface"},
+        "hil": {"module": "tests.pytest.test_interfaces.network.hil", "class": "HILNetworkInterface"}
+      }
+    },
+    {
+      "tool_id": "jtag",
+      "name": "JTAG",
+      "implementations": {
+        "mock": {"module": "tests.pytest.test_interfaces.jtag.mock", "class": "MockJTAGInterface"},
+        "hil": {"module": "tests.pytest.test_interfaces.jtag.hil", "class": "HILJTAGInterface"}
+      }
     }
   ]
 }

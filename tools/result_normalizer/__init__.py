@@ -25,8 +25,11 @@ class ResultRecord:
     description: str = "Automated test execution"
     environment: str = "local"
     configuration: Mapping[str, Any] = field(default_factory=dict)
+    test_mode: str = "mock"
     interface: str = "None"
+    interface_mode: str = "none"
     equipment: str = "None"
+    equipment_mode: str = "none"
     commit: str = "local"
     runner: str = "local"
     execution_id: str = field(default_factory=_execution_id)
@@ -51,6 +54,10 @@ class ResultRecord:
             raise ValueError("test_id must be a non-empty identifier without spaces")
         if self.duration < 0:
             raise ValueError("duration cannot be negative")
+        for name in ("test_mode", "interface_mode", "equipment_mode"):
+            value = getattr(self, name)
+            if value not in {"mock", "hil", "none"}:
+                raise ValueError(f"{name} must be mock, hil, or none: {value}")
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
