@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from tools.deepseek import Analysis
+from tools.local_llm import Analysis
 from tools.result_normalizer import ResultRecord, ResultStore
 
 
@@ -171,7 +171,7 @@ class MarkdownReporter:
 
 {warnings}
 
-## DeepSeek analysis
+## Local LLM analysis
 
 {analysis.summary}
 

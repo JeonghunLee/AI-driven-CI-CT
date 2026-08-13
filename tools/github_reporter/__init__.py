@@ -5,7 +5,7 @@ import os
 from typing import Any
 from urllib.request import Request, urlopen
 
-from tools.deepseek import Analysis
+from tools.local_llm import Analysis
 from tools.result_normalizer import ResultRecord
 
 
@@ -46,7 +46,7 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
 
 - Classification: {analysis.classification}
 - Confidence: {analysis.confidence:.2f}
-- DeepSeek analyzer: {analysis.source}
+- Local LLM analyzer: {analysis.source}
 
 ### Evidence
 - [Workflow run and artifacts]({artifact})

@@ -9,7 +9,7 @@
 | Unit test | `unittest` |
 | Continuous test | `pytest` |
 | Local LLM runtime | Ollama |
-| Primary model | `deepseek-r1:7b` |
+| Primary model | Configurable Ollama model |
 | Escalation agent | Codex |
 | Human-readable result | Markdown |
 | Web documentation | MkDocs |
@@ -27,7 +27,7 @@ CT = Test + Analysis + Documentation
 VS Code
 ├── Run and Debug
 │   ├── Python .venv Setup
-│   ├── Ollama + DeepSeek Setup
+│   ├── Ollama + Local LLM Setup
 │   ├── Extension Module
 │   └── Latest Markdown Report
 ├── Testing
@@ -49,7 +49,7 @@ unittest / pytest
 Result + Log + Measurement + Warning
           │
           ▼
-Ollama + DeepSeek
+Ollama + Local LLM
           │
           ├── Test Analysis
           ├── Log Analysis
@@ -78,11 +78,12 @@ Source: `.vscode/launch.json`
 | Order | Configuration | Runtime | Entry point | Purpose |
 |---:|---|---|---|---|
 | 1 | `Setup 1: Install Python Virtual Environment` | System Python | `tools.environment_setup python` | `.venv` creation, dependency installation |
-| 2 | `Setup 2: Install Ollama and DeepSeek` | `.venv` Python | `tools.environment_setup ollama` | Ollama installation, server startup, DeepSeek pull |
-| 3 | `Run 3: Extension Module` | `.venv` Python | `tools.extension_runner` | Future module execution |
-| 4 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_result --docs` | Latest result analysis, Markdown generation |
-| 5 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
-| 6 | `Debug: Current pytest File` | `.venv` Python | pytest current file | Test debugging |
+| 2 | `Setup 2: Install Ollama and Local LLM` | `.venv` Python | `tools.environment_setup ollama` | Ollama installation, server startup, selected model pull |
+| 3 | `Local LLM: Show Configuration and Installed Models` | `.venv` Python | `tools.local_llm status` | Config and installed inventory |
+| 4 | `Run 3: Extension Module` | `.venv` Python | `tools.extension_runner` | Future module execution |
+| 5 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_result --docs` | Latest result analysis, Markdown generation |
+| 6 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
+| 7 | `Debug: Current pytest File` | `.venv` Python | pytest current file | Test debugging |
 
 ### 3.1 Python Environment Setup
 
@@ -100,7 +101,7 @@ python -m venv .venv
     └── requirements.txt install
 ```
 
-### 3.2 Ollama and DeepSeek Setup
+### 3.2 Ollama and Local LLM Setup
 
 ```text
 Ollama executable check
@@ -115,7 +116,7 @@ Ollama executable check
 Ollama server startup
           │
           ▼
-ollama pull deepseek-r1:7b
+ollama pull <selected-model>
 ```
 
 ### 3.3 Extension Module Contract
@@ -169,7 +170,8 @@ Source: `.vscode/tasks.json`
 | Group | Task |
 |---|---|
 | Setup | `Setup: Create Python Virtual Environment` |
-| Setup | `Setup: Install Ollama and Pull DeepSeek` |
+| Setup | `Setup: Install Ollama and Pull Local LLM` |
+| Setup | `Local LLM: Show Configuration and Installed Models` |
 | Test | `Test: Run All with pytest` |
 | Test | `Test: Run Continuous Tests` |
 | Test | `Test: Run unittest Suite` |
@@ -287,7 +289,7 @@ Execution rule:
 - Test re-execution: prohibited
 - Input: newest `result.json`
 - Logs: same execution directory
-- Analysis: DeepSeek or deterministic fallback
+- Analysis: Local LLM or deterministic fallback
 - Canonical output: execution-specific Markdown
 - Latest output: fixed latest Markdown path
 - Optional MkDocs latest copy: `--docs`
@@ -305,7 +307,7 @@ Latest result.json
 Latest execution logs
       │
       ▼
-DeepSeek Analysis
+Local LLM Analysis
       │
       ▼
 reports/markdown/<test-id>/<execution-id>/result.md
@@ -329,7 +331,7 @@ reports/markdown/<test-id>/<execution-id>/result.md
 ├── Statistics
 ├── Important logs
 ├── Warnings
-├── DeepSeek analysis
+├── Local LLM analysis
 │   ├── Classification
 │   ├── Confidence
 │   ├── Failure analysis
@@ -337,16 +339,48 @@ reports/markdown/<test-id>/<execution-id>/result.md
 └── Test history
 ```
 
-## 10. DeepSeek Analysis
+## 10. Local LLM Analysis
 
 | Component | Value |
 |---|---|
 | Runtime | Ollama |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Environment variable | `OLLAMA_URL` |
-| Default model | `deepseek-r1:7b` |
-| Model variable | `DEEPSEEK_MODEL` |
+| Default model | `qwen3:latest` |
+| Model variable | `OLLAMA_MODEL` |
+| Model config | `tools/local_llm/model_config.json` |
+| Selection priority | CLI → Environment → Config → Default |
+| Config selection | `selected` preset |
+| Installed inventory | Ollama `/api/tags` |
 | Offline fallback | Deterministic analysis |
+
+Model config schema:
+
+```text
+model_config.json
+├── version
+├── url
+├── selected
+└── models
+    └── <preset>
+        ├── name
+        └── role
+```
+
+Runtime status schema:
+
+```text
+Local LLM Status
+├── endpoint
+├── configured_model
+├── configured_model_installed
+├── available
+└── installed_models
+    ├── name
+    ├── size
+    ├── modified_at
+    └── digest
+```
 
 Analysis outputs:
 
@@ -368,8 +402,8 @@ Warning severity:
 
 Trigger conditions:
 
-- DeepSeek confidence `< 0.5`
-- DeepSeek inconclusive result
+- Local LLM confidence `< 0.5`
+- Local LLM inconclusive result
 - Unknown root cause
 - Repeated failure
 - Multi-file modification
@@ -378,7 +412,7 @@ Trigger conditions:
 - Explicit source fix request
 
 ```text
-DeepSeek
+Local LLM
 ├── Resolved ──► Complete
 └── Escalation required ──► Codex
 ```
@@ -422,7 +456,7 @@ GitHub Issue content:
 - PASS / FAIL
 - Measurement summary
 - Warning summary
-- DeepSeek summary
+- Local LLM summary
 - Markdown path
 - MkDocs path
 - Artifact path
@@ -454,7 +488,7 @@ Excluded from GitHub Issue:
 │   └── markdown/
 │       └── latest.md              # Generated, Git ignored
 ├── tools/
-│   ├── deepseek/
+│   ├── local_llm/
 │   ├── extensions/
 │   ├── github_reporter/
 │   ├── log_parser/
@@ -502,7 +536,7 @@ Result + Log + Measurement + Warning
 test_result: Latest Result Selection
               │
               ▼
-Ollama + DeepSeek
+Ollama + Local LLM
               │
               ▼
 Markdown

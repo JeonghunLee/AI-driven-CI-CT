@@ -13,12 +13,23 @@
       "justMyCode": true
     },
     {
-      "name": "Setup 2: Install Ollama and DeepSeek",
+      "name": "Setup 2: Install Ollama and Local LLM",
       "type": "debugpy",
       "request": "launch",
       "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
       "module": "tools.environment_setup",
-      "args": ["ollama", "--model", "deepseek-r1:7b"],
+      "args": ["ollama"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Local LLM: Show Configuration and Installed Models",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "module": "tools.local_llm",
+      "args": ["status"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true

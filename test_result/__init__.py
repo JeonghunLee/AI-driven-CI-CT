@@ -16,9 +16,13 @@ def publish_latest(source: str | Path, destination: str | Path = LATEST_MARKDOWN
     return destination_path
 
 
-def generate_latest_markdown(publish_docs: bool = False, review_source: bool = False) -> dict[str, object]:
+def generate_latest_markdown(
+    publish_docs: bool = False,
+    review_source: bool = False,
+    model: str | None = None,
+) -> dict[str, object]:
     """Generate Markdown from the newest result without running tests."""
-    output = run(publish_docs=publish_docs, review_source=review_source)
+    output = run(publish_docs=publish_docs, review_source=review_source, model=model)
     output["latest_markdown"] = str(publish_latest(str(output["markdown"])))
     return output
 

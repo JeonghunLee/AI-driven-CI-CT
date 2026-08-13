@@ -1,6 +1,6 @@
 # AI-driven Continuous Testing
 
-VS Code와 프로젝트 로컬 Python `.venv`를 중심으로 Unit Test 및 pytest CT를 실행하고, Ollama의 DeepSeek 모델로 결과·로그·경고·소스 변경을 분석한 뒤 Markdown으로 기록하는 프로젝트입니다. Markdown 결과는 MkDocs 웹 문서와 Pandoc DOCX/PDF/HTML 출력의 공통 원본입니다.
+VS Code와 프로젝트 로컬 Python `.venv`를 중심으로 Unit Test 및 pytest CT를 실행하고, Ollama Local LLM으로 결과·로그·경고·소스 변경을 분석한 뒤 Markdown으로 기록하는 프로젝트입니다. Markdown 결과는 MkDocs 웹 문서와 Pandoc DOCX/PDF/HTML 출력의 공통 원본입니다.
 
 상세 설계는 [DESIGN.md](DESIGN.md)를 참고하세요.
 
@@ -12,7 +12,7 @@ VS Code와 프로젝트 로컬 Python `.venv`를 중심으로 Unit Test 및 pyte
 - pytest 기반 Integration/Functional/Hardware CT
 - 분리된 Test Equipment와 Test Interface
 - Mock UART 및 Mock Saleae UART Timing CT
-- Ollama Runtime + DeepSeek Primary Model
+- Ollama Runtime + Configurable Local LLM
 - Markdown-first 결과 및 실행 이력
 - MkDocs 게시와 Pandoc 문서 변환
 - GitHub-hosted runner 기반 일반 자동화
@@ -36,7 +36,7 @@ VS Code가 `.venv\Scripts\python.exe`를 선택하면 Test Explorer에서 전체
 Run and Debug에는 다음 실행 구성이 있습니다.
 
 1. `Setup 1: Install Python Virtual Environment`: `.venv` 생성 후 `requirements.txt`를 설치합니다.
-2. `Setup 2: Install Ollama and DeepSeek`: Ollama가 없으면 OS 패키지 관리자로 설치하고 서버를 시작한 뒤 `deepseek-r1:7b`를 pull합니다.
+2. `Setup 2: Install Ollama and Local LLM`: Ollama 설치, 서버 시작, 선택 모델 pull을 수행합니다.
 3. `Run 3: Extension Module`: `main()`을 제공하는 Python 모듈을 실행하는 확장용 진입점입니다.
 4. `Test Result: Generate Latest Markdown`: 테스트를 재실행하지 않고 가장 최근 결과로 Markdown을 만듭니다.
 
@@ -60,7 +60,7 @@ VS Code Python 확장은 pytest와 unittest를 동시에 활성화하면 pytest�
 # CT만 실행
 .\.venv\Scripts\python.exe -m pytest tests/pytest -m ct -s
 
-# 최신 실행을 DeepSeek로 분석하고 Markdown 생성
+# 최신 실행을 Local LLM으로 분석하고 Markdown 생성
 .\.venv\Scripts\python.exe -m test_result
 
 # Markdown을 생성하고 docs/test에도 게시
@@ -70,14 +70,50 @@ VS Code Python 확장은 pytest와 unittest를 동시에 활성화하면 pytest�
 .\.venv\Scripts\python.exe -m test_result --docs --source-review
 ```
 
-Ollama 기본 주소는 `http://127.0.0.1:11434`, 기본 모델은 `deepseek-r1:7b`입니다.
+Ollama 기본 주소는 `http://127.0.0.1:11434`, 기본 모델은 `qwen3:latest`입니다.
+
+내부 모델 선택은 `tools/local_llm/model_config.json`에서 할 수 있습니다.
+
+```json
+{
+  "version": 1,
+  "url": "http://127.0.0.1:11434",
+  "selected": "qwen",
+  "models": {
+    "qwen": {
+      "name": "qwen3:latest",
+      "role": "test-log-source-analysis"
+    },
+    "deepseek": {
+      "name": "deepseek-r1:7b",
+      "role": "reasoning-alternative"
+    }
+  }
+}
+```
+
+- `selected` 값으로 preset을 선택합니다.
+- `models`에 새 모델 preset을 추가합니다.
+- VS Code의 setup launch/task는 모델명을 전달하지 않고 이 JSON을 사용합니다.
+- 우선순위는 `명시적 인자 > OLLAMA_MODEL 환경변수 > model_config.json > 코드 기본값`입니다.
+
+```powershell
+# 현재 설정과 설치 모델 목록
+.\.venv\Scripts\python.exe -m tools.local_llm status
+
+# 설정 모델 pull/update
+.\.venv\Scripts\python.exe -m tools.environment_setup ollama
+
+# 이번 보고서에만 다른 모델 사용
+.\.venv\Scripts\python.exe -m test_result --model "<ollama-model>:latest"
+```
 
 ```powershell
 $env:OLLAMA_URL = "http://127.0.0.1:11434"
-$env:DEEPSEEK_MODEL = "deepseek-r1:7b"
+$env:OLLAMA_MODEL = "<ollama-model>:latest"
 ```
 
-Ollama 또는 DeepSeek가 준비되지 않은 경우에도 규칙 기반 fallback이 테스트 결과와 경고를 Markdown으로 정리합니다.
+Ollama 또는 선택 모델이 준비되지 않은 경우에도 규칙 기반 fallback이 테스트 결과와 경고를 Markdown으로 정리합니다.
 
 ## 결과 구조
 

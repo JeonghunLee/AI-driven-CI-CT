@@ -49,10 +49,13 @@ flowchart TD
 | 항목 | 구성 |
 |---|---|
 | Local LLM runtime | Ollama |
-| Primary model | `deepseek-r1:7b` |
+| Primary model | `model_config.json` / `OLLAMA_MODEL` |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Endpoint variable | `OLLAMA_URL` |
-| Model variable | `DEEPSEEK_MODEL` |
+| Model variable | `OLLAMA_MODEL` |
+| Model config | `tools/local_llm/model_config.json` |
+| Model selection | `selected` preset |
+| Installed inventory | `python -m tools.local_llm status` |
 | Offline fallback | Deterministic analyzer |
 | Escalation | Codex |
 
@@ -68,8 +71,8 @@ flowchart TD
     E -- No --> F[ollama serve]
     E -- Yes --> G[Model Check]
     F --> G
-    G --> H[ollama pull deepseek-r1:7b]
-    H --> I[DeepSeek Ready]
+    G --> H[ollama pull selected model]
+    H --> I[Local LLM Ready]
 ```
 
 ### OS 설치 방식
@@ -82,9 +85,10 @@ flowchart TD
 
 ### VS Code 실행
 
-- Run and Debug: `Setup 2: Install Ollama and DeepSeek`
-- Task: `Setup: Install Ollama and Pull DeepSeek`
-- Setup module: `python -m tools.environment_setup ollama --model deepseek-r1:7b`
+- Run and Debug: `Setup 2: Install Ollama and Local LLM`
+- Task: `Setup: Install Ollama and Pull Local LLM`
+- Setup module: `python -m tools.environment_setup ollama [--model <model>]`
+- Status launch/task: `Local LLM: Show Configuration and Installed Models`
 
 ## 3. VS Code 환경 구성
 
@@ -102,7 +106,8 @@ flowchart TD
 | Configuration | 기능 |
 |---|---|
 | `Setup 1: Install Python Virtual Environment` | `.venv` 생성 및 Python dependency 설치 |
-| `Setup 2: Install Ollama and DeepSeek` | Ollama 설치, 서버 실행, DeepSeek pull |
+| `Setup 2: Install Ollama and Local LLM` | Ollama 설치, 서버 실행, 선택 모델 pull |
+| `Local LLM: Show Configuration and Installed Models` | 설정 모델 및 설치 모델 목록 출력 |
 | `Run 3: Extension Module` | 확장 모듈 `main()` 실행 |
 | `Test Result: Generate Latest Markdown` | 최근 TEST 결과 Markdown 생성 |
 | `Debug: Current Python File` | 현재 Python 파일 디버그 |
@@ -124,7 +129,7 @@ flowchart TD
 | Group | Task |
 |---|---|
 | Setup | Python `.venv` |
-| Setup | Ollama + DeepSeek |
+| Setup | Ollama + Local LLM |
 | Test | pytest all |
 | Test | Continuous Tests |
 | Test | unittest suite |
@@ -207,7 +212,7 @@ flowchart TD
     B --> E[Latest Result Selection]
     C --> E
     D --> E
-    E --> F[Ollama + DeepSeek]
+    E --> F[Ollama + Local LLM]
     F --> G[Markdown Report]
     G --> H[reports/markdown]
     G --> I[test_result/markdown/latest.md]
@@ -267,7 +272,7 @@ docs/
 ```text
 python -m test_result --docs
 ├── Latest result selection
-├── DeepSeek analysis
+├── Local LLM analysis
 ├── Canonical Markdown generation
 ├── Execution snapshot creation
 ├── Latest TEST page update

@@ -6,20 +6,25 @@ import subprocess
 from pathlib import Path
 
 from tools.codex_escalation import evaluate
-from tools.deepseek import DeepSeekAnalyzer
+from tools.local_llm import LocalLLMAnalyzer
 from tools.log_parser import parse_files
 from tools.mkdocs_reporter import MarkdownReporter
 from tools.result_normalizer import ResultStore
 
 
-def run(publish_docs: bool = False, review_source: bool = False) -> dict[str, object]:
+def run(
+    publish_docs: bool = False,
+    review_source: bool = False,
+    model: str | None = None,
+) -> dict[str, object]:
     store = ResultStore()
     result_path = store.latest()
     result = store.load(result_path)
     execution_dir = result_path.parent
     logs = parse_files([execution_dir / filename for filename in result.logs.values()])
     source_diff = _source_diff() if review_source else ""
-    analysis = DeepSeekAnalyzer().analyze(result, logs, source_diff)
+    analyzer = LocalLLMAnalyzer(model=model)
+    analysis = analyzer.analyze(result, logs, source_diff)
     decision = evaluate(result, analysis, repeated_failures=_consecutive_failures(store, result.test_id))
 
     analysis_path = execution_dir / "analysis.json"
@@ -36,6 +41,7 @@ def run(publish_docs: bool = False, review_source: bool = False) -> dict[str, ob
         "result_data": str(result_path),
         "markdown": str(markdown),
         "analysis": str(analysis_path),
+        "local_llm_model": analyzer.model,
         "published_to_mkdocs": publish_docs,
         "codex_escalation": decision.required,
         "escalation_reasons": decision.reasons,
@@ -75,9 +81,16 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Analyze the latest test and create a Markdown-first report")
     parser.add_argument("--latest", action="store_true", help="Compatibility flag; latest is always processed")
     parser.add_argument("--docs", action="store_true", help="Also publish the canonical Markdown into docs/test")
-    parser.add_argument("--source-review", action="store_true", help="Include the local git diff in DeepSeek analysis")
+    parser.add_argument("--source-review", action="store_true", help="Include the local git diff in Local LLM analysis")
+    parser.add_argument("--model", help="Override model_config.json for this analysis")
     args = parser.parse_args()
-    print(json.dumps(run(publish_docs=args.docs, review_source=args.source_review), indent=2, ensure_ascii=False))
+    print(
+        json.dumps(
+            run(publish_docs=args.docs, review_source=args.source_review, model=args.model),
+            indent=2,
+            ensure_ascii=False,
+        )
+    )
 
 
 if __name__ == "__main__":

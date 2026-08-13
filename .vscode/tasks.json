@@ -9,10 +9,17 @@
             "problemMatcher": []
         },
         {
-            "label": "Setup: Install Ollama and Pull DeepSeek",
+            "label": "Setup: Install Ollama and Pull Local LLM",
             "type": "shell",
             "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-            "args": ["-m", "tools.environment_setup", "ollama", "--model", "deepseek-r1:7b"],
+            "args": ["-m", "tools.environment_setup", "ollama"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Local LLM: Show Configuration and Installed Models",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": ["-m", "tools.local_llm", "status"],
             "problemMatcher": []
         },
         {

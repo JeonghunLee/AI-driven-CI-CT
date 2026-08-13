@@ -1,6 +1,6 @@
 import unittest
 
-from tools.deepseek import Analysis
+from tools.local_llm import Analysis
 from tools.github_reporter import render_comment
 from tools.result_normalizer import ResultRecord
 

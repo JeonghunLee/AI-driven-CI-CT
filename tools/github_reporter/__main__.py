@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 
-from tools.deepseek import Analysis
+from tools.local_llm import Analysis
 from tools.result_normalizer import ResultStore
 
 from . import post_comment, render_comment

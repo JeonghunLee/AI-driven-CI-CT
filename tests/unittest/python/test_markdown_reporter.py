@@ -1,7 +1,7 @@
 import unittest
 from pathlib import Path
 
-from tools.deepseek import Analysis
+from tools.local_llm import Analysis
 from tools.mkdocs_reporter import MarkdownReporter
 from tools.result_normalizer import ResultRecord, ResultStore
 
@@ -23,7 +23,7 @@ class MarkdownReporterTests(unittest.TestCase):
         ResultStore(root).save(result)
         path = MarkdownReporter(root).generate(result, Analysis("Stable", "passed", 1.0, "test"))
         text = path.read_text(encoding="utf-8")
-        self.assertIn("## DeepSeek analysis", text)
+        self.assertIn("## Local LLM analysis", text)
         self.assertIn("## Warnings", text)
         self.assertIn("## Test history", text)
 
