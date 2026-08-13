@@ -6,10 +6,11 @@
 |---|---|---|---|---:|
 | communication | `CT-NETWORK-001` | mock | [Open](test/ct/communication/CT-NETWORK-001.md) | 2 |
 | communication | `CT-USB-001` | mock | [Open](test/ct/communication/CT-USB-001.md) | 4 |
-| timing | `CT-UART-001` | mock | [Open](test/ct/timing/CT-UART-001.md) | 9 |
+| timing | `CT-UART-001` | mock | [Open](test/ct/timing/CT-UART-001.md) | 10 |
 
 ## Recent Executions
 
+- [`20260813-065450-655846`](test/ct/timing/CT-UART-001/20260813-065450-655846.md)
 - [`20260813-064903-857699`](test/ct/communication/CT-USB-001/20260813-064903-857699.md)
 - [`20260813-064856-608201`](test/ct/communication/CT-NETWORK-001/20260813-064856-608201.md)
 - [`20260813-064838-484993`](test/ct/timing/CT-UART-001/20260813-064838-484993.md)
