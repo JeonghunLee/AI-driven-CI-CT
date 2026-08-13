@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "tools": [
+    {
+      "tool_id": "uart",
+      "name": "UART",
+      "module": "tests.pytest.test_interfaces.uart",
+      "class": "MockUARTInterface",
+      "mode": "mock"
+    },
+    {
+      "tool_id": "usb",
+      "name": "USB",
+      "module": "tests.pytest.test_interfaces.usb",
+      "class": "MockUSBInterface",
+      "mode": "mock"
+    },
+    {
+      "tool_id": "network",
+      "name": "Network",
+      "module": "tests.pytest.test_interfaces.network",
+      "class": "MockNetworkInterface",
+      "mode": "mock"
+    }
+  ]
+}

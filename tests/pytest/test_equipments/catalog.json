@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "tools": [
+    {
+      "tool_id": "saleae",
+      "name": "Saleae",
+      "module": "tests.pytest.test_equipments.saleae",
+      "class": "MockSaleaeController",
+      "mode": "mock"
+    },
+    {
+      "tool_id": "digilent",
+      "name": "Digilent",
+      "module": "tests.pytest.test_equipments.digilent",
+      "class": "MockDigilentController",
+      "mode": "mock"
+    }
+  ]
+}

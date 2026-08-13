@@ -18,6 +18,20 @@
 | `CT-USB-001` | USB | Bulk loopback / packetization / integrity |
 | `CT-NETWORK-001` | Network | Packet loopback / latency / integrity |
 
+## TEST CASE Registry
+
+| Item | Value |
+|---|---|
+| File | `tests/pytest/test_cases/catalog.json` |
+| Key | `test_id` |
+| Validation | pytest collection hook |
+| Missing / mismatch | Collection error |
+
+| Registry | Tools |
+|---|---|
+| `test_equipments/catalog.json` | Saleae, Digilent |
+| `test_interfaces/catalog.json` | UART, USB, Network |
+
 ## Structure
 
 ```text

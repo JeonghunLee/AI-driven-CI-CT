@@ -187,6 +187,11 @@ flowchart TD
 | USB | `CT-USB-001` | bytes, packets, integrity |
 | Network | `CT-NETWORK-001` | bytes, packets, latency, integrity |
 
+| Tool group | Registry | Tools |
+|---|---|---|
+| Equipment | `test_equipments/catalog.json` | Saleae, Digilent |
+| Interface | `test_interfaces/catalog.json` | UART, USB, Network |
+
 ### Repository Structure
 
 ```text

@@ -8,7 +8,7 @@ from tests.pytest.test_interfaces.network import MockNetworkInterface
     test_id="CT-NETWORK-001",
     category="communication",
     interface="Network",
-    equipment="MockHost",
+    equipment="None",
 )
 def test_network_packet_loopback(network: MockNetworkInterface, ct_result: CTResultRecorder) -> None:
     payload = b'{"command":"health","sequence":1}'

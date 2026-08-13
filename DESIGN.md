@@ -242,6 +242,18 @@ Source: `.vscode/tasks.json`
 | USB | `MockUSBInterface` | `CT-USB-001` | communication |
 | Network | `MockNetworkInterface` | `CT-NETWORK-001` | communication |
 
+| Test case registration | Value |
+|---|---|
+| Registry | `tests/pytest/test_cases/catalog.json` |
+| Registry key | `test_id` |
+| Collection validation | Marker ID + module path |
+| Missing registration | pytest collection error |
+
+| Tool registry | Path | IDs |
+|---|---|---|
+| Equipment | `tests/pytest/test_equipments/catalog.json` | `saleae`, `digilent` |
+| Interface | `tests/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `network` |
+
 ```text
 tests/
 ├── pytest/

@@ -214,6 +214,24 @@ reports/
 | USB | `test_interfaces/usb/mock_usb.py` | `test_mock_usb.py` | `CT-USB-001` |
 | Network | `test_interfaces/network/mock_network.py` | `test_mock_network.py` | `CT-NETWORK-001` |
 
+| TEST CASE registration | 값 |
+|---|---|
+| Catalog | `tests/pytest/test_cases/catalog.json` |
+| Validation | `pytest_collection_modifyitems` |
+| Unregistered CT | Collection error |
+| Module mismatch | Collection error |
+
+| Tool registry | Tool IDs |
+|---|---|
+| `test_interfaces/catalog.json` | `uart`, `usb`, `network` |
+| `test_equipments/catalog.json` | `saleae`, `digilent` |
+
+| TEST Program | Interface Tool | Equipment Tool |
+|---|---|---|
+| `CT-UART-001` | `uart` | `saleae` |
+| `CT-USB-001` | `usb` | `digilent` |
+| `CT-NETWORK-001` | `network` | None |
+
 ## GitHub 자동화
 
 | Workload | Runner |

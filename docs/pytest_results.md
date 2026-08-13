@@ -5,11 +5,12 @@
 | Category | Test ID | Latest | Executions |
 |---|---|---|---:|
 | communication | `CT-NETWORK-001` | [Open](test/ct/communication/CT-NETWORK-001.md) | 1 |
-| communication | `CT-USB-001` | [Open](test/ct/communication/CT-USB-001.md) | 1 |
+| communication | `CT-USB-001` | [Open](test/ct/communication/CT-USB-001.md) | 2 |
 | timing | `CT-UART-001` | [Open](test/ct/timing/CT-UART-001.md) | 8 |
 
 ## Recent Executions
 
+- [`20260813-061738-783789`](test/ct/communication/CT-USB-001/20260813-061738-783789.md)
 - [`20260813-060848-213270`](test/ct/communication/CT-USB-001/20260813-060848-213270.md)
 - [`20260813-060827-628936`](test/ct/communication/CT-NETWORK-001/20260813-060827-628936.md)
 - [`20260813-060242-833931`](test/ct/timing/CT-UART-001/20260813-060242-833931.md)
