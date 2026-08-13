@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import os
-import shutil
+import csv
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -22,6 +22,9 @@ class ResultRecord:
     status: str
     category: str
     duration: float
+    description: str = "Automated test execution"
+    environment: str = "local"
+    configuration: Mapping[str, Any] = field(default_factory=dict)
     interface: str = "None"
     equipment: str = "None"
     commit: str = "local"
@@ -73,20 +76,25 @@ class ResultStore:
         payload = record.to_dict()
         result_path = log_dir / "result.json"
         result_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
-
-        json_dir = self.root / "json"
-        json_dir.mkdir(parents=True, exist_ok=True)
-        canonical = json_dir / f"{record.test_id}-{record.execution_id}.json"
-        shutil.copyfile(result_path, canonical)
-        shutil.copyfile(result_path, json_dir / "latest.json")
+        measurement_dir = self.root / "measurements" / record.test_id / record.execution_id
+        measurement_dir.mkdir(parents=True, exist_ok=True)
+        (measurement_dir / "measurement.json").write_text(
+            json.dumps({"metrics": payload["metrics"], "statistics": payload["statistics"]}, indent=2),
+            encoding="utf-8",
+        )
+        with (measurement_dir / "measurement.csv").open("w", newline="", encoding="utf-8") as stream:
+            writer = csv.writer(stream)
+            writer.writerow(["type", "name", "value"])
+            writer.writerows(("metric", key, value) for key, value in record.metrics.items())
+            writer.writerows(("statistic", key, value) for key, value in record.statistics.items())
         os.environ["CICT_RESULT_PATH"] = str(result_path)
         return result_path
 
     def latest(self) -> Path:
-        path = self.root / "json" / "latest.json"
-        if not path.exists():
-            raise FileNotFoundError("No normalized result exists at reports/json/latest.json")
-        return path
+        candidates = list((self.root / "logs").glob("*/*/result.json"))
+        if not candidates:
+            raise FileNotFoundError("No normalized result exists under reports/logs")
+        return max(candidates, key=lambda path: path.parent.name)
 
     def load(self, path: str | Path | None = None) -> ResultRecord:
         source = Path(path) if path else self.latest()
@@ -107,6 +115,8 @@ def from_junit(path: str | Path, test_id: str = "UNIT-TEST") -> ResultRecord:
         status=status,
         category="unit",
         duration=duration,
+        description="Unit test suite",
+        environment=os.getenv("CI", "local"),
         commit=os.getenv("GITHUB_SHA", "local")[:7],
         runner=os.getenv("RUNNER_NAME", "local"),
         metrics=totals,

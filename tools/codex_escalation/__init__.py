@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from tools.ollama import Analysis
+from tools.deepseek import Analysis
 from tools.result_normalizer import ResultRecord
 
 
@@ -15,7 +15,7 @@ class EscalationDecision:
 def evaluate(result: ResultRecord, analysis: Analysis, repeated_failures: int = 0) -> EscalationDecision:
     reasons: list[str] = []
     if analysis.needs_escalation or analysis.confidence < 0.5:
-        reasons.append("Ollama confidence is low or analysis is inconclusive")
+        reasons.append("DeepSeek confidence is low or analysis is inconclusive")
     if result.status in {"FAIL", "ERROR"} and analysis.classification in {"unknown", "architecture", "multi-module"}:
         reasons.append("Root cause requires advanced analysis")
     if repeated_failures >= 2:
@@ -24,4 +24,3 @@ def evaluate(result: ResultRecord, analysis: Analysis, repeated_failures: int = 
 
 
 __all__ = ["EscalationDecision", "evaluate"]
-

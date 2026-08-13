@@ -8,6 +8,8 @@ htmlcov/
 .venv/
 site/
 reports/logs/*
-reports/json/*
-reports/raw/*
+reports/measurements/*
+reports/markdown/*
+reports/test-artifacts/
+reports/raw/
 !reports/**/.gitkeep

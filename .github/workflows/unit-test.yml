@@ -6,17 +6,24 @@ on:
 
 jobs:
   unit-test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: {python-version: "3.11"}
-      - run: python -m pip install -r requirements.txt
-      - run: python -m pytest tests/unittest --junitxml=reports/raw/unit-junit.xml
+        with: {python-version: "3.12", cache: pip}
+      - run: python -m venv .venv
+      - run: .venv/bin/python -m pip install -r requirements.txt
+      - run: .venv/bin/python -m pytest tests/unittest --junitxml=reports/unit-junit.xml
       - name: Normalize unit-test result
         if: always()
-        run: python -m tools.result_normalizer reports/raw/unit-junit.xml --test-id UNIT-TEST
+        run: .venv/bin/python -m tools.result_normalizer reports/unit-junit.xml --test-id UNIT-TEST
+      - name: Analyze and generate Markdown
+        if: always()
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          RUNNER_NAME: ${{ runner.name }}
+        run: .venv/bin/python -m tools.pipeline --docs --source-review
       - name: Upload unit-test evidence
         if: always()
         uses: actions/upload-artifact@v4

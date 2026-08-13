@@ -1,60 +1,82 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any
 
-from tools.ollama import Analysis
+from tools.deepseek import Analysis
 from tools.result_normalizer import ResultRecord, ResultStore
 
 
-def _cell(value: Any) -> str:
+def _safe(value: Any) -> str:
     return str(value).replace("|", "\\|").replace("\n", " ")
 
 
 def _items(values: dict[str, Any]) -> str:
-    return "\n".join(f"- **{_cell(key)}:** {_cell(value)}" for key, value in values.items()) or "- None"
+    return "\n".join(f"- **{_safe(key)}:** {_safe(value)}" for key, value in values.items()) or "- None"
 
 
-class MkDocsReporter:
-    def __init__(self, docs_root: str | Path = "docs", reports_root: str | Path = "reports") -> None:
-        self.docs_root = Path(docs_root)
+class MarkdownReporter:
+    """Create the canonical human-readable report and optionally publish it to MkDocs."""
+
+    def __init__(self, reports_root: str | Path = "reports", docs_root: str | Path = "docs") -> None:
         self.store = ResultStore(reports_root)
+        self.docs_root = Path(docs_root)
 
-    def generate(self, result: ResultRecord, analysis: Analysis, important_logs: list[str] | None = None) -> Path:
-        category = result.category.lower().replace(" ", "-")
-        if category == "unit":
-            destination = self.docs_root / "test" / "unit" / f"{result.test_id}.md"
-        else:
-            destination = self.docs_root / "test" / "ct" / category / f"{result.test_id}.md"
+    def generate(
+        self,
+        result: ResultRecord,
+        analysis: Analysis,
+        important_logs: list[str] | None = None,
+        publish_docs: bool = False,
+    ) -> Path:
+        destination = self.store.root / "markdown" / result.test_id / result.execution_id / "result.md"
         destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(self.render(result, analysis, important_logs), encoding="utf-8")
+
+        latest = self.store.root / "markdown" / result.test_id / "latest.md"
+        latest.write_text(destination.read_text(encoding="utf-8"), encoding="utf-8")
+        if publish_docs:
+            self.publish(destination, result)
+        return destination
+
+    def publish(self, source: Path, result: ResultRecord) -> Path:
+        if result.category.lower() == "unit":
+            target = self.docs_root / "test" / "unit" / f"{result.test_id}.md"
+        else:
+            category = result.category.lower().replace(" ", "-")
+            target = self.docs_root / "test" / "ct" / category / f"{result.test_id}.md"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+        return target
+
+    def render(self, result: ResultRecord, analysis: Analysis, important_logs: list[str] | None = None) -> str:
         history = self._history(result.test_id)
         history_rows = "\n".join(
-            "| " + " | ".join(
-                _cell(value) for value in (
-                    item.timestamp, item.execution_id, item.commit, item.status,
-                    f"{item.duration:.3f}", item.statistics.get("mean", "-"), item.runner,
-                )
-            ) + " |"
+            f"| {_safe(item.timestamp)} | {_safe(item.execution_id)} | {_safe(item.commit)} | "
+            f"{item.status} | {item.duration:.3f} | {_safe(item.environment)} |"
             for item in history
-        ) or "| - | - | - | - | - | - | - |"
-        logs = "\n".join(f"- `{_cell(line)}`" for line in (important_logs or [])) or "- No error or warning extracted."
-        issue = result.metrics.get("issue_url", "Not associated")
-        body = f"""# {result.test_id}
+        ) or "| - | - | - | - | - | - |"
+        logs = "\n".join(f"- `{_safe(line)}`" for line in (important_logs or [])) or "- None"
+        warnings = "\n".join(
+            f"- **{_safe(item.get('severity', 'Important'))}:** {_safe(item.get('message', ''))}"
+            for item in analysis.warnings
+        ) or "- None"
+        return f"""# {result.test_id} Test Result
 
-## Latest result
+## Test summary
 
-- **Status:** {result.status}
-- **Category:** {result.category}
-- **Execution ID:** {result.execution_id}
-- **Duration:** {result.duration:.3f} seconds
-- **Interface:** {result.interface}
-- **Equipment:** {result.equipment}
-- **Commit:** `{result.commit}`
-- **Runner:** {result.runner}
-- **GitHub Issue:** {issue}
+- **Description:** {_safe(result.description)}
+- **Environment:** {_safe(result.environment)}
+- **Configuration:** {_safe(dict(result.configuration))}
+- **Equipment:** {_safe(result.equipment)}
+- **Interface:** {_safe(result.interface)}
+- **Result:** **{result.status}**
+- **Execution time:** {result.duration:.3f} seconds
+- **Execution date:** {_safe(result.timestamp)}
+- **Commit / revision:** `{_safe(result.commit)}`
+- **Execution ID:** `{_safe(result.execution_id)}`
 
-## Measurements
+## Measurement
 
 {_items(dict(result.metrics))}
 
@@ -62,35 +84,46 @@ class MkDocsReporter:
 
 {_items(dict(result.statistics))}
 
-## Important log
+## Important logs
 
 {logs}
 
-## AI analysis
+## Warnings
+
+{warnings}
+
+## DeepSeek analysis
 
 {analysis.summary}
 
-- Classification: `{analysis.classification}`
-- Confidence: {analysis.confidence:.2f}
-- Source: `{analysis.source}`
+- **Classification:** `{_safe(analysis.classification)}`
+- **Confidence:** {analysis.confidence:.2f}
+- **Analyzer:** `{_safe(analysis.source)}`
+
+### Failure analysis
+
+{analysis.failure_analysis or "Not applicable"}
+
+### Source review
+
+{analysis.source_review}
 
 ## Test history
 
-| Date | Execution ID | Commit | Status | Duration (s) | Mean | Runner |
-|---|---|---|---|---:|---:|---|
+| Date | Execution ID | Commit | Result | Duration (s) | Environment |
+|---|---|---|---|---:|---|
 {history_rows}
 """
-        destination.write_text(body, encoding="utf-8")
-        return destination
 
     def _history(self, test_id: str) -> list[ResultRecord]:
-        items: list[ResultRecord] = []
-        for path in sorted((self.store.root / "json").glob(f"{test_id}-*.json")):
+        records: list[ResultRecord] = []
+        for path in (self.store.root / "logs" / test_id).glob("*/result.json"):
             try:
-                items.append(self.store.load(path))
-            except (ValueError, TypeError, json.JSONDecodeError):
+                records.append(self.store.load(path))
+            except (ValueError, TypeError):
                 continue
-        return sorted(items, key=lambda item: item.timestamp, reverse=True)
+        return sorted(records, key=lambda item: item.timestamp, reverse=True)
 
 
-__all__ = ["MkDocsReporter"]
+MkDocsReporter = MarkdownReporter
+__all__ = ["MarkdownReporter", "MkDocsReporter"]

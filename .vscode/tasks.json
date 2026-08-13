@@ -2,6 +2,42 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "VENV create and install",
+            "type": "shell",
+            "command": "python -m venv .venv; .\\.venv\\Scripts\\python.exe -m pip install -r requirements.txt",
+            "problemMatcher": []
+        },
+        {
+            "label": "VENV pytest all",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": ["-m", "pytest"],
+            "group": {"kind": "test", "isDefault": true},
+            "problemMatcher": []
+        },
+        {
+            "label": "VENV pytest CT",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": ["-m", "pytest", "tests/pytest", "-m", "ct", "-s"],
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "VENV generate test report",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": ["-m", "tools.pipeline", "--docs"],
+            "problemMatcher": []
+        },
+        {
+            "label": "VENV Pandoc HTML",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": ["-m", "tools.pandoc_reporter", "--latest", "--format", "html"],
+            "problemMatcher": []
+        },
+        {
             "label": "VENV mkdoc serve Local",
             "type": "shell",
             "command": "powershell",
@@ -10,7 +46,7 @@
                 "RemoteSigned",
                 "-Command",
                 "& { .\\.venv\\Scripts\\Activate.ps1; mkdocs serve }"
-            ],
+            ]
         },
         {
             "label": "VENV mkdoc serve Remote",
@@ -21,7 +57,7 @@
                 "RemoteSigned",
                 "-Command",
                 "& { .\\.venv\\Scripts\\Activate.ps1; mkdocs serve -a 0.0.0.0:8000 }"
-            ],
+            ]
         },
         {
             "label": "VENV mkdoc build",
@@ -32,8 +68,8 @@
                 "RemoteSigned",
                 "-Command",
                 "& { .\\.venv\\Scripts\\Activate.ps1; mkdocs build  }"
-            ],
-        },       
+            ]
+        },
         {
             "label": "VENV mkdoc build strict",
             "type": "shell",
@@ -43,7 +79,7 @@
                 "RemoteSigned",
                 "-Command",
                 "& { .\\.venv\\Scripts\\Activate.ps1; mkdocs build --strict }"
-            ],
+            ]
         },
         {
             "label": "Package Electron",
@@ -61,7 +97,6 @@
                 "panel": "shared"
             },
             "problemMatcher": []
-        },        
-                    
+        }
     ]
 }

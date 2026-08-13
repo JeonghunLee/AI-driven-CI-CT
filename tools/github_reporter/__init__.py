@@ -2,11 +2,10 @@ from __future__ import annotations
 
 import json
 import os
-from pathlib import Path
 from typing import Any
 from urllib.request import Request, urlopen
 
-from tools.ollama import Analysis
+from tools.deepseek import Analysis
 from tools.result_normalizer import ResultRecord
 
 
@@ -17,6 +16,11 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
     repository = os.getenv("GITHUB_REPOSITORY", "owner/repository")
     run_id = os.getenv("GITHUB_RUN_ID")
     artifact = f"https://github.com/{repository}/actions/runs/{run_id}" if run_id else "Available in the workflow run"
+    category_path = "unit" if result.category.lower() == "unit" else f"ct/{result.category.lower()}"
+    mkdocs_source = f"docs/test/{category_path}/{result.test_id}.md"
+    warnings = "\n".join(
+        f"- {item.get('severity', 'Important')}: {item.get('message', '')}" for item in analysis.warnings
+    ) or "- None"
     return f"""## Test Result
 
 **Result: {result.status}**
@@ -34,15 +38,20 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
 ### Statistics
 {rows(dict(result.statistics))}
 
+### Warning Summary
+{warnings}
+
 ### AI Analysis
 {analysis.summary}
 
 - Classification: {analysis.classification}
 - Confidence: {analysis.confidence:.2f}
-- Analyzer: {analysis.source}
+- DeepSeek analyzer: {analysis.source}
 
 ### Evidence
 - [Workflow run and artifacts]({artifact})
+- MkDocs source: `{mkdocs_source}`
+- Markdown result: `reports/markdown/{result.test_id}/{result.execution_id}/result.md`
 - Commit: `{result.commit}`
 - Runner: {result.runner}
 - Execution ID: `{result.execution_id}`
@@ -71,4 +80,3 @@ def post_comment(issue: int, body: str, repository: str | None = None, token: st
 
 
 __all__ = ["post_comment", "render_comment"]
-
