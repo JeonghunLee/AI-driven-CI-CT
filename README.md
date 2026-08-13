@@ -86,7 +86,7 @@ python -m tools.environment_setup python --platform config
 | TEST Task | Scope | VS Code group |
 |---|---|---|
 | `TEST CASE: ALL` | All registered TEST cases | Default test |
-| `TEST CASE: TEST ID` | Prompted `test_id` | Test |
+| `TEST CASE: TEST ID` | Catalog `test_id` picker | Test |
 
 ## 테스트와 리포트
 

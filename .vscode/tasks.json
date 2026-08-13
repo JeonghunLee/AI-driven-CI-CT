@@ -198,8 +198,13 @@
     "inputs": [
         {
             "id": "testCaseId",
-            "type": "promptString",
+            "type": "pickString",
             "description": "TEST ID",
+            "options": [
+                "CT-UART-001",
+                "CT-USB-001",
+                "CT-NETWORK-001"
+            ],
             "default": "CT-UART-001"
         }
     ]

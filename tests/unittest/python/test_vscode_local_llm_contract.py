@@ -130,6 +130,17 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         self.assertFalse(tasks[1]["group"]["isDefault"])
         self.assertIn("${input:testCaseId}", tasks[1]["args"])
 
+    def test_test_case_id_picker_matches_catalog(self) -> None:
+        picker = next(item for item in self.tasks["inputs"] if item["id"] == "testCaseId")
+        catalog = json.loads(
+            Path("tests/pytest/test_cases/catalog.json").read_text(encoding="utf-8")
+        )
+        test_ids = [item["test_id"] for item in catalog["test_cases"]]
+
+        self.assertEqual(picker["type"], "pickString")
+        self.assertEqual(picker["options"], test_ids)
+        self.assertIn(picker["default"], test_ids)
+
     def test_report_tasks_include_html_and_docx(self) -> None:
         labels = {item["label"] for item in self.tasks["tasks"]}
         self.assertIn("REPORT: Convert Latest Markdown to HTML", labels)

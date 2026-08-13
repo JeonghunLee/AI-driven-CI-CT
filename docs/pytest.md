@@ -95,4 +95,4 @@ flowchart TD
 - Testing path: `tests/pytest`
 - Debug: `Debug: Current pytest File`
 - Task: `TEST CASE: ALL`
-- Task: `TEST CASE: TEST ID`
+- Task: `TEST CASE: TEST ID` / ID list

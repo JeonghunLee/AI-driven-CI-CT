@@ -220,7 +220,7 @@ Source: `.vscode/tasks.json`
 | CHECK | `CHECK 2: Show Environment Configuration` |
 | CHECK | `CHECK 3: Run Ollama Server (Foreground)` |
 | TEST CASE | `TEST CASE: ALL` |
-| TEST CASE | `TEST CASE: TEST ID` |
+| TEST CASE | `TEST CASE: TEST ID` / catalog ID picker |
 | REPORT | `REPORT: Generate Latest Markdown` |
 | REPORT | `REPORT: Convert Latest Markdown to HTML` |
 | REPORT | `REPORT: Convert Latest Markdown to DOCX` |
