@@ -40,17 +40,17 @@
 
 DeepSeek returned no summary
 
-- **Classification:** `unknown`
+- **Classification:** `timing_test`
 - **Confidence:** 0.50
 - **Analyzer:** `ollama/deepseek-r1:7b`
 
 ### Failure analysis
 
-Not applicable
+{'interface': 'UART', 'equipment': 'Saleae', 'failure_type': 'jitter', 'description': 'Timing measurements show significant deviation from expected baudrate.', 'severity': 'High', 'source': 'local'}
 
 ### Source review
 
-Not requested
+{}
 
 ## Test history
 

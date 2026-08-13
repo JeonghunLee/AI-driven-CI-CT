@@ -293,6 +293,8 @@ Execution rule:
 - Optional MkDocs latest copy: `--docs`
 - MkDocs execution snapshot: append-only
 - Previous canonical reports: snapshot backfill
+- MkDocs root index: automatic regeneration
+- Nested `docs/test/index.md`: prohibited
 - Optional source review: `--source-review`
 
 ```text
@@ -311,6 +313,8 @@ reports/markdown/<test-id>/<execution-id>/result.md
       └── docs/test/...  [--docs]
           ├── <test-id>.md                    # Latest
           └── <test-id>/<execution-id>.md     # Per execution
+      │
+      └── docs/index.md                       # Auto-generated catalog
 ```
 
 ## 9. Markdown Report Schema
@@ -385,6 +389,7 @@ DeepSeek
 | Global latest Markdown | Canonical Markdown | `test_result/markdown/latest.md` |
 | MkDocs latest page | Canonical Markdown | `docs/test/.../<test-id>.md` |
 | MkDocs execution page | Canonical Markdown | `docs/test/.../<test-id>/<execution-id>.md` |
+| MkDocs root index | Published page scan | `docs/index.md` |
 | DOCX | Canonical Markdown | Pandoc output |
 | PDF | Canonical Markdown | Pandoc output |
 | HTML | Canonical Markdown | Pandoc output |
@@ -459,7 +464,8 @@ Excluded from GitHub Issue:
 │   ├── measurements/
 │   └── markdown/
 ├── docs/
-│   └── test/
+│   ├── index.md                     # Auto-generated catalog
+│   └── test/                        # No nested index.md
 ├── DESIGN.md
 ├── mkdocs.yml
 ├── pytest.ini

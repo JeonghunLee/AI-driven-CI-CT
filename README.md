@@ -106,6 +106,7 @@ reports/
 
 ```text
 python -m test_result --docs
+├── docs/index.md
 └── docs/test/<scope>/<category>/
     ├── <test-id>.md
     └── <test-id>/

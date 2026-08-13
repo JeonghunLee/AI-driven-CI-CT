@@ -62,7 +62,59 @@ class MarkdownReporter:
             f"{latest_content}\n## Execution documents\n\n{links or '- None'}\n",
             encoding="utf-8",
         )
+        self.update_index()
         return execution_dir / f"{result.execution_id}.md"
+
+    def update_index(self) -> Path:
+        test_root = self.docs_root / "test"
+        ct_rows: list[str] = []
+        unit_rows: list[str] = []
+        execution_rows: list[tuple[str, str]] = []
+
+        for path in sorted(test_root.rglob("*.md")):
+            relative = path.relative_to(test_root)
+            parts = relative.parts
+            link = (Path("test") / relative).as_posix()
+            if parts[0] == "ct" and len(parts) == 3:
+                category, filename = parts[1], parts[2]
+                test_id = Path(filename).stem
+                count = len(list(path.with_suffix("").glob("*.md")))
+                ct_rows.append(f"| {_safe(category)} | `{_safe(test_id)}` | [Open]({link}) | {count} |")
+            elif parts[0] == "unit" and len(parts) == 2:
+                test_id = Path(parts[1]).stem
+                count = len(list(path.with_suffix("").glob("*.md")))
+                unit_rows.append(f"| `{_safe(test_id)}` | [Open]({link}) | {count} |")
+            elif (parts[0] == "ct" and len(parts) == 4) or (parts[0] == "unit" and len(parts) == 3):
+                execution_rows.append((Path(parts[-1]).stem, link))
+
+        recent = "\n".join(
+            f"- [`{execution_id}`]({link})"
+            for execution_id, link in sorted(execution_rows, key=lambda item: item[0], reverse=True)[:20]
+        ) or "- None"
+        index = f"""# AI-driven CI/CT
+
+## Test Reports
+
+### Continuous Tests
+
+| Category | Test ID | Latest | Executions |
+|---|---|---|---:|
+{chr(10).join(ct_rows) or '| - | - | - | 0 |'}
+
+### Unit Tests
+
+| Test ID | Latest | Executions |
+|---|---|---:|
+{chr(10).join(unit_rows) or '| - | - | 0 |'}
+
+### Recent Executions
+
+{recent}
+"""
+        destination = self.docs_root / "index.md"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(index, encoding="utf-8")
+        return destination
 
     def render(self, result: ResultRecord, analysis: Analysis, important_logs: list[str] | None = None) -> str:
         history = self._history(result.test_id)

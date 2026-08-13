@@ -48,6 +48,11 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertIn("## Execution documents", latest)
         self.assertIn("20260101-000001", latest)
         self.assertIn("20260101-000002", latest)
+        index = (Path(docs_root) / "index.md").read_text(encoding="utf-8")
+        self.assertIn("| timing | `CT-MD-HISTORY` |", index)
+        self.assertIn("20260101-000001", index)
+        self.assertIn("20260101-000002", index)
+        self.assertFalse((Path(docs_root) / "test" / "index.md").exists())
 
 
 if __name__ == "__main__":

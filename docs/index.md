@@ -1,6 +1,23 @@
 # AI-driven CI/CT
 
-This site contains normalized test results, measurements, AI summaries, and execution history.
+## Test Reports
 
-Start at the [test index](test/index.md).
+### Continuous Tests
 
+| Category | Test ID | Latest | Executions |
+|---|---|---|---:|
+| timing | `CT-UART-001` | [Open](test/ct/timing/CT-UART-001.md) | 5 |
+
+### Unit Tests
+
+| Test ID | Latest | Executions |
+|---|---|---:|
+| - | - | 0 |
+
+### Recent Executions
+
+- [`20260813-015049-884986`](test/ct/timing/CT-UART-001/20260813-015049-884986.md)
+- [`20260813-014919-691948`](test/ct/timing/CT-UART-001/20260813-014919-691948.md)
+- [`20260813-004323-383189`](test/ct/timing/CT-UART-001/20260813-004323-383189.md)
+- [`20260813-001038-341669`](test/ct/timing/CT-UART-001/20260813-001038-341669.md)
+- [`20260813-000735-891978`](test/ct/timing/CT-UART-001/20260813-000735-891978.md)
