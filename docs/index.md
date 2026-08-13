@@ -127,6 +127,12 @@ flowchart TD
 | `Setup 1: Select Operating System` | `config/config.json` OS update |
 | `Setup 2: Install Python Virtual Environment` | Python setup Task delegation |
 | `Setup 3: Install Ollama and Local LLM` | Ollama setup Task delegation |
+
+| Setup 1 runtime | Rule |
+|---|---|
+| Launch / Task Python | `python` |
+| Virtual environment | System Python re-exec |
+| System environment | Direct execution |
 | `Check 1: Refresh Environment Check File` | Environment check Task delegation |
 | `Run 3: Extension Module` | 확장 모듈 `main()` 실행 |
 | `Test Result: Generate Latest Markdown` | 최근 TEST 결과 Markdown 생성 |
@@ -143,7 +149,8 @@ flowchart TD
 | 항목 | 설정 |
 |---|---|
 | Default interpreter | `${workspaceFolder}/.venv` |
-| Launch/task interpreter | `${command:python.interpreterPath}` |
+| Setup 1·2 interpreter | `python` |
+| Setup 3+ interpreter | `${config:python.defaultInterpreterPath}` |
 | OS-specific path | `.vscode/settings.json` only |
 | Testing interpreter | Setup 1 synchronized path |
 | MkDocs execution | `python -m mkdocs` |

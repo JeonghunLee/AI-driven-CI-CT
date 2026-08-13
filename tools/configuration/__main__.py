@@ -2,8 +2,19 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import sys
 
 from . import SUPPORTED_OS, load_config, set_configured_os, write_check
+
+
+def _ensure_system_python() -> None:
+    if sys.prefix == sys.base_prefix:
+        return
+    executable = getattr(sys, "_base_executable", None)
+    if not executable:
+        raise RuntimeError("System Python executable could not be resolved from the virtual environment")
+    os.execv(executable, [executable, "-m", "tools.configuration", *sys.argv[1:]])
 
 
 def main() -> None:
@@ -19,6 +30,7 @@ def main() -> None:
         path = set_configured_os(args.os)
         value = {"config_file": str(path), "os": args.os}
     elif args.command == "select-os":
+        _ensure_system_python()
         options = list(SUPPORTED_OS)
         print("Operating system:")
         for index, option in enumerate(options, start=1):

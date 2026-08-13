@@ -97,13 +97,22 @@ Source: `.vscode/launch.json`
 | Background process | None |
 | Setup location | `.vscode/tasks.json` |
 
+| Setup 1 runtime | Rule |
+|---|---|
+| Launch Python | `python` |
+| Task Python | `python` |
+| `sys.prefix == sys.base_prefix` | Continue |
+| `sys.prefix != sys.base_prefix` | System Python `execv` |
+| System executable | `sys._base_executable` |
+
 | Setup input | Options | Default | Validation |
 |---|---|---|---|
 | `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `config/config.json` |
 
 | VS Code Python path | Value |
 |---|---|
-| Launch / Task | `${command:python.interpreterPath}` |
+| Setup 1·2 | `python` |
+| Setup 3+ | `${config:python.defaultInterpreterPath}` |
 | OS-specific path | `.vscode/settings.json` only |
 | Testing interpreter sync | Setup 1 → `.vscode/settings.json` |
 
@@ -221,8 +230,8 @@ Source: `.vscode/tasks.json`
 
 | Task runtime | Command |
 |---|---|
-| Python / Test / Report | `${command:python.interpreterPath}` |
-| MkDocs | `${command:python.interpreterPath} -m mkdocs` |
+| Python / Test / Report | `${config:python.defaultInterpreterPath}` |
+| MkDocs | `${config:python.defaultInterpreterPath} -m mkdocs` |
 | Platform-specific activation script | None |
 
 ## 6. Test Architecture

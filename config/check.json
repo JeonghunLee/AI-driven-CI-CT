@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T05:42:34.587560+00:00",
+  "generated_at": "2026-08-13T05:57:53.865449+00:00",
   "os": {
     "configured": "auto",
     "detected": "windows",
@@ -22,7 +22,7 @@
       {
         "name": "deepseek-r1:7b",
         "model": "deepseek-r1:7b",
-        "modified_at": "2026-08-13T11:25:50.562416+09:00",
+        "modified_at": "2026-08-13T14:57:44.2560963+09:00",
         "size": 4683075440,
         "digest": "755ced02ce7befdb13b7ca74e1e4d08cddba4986afdb63a480f2c93d3140383f",
         "details": {

@@ -4,7 +4,7 @@
         {
             "label": "Setup 1: Select Operating System",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "python",
             "args": ["-m", "tools.configuration", "select-os"],
             "presentation": {"reveal": "always", "panel": "dedicated", "clear": true},
             "problemMatcher": []
@@ -12,28 +12,28 @@
         {
             "label": "Setup 2: Install Python Virtual Environment",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "python",
             "args": ["-m", "tools.environment_setup", "python"],
             "problemMatcher": []
         },
         {
             "label": "Setup 3: Install Ollama and Local LLM",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "tools.environment_setup", "ollama"],
             "problemMatcher": []
         },
         {
             "label": "Check: Refresh Environment Check File",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "tools.configuration", "check"],
             "problemMatcher": []
         },
         {
             "label": "Local LLM: Run Ollama Server (Foreground)",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "tools.environment_setup", "serve"],
             "presentation": {
                 "reveal": "always",
@@ -45,7 +45,7 @@
         {
             "label": "Test: Run All with pytest",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "pytest"],
             "group": {"kind": "test", "isDefault": true},
             "problemMatcher": []
@@ -53,7 +53,7 @@
         {
             "label": "Test: Run Continuous Tests",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "pytest", "tests/pytest", "-m", "ct", "-s"],
             "group": "test",
             "problemMatcher": []
@@ -61,7 +61,7 @@
         {
             "label": "Test: Run unittest Suite",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "unittest", "discover", "-v", "-s", "tests/unittest", "-p", "test_*.py"],
             "group": "test",
             "problemMatcher": []
@@ -69,39 +69,39 @@
         {
             "label": "Report: Generate Latest Markdown",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "test_result", "--docs"],
             "problemMatcher": []
         },
         {
             "label": "Report: Convert Latest Markdown to HTML",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "tools.pandoc_reporter", "--latest", "--format", "html"],
             "problemMatcher": []
         },
         {
             "label": "MkDocs: Serve Locally",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "mkdocs", "serve"]
         },
         {
             "label": "MkDocs: Serve on Network",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "mkdocs", "serve", "-a", "0.0.0.0:8000"]
         },
         {
             "label": "MkDocs: Build",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "mkdocs", "build"]
         },
         {
             "label": "MkDocs: Build Strict",
             "type": "process",
-            "command": "${command:python.interpreterPath}",
+            "command": "${config:python.defaultInterpreterPath}",
             "args": ["-m", "mkdocs", "build", "--strict"]
         }
     ]

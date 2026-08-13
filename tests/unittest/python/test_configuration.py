@@ -6,6 +6,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 from tools import configuration
+from tools.configuration import __main__ as configuration_main
 
 
 class ConfigurationTests(unittest.TestCase):
@@ -33,7 +34,7 @@ class ConfigurationTests(unittest.TestCase):
     def test_auto_os_uses_windows_venv_interpreter(self, _detected_os) -> None:
         self.assertEqual(
             configuration.vscode_interpreter_path("auto"),
-            "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "${workspaceFolder}/.venv/Scripts/python.exe",
         )
 
     def test_unix_hosts_use_bin_python(self) -> None:
@@ -45,6 +46,25 @@ class ConfigurationTests(unittest.TestCase):
             configuration.vscode_interpreter_path("macos"),
             "${workspaceFolder}/.venv/bin/python",
         )
+
+    @patch("tools.configuration.__main__.os.execv")
+    @patch("tools.configuration.__main__.sys.argv", ["configuration", "select-os"])
+    @patch("tools.configuration.__main__.sys._base_executable", "system-python", create=True)
+    @patch("tools.configuration.__main__.sys.base_prefix", "system-prefix")
+    @patch("tools.configuration.__main__.sys.prefix", "venv-prefix")
+    def test_os_selection_restarts_with_system_python(self, execv) -> None:
+        configuration_main._ensure_system_python()
+        execv.assert_called_once_with(
+            "system-python",
+            ["system-python", "-m", "tools.configuration", "select-os"],
+        )
+
+    @patch("tools.configuration.__main__.os.execv")
+    @patch("tools.configuration.__main__.sys.base_prefix", "system-prefix")
+    @patch("tools.configuration.__main__.sys.prefix", "system-prefix")
+    def test_os_selection_keeps_system_python(self, execv) -> None:
+        configuration_main._ensure_system_python()
+        execv.assert_not_called()
 
     @patch("tools.configuration._command_version", return_value="ollama version test")
     @patch(

@@ -66,12 +66,22 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
     def test_vscode_json_contains_no_os_metadata(self) -> None:
         self.assertNotIn("inputs", self.tasks)
         for configuration in self.launch["configurations"]:
-            self.assertEqual(configuration["python"], "${command:python.interpreterPath}")
+            expected_python = (
+                "python"
+                if configuration["name"].startswith(("Setup 1", "Setup 2"))
+                else "${config:python.defaultInterpreterPath}"
+            )
+            self.assertEqual(configuration["python"], expected_python)
             self.assertNotIn("windows", configuration)
             self.assertNotIn("linux", configuration)
             self.assertNotIn("osx", configuration)
         for task in self.tasks["tasks"]:
-            self.assertEqual(task["command"], "${command:python.interpreterPath}")
+            expected_command = (
+                "python"
+                if task["label"].startswith(("Setup 1", "Setup 2"))
+                else "${config:python.defaultInterpreterPath}"
+            )
+            self.assertEqual(task["command"], expected_command)
             self.assertNotIn("windows", task)
             self.assertNotIn("linux", task)
             self.assertNotIn("osx", task)
@@ -81,10 +91,24 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             self.assertEqual(task["type"], "process")
             self.assertNotIn("isBackground", task)
 
+    def test_setup_1_uses_system_python(self) -> None:
+        launch = next(
+            item for item in self.launch["configurations"]
+            if item["name"] == "Setup 1: Select Operating System"
+        )
+        task = next(
+            item for item in self.tasks["tasks"]
+            if item["label"] == "Setup 1: Select Operating System"
+        )
+        self.assertEqual(launch["python"], "python")
+        self.assertEqual(task["command"], "python")
+        self.assertNotIn(".venv", json.dumps(launch))
+        self.assertNotIn(".venv", json.dumps(task))
+
     def test_vscode_testing_uses_project_venv_and_pytest(self) -> None:
         self.assertEqual(
             self.settings["python.defaultInterpreterPath"],
-            "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "${workspaceFolder}/.venv/Scripts/python.exe",
         )
         self.assertTrue(self.settings["python.testing.pytestEnabled"])
         self.assertFalse(self.settings["python.testing.unittestEnabled"])

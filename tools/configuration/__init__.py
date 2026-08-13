@@ -57,7 +57,7 @@ def set_configured_os(value: str) -> Path:
 def vscode_interpreter_path(value: str) -> str:
     resolved = detected_os() if value == "auto" else value
     if resolved == "windows":
-        return "${workspaceFolder}\\.venv\\Scripts\\python.exe"
+        return "${workspaceFolder}/.venv/Scripts/python.exe"
     if resolved in {"linux", "macos"}:
         return "${workspaceFolder}/.venv/bin/python"
     raise RuntimeError(f"Unsupported VS Code interpreter OS: {resolved}")

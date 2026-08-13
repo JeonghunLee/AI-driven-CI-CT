@@ -54,13 +54,22 @@ python -m tools.environment_setup python --platform config
 | Check 1 | `preLaunchTask` → Environment check Task |
 | Launch completion | `tools.configuration config` → immediate exit |
 
+| Setup 1 runtime | 값 |
+|---|---|
+| Launch Python | `python` |
+| Task Python | `python` |
+| `.venv` detected | System Python re-exec |
+| System Python detected | Direct execution |
+| Resolution source | `sys._base_executable` |
+
 | Setup 1 OS input | 값 |
 |---|---|
 | Default | `auto` |
 | Options | `auto`, `windows`, `linux`, `macos` |
 | Config source | `config/config.json` → `os` |
 | Host mismatch | Setup stop |
-| Launch / Task Python | `${command:python.interpreterPath}` |
+| Setup 1·2 Python | `python` |
+| Setup 3+ Python | `${config:python.defaultInterpreterPath}` |
 | OS-specific path | `.vscode/settings.json` only |
 | Testing interpreter sync | Setup 1 → `.vscode/settings.json` |
 | Test discovery | Save-triggered automatic discovery |
