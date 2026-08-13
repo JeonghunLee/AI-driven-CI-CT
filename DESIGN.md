@@ -103,8 +103,9 @@ Source: `.vscode/launch.json`
 
 | VS Code Python path | Value |
 |---|---|
-| Interpreter command | `${command:python.interpreterPath}` |
-| Default environment | `${workspaceFolder}/.venv` |
+| Launch / Task | `${command:python.interpreterPath}` |
+| OS-specific path | `.vscode/settings.json` only |
+| Testing interpreter sync | Setup 1 → `.vscode/settings.json` |
 
 ### 3.1 Python Environment Setup
 
@@ -180,6 +181,7 @@ Source: `.vscode/settings.json`
 | pytest path 2 | `tests/unittest` |
 | unittest implementation | Standard `unittest.TestCase` |
 | Separate unittest execution | `Test: Run unittest Suite` task |
+| VS Code pytest cache | `-p no:cacheprovider` |
 
 ```text
 VS Code Testing
@@ -216,7 +218,6 @@ Source: `.vscode/tasks.json`
 | MkDocs | `MkDocs: Serve on Network` |
 | MkDocs | `MkDocs: Build` |
 | MkDocs | `MkDocs: Build Strict` |
-| Build | `Package Electron` |
 
 | Task runtime | Command |
 |---|---|

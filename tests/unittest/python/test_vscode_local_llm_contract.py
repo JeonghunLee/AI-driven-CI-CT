@@ -7,6 +7,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
     def setUp(self) -> None:
         self.launch = json.loads(Path(".vscode/launch.json").read_text(encoding="utf-8"))
         self.tasks = json.loads(Path(".vscode/tasks.json").read_text(encoding="utf-8"))
+        self.settings = json.loads(Path(".vscode/settings.json").read_text(encoding="utf-8"))
         self.config = json.loads(Path("config/config.json").read_text(encoding="utf-8"))
 
     def test_selected_preset_has_model_name(self) -> None:
@@ -36,7 +37,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         )
         self.assertEqual(
             task["args"],
-            ["-m", "tools.environment_setup", "python", "--platform", "config"],
+            ["-m", "tools.environment_setup", "python"],
         )
 
     def test_task_setup_uses_internal_model_config(self) -> None:
@@ -46,7 +47,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         )
         self.assertEqual(
             setup["args"],
-            ["-m", "tools.environment_setup", "ollama", "--platform", "config"],
+            ["-m", "tools.environment_setup", "ollama"],
         )
         self.assertTrue(any("Check File" in item["label"] for item in self.tasks["tasks"]))
 
@@ -59,27 +60,38 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         self.assertNotIn("isBackground", task)
         self.assertEqual(
             task["args"],
-            ["-m", "tools.environment_setup", "serve", "--platform", "config"],
+            ["-m", "tools.environment_setup", "serve"],
         )
 
-    def test_platform_picker_supports_all_hosts(self) -> None:
-        expected = ["auto", "windows", "linux", "macos"]
-        task_input = next(item for item in self.tasks["inputs"] if item["id"] == "targetOS")
-        self.assertEqual(task_input["options"], expected)
-        self.assertEqual(task_input["default"], "auto")
-
-    def test_python_commands_do_not_use_windows_venv_paths(self) -> None:
+    def test_vscode_json_contains_no_os_metadata(self) -> None:
+        self.assertNotIn("inputs", self.tasks)
         for configuration in self.launch["configurations"]:
-            self.assertNotIn("\\.venv\\Scripts\\", configuration.get("python", ""))
+            self.assertEqual(configuration["python"], "${command:python.interpreterPath}")
+            self.assertNotIn("windows", configuration)
+            self.assertNotIn("linux", configuration)
+            self.assertNotIn("osx", configuration)
         for task in self.tasks["tasks"]:
-            if task["label"] != "Package Electron":
-                self.assertNotIn("\\.venv\\Scripts\\", task.get("command", ""))
+            self.assertEqual(task["command"], "${command:python.interpreterPath}")
+            self.assertNotIn("windows", task)
+            self.assertNotIn("linux", task)
+            self.assertNotIn("osx", task)
 
     def test_python_tasks_run_as_managed_processes(self) -> None:
         for task in self.tasks["tasks"]:
-            if task.get("command") == "${command:python.interpreterPath}":
-                self.assertEqual(task["type"], "process")
-                self.assertNotIn("isBackground", task)
+            self.assertEqual(task["type"], "process")
+            self.assertNotIn("isBackground", task)
+
+    def test_vscode_testing_uses_project_venv_and_pytest(self) -> None:
+        self.assertEqual(
+            self.settings["python.defaultInterpreterPath"],
+            "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+        )
+        self.assertTrue(self.settings["python.testing.pytestEnabled"])
+        self.assertFalse(self.settings["python.testing.unittestEnabled"])
+        self.assertEqual(
+            self.settings["python.testing.pytestArgs"],
+            ["-p", "no:cacheprovider", "tests/pytest", "tests/unittest"],
+        )
 
 
 if __name__ == "__main__":

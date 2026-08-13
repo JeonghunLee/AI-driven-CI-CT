@@ -60,8 +60,11 @@ python -m tools.environment_setup python --platform config
 | Options | `auto`, `windows`, `linux`, `macos` |
 | Config source | `config/config.json` → `os` |
 | Host mismatch | Setup stop |
-| VS Code Python | `${command:python.interpreterPath}` |
-| Default environment | `${workspaceFolder}/.venv` |
+| Launch / Task Python | `${command:python.interpreterPath}` |
+| OS-specific path | `.vscode/settings.json` only |
+| Testing interpreter sync | Setup 1 → `.vscode/settings.json` |
+| Test discovery | Save-triggered automatic discovery |
+| VS Code pytest cache | Disabled |
 
 ### VS Code Testing
 

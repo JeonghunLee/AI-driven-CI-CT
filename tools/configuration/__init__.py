@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CONFIG_DIR = ROOT / "config"
 CONFIG_PATH = CONFIG_DIR / "config.json"
 CHECK_PATH = CONFIG_DIR / "check.json"
+VSCODE_SETTINGS_PATH = ROOT / ".vscode" / "settings.json"
 SUPPORTED_OS = ("auto", "windows", "linux", "macos")
 
 
@@ -49,7 +50,33 @@ def set_configured_os(value: str) -> Path:
     config["os"] = value
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     CONFIG_PATH.write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    sync_vscode_interpreter(value)
     return CONFIG_PATH
+
+
+def vscode_interpreter_path(value: str) -> str:
+    resolved = detected_os() if value == "auto" else value
+    if resolved == "windows":
+        return "${workspaceFolder}\\.venv\\Scripts\\python.exe"
+    if resolved in {"linux", "macos"}:
+        return "${workspaceFolder}/.venv/bin/python"
+    raise RuntimeError(f"Unsupported VS Code interpreter OS: {resolved}")
+
+
+def sync_vscode_interpreter(value: str | None = None) -> Path:
+    selected = value or configured_os()
+    try:
+        settings = json.loads(VSCODE_SETTINGS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError(f"Invalid VS Code settings: {VSCODE_SETTINGS_PATH}: {error}") from error
+    if not isinstance(settings, dict):
+        raise RuntimeError(f"Invalid VS Code settings root: {VSCODE_SETTINGS_PATH}")
+    settings["python.defaultInterpreterPath"] = vscode_interpreter_path(selected)
+    VSCODE_SETTINGS_PATH.write_text(
+        json.dumps(settings, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    return VSCODE_SETTINGS_PATH
 
 
 def detected_os() -> str:
@@ -147,5 +174,7 @@ __all__ = [
     "detected_os",
     "load_config",
     "set_configured_os",
+    "sync_vscode_interpreter",
+    "vscode_interpreter_path",
     "write_check",
 ]

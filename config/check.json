@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-13T05:38:38.068671+00:00",
+  "generated_at": "2026-08-13T05:42:34.587560+00:00",
   "os": {
     "configured": "auto",
     "detected": "windows",
@@ -7,7 +7,7 @@
   },
   "python": {
     "installed": true,
-    "executable": "C:\\Users\\LeeJeongHun\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "executable": "D:\\Works\\projects\\Private\\AI-driven-CI-CT\\.venv\\Scripts\\python.exe",
     "version": "3.14.6"
   },
   "ollama": {

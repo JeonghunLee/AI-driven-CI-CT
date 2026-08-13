@@ -1,13 +1,16 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
   "python.terminal.activateEnvironment": true,
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "python.testing.pytestArgs": [
+    "-p",
+    "no:cacheprovider",
     "tests/pytest",
     "tests/unittest"
   ],
   "python.testing.cwd": "${workspaceFolder}",
+  "python.testing.autoTestDiscoverOnSaveEnabled": true,
   "python.analysis.extraPaths": [
     "${workspaceFolder}"
   ]

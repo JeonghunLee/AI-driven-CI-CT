@@ -5,27 +5,22 @@
             "label": "Setup 1: Select Operating System",
             "type": "process",
             "command": "${command:python.interpreterPath}",
-            "args": ["-m", "tools.configuration", "set-os", "--os", "${input:targetOS}"],
-            "windows": {"command": "python"},
-            "linux": {"command": "python3"},
-            "osx": {"command": "python3"},
+            "args": ["-m", "tools.configuration", "select-os"],
+            "presentation": {"reveal": "always", "panel": "dedicated", "clear": true},
             "problemMatcher": []
         },
         {
             "label": "Setup 2: Install Python Virtual Environment",
             "type": "process",
             "command": "${command:python.interpreterPath}",
-            "args": ["-m", "tools.environment_setup", "python", "--platform", "config"],
-            "windows": {"command": "python"},
-            "linux": {"command": "python3"},
-            "osx": {"command": "python3"},
+            "args": ["-m", "tools.environment_setup", "python"],
             "problemMatcher": []
         },
         {
             "label": "Setup 3: Install Ollama and Local LLM",
             "type": "process",
             "command": "${command:python.interpreterPath}",
-            "args": ["-m", "tools.environment_setup", "ollama", "--platform", "config"],
+            "args": ["-m", "tools.environment_setup", "ollama"],
             "problemMatcher": []
         },
         {
@@ -39,7 +34,7 @@
             "label": "Local LLM: Run Ollama Server (Foreground)",
             "type": "process",
             "command": "${command:python.interpreterPath}",
-            "args": ["-m", "tools.environment_setup", "serve", "--platform", "config"],
+            "args": ["-m", "tools.environment_setup", "serve"],
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated",
@@ -108,32 +103,6 @@
             "type": "process",
             "command": "${command:python.interpreterPath}",
             "args": ["-m", "mkdocs", "build", "--strict"]
-        },
-        {
-            "label": "Package Electron",
-            "type": "shell",
-            "command": "powershell",
-            "args": [
-                "-ExecutionPolicy",
-                "Bypass",
-                "-File",
-                "${workspaceFolder}/electron_package.ps1"
-            ],
-            "group": "build",
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            },
-            "problemMatcher": []
-        }
-    ],
-    "inputs": [
-        {
-            "id": "targetOS",
-            "type": "pickString",
-            "description": "Select the operating system stored in config/config.json",
-            "options": ["auto", "windows", "linux", "macos"],
-            "default": "auto"
         }
     ]
 }

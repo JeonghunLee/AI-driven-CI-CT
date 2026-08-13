@@ -143,8 +143,9 @@ flowchart TD
 | 항목 | 설정 |
 |---|---|
 | Default interpreter | `${workspaceFolder}/.venv` |
-| Launch interpreter | `${command:python.interpreterPath}` |
-| Task interpreter | `${command:python.interpreterPath}` |
+| Launch/task interpreter | `${command:python.interpreterPath}` |
+| OS-specific path | `.vscode/settings.json` only |
+| Testing interpreter | Setup 1 synchronized path |
 | MkDocs execution | `python -m mkdocs` |
 
 ### Testing

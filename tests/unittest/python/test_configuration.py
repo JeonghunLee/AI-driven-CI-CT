@@ -20,11 +20,31 @@ class ConfigurationTests(unittest.TestCase):
         source = {"version": 1, "os": "auto", "ollama": {"selected_model": "model:test"}}
         with patch("tools.configuration.CONFIG_PATH", path), patch(
             "tools.configuration.CONFIG_DIR", directory
-        ), patch("tools.configuration.load_config", return_value=source):
+        ), patch("tools.configuration.load_config", return_value=source), patch(
+            "tools.configuration.sync_vscode_interpreter"
+        ) as sync:
             configuration.set_configured_os("linux")
         written = json.loads(path.write_text.call_args.args[0])
         self.assertEqual(written["os"], "linux")
         self.assertEqual(written["ollama"]["selected_model"], "model:test")
+        sync.assert_called_once_with("linux")
+
+    @patch("tools.configuration.detected_os", return_value="windows")
+    def test_auto_os_uses_windows_venv_interpreter(self, _detected_os) -> None:
+        self.assertEqual(
+            configuration.vscode_interpreter_path("auto"),
+            "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+        )
+
+    def test_unix_hosts_use_bin_python(self) -> None:
+        self.assertEqual(
+            configuration.vscode_interpreter_path("linux"),
+            "${workspaceFolder}/.venv/bin/python",
+        )
+        self.assertEqual(
+            configuration.vscode_interpreter_path("macos"),
+            "${workspaceFolder}/.venv/bin/python",
+        )
 
     @patch("tools.configuration._command_version", return_value="ollama version test")
     @patch(
