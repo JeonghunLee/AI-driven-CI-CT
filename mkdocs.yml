@@ -9,11 +9,11 @@ repo_url: https://github.com/JeonghunLee/AI-driven-CI-CT
 repo_name: JeonghunLee/AI-driven-CI-CT
 
 nav:
-  - Home: index.md
-  - TEST:
+  - Overview: index.md
+  - TEST Architecture:
     - Pytest: pytest.md
     - Unittest: unittest.md
-  - TEST_RESULTS:
+  - TEST RESULTS:
     - Pytest: pytest_results.md
     - Unittest: unittest_results.md
 
