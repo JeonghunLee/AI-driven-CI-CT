@@ -293,7 +293,9 @@ tests/
 │   │   └── network/{mock,hil}/
 │   └── conftest.py
 └── unittest/
-    ├── python/
+    ├──ct_framework
+    │      └──python/
+    ├── python/    
     ├── c_cpp/
     ├── firmware/
     └── common/
