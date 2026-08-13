@@ -1,88 +1,89 @@
 # AI-driven Continuous Testing
 
-VS Code와 프로젝트 로컬 Python `.venv`를 중심으로 Unit Test 및 pytest CT를 실행하고, Ollama Local LLM으로 결과·로그·경고·소스 변경을 분석한 뒤 Markdown으로 기록하는 프로젝트입니다. Markdown 결과는 MkDocs 웹 문서와 Pandoc DOCX/PDF/HTML 출력의 공통 원본입니다.
-
-상세 설계는 [DESIGN.md](DESIGN.md)를 참고하세요.
+| 항목 | 구성 |
+|---|---|
+| Development | VS Code |
+| Python | Project-local `.venv` |
+| Unit Test | `unittest` |
+| Continuous Test | `pytest` |
+| Local LLM | Ollama |
+| Result source | Markdown |
+| Web documentation | MkDocs |
+| Document conversion | Pandoc |
+| Design | [DESIGN.md](DESIGN.md) |
 
 ## 구성
 
-- VS Code Testing 및 Run and Debug
-- 프로젝트 로컬 `.venv`
-- Python Unit Test와 확장 가능한 C/C++·Firmware 구조
-- pytest 기반 Integration/Functional/Hardware CT
-- 분리된 Test Equipment와 Test Interface
-- Mock UART 및 Mock Saleae UART Timing CT
-- Ollama Runtime + Configurable Local LLM
-- Markdown-first 결과 및 실행 이력
-- MkDocs 게시와 Pandoc 문서 변환
-- GitHub-hosted runner 기반 일반 자동화
-- 장비/특수 환경용 optional self-hosted runner
-- 복잡한 실패를 위한 Codex escalation 판단
+- VS Code Testing / Run and Debug
+- Python Unit Test
+- C/C++ / Firmware extension structure
+- Integration / Functional / Hardware CT
+- Test Equipment / Test Interface separation
+- Mock UART / Mock Saleae UART Timing CT
+- Ollama Local LLM
+- Markdown execution history
+- GitHub-hosted runner
+- Optional self-hosted hardware runner
+- Codex escalation
 
 ## 환경 준비
 
-Windows PowerShell 기준입니다. VS Code의 `Setup: Create Python Virtual Environment` task로도 실행할 수 있습니다.
+| Platform | Bootstrap Python |
+|---|---|
+| Windows | `python` |
+| Linux | `python3` |
+| macOS | `python3` |
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install --upgrade pip
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```text
+python -m tools.environment_setup python --platform config
 ```
-
-VS Code가 `.venv\Scripts\python.exe`를 선택하면 Test Explorer에서 전체 테스트와 개별 테스트를 실행하거나 디버깅할 수 있습니다.
 
 ### VS Code Run and Debug
 
-Run and Debug에는 다음 실행 구성이 있습니다.
+| Order | Configuration | 기능 |
+|---:|---|---|
+| 1 | `Setup 1: Install Python Virtual Environment` | `.venv` + dependencies |
+| 2 | `Setup 2: Install Ollama and Local LLM` | Ollama + selected model |
+| 3 | `Check 1: Refresh Environment Check File` | `config/check.json` 갱신 |
+| 4 | `Run 3: Extension Module` | Extension `main()` |
+| 5 | `Test Result: Generate Latest Markdown` | Latest result report |
 
-1. `Setup 1: Install Python Virtual Environment`: `.venv` 생성 후 `requirements.txt`를 설치합니다.
-2. `Setup 2: Install Ollama and Local LLM`: Ollama 설치, 임시 서버 시작, 선택 모델 pull, 설정이 시작한 서버 정리를 수행합니다.
-3. `Run 3: Extension Module`: `main()`을 제공하는 Python 모듈을 실행하는 확장용 진입점입니다.
-4. `Test Result: Generate Latest Markdown`: 테스트를 재실행하지 않고 가장 최근 결과로 Markdown을 만듭니다.
-
-Ollama 설정 선택값:
-
-- `auto`: 현재 운영체제 자동 감지
-- `windows`: Windows + winget
-- `linux`: Linux + official installer
-- `macos`: macOS + Homebrew
-- Host mismatch: setup 중단
-- VS Code Python: `${command:python.interpreterPath}`
-- Default environment: `${workspaceFolder}/.venv`
-
-확장 실행은 `tools/extensions/example.py`를 새 모듈로 교체하고 `.vscode/launch.json`의 `--module` 값만 변경하면 됩니다.
+| Platform input | 값 |
+|---|---|
+| Default | `config` |
+| Options | `config`, `auto`, `windows`, `linux`, `macos` |
+| Config source | `config/config.json` → `os` |
+| Host mismatch | Setup stop |
+| VS Code Python | `${command:python.interpreterPath}` |
+| Default environment | `${workspaceFolder}/.venv` |
 
 ### VS Code Testing
 
-VS Code Python 확장은 pytest와 unittest를 동시에 활성화하면 pytest만 실행하므로, Test Explorer에서는 pytest adapter가 다음 두 디렉터리를 함께 검색하도록 구성했습니다.
-
-- pytest: `tests/pytest`
-- unittest: `tests/unittest`
-
-따라서 Testing 트리에는 `pytest`와 `unittest` 디렉터리가 각각 나타납니다. unittest 코드는 표준 `unittest.TestCase`로 작성되어 있어 Test Explorer의 pytest 실행과 `Test: Run unittest Suite` task의 unittest discovery 양쪽에서 사용할 수 있습니다.
+| Adapter | Discovery path | Implementation |
+|---|---|---|
+| pytest | `tests/pytest` | pytest |
+| pytest | `tests/unittest` | `unittest.TestCase` |
+| Native unittest task | `tests/unittest` | unittest discovery |
 
 ## 테스트와 리포트
 
-```powershell
-# 전체 테스트
-.\.venv\Scripts\python.exe -m pytest
+| 작업 | 명령 |
+|---|---|
+| 전체 TEST | `python -m pytest` |
+| CT | `python -m pytest tests/pytest -m ct -s` |
+| Latest Markdown | `python -m test_result` |
+| MkDocs publish | `python -m test_result --docs` |
+| Source review | `python -m test_result --docs --source-review` |
 
-# CT만 실행
-.\.venv\Scripts\python.exe -m pytest tests/pytest -m ct -s
+## Configuration
 
-# 최신 실행을 Local LLM으로 분석하고 Markdown 생성
-.\.venv\Scripts\python.exe -m test_result
-
-# Markdown을 생성하고 docs/test에도 게시
-.\.venv\Scripts\python.exe -m test_result --docs
-
-# 변경 소스도 함께 리뷰
-.\.venv\Scripts\python.exe -m test_result --docs --source-review
+```text
+config/
+├── config.json   # User selection
+└── check.json    # Generated environment state
 ```
 
-Ollama 기본 주소는 `http://127.0.0.1:11434`입니다. 선택 모델은 `config/config.json`의 `ollama.selected_model`에서만 관리합니다.
-
-OS와 Ollama 모델 선택은 `config/config.json`에서 할 수 있습니다. 자동 점검 결과는 `config/check.json`에 기록됩니다.
+### `config/config.json`
 
 ```json
 {
@@ -95,35 +96,45 @@ OS와 Ollama 모델 선택은 `config/config.json`에서 할 수 있습니다. �
 }
 ```
 
-- `os` 값으로 `auto`, `windows`, `linux`, `macos`를 선택합니다.
-- `ollama.selected_model` 값으로 실행 모델을 선택합니다.
-- `ollama.url` 값으로 Local LLM endpoint를 선택합니다.
-- VS Code의 setup launch/task는 모델명을 전달하지 않고 이 JSON을 사용합니다.
-- 모델 우선순위는 `명시적 인자 > OLLAMA_MODEL 환경변수 > config/config.json`입니다.
-- 설정 모델 누락 시 Python은 임의 기본 모델을 사용하지 않고 중단합니다.
+| Key | 값 |
+|---|---|
+| `os` | `auto`, `windows`, `linux`, `macos` |
+| `ollama.url` | Local LLM endpoint |
+| `ollama.selected_model` | Ollama model name |
 
-```powershell
-# 현재 설정과 설치 모델 목록
-python -m tools.configuration check
+| Model selection priority | Source |
+|---:|---|
+| 1 | CLI `--model` |
+| 2 | `OLLAMA_MODEL` |
+| 3 | `config/config.json` |
+| Missing | Configuration error |
 
-# 설정 모델 pull/update
-python -m tools.environment_setup ollama --platform config
+### `config/check.json`
 
-# Ollama 서버를 foreground로 실행
-python -m tools.environment_setup serve --platform config
+| Check | Field |
+|---|---|
+| OS configuration | `os.configured` |
+| OS detection | `os.detected`, `os.name` |
+| Python installation | `python.installed` |
+| Python runtime | `python.executable`, `python.version` |
+| Ollama installation | `ollama.installed` |
+| Ollama runtime | `ollama.executable`, `ollama.version`, `ollama.available` |
+| Selected model | `ollama.selected_model`, `ollama.selected_model_installed` |
+| Installed models | `ollama.supported_models` |
 
-# 이번 보고서에만 다른 모델 사용
-.\.venv\Scripts\python.exe -m test_result --model "<ollama-model>:latest"
-```
+| 작업 | 명령 |
+|---|---|
+| Environment check | `python -m tools.configuration check` |
+| Model pull/update | `python -m tools.environment_setup ollama --platform config` |
+| Foreground server | `python -m tools.environment_setup serve --platform config` |
+| Report model override | `python -m test_result --model "<ollama-model>:<tag>"` |
 
-설정 전에 이미 실행 중인 Ollama 서버는 외부 소유 프로세스로 간주하여 종료하지 않습니다. 설정이 직접 시작한 서버는 성공·실패 여부와 관계없이 설정 종료 시 함께 정리됩니다. VS Code에서 상주 서버가 필요하면 `Local LLM: Run Ollama Server (Foreground)` 작업을 실행하고, 작업 중지로 서버를 종료합니다.
-
-```powershell
-$env:OLLAMA_URL = "http://127.0.0.1:11434"
-$env:OLLAMA_MODEL = "<ollama-model>:latest"
-```
-
-Ollama 또는 선택 모델이 준비되지 않은 경우에도 규칙 기반 fallback이 테스트 결과와 경고를 Markdown으로 정리합니다.
+| Ollama server state | Setup behavior | Completion behavior |
+|---|---|---|
+| Existing server | Reuse | Preserve |
+| Setup-owned server | Temporary start | Stop |
+| VS Code foreground task | Explicit start | Task stop |
+| Ollama unavailable | Deterministic fallback | Markdown generation |
 
 ## 결과 구조
 
@@ -146,42 +157,38 @@ reports/
     └── <execution-id>/result.md
 ```
 
-사람이 읽는 기준 결과는 `reports/markdown/.../result.md`입니다. JSON은 테스트 실행과 도구 사이의 machine-readable 중간 데이터로만 사용합니다.
-
-`python -m test_result`를 실행하면 이 canonical 보고서를 생성한 뒤 가장 최근 사본을 `test_result/markdown/latest.md`에도 넣습니다.
-
-```text
-python -m test_result --docs
-└── docs/test/
-    └── <scope>/<category>/
-        ├── <test-id>.md
-        └── <test-id>/
-            ├── <execution-id-1>.md
-            ├── <execution-id-2>.md
-            └── <execution-id-N>.md
-```
+| Artifact | 역할 |
+|---|---|
+| `reports/markdown/.../result.md` | Canonical human-readable result |
+| `result.json` | Machine-readable intermediate data |
+| `test_result/markdown/latest.md` | Latest report copy |
+| `docs/test/.../<test-id>.md` | Latest MkDocs TEST page |
+| `docs/test/.../<test-id>/<execution-id>.md` | Append-only execution page |
 
 ## Pandoc 변환
 
-Pandoc 실행 파일을 별도로 설치하고 PATH에 등록해야 합니다.
-
-```powershell
-.\.venv\Scripts\python.exe -m tools.pandoc_reporter --latest --format html
-.\.venv\Scripts\python.exe -m tools.pandoc_reporter --latest --format docx
-.\.venv\Scripts\python.exe -m tools.pandoc_reporter --latest --format pdf
-```
-
-PDF 생성에는 설치 환경에 따라 LaTeX 같은 PDF engine이 추가로 필요할 수 있습니다.
+| Format | 명령 | 추가 요구사항 |
+|---|---|---|
+| HTML | `python -m tools.pandoc_reporter --latest --format html` | Pandoc PATH |
+| DOCX | `python -m tools.pandoc_reporter --latest --format docx` | Pandoc PATH |
+| PDF | `python -m tools.pandoc_reporter --latest --format pdf` | Pandoc PATH + PDF engine |
 
 ## 실제 장비 확장
 
-- Test Case: `tests/pytest/test_cases/`
-- Equipment Controller: `tests/pytest/test_equipments/`
-- DUT Interface: `tests/pytest/test_interfaces/`
-- 연결과 정리: `tests/pytest/conftest.py` fixture
-
-CT에는 `@pytest.mark.ct(...)`와 `ct_result` fixture를 사용합니다. 테스트의 PASS/FAIL 여부와 관계없이 로그와 측정 자료가 실행 ID별로 생성됩니다.
+| Layer | Path |
+|---|---|
+| Test Case | `tests/pytest/test_cases/` |
+| Equipment Controller | `tests/pytest/test_equipments/` |
+| DUT Interface | `tests/pytest/test_interfaces/` |
+| Lifecycle fixture | `tests/pytest/conftest.py` |
+| CT marker | `@pytest.mark.ct(...)` |
+| Result fixture | `ct_result` |
 
 ## GitHub 자동화
 
-일반 Unit Test와 mock CT는 GitHub-hosted runner에서 동작합니다. 실제 USB/JTAG 장비, vendor tool, 내부망 등 특수 실행 환경이 필요한 작업만 `Optional Special Environment Test` workflow와 `[self-hosted, hw-test]` runner를 사용합니다.
+| Workload | Runner |
+|---|---|
+| Unit Test | GitHub-hosted |
+| Mock CT | GitHub-hosted |
+| USB / JTAG / vendor tool / internal network | `[self-hosted, hw-test]` |
+| Special workflow | `Optional Special Environment Test` |
