@@ -40,7 +40,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Check: Refresh Environment Check File",
+            "label": "Check 1: Refresh Environment Check File",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [

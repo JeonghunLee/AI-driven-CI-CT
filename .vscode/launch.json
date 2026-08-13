@@ -54,7 +54,7 @@
       "justMyCode": true
     },
     {
-      "name": "Run 3: Extension Module",
+      "name": "Run 1: Extension Module",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
