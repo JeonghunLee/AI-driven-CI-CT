@@ -4,10 +4,11 @@
 
 | Category | Test ID | Latest | Executions |
 |---|---|---|---:|
-| timing | `CT-UART-001` | [Open](test/ct/timing/CT-UART-001.md) | 6 |
+| timing | `CT-UART-001` | [Open](test/ct/timing/CT-UART-001.md) | 7 |
 
 ## Recent Executions
 
+- [`20260813-024005-771843`](test/ct/timing/CT-UART-001/20260813-024005-771843.md)
 - [`20260813-023202-059324`](test/ct/timing/CT-UART-001/20260813-023202-059324.md)
 - [`20260813-015049-884986`](test/ct/timing/CT-UART-001/20260813-015049-884986.md)
 - [`20260813-014919-691948`](test/ct/timing/CT-UART-001/20260813-014919-691948.md)
