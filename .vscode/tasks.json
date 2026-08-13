@@ -3,106 +3,101 @@
     "tasks": [
         {
             "label": "Setup: Create Python Virtual Environment",
-            "type": "shell",
-            "command": "python",
-            "args": ["-m", "tools.environment_setup", "python"],
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "tools.environment_setup", "python", "--platform", "${input:setupPlatform}"],
+            "windows": {"command": "python"},
+            "linux": {"command": "python3"},
+            "osx": {"command": "python3"},
             "problemMatcher": []
         },
         {
             "label": "Setup: Install Ollama and Pull Local LLM",
-            "type": "shell",
-            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-            "args": ["-m", "tools.environment_setup", "ollama"],
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "tools.environment_setup", "ollama", "--platform", "${input:setupPlatform}"],
             "problemMatcher": []
         },
         {
             "label": "Local LLM: Show Configuration and Installed Models",
-            "type": "shell",
-            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
             "args": ["-m", "tools.local_llm", "status"],
             "problemMatcher": []
         },
         {
+            "label": "Local LLM: Run Ollama Server (Foreground)",
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "tools.environment_setup", "serve", "--platform", "${input:setupPlatform}"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Test: Run All with pytest",
-            "type": "shell",
-            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
             "args": ["-m", "pytest"],
             "group": {"kind": "test", "isDefault": true},
             "problemMatcher": []
         },
         {
             "label": "Test: Run Continuous Tests",
-            "type": "shell",
-            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
             "args": ["-m", "pytest", "tests/pytest", "-m", "ct", "-s"],
             "group": "test",
             "problemMatcher": []
         },
         {
             "label": "Test: Run unittest Suite",
-            "type": "shell",
-            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
             "args": ["-m", "unittest", "discover", "-v", "-s", "tests/unittest", "-p", "test_*.py"],
             "group": "test",
             "problemMatcher": []
         },
         {
             "label": "Report: Generate Latest Markdown",
-            "type": "shell",
-            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
             "args": ["-m", "test_result", "--docs"],
             "problemMatcher": []
         },
         {
             "label": "Report: Convert Latest Markdown to HTML",
-            "type": "shell",
-            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
             "args": ["-m", "tools.pandoc_reporter", "--latest", "--format", "html"],
             "problemMatcher": []
         },
         {
             "label": "MkDocs: Serve Locally",
-            "type": "shell",
-            "command": "powershell",
-            "args": [
-                "-ExecutionPolicy",
-                "RemoteSigned",
-                "-Command",
-                "& { .\\.venv\\Scripts\\Activate.ps1; mkdocs serve }"
-            ]
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "mkdocs", "serve"]
         },
         {
             "label": "MkDocs: Serve on Network",
-            "type": "shell",
-            "command": "powershell",
-            "args": [
-                "-ExecutionPolicy",
-                "RemoteSigned",
-                "-Command",
-                "& { .\\.venv\\Scripts\\Activate.ps1; mkdocs serve -a 0.0.0.0:8000 }"
-            ]
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "mkdocs", "serve", "-a", "0.0.0.0:8000"]
         },
         {
             "label": "MkDocs: Build",
-            "type": "shell",
-            "command": "powershell",
-            "args": [
-                "-ExecutionPolicy",
-                "RemoteSigned",
-                "-Command",
-                "& { .\\.venv\\Scripts\\Activate.ps1; mkdocs build  }"
-            ]
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "mkdocs", "build"]
         },
         {
             "label": "MkDocs: Build Strict",
-            "type": "shell",
-            "command": "powershell",
-            "args": [
-                "-ExecutionPolicy",
-                "RemoteSigned",
-                "-Command",
-                "& { .\\.venv\\Scripts\\Activate.ps1; mkdocs build --strict }"
-            ]
+            "type": "process",
+            "command": "${command:python.interpreterPath}",
+            "args": ["-m", "mkdocs", "build", "--strict"]
         },
         {
             "label": "Package Electron",
@@ -120,6 +115,15 @@
                 "panel": "shared"
             },
             "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "setupPlatform",
+            "type": "pickString",
+            "description": "Select the operating system for environment setup",
+            "options": ["auto", "windows", "linux", "macos"],
+            "default": "auto"
         }
     ]
 }

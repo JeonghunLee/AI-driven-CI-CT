@@ -5,9 +5,12 @@
       "name": "Setup 1: Install Python Virtual Environment",
       "type": "debugpy",
       "request": "launch",
-      "python": "python",
+      "python": "${command:python.interpreterPath}",
+      "windows": {"python": "python"},
+      "linux": {"python": "python3"},
+      "osx": {"python": "python3"},
       "module": "tools.environment_setup",
-      "args": ["python"],
+      "args": ["python", "--platform", "${input:setupPlatform}"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
@@ -16,18 +19,18 @@
       "name": "Setup 2: Install Ollama and Local LLM",
       "type": "debugpy",
       "request": "launch",
-      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "python": "${command:python.interpreterPath}",
       "module": "tools.environment_setup",
-      "args": ["ollama"],
+      "args": ["ollama", "--platform", "${input:setupPlatform}"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
     },
     {
-      "name": "Local LLM: Show Configuration and Installed Models",
+      "name": "Check 1: Show Configuration and Installed Models",
       "type": "debugpy",
       "request": "launch",
-      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "python": "${command:python.interpreterPath}",
       "module": "tools.local_llm",
       "args": ["status"],
       "console": "integratedTerminal",
@@ -38,7 +41,7 @@
       "name": "Run 3: Extension Module",
       "type": "debugpy",
       "request": "launch",
-      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "python": "${command:python.interpreterPath}",
       "module": "tools.extension_runner",
       "args": ["--module", "tools.extensions.example"],
       "console": "integratedTerminal",
@@ -49,7 +52,7 @@
       "name": "Test Result: Generate Latest Markdown",
       "type": "debugpy",
       "request": "launch",
-      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "python": "${command:python.interpreterPath}",
       "module": "test_result",
       "args": ["--docs"],
       "console": "integratedTerminal",
@@ -60,7 +63,7 @@
       "name": "Debug: Current Python File",
       "type": "debugpy",
       "request": "launch",
-      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "python": "${command:python.interpreterPath}",
       "program": "${file}",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
@@ -70,12 +73,21 @@
       "name": "Debug: Current pytest File",
       "type": "debugpy",
       "request": "launch",
-      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "python": "${command:python.interpreterPath}",
       "module": "pytest",
       "args": ["${file}", "-s", "-vv"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": false
+    }
+  ],
+  "inputs": [
+    {
+      "id": "setupPlatform",
+      "type": "pickString",
+      "description": "Select the operating system for environment setup",
+      "options": ["auto", "windows", "linux", "macos"],
+      "default": "auto"
     }
   ]
 }

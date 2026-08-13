@@ -68,11 +68,12 @@ flowchart TD
     B -- Yes --> D[Server Health Check]
     C --> D
     D --> E{Server Ready?}
-    E -- No --> F[ollama serve]
+    E -- No --> F[Temporary ollama serve]
     E -- Yes --> G[Model Check]
     F --> G
     G --> H[ollama pull selected model]
-    H --> I[Local LLM Ready]
+    H --> I[Stop Setup-owned Server]
+    I --> J[Local LLM Model Ready]
 ```
 
 ### OS 설치 방식
@@ -83,12 +84,28 @@ flowchart TD
 | macOS | `brew install ollama` |
 | Linux | Ollama official installer |
 
+### 플랫폼 선택
+
+| 선택값 | 동작 |
+|---|---|
+| `auto` | 현재 운영체제 자동 감지 |
+| `windows` | Windows + winget |
+| `linux` | Linux + official installer |
+| `macos` | macOS + Homebrew |
+
+- VS Code input: `setupPlatform`
+- Host mismatch: setup 중단
+- Default: `auto`
+
 ### VS Code 실행
 
 - Run and Debug: `Setup 2: Install Ollama and Local LLM`
 - Task: `Setup: Install Ollama and Pull Local LLM`
 - Setup module: `python -m tools.environment_setup ollama [--model <model>]`
 - Status launch/task: `Local LLM: Show Configuration and Installed Models`
+- Foreground server task: `Local LLM: Run Ollama Server (Foreground)`
+- Setup-owned server: setup completion or failure 시 자동 종료
+- Existing server: setup에서 종료하지 않음
 
 ## 3. VS Code 환경 구성
 
@@ -106,12 +123,21 @@ flowchart TD
 | Configuration | 기능 |
 |---|---|
 | `Setup 1: Install Python Virtual Environment` | `.venv` 생성 및 Python dependency 설치 |
-| `Setup 2: Install Ollama and Local LLM` | Ollama 설치, 서버 실행, 선택 모델 pull |
+| `Setup 2: Install Ollama and Local LLM` | Ollama 설치, 임시 서버 실행, 선택 모델 pull, 임시 서버 종료 |
 | `Local LLM: Show Configuration and Installed Models` | 설정 모델 및 설치 모델 목록 출력 |
 | `Run 3: Extension Module` | 확장 모듈 `main()` 실행 |
 | `Test Result: Generate Latest Markdown` | 최근 TEST 결과 Markdown 생성 |
 | `Debug: Current Python File` | 현재 Python 파일 디버그 |
 | `Debug: Current pytest File` | 현재 pytest 파일 디버그 |
+
+### Cross-platform Python
+
+| 항목 | 설정 |
+|---|---|
+| Default interpreter | `${workspaceFolder}/.venv` |
+| Launch interpreter | `${command:python.interpreterPath}` |
+| Task interpreter | `${command:python.interpreterPath}` |
+| MkDocs execution | `python -m mkdocs` |
 
 ### Testing
 

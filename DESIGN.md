@@ -78,12 +78,21 @@ Source: `.vscode/launch.json`
 | Order | Configuration | Runtime | Entry point | Purpose |
 |---:|---|---|---|---|
 | 1 | `Setup 1: Install Python Virtual Environment` | System Python | `tools.environment_setup python` | `.venv` creation, dependency installation |
-| 2 | `Setup 2: Install Ollama and Local LLM` | `.venv` Python | `tools.environment_setup ollama` | Ollama installation, server startup, selected model pull |
+| 2 | `Setup 2: Install Ollama and Local LLM` | `.venv` Python | `tools.environment_setup ollama` | Ollama installation, temporary server, selected model pull, owned-process cleanup |
 | 3 | `Local LLM: Show Configuration and Installed Models` | `.venv` Python | `tools.local_llm status` | Config and installed inventory |
 | 4 | `Run 3: Extension Module` | `.venv` Python | `tools.extension_runner` | Future module execution |
 | 5 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_result --docs` | Latest result analysis, Markdown generation |
 | 6 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
 | 7 | `Debug: Current pytest File` | `.venv` Python | pytest current file | Test debugging |
+
+| Setup input | Options | Default | Validation |
+|---|---|---|---|
+| `setupPlatform` | `auto`, `windows`, `linux`, `macos` | `auto` | Selected OS = host OS |
+
+| VS Code Python path | Value |
+|---|---|
+| Interpreter command | `${command:python.interpreterPath}` |
+| Default environment | `${workspaceFolder}/.venv` |
 
 ### 3.1 Python Environment Setup
 
@@ -113,11 +122,26 @@ Ollama executable check
     └── Linux: official installer
           │
           ▼
-Ollama server startup
+Temporary Ollama server startup
           │
           ▼
 ollama pull <selected-model>
+          │
+          ▼
+Owned server process cleanup
 ```
+
+| Server state before setup | Setup behavior | Server state after setup |
+|---|---|---|
+| Running | Reuse | Running; external ownership |
+| Stopped | Temporary start | Stopped; setup ownership |
+| Remote endpoint | Health check only | Unchanged |
+
+| Platform | Installer | Requirement |
+|---|---|---|
+| Windows | `winget install Ollama.Ollama` | `winget` |
+| Linux | `https://ollama.com/install.sh` | `sh` |
+| macOS | `brew install ollama` | Homebrew |
 
 ### 3.3 Extension Module Contract
 
@@ -141,7 +165,7 @@ Source: `.vscode/settings.json`
 
 | Setting | Value |
 |---|---|
-| Interpreter | `${workspaceFolder}\.venv\Scripts\python.exe` |
+| Interpreter | `${workspaceFolder}/.venv` |
 | Adapter | pytest |
 | pytest path 1 | `tests/pytest` |
 | pytest path 2 | `tests/unittest` |
@@ -172,6 +196,7 @@ Source: `.vscode/tasks.json`
 | Setup | `Setup: Create Python Virtual Environment` |
 | Setup | `Setup: Install Ollama and Pull Local LLM` |
 | Setup | `Local LLM: Show Configuration and Installed Models` |
+| Runtime | `Local LLM: Run Ollama Server (Foreground)` |
 | Test | `Test: Run All with pytest` |
 | Test | `Test: Run Continuous Tests` |
 | Test | `Test: Run unittest Suite` |
@@ -182,6 +207,12 @@ Source: `.vscode/tasks.json`
 | MkDocs | `MkDocs: Build` |
 | MkDocs | `MkDocs: Build Strict` |
 | Build | `Package Electron` |
+
+| Task runtime | Command |
+|---|---|
+| Python / Test / Report | `${command:python.interpreterPath}` |
+| MkDocs | `${command:python.interpreterPath} -m mkdocs` |
+| Platform-specific activation script | None |
 
 ## 6. Test Architecture
 
@@ -353,6 +384,12 @@ reports/markdown/<test-id>/<execution-id>/result.md
 | Config selection | `selected` preset |
 | Installed inventory | Ollama `/api/tags` |
 | Offline fallback | Deterministic analysis |
+
+| Process | Execution mode | Stop rule |
+|---|---|---|
+| Setup-owned Ollama server | Temporary child process | Setup completion or failure |
+| Existing Ollama server | External process | No control |
+| VS Code Ollama server task | Foreground process task | VS Code task termination |
 
 Model config schema:
 

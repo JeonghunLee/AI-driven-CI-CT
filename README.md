@@ -36,9 +36,19 @@ VS Code가 `.venv\Scripts\python.exe`를 선택하면 Test Explorer에서 전체
 Run and Debug에는 다음 실행 구성이 있습니다.
 
 1. `Setup 1: Install Python Virtual Environment`: `.venv` 생성 후 `requirements.txt`를 설치합니다.
-2. `Setup 2: Install Ollama and Local LLM`: Ollama 설치, 서버 시작, 선택 모델 pull을 수행합니다.
+2. `Setup 2: Install Ollama and Local LLM`: Ollama 설치, 임시 서버 시작, 선택 모델 pull, 설정이 시작한 서버 정리를 수행합니다.
 3. `Run 3: Extension Module`: `main()`을 제공하는 Python 모듈을 실행하는 확장용 진입점입니다.
 4. `Test Result: Generate Latest Markdown`: 테스트를 재실행하지 않고 가장 최근 결과로 Markdown을 만듭니다.
+
+Ollama 설정 선택값:
+
+- `auto`: 현재 운영체제 자동 감지
+- `windows`: Windows + winget
+- `linux`: Linux + official installer
+- `macos`: macOS + Homebrew
+- Host mismatch: setup 중단
+- VS Code Python: `${command:python.interpreterPath}`
+- Default environment: `${workspaceFolder}/.venv`
 
 확장 실행은 `tools/extensions/example.py`를 새 모듈로 교체하고 `.vscode/launch.json`의 `--module` 값만 변경하면 됩니다.
 
@@ -102,11 +112,16 @@ Ollama 기본 주소는 `http://127.0.0.1:11434`, 기본 모델은 `qwen3:latest
 .\.venv\Scripts\python.exe -m tools.local_llm status
 
 # 설정 모델 pull/update
-.\.venv\Scripts\python.exe -m tools.environment_setup ollama
+python -m tools.environment_setup ollama --platform auto
+
+# Ollama 서버를 foreground로 실행
+python -m tools.environment_setup serve --platform auto
 
 # 이번 보고서에만 다른 모델 사용
 .\.venv\Scripts\python.exe -m test_result --model "<ollama-model>:latest"
 ```
+
+설정 전에 이미 실행 중인 Ollama 서버는 외부 소유 프로세스로 간주하여 종료하지 않습니다. 설정이 직접 시작한 서버는 성공·실패 여부와 관계없이 설정 종료 시 함께 정리됩니다. VS Code에서 상주 서버가 필요하면 `Local LLM: Run Ollama Server (Foreground)` 작업을 실행하고, 작업 중지로 서버를 종료합니다.
 
 ```powershell
 $env:OLLAMA_URL = "http://127.0.0.1:11434"
