@@ -1186,15 +1186,15 @@
 <td>Ollama + Local LLM</td>
 </tr>
 <tr>
-<td>Test</td>
+<td>TEST 1</td>
 <td>pytest all</td>
 </tr>
 <tr>
-<td>Test</td>
+<td>TEST 2</td>
 <td>Continuous Tests</td>
 </tr>
 <tr>
-<td>Test</td>
+<td>TEST 3</td>
 <td>unittest suite</td>
 </tr>
 <tr>
@@ -1212,6 +1212,88 @@
 </tbody>
 </table>
 <h2 id="4-test">4. TEST 구조도</h2>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Test ID</th>
+<th>Measurement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UART</td>
+<td><code>CT-UART-001</code></td>
+<td>baudrate, error, jitter</td>
+</tr>
+<tr>
+<td>USB</td>
+<td><code>CT-USB-001</code></td>
+<td>bytes, packets, integrity</td>
+</tr>
+<tr>
+<td>Network</td>
+<td><code>CT-NETWORK-001</code></td>
+<td>bytes, packets, latency, integrity</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Tool group</th>
+<th>Registry</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Equipment</td>
+<td><code>test_equipments/catalog.json</code></td>
+<td>FPGA, Saleae, Digilent</td>
+</tr>
+<tr>
+<td>Interface</td>
+<td><code>test_interfaces/catalog.json</code></td>
+<td>USB, UART, JTAG, Network</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Directory</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mock</td>
+<td><code>mock/</code></td>
+<td><code>test_mode/interface_mode/equipment_mode = mock</code></td>
+</tr>
+<tr>
+<td>HIL</td>
+<td><code>hil/</code></td>
+<td><code>test_mode/interface_mode/equipment_mode = hil</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Selection</th>
+<th>Derived</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_cases/catalog.json:test_mode</code></td>
+<td><code>interface_mode</code>, <code>equipment_mode</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="repository-structure">Repository Structure</h3>
 <div class="highlight"><pre><span></span><code>tests/
 ├── pytest/
@@ -1222,15 +1304,22 @@
 │   │   ├── performance/
 │   │   ├── stability/
 │   │   └── regression/
+│   ├── fixtures/
+│   │   ├── fixture_001_uart.py
+│   │   ├── fixture_002_uart_saleae.py
+│   │   ├── fixture_003_usb_digilent.py
+│   │   ├── fixture_004_jtag_fpga.py
+│   │   ├── fixture_005_full_hil.py
+│   │   └── fixture_006_network.py
 │   ├── test_equipments/
-│   │   ├── fpga/
-│   │   ├── saleae/
-│   │   └── digilent/
+│   │   ├── fpga/{mock,hil}/
+│   │   ├── saleae/{mock,hil}/
+│   │   └── digilent/{mock,hil}/
 │   ├── test_interfaces/
-│   │   ├── usb/
-│   │   ├── uart/
-│   │   ├── jtag/
-│   │   └── network/
+│   │   ├── usb/{mock,hil}/
+│   │   ├── uart/{mock,hil}/
+│   │   ├── jtag/{mock,hil}/
+│   │   └── network/{mock,hil}/
 │   └── conftest.py
 └── unittest/
     ├── python/
