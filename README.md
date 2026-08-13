@@ -1,80 +1,108 @@
-# AI-driven CI/CT
+# AI-driven Continuous Testing
 
-GitHub Actions와 self-hosted runner에서 Unit Test 및 하드웨어 Continuous Test(CT)를 실행하고, 결과를 Ollama 우선으로 분석하는 자동화 프로젝트입니다. 복잡하거나 신뢰도가 낮은 실패만 Codex escalation 대상으로 분류합니다.
+VS Code와 프로젝트 로컬 Python `.venv`를 중심으로 Unit Test 및 pytest CT를 실행하고, Ollama의 DeepSeek 모델로 결과·로그·경고·소스 변경을 분석한 뒤 Markdown으로 기록하는 프로젝트입니다. Markdown 결과는 MkDocs 웹 문서와 Pandoc DOCX/PDF/HTML 출력의 공통 원본입니다.
 
-## 현재 구현 범위
+상세 설계는 [DESIGN.md](DESIGN.md)를 참고하세요.
 
-- GitHub Test Request Issue Form과 `run-test` 라벨 기반 실행
-- self-hosted runner용 Unit Test / Continuous Test workflow
-- Python Unit Test 샘플
-- 공통 `connect`, `disconnect`, `read`, `write`, `execute` 인터페이스
-- Mock UART 및 Mock Saleae 장비
-- UART baudrate/jitter CT 샘플
-- 로그 디렉터리와 표준 `result.json` 생성
-- 오류/경고/측정값 선행 파싱
-- Ollama 분석과 연결 실패 시 deterministic fallback
-- GitHub Issue 결과 코멘트
-- MkDocs 상세 리포트와 테스트 이력
-- Codex escalation 판단 인터페이스
+## 구성
 
-실제 FPGA, Saleae, Digilent, USB, UART, JTAG, Network 드라이버는 각 분리된 디렉터리에 추가할 수 있으며, 기본 샘플은 장비 없이 실행됩니다.
+- VS Code Testing 및 Run and Debug
+- 프로젝트 로컬 `.venv`
+- Python Unit Test와 확장 가능한 C/C++·Firmware 구조
+- pytest 기반 Integration/Functional/Hardware CT
+- 분리된 Test Equipment와 Test Interface
+- Mock UART 및 Mock Saleae UART Timing CT
+- Ollama Runtime + DeepSeek Primary Model
+- Markdown-first 결과 및 실행 이력
+- MkDocs 게시와 Pandoc 문서 변환
+- GitHub-hosted runner 기반 일반 자동화
+- 장비/특수 환경용 optional self-hosted runner
+- 복잡한 실패를 위한 Codex escalation 판단
 
-## 로컬 실행
+## 환경 준비
 
-Python 3.10 이상을 권장합니다.
+Windows PowerShell 기준입니다. VS Code의 `VENV create and install` task로도 실행할 수 있습니다.
 
 ```powershell
-python -m pip install -r requirements.txt
-python -m pytest
-python -m tools.pipeline --latest --docs
-python -m mkdocs serve
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Ollama가 실행 중이면 기본적으로 `http://127.0.0.1:11434`의 `qwen2.5-coder:7b` 모델을 사용합니다. 환경에 맞게 변경할 수 있습니다.
+VS Code가 `.venv\Scripts\python.exe`를 선택하면 Test Explorer에서 전체 테스트와 개별 테스트를 실행하거나 디버깅할 수 있습니다.
+
+## 테스트와 리포트
+
+```powershell
+# 전체 테스트
+.\.venv\Scripts\python.exe -m pytest
+
+# CT만 실행
+.\.venv\Scripts\python.exe -m pytest tests/pytest -m ct -s
+
+# 최신 실행을 DeepSeek로 분석하고 Markdown 생성
+.\.venv\Scripts\python.exe -m tools.pipeline
+
+# Markdown을 생성하고 docs/test에도 게시
+.\.venv\Scripts\python.exe -m tools.pipeline --docs
+
+# 변경 소스도 함께 리뷰
+.\.venv\Scripts\python.exe -m tools.pipeline --docs --source-review
+```
+
+Ollama 기본 주소는 `http://127.0.0.1:11434`, 기본 모델은 `deepseek-r1:7b`입니다.
 
 ```powershell
 $env:OLLAMA_URL = "http://127.0.0.1:11434"
-$env:OLLAMA_MODEL = "qwen2.5-coder:7b"
+$env:DEEPSEEK_MODEL = "deepseek-r1:7b"
 ```
 
-Ollama가 없거나 응답하지 않아도 파이프라인은 중단되지 않으며 규칙 기반 요약을 생성합니다.
-
-## GitHub에서 실행
-
-1. `Test request` Issue를 생성하고 항목을 선택합니다.
-2. 준비된 Issue에 `run-test` 라벨을 추가합니다.
-3. self-hosted runner에서 workflow가 실행됩니다.
-4. 결과와 raw evidence는 Actions Artifact에 보존됩니다.
-5. Issue에는 요약 코멘트가 추가되고 MkDocs용 문서가 생성됩니다.
-
-수동 실행은 Actions의 `Continuous Test` workflow에서 `CT-UART-001`을 지정하면 됩니다.
+Ollama 또는 DeepSeek가 준비되지 않은 경우에도 규칙 기반 fallback이 테스트 결과와 경고를 Markdown으로 정리합니다.
 
 ## 결과 구조
 
 ```text
 reports/
-├── json/
-│   ├── latest.json
-│   └── latest-analysis.json
-└── logs/<test-id>/<execution-id>/
-    ├── result.json
-    ├── analysis.json
-    ├── codex-escalation.json
-    ├── test.log
-    ├── stdout.log
-    ├── stderr.log
-    ├── equipment.log
-    └── interface.log
+├── logs/<test-id>/<execution-id>/
+│   ├── result.json
+│   ├── analysis.json
+│   ├── codex-escalation.json
+│   ├── test.log
+│   ├── stdout.log
+│   ├── stderr.log
+│   ├── equipment.log
+│   └── interface.log
+├── measurements/<test-id>/<execution-id>/
+│   ├── measurement.json
+│   └── measurement.csv
+└── markdown/<test-id>/
+    ├── latest.md
+    └── <execution-id>/result.md
 ```
 
-`reports/json/latest.json`이 후속 분석과 리포팅의 기준이며, 각 실행 원본은 실행 ID별 디렉터리에 유지됩니다.
+사람이 읽는 기준 결과는 `reports/markdown/.../result.md`입니다. JSON은 테스트 실행과 도구 사이의 machine-readable 중간 데이터로만 사용합니다.
+
+## Pandoc 변환
+
+Pandoc 실행 파일을 별도로 설치하고 PATH에 등록해야 합니다.
+
+```powershell
+.\.venv\Scripts\python.exe -m tools.pandoc_reporter --latest --format html
+.\.venv\Scripts\python.exe -m tools.pandoc_reporter --latest --format docx
+.\.venv\Scripts\python.exe -m tools.pandoc_reporter --latest --format pdf
+```
+
+PDF 생성에는 설치 환경에 따라 LaTeX 같은 PDF engine이 추가로 필요할 수 있습니다.
 
 ## 실제 장비 확장
 
-- DUT transport는 `tests/pytest/test_interfaces/` 아래에 구현합니다.
-- 측정 장비 제어는 `tests/pytest/test_equipments/` 아래에 구현합니다.
-- 테스트 시나리오는 `tests/pytest/test_cases/`에만 둡니다.
-- 연결과 정리는 `conftest.py` fixture가 담당합니다.
-- CT에는 `@pytest.mark.ct(...)` 메타데이터와 `ct_result` fixture를 사용하면 PASS/FAIL 여부와 무관하게 정규화 결과가 생성됩니다.
+- Test Case: `tests/pytest/test_cases/`
+- Equipment Controller: `tests/pytest/test_equipments/`
+- DUT Interface: `tests/pytest/test_interfaces/`
+- 연결과 정리: `tests/pytest/conftest.py` fixture
 
-상세 설계 원칙과 전체 목표는 [Codex.md](Codex.md)를 참고하세요.
+CT에는 `@pytest.mark.ct(...)`와 `ct_result` fixture를 사용합니다. 테스트의 PASS/FAIL 여부와 관계없이 로그와 측정 자료가 실행 ID별로 생성됩니다.
+
+## GitHub 자동화
+
+일반 Unit Test와 mock CT는 GitHub-hosted runner에서 동작합니다. 실제 USB/JTAG 장비, vendor tool, 내부망 등 특수 실행 환경이 필요한 작업만 `Optional Special Environment Test` workflow와 `[self-hosted, hw-test]` runner를 사용합니다.
