@@ -24,6 +24,11 @@ class OllamaServerLifecycleTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "does not match host"):
             environment_setup.selected_platform("windows")
 
+    @patch("tools.environment_setup.configured_os", return_value="linux")
+    @patch("tools.environment_setup.sys.platform", "linux")
+    def test_config_platform_uses_project_config(self, _configured_os: Mock) -> None:
+        self.assertEqual(environment_setup.selected_platform("config"), "linux")
+
     @patch("tools.environment_setup.subprocess.Popen")
     @patch("tools.environment_setup._ollama_ready", return_value=True)
     def test_existing_server_is_not_started_or_stopped(self, _ready: Mock, popen: Mock) -> None:

@@ -27,12 +27,12 @@
       "justMyCode": true
     },
     {
-      "name": "Check 1: Show Configuration and Installed Models",
+      "name": "Check 1: Refresh Environment Check File",
       "type": "debugpy",
       "request": "launch",
       "python": "${command:python.interpreterPath}",
-      "module": "tools.local_llm",
-      "args": ["status"],
+      "module": "tools.configuration",
+      "args": ["check"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
@@ -86,8 +86,8 @@
       "id": "setupPlatform",
       "type": "pickString",
       "description": "Select the operating system for environment setup",
-      "options": ["auto", "windows", "linux", "macos"],
-      "default": "auto"
+      "options": ["config", "auto", "windows", "linux", "macos"],
+      "default": "config"
     }
   ]
 }

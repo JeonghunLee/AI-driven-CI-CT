@@ -19,10 +19,10 @@
             "problemMatcher": []
         },
         {
-            "label": "Local LLM: Show Configuration and Installed Models",
+            "label": "Check: Refresh Environment Check File",
             "type": "process",
             "command": "${command:python.interpreterPath}",
-            "args": ["-m", "tools.local_llm", "status"],
+            "args": ["-m", "tools.configuration", "check"],
             "problemMatcher": []
         },
         {
@@ -122,8 +122,8 @@
             "id": "setupPlatform",
             "type": "pickString",
             "description": "Select the operating system for environment setup",
-            "options": ["auto", "windows", "linux", "macos"],
-            "default": "auto"
+            "options": ["config", "auto", "windows", "linux", "macos"],
+            "default": "config"
         }
     ]
 }

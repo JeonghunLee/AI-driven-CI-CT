@@ -49,13 +49,14 @@ flowchart TD
 | 항목 | 구성 |
 |---|---|
 | Local LLM runtime | Ollama |
-| Primary model | `model_config.json` / `OLLAMA_MODEL` |
+| Primary model | `config/config.json` / `OLLAMA_MODEL` |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Endpoint variable | `OLLAMA_URL` |
 | Model variable | `OLLAMA_MODEL` |
-| Model config | `tools/local_llm/model_config.json` |
-| Model selection | `selected` preset |
-| Installed inventory | `python -m tools.local_llm status` |
+| Project config | `config/config.json` |
+| Environment check | `config/check.json` |
+| Model selection | `ollama.selected_model` |
+| Installed inventory | `python -m tools.configuration check` |
 | Offline fallback | Deterministic analyzer |
 | Escalation | Codex |
 
@@ -89,20 +90,22 @@ flowchart TD
 | 선택값 | 동작 |
 |---|---|
 | `auto` | 현재 운영체제 자동 감지 |
+| `config` | `config/config.json`의 `os` 사용 |
 | `windows` | Windows + winget |
 | `linux` | Linux + official installer |
 | `macos` | macOS + Homebrew |
 
 - VS Code input: `setupPlatform`
 - Host mismatch: setup 중단
-- Default: `auto`
+- Default: `config`
 
 ### VS Code 실행
 
 - Run and Debug: `Setup 2: Install Ollama and Local LLM`
 - Task: `Setup: Install Ollama and Pull Local LLM`
 - Setup module: `python -m tools.environment_setup ollama [--model <model>]`
-- Status launch/task: `Local LLM: Show Configuration and Installed Models`
+- Check launch: `Check 1: Refresh Environment Check File`
+- Check task: `Check: Refresh Environment Check File`
 - Foreground server task: `Local LLM: Run Ollama Server (Foreground)`
 - Setup-owned server: setup completion or failure 시 자동 종료
 - Existing server: setup에서 종료하지 않음
@@ -124,7 +127,7 @@ flowchart TD
 |---|---|
 | `Setup 1: Install Python Virtual Environment` | `.venv` 생성 및 Python dependency 설치 |
 | `Setup 2: Install Ollama and Local LLM` | Ollama 설치, 임시 서버 실행, 선택 모델 pull, 임시 서버 종료 |
-| `Local LLM: Show Configuration and Installed Models` | 설정 모델 및 설치 모델 목록 출력 |
+| `Check 1: Refresh Environment Check File` | OS, Python, Ollama, 설치 모델 점검 파일 갱신 |
 | `Run 3: Extension Module` | 확장 모듈 `main()` 실행 |
 | `Test Result: Generate Latest Markdown` | 최근 TEST 결과 Markdown 생성 |
 | `Debug: Current Python File` | 현재 Python 파일 디버그 |

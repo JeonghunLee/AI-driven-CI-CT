@@ -14,12 +14,13 @@ from urllib.error import URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen, urlretrieve
 
-from tools.local_llm import DEFAULT_OLLAMA_MODEL, runtime_status, selected_model, selected_url
+from tools.local_llm import runtime_status, selected_model, selected_url
+from tools.configuration import configured_os, write_check
 
 ROOT = Path(__file__).resolve().parents[1]
 VENV = ROOT / ".venv"
 VENV_PYTHON = VENV / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
-PLATFORMS = ("auto", "windows", "linux", "macos")
+PLATFORMS = ("config", "auto", "windows", "linux", "macos")
 
 
 def _run(command: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -27,7 +28,7 @@ def _run(command: list[str], *, check: bool = True) -> subprocess.CompletedProce
     return subprocess.run(command, cwd=ROOT, check=check, text=True)
 
 
-def setup_python(platform: str = "auto") -> None:
+def setup_python(platform: str = "config") -> None:
     platform = selected_platform(platform)
     print(f"Setup platform: {platform}", flush=True)
     if not VENV_PYTHON.exists():
@@ -36,6 +37,7 @@ def setup_python(platform: str = "auto") -> None:
     _run([str(VENV_PYTHON), "-m", "pip", "install", "--upgrade", "pip"])
     _run([str(VENV_PYTHON), "-m", "pip", "install", "-r", str(ROOT / "requirements.txt")])
     print(f"Python environment ready: {VENV_PYTHON}")
+    _refresh_check_file()
 
 
 def _host_platform() -> str:
@@ -48,10 +50,11 @@ def _host_platform() -> str:
     raise RuntimeError(f"unsupported host platform: {sys.platform}")
 
 
-def selected_platform(platform: str = "auto") -> str:
+def selected_platform(platform: str = "config") -> str:
     host = _host_platform()
-    selected = host if platform == "auto" else platform
-    if selected not in PLATFORMS[1:]:
+    configured = configured_os() if platform == "config" else platform
+    selected = host if configured == "auto" else configured
+    if selected not in PLATFORMS[2:]:
         raise ValueError(f"unsupported setup platform: {platform}")
     if selected != host:
         raise RuntimeError(f"selected platform '{selected}' does not match host platform '{host}'")
@@ -160,7 +163,7 @@ def _pull_model(url: str, model: str) -> None:
         raise RuntimeError(f"Ollama pull failed: {payload}")
 
 
-def setup_ollama(model: str | None = None, platform: str = "auto") -> None:
+def setup_ollama(model: str | None = None, platform: str = "config") -> None:
     model = selected_model(model)
     url = selected_url()
     platform = selected_platform(platform)
@@ -181,9 +184,15 @@ def _setup_model(url: str, model: str) -> None:
     _pull_model(url, model)
     print("Updated Ollama inventory:")
     print(json.dumps(runtime_status(url), indent=2, ensure_ascii=False))
+    _refresh_check_file()
 
 
-def serve_ollama(platform: str = "auto") -> None:
+def _refresh_check_file() -> None:
+    path = write_check()
+    print(f"Environment check updated: {path}", flush=True)
+
+
+def serve_ollama(platform: str = "config") -> None:
     url = selected_url()
     platform = selected_platform(platform)
     if not _is_local_endpoint(url):
@@ -198,15 +207,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Set up local CI/CT development dependencies")
     subparsers = parser.add_subparsers(dest="command", required=True)
     python_setup = subparsers.add_parser("python", help="Create .venv and install Python dependencies")
-    python_setup.add_argument("--platform", choices=PLATFORMS, default="auto", help="Target platform; auto detects the host")
+    python_setup.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses config/config.json")
     ollama = subparsers.add_parser("ollama", help="Install Ollama, start it, and pull the selected Local LLM")
     ollama.add_argument(
         "--model",
-        help=f"Ollama model; defaults to OLLAMA_MODEL or {DEFAULT_OLLAMA_MODEL}",
+        help="Ollama model override; defaults to OLLAMA_MODEL or config/config.json",
     )
-    ollama.add_argument("--platform", choices=PLATFORMS, default="auto", help="Target platform; auto detects the host")
+    ollama.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses config/config.json")
     serve = subparsers.add_parser("serve", help="Run the local Ollama server in the foreground")
-    serve.add_argument("--platform", choices=PLATFORMS, default="auto", help="Target platform; auto detects the host")
+    serve.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses config/config.json")
     args = parser.parse_args()
     if args.command == "python":
         setup_python(args.platform)

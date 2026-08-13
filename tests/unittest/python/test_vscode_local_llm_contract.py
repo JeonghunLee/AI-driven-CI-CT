@@ -7,12 +7,11 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
     def setUp(self) -> None:
         self.launch = json.loads(Path(".vscode/launch.json").read_text(encoding="utf-8"))
         self.tasks = json.loads(Path(".vscode/tasks.json").read_text(encoding="utf-8"))
-        self.config = json.loads(Path("tools/local_llm/model_config.json").read_text(encoding="utf-8"))
+        self.config = json.loads(Path("config/config.json").read_text(encoding="utf-8"))
 
     def test_selected_preset_has_model_name(self) -> None:
-        selected = self.config["selected"]
-        self.assertIn(selected, self.config["models"])
-        self.assertTrue(self.config["models"][selected]["name"])
+        self.assertIn(self.config["os"], ["auto", "windows", "linux", "macos"])
+        self.assertTrue(self.config["ollama"]["selected_model"])
 
     def test_launch_setup_uses_internal_model_config(self) -> None:
         setup = next(
@@ -23,7 +22,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             setup["args"],
             ["ollama", "--platform", "${input:setupPlatform}"],
         )
-        self.assertTrue(any("Installed Models" in item["name"] for item in self.launch["configurations"]))
+        self.assertTrue(any("Check File" in item["name"] for item in self.launch["configurations"]))
 
     def test_python_setup_uses_platform_picker(self) -> None:
         launch = next(
@@ -49,7 +48,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             setup["args"],
             ["-m", "tools.environment_setup", "ollama", "--platform", "${input:setupPlatform}"],
         )
-        self.assertTrue(any("Installed Models" in item["label"] for item in self.tasks["tasks"]))
+        self.assertTrue(any("Check File" in item["label"] for item in self.tasks["tasks"]))
 
     def test_ollama_server_task_is_foreground_process(self) -> None:
         task = next(
@@ -64,11 +63,13 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         )
 
     def test_platform_picker_supports_all_hosts(self) -> None:
-        expected = ["auto", "windows", "linux", "macos"]
+        expected = ["config", "auto", "windows", "linux", "macos"]
         launch_input = next(item for item in self.launch["inputs"] if item["id"] == "setupPlatform")
         task_input = next(item for item in self.tasks["inputs"] if item["id"] == "setupPlatform")
         self.assertEqual(launch_input["options"], expected)
         self.assertEqual(task_input["options"], expected)
+        self.assertEqual(launch_input["default"], "config")
+        self.assertEqual(task_input["default"], "config")
 
     def test_python_commands_do_not_use_windows_venv_paths(self) -> None:
         for configuration in self.launch["configurations"]:

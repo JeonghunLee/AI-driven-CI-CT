@@ -3,41 +3,23 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import asdict, dataclass, field
-from functools import lru_cache
-from pathlib import Path
 from typing import Any
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 from tools.log_parser import ParsedLog
 from tools.result_normalizer import ResultRecord
+from tools.configuration import load_config
 
-DEFAULT_OLLAMA_MODEL = "qwen3:latest"
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
 
 
-def _config_path() -> Path:
-    override = os.getenv("LOCAL_LLM_CONFIG")
-    if override:
-        return Path(override)
-    return Path(__file__).resolve().parent / "model_config.json"
-
-
-@lru_cache(maxsize=1)
-def _load_config() -> dict[str, Any]:
-    path = _config_path()
-    if not path.exists():
-        return {}
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-        if isinstance(data, dict):
-            return data
-    except (OSError, json.JSONDecodeError) as error:
-        raise RuntimeError(f"Invalid Local LLM configuration: {path}: {error}") from error
-    raise RuntimeError(f"Invalid Local LLM configuration root: {path}")
-
-
 def _resolve_model_from_config(config: dict[str, Any]) -> str | None:
+    ollama = config.get("ollama")
+    if isinstance(ollama, dict):
+        selected_model = ollama.get("selected_model")
+        if isinstance(selected_model, str) and selected_model.strip():
+            return selected_model.strip()
     models = config.get("models")
     preset = config.get("selected")
     if isinstance(models, dict) and isinstance(preset, str):
@@ -55,13 +37,17 @@ def _resolve_model_from_config(config: dict[str, Any]) -> str | None:
 
 
 def selected_model(explicit: str | None = None) -> str:
-    config = _load_config()
-    return explicit or os.getenv("OLLAMA_MODEL") or _resolve_model_from_config(config) or DEFAULT_OLLAMA_MODEL
+    config = load_config()
+    model = explicit or os.getenv("OLLAMA_MODEL") or _resolve_model_from_config(config)
+    if not model:
+        raise RuntimeError("Ollama model is not configured in config/config.json")
+    return model
 
 
 def selected_url(explicit: str | None = None) -> str:
-    config = _load_config()
-    config_url = config.get("url")
+    config = load_config()
+    ollama = config.get("ollama")
+    config_url = ollama.get("url") if isinstance(ollama, dict) else config.get("url")
     return (explicit or os.getenv("OLLAMA_URL") or (config_url if isinstance(config_url, str) else DEFAULT_OLLAMA_URL)).rstrip("/")
 
 
@@ -210,7 +196,6 @@ class LocalLLMAnalyzer:
 
 __all__ = [
     "Analysis",
-    "DEFAULT_OLLAMA_MODEL",
     "DEFAULT_OLLAMA_URL",
     "InstalledModel",
     "LocalLLMAnalyzer",

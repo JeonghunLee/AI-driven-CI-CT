@@ -79,7 +79,7 @@ Source: `.vscode/launch.json`
 |---:|---|---|---|---|
 | 1 | `Setup 1: Install Python Virtual Environment` | System Python | `tools.environment_setup python` | `.venv` creation, dependency installation |
 | 2 | `Setup 2: Install Ollama and Local LLM` | `.venv` Python | `tools.environment_setup ollama` | Ollama installation, temporary server, selected model pull, owned-process cleanup |
-| 3 | `Local LLM: Show Configuration and Installed Models` | `.venv` Python | `tools.local_llm status` | Config and installed inventory |
+| 3 | `Check 1: Refresh Environment Check File` | `.venv` Python | `tools.configuration check` | OS, Python, Ollama, model inventory check |
 | 4 | `Run 3: Extension Module` | `.venv` Python | `tools.extension_runner` | Future module execution |
 | 5 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_result --docs` | Latest result analysis, Markdown generation |
 | 6 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
@@ -87,7 +87,7 @@ Source: `.vscode/launch.json`
 
 | Setup input | Options | Default | Validation |
 |---|---|---|---|
-| `setupPlatform` | `auto`, `windows`, `linux`, `macos` | `auto` | Selected OS = host OS |
+| `setupPlatform` | `config`, `auto`, `windows`, `linux`, `macos` | `config` | Configured/selected OS = host OS |
 
 | VS Code Python path | Value |
 |---|---|
@@ -195,7 +195,7 @@ Source: `.vscode/tasks.json`
 |---|---|
 | Setup | `Setup: Create Python Virtual Environment` |
 | Setup | `Setup: Install Ollama and Pull Local LLM` |
-| Setup | `Local LLM: Show Configuration and Installed Models` |
+| Check | `Check: Refresh Environment Check File` |
 | Runtime | `Local LLM: Run Ollama Server (Foreground)` |
 | Test | `Test: Run All with pytest` |
 | Test | `Test: Run Continuous Tests` |
@@ -377,11 +377,13 @@ reports/markdown/<test-id>/<execution-id>/result.md
 | Runtime | Ollama |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Environment variable | `OLLAMA_URL` |
-| Default model | `qwen3:latest` |
+| Configured model | `config/config.json` → `ollama.selected_model` |
 | Model variable | `OLLAMA_MODEL` |
-| Model config | `tools/local_llm/model_config.json` |
-| Selection priority | CLI → Environment → Config → Default |
-| Config selection | `selected` preset |
+| Project config | `config/config.json` |
+| Environment check | `config/check.json` |
+| Selection priority | CLI → Environment → Config |
+| Missing model | Configuration error |
+| Config selection | `ollama.selected_model` |
 | Installed inventory | Ollama `/api/tags` |
 | Offline fallback | Deterministic analysis |
 
@@ -394,14 +396,36 @@ reports/markdown/<test-id>/<execution-id>/result.md
 Model config schema:
 
 ```text
-model_config.json
+config/config.json
 ├── version
-├── url
-├── selected
-└── models
-    └── <preset>
-        ├── name
-        └── role
+├── os
+└── ollama
+    ├── url
+    └── selected_model
+```
+
+Environment check schema:
+
+```text
+config/check.json
+├── generated_at
+├── os
+│   ├── configured
+│   ├── detected
+│   └── name
+├── python
+│   ├── installed
+│   ├── executable
+│   └── version
+└── ollama
+    ├── installed
+    ├── executable
+    ├── version
+    ├── available
+    ├── endpoint
+    ├── selected_model
+    ├── selected_model_installed
+    └── supported_models
 ```
 
 Runtime status schema:
@@ -515,6 +539,9 @@ Excluded from GitHub Issue:
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
 │   └── workflows/
+├── config/
+│   ├── config.json                # Selected OS and Ollama model
+│   └── check.json                 # Generated environment check
 ├── .venv/                         # Git ignored
 ├── tests/
 │   ├── pytest/
@@ -525,6 +552,7 @@ Excluded from GitHub Issue:
 │   └── markdown/
 │       └── latest.md              # Generated, Git ignored
 ├── tools/
+│   ├── configuration/
 │   ├── local_llm/
 │   ├── extensions/
 │   ├── github_reporter/

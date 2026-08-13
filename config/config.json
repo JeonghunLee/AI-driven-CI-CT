@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "os": "auto",
+  "ollama": {
+    "url": "http://127.0.0.1:11434",
+    "selected_model": "deepseek-r1:7b"
+  }
+}

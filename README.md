@@ -80,42 +80,37 @@ VS Code Python 확장은 pytest와 unittest를 동시에 활성화하면 pytest�
 .\.venv\Scripts\python.exe -m test_result --docs --source-review
 ```
 
-Ollama 기본 주소는 `http://127.0.0.1:11434`, 기본 모델은 `qwen3:latest`입니다.
+Ollama 기본 주소는 `http://127.0.0.1:11434`입니다. 선택 모델은 `config/config.json`의 `ollama.selected_model`에서만 관리합니다.
 
-내부 모델 선택은 `tools/local_llm/model_config.json`에서 할 수 있습니다.
+OS와 Ollama 모델 선택은 `config/config.json`에서 할 수 있습니다. 자동 점검 결과는 `config/check.json`에 기록됩니다.
 
 ```json
 {
   "version": 1,
-  "url": "http://127.0.0.1:11434",
-  "selected": "qwen",
-  "models": {
-    "qwen": {
-      "name": "qwen3:latest",
-      "role": "test-log-source-analysis"
-    },
-    "deepseek": {
-      "name": "deepseek-r1:7b",
-      "role": "reasoning-alternative"
-    }
+  "os": "auto",
+  "ollama": {
+    "url": "http://127.0.0.1:11434",
+    "selected_model": "deepseek-r1:7b"
   }
 }
 ```
 
-- `selected` 값으로 preset을 선택합니다.
-- `models`에 새 모델 preset을 추가합니다.
+- `os` 값으로 `auto`, `windows`, `linux`, `macos`를 선택합니다.
+- `ollama.selected_model` 값으로 실행 모델을 선택합니다.
+- `ollama.url` 값으로 Local LLM endpoint를 선택합니다.
 - VS Code의 setup launch/task는 모델명을 전달하지 않고 이 JSON을 사용합니다.
-- 우선순위는 `명시적 인자 > OLLAMA_MODEL 환경변수 > model_config.json > 코드 기본값`입니다.
+- 모델 우선순위는 `명시적 인자 > OLLAMA_MODEL 환경변수 > config/config.json`입니다.
+- 설정 모델 누락 시 Python은 임의 기본 모델을 사용하지 않고 중단합니다.
 
 ```powershell
 # 현재 설정과 설치 모델 목록
-.\.venv\Scripts\python.exe -m tools.local_llm status
+python -m tools.configuration check
 
 # 설정 모델 pull/update
-python -m tools.environment_setup ollama --platform auto
+python -m tools.environment_setup ollama --platform config
 
 # Ollama 서버를 foreground로 실행
-python -m tools.environment_setup serve --platform auto
+python -m tools.environment_setup serve --platform config
 
 # 이번 보고서에만 다른 모델 사용
 .\.venv\Scripts\python.exe -m test_result --model "<ollama-model>:latest"
