@@ -83,6 +83,12 @@ python -m tools.environment_setup python --platform config
 | pytest | `tests/unittest` | `unittest.TestCase` |
 | Native unittest task | `tests/unittest` | unittest discovery |
 
+| TEST Task | Scope | VS Code group |
+|---|---|---|
+| `TEST 1: Run All with pytest` | All | Default test |
+| `TEST 2: Run Continuous Tests` | CT | Test |
+| `TEST 3: Run unittest Suite` | unittest | Test |
+
 ## 테스트와 리포트
 
 | 작업 | 명령 |

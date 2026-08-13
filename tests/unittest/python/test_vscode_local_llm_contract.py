@@ -117,6 +117,20 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             ["-p", "no:cacheprovider", "tests/pytest", "tests/unittest"],
         )
 
+    def test_test_tasks_use_numbered_test_group(self) -> None:
+        tasks = [item for item in self.tasks["tasks"] if item["label"].startswith("TEST ")]
+        self.assertEqual(
+            [item["label"] for item in tasks],
+            [
+                "TEST 1: Run All with pytest",
+                "TEST 2: Run Continuous Tests",
+                "TEST 3: Run unittest Suite",
+            ],
+        )
+        self.assertTrue(tasks[0]["group"]["isDefault"])
+        self.assertFalse(tasks[1]["group"]["isDefault"])
+        self.assertFalse(tasks[2]["group"]["isDefault"])
+
 
 if __name__ == "__main__":
     unittest.main()

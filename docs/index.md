@@ -172,9 +172,9 @@ flowchart TD
 |---|---|
 | Setup | Python `.venv` |
 | Setup | Ollama + Local LLM |
-| Test | pytest all |
-| Test | Continuous Tests |
-| Test | unittest suite |
+| TEST 1 | pytest all |
+| TEST 2 | Continuous Tests |
+| TEST 3 | unittest suite |
 | Report | Latest Markdown |
 | Report | Pandoc HTML |
 | MkDocs | Serve / Build / Strict Build |

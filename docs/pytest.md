@@ -45,5 +45,4 @@ flowchart TD
 
 - Testing path: `tests/pytest`
 - Debug: `Debug: Current pytest File`
-- Task: `Test: Run Continuous Tests`
-
+- Task: `TEST 2: Run Continuous Tests`

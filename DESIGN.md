@@ -189,7 +189,7 @@ Source: `.vscode/settings.json`
 | pytest path 1 | `tests/pytest` |
 | pytest path 2 | `tests/unittest` |
 | unittest implementation | Standard `unittest.TestCase` |
-| Separate unittest execution | `Test: Run unittest Suite` task |
+| Separate unittest execution | `TEST 3: Run unittest Suite` task |
 | VS Code pytest cache | `-p no:cacheprovider` |
 
 ```text
@@ -218,9 +218,9 @@ Source: `.vscode/tasks.json`
 | Setup | `Setup 3: Install Ollama and Local LLM` |
 | Check | `Check: Refresh Environment Check File` |
 | Runtime | `Local LLM: Run Ollama Server (Foreground)` |
-| Test | `Test: Run All with pytest` |
-| Test | `Test: Run Continuous Tests` |
-| Test | `Test: Run unittest Suite` |
+| TEST 1 | `TEST 1: Run All with pytest` |
+| TEST 2 | `TEST 2: Run Continuous Tests` |
+| TEST 3 | `TEST 3: Run unittest Suite` |
 | Report | `Report: Generate Latest Markdown` |
 | Report | `Report: Convert Latest Markdown to HTML` |
 | MkDocs | `MkDocs: Serve Locally` |

@@ -5,36 +5,11 @@
             "label": "Setup 1: Select Operating System",
             "type": "process",
             "command": "python",
-            "args": ["-m", "tools.configuration", "select-os"],
-            "presentation": {"reveal": "always", "panel": "dedicated", "clear": true},
-            "problemMatcher": []
-        },
-        {
-            "label": "Setup 2: Install Python Virtual Environment",
-            "type": "process",
-            "command": "python",
-            "args": ["-m", "tools.environment_setup", "python"],
-            "problemMatcher": []
-        },
-        {
-            "label": "Setup 3: Install Ollama and Local LLM",
-            "type": "process",
-            "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "tools.environment_setup", "ollama"],
-            "problemMatcher": []
-        },
-        {
-            "label": "Check: Refresh Environment Check File",
-            "type": "process",
-            "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "tools.configuration", "check"],
-            "problemMatcher": []
-        },
-        {
-            "label": "Local LLM: Run Ollama Server (Foreground)",
-            "type": "process",
-            "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "tools.environment_setup", "serve"],
+            "args": [
+                "-m",
+                "tools.configuration",
+                "select-os"
+            ],
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated",
@@ -43,66 +18,173 @@
             "problemMatcher": []
         },
         {
-            "label": "Test: Run All with pytest",
+            "label": "Setup 2: Install Python Virtual Environment",
             "type": "process",
-            "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "pytest"],
-            "group": {"kind": "test", "isDefault": true},
+            "command": "python",
+            "args": [
+                "-m",
+                "tools.environment_setup",
+                "python"
+            ],
             "problemMatcher": []
         },
         {
-            "label": "Test: Run Continuous Tests",
+            "label": "Setup 3: Install Ollama and Local LLM",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "pytest", "tests/pytest", "-m", "ct", "-s"],
-            "group": "test",
+            "args": [
+                "-m",
+                "tools.environment_setup",
+                "ollama"
+            ],
             "problemMatcher": []
         },
         {
-            "label": "Test: Run unittest Suite",
+            "label": "Check: Refresh Environment Check File",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "unittest", "discover", "-v", "-s", "tests/unittest", "-p", "test_*.py"],
-            "group": "test",
+            "args": [
+                "-m",
+                "tools.configuration",
+                "check"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Local LLM: Run Ollama Server (Foreground)",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "tools.environment_setup",
+                "serve"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TEST 1: Run All with pytest",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "pytest"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TEST 2: Run Continuous Tests",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "pytest",
+                "tests/pytest",
+                "-m",
+                "ct",
+                "-s"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TEST 3: Run unittest Suite",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "unittest",
+                "discover",
+                "-v",
+                "-s",
+                "tests/unittest",
+                "-p",
+                "test_*.py"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
             "problemMatcher": []
         },
         {
             "label": "Report: Generate Latest Markdown",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "test_result", "--docs"],
+            "args": [
+                "-m",
+                "test_result",
+                "--docs"
+            ],
             "problemMatcher": []
         },
         {
             "label": "Report: Convert Latest Markdown to HTML",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "tools.pandoc_reporter", "--latest", "--format", "html"],
+            "args": [
+                "-m",
+                "tools.pandoc_reporter",
+                "--latest",
+                "--format",
+                "html"
+            ],
             "problemMatcher": []
         },
         {
             "label": "MkDocs: Serve Locally",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "mkdocs", "serve"]
+            "args": [
+                "-m",
+                "mkdocs",
+                "serve"
+            ],
+            "problemMatcher": []
         },
         {
             "label": "MkDocs: Serve on Network",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "mkdocs", "serve", "-a", "0.0.0.0:8000"]
+            "args": [
+                "-m",
+                "mkdocs",
+                "serve",
+                "-a",
+                "0.0.0.0:8000"
+            ]
         },
         {
             "label": "MkDocs: Build",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "mkdocs", "build"]
+            "args": [
+                "-m",
+                "mkdocs",
+                "build"
+            ]
         },
         {
             "label": "MkDocs: Build Strict",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
-            "args": ["-m", "mkdocs", "build", "--strict"]
+            "args": [
+                "-m",
+                "mkdocs",
+                "build",
+                "--strict"
+            ]
         }
     ]
 }
