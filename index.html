@@ -6,6 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Test results and execution history" name="description"/>
+<link href="pytest.html" rel="next"/>
 <link href="imgs/logo.jpg" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
 <title>AI-driven CI/CT</title>
@@ -26,7 +27,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#ai-driven-cict">
+<a class="md-skip" href="#ai-driven-continuous-testing">
           콘텐츠로 이동
         </a>
 </div>
@@ -168,44 +169,358 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#test-reports">
+<a class="md-nav__link" href="#1-ct-python">
 <span class="md-ellipsis">
       
-        Test Reports
+        1. CT 환경 구성 — Python
       
     </span>
 </a>
-<nav aria-label="Test Reports" class="md-nav">
+<nav aria-label="1. CT 환경 구성 — Python" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#continuous-tests">
+<a class="md-nav__link" href="#_1">
 <span class="md-ellipsis">
       
-        Continuous Tests
+        구성 요소
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#unit-tests">
+<a class="md-nav__link" href="#_2">
 <span class="md-ellipsis">
       
-        Unit Tests
+        설치 흐름
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#recent-executions">
+<a class="md-nav__link" href="#_3">
 <span class="md-ellipsis">
       
-        Recent Executions
+        실행 경로
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vs-code">
+<span class="md-ellipsis">
+      
+        VS Code 실행
       
     </span>
 </a>
 </li>
 </ul>
 </nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2-ollama">
+<span class="md-ellipsis">
+      
+        2. Ollama 환경 구성
+      
+    </span>
+</a>
+<nav aria-label="2. Ollama 환경 구성" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        구성 요소
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        설치 흐름
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#os">
+<span class="md-ellipsis">
+      
+        OS 설치 방식
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vs-code_1">
+<span class="md-ellipsis">
+      
+        VS Code 실행
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-vs-code">
+<span class="md-ellipsis">
+      
+        3. VS Code 환경 구성
+      
+    </span>
+</a>
+<nav aria-label="3. VS Code 환경 구성" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        설정 파일
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#run-and-debug">
+<span class="md-ellipsis">
+      
+        Run and Debug
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing">
+<span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tasks">
+<span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4-test">
+<span class="md-ellipsis">
+      
+        4. TEST 구조도
+      
+    </span>
+</a>
+<nav aria-label="4. TEST 구조도" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#repository-structure">
+<span class="md-ellipsis">
+      
+        Repository Structure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer-structure">
+<span class="md-ellipsis">
+      
+        Layer Structure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer-responsibility">
+<span class="md-ellipsis">
+      
+        Layer Responsibility
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#interface-contract">
+<span class="md-ellipsis">
+      
+        Interface Contract
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5-test-result-report">
+<span class="md-ellipsis">
+      
+        5. TEST Result Report 구조도
+      
+    </span>
+</a>
+<nav aria-label="5. TEST Result Report 구조도" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#data-flow">
+<span class="md-ellipsis">
+      
+        Data Flow
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#runtime-data">
+<span class="md-ellipsis">
+      
+        Runtime Data
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mkdocs-data">
+<span class="md-ellipsis">
+      
+        MkDocs Data
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#index-responsibility">
+<span class="md-ellipsis">
+      
+        Index Responsibility
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#report-generation">
+<span class="md-ellipsis">
+      
+        Report Generation
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="pytest.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="unittest.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST_RESULTS
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST_RESULTS
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="pytest_results.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="unittest_results.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
 </li>
 </ul>
 </nav>
@@ -225,38 +540,252 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#test-reports">
+<a class="md-nav__link" href="#1-ct-python">
 <span class="md-ellipsis">
       
-        Test Reports
+        1. CT 환경 구성 — Python
       
     </span>
 </a>
-<nav aria-label="Test Reports" class="md-nav">
+<nav aria-label="1. CT 환경 구성 — Python" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#continuous-tests">
+<a class="md-nav__link" href="#_1">
 <span class="md-ellipsis">
       
-        Continuous Tests
+        구성 요소
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#unit-tests">
+<a class="md-nav__link" href="#_2">
 <span class="md-ellipsis">
       
-        Unit Tests
+        설치 흐름
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#recent-executions">
+<a class="md-nav__link" href="#_3">
 <span class="md-ellipsis">
       
-        Recent Executions
+        실행 경로
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vs-code">
+<span class="md-ellipsis">
+      
+        VS Code 실행
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2-ollama">
+<span class="md-ellipsis">
+      
+        2. Ollama 환경 구성
+      
+    </span>
+</a>
+<nav aria-label="2. Ollama 환경 구성" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      
+        구성 요소
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      
+        설치 흐름
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#os">
+<span class="md-ellipsis">
+      
+        OS 설치 방식
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vs-code_1">
+<span class="md-ellipsis">
+      
+        VS Code 실행
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#3-vs-code">
+<span class="md-ellipsis">
+      
+        3. VS Code 환경 구성
+      
+    </span>
+</a>
+<nav aria-label="3. VS Code 환경 구성" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      
+        설정 파일
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#run-and-debug">
+<span class="md-ellipsis">
+      
+        Run and Debug
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing">
+<span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tasks">
+<span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#4-test">
+<span class="md-ellipsis">
+      
+        4. TEST 구조도
+      
+    </span>
+</a>
+<nav aria-label="4. TEST 구조도" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#repository-structure">
+<span class="md-ellipsis">
+      
+        Repository Structure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer-structure">
+<span class="md-ellipsis">
+      
+        Layer Structure
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#layer-responsibility">
+<span class="md-ellipsis">
+      
+        Layer Responsibility
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#interface-contract">
+<span class="md-ellipsis">
+      
+        Interface Contract
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#5-test-result-report">
+<span class="md-ellipsis">
+      
+        5. TEST Result Report 구조도
+      
+    </span>
+</a>
+<nav aria-label="5. TEST Result Report 구조도" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#data-flow">
+<span class="md-ellipsis">
+      
+        Data Flow
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#runtime-data">
+<span class="md-ellipsis">
+      
+        Runtime Data
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mkdocs-data">
+<span class="md-ellipsis">
+      
+        MkDocs Data
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#index-responsibility">
+<span class="md-ellipsis">
+      
+        Index Responsibility
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#report-generation">
+<span class="md-ellipsis">
+      
+        Report Generation
       
     </span>
 </a>
@@ -271,52 +800,402 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="ai-driven-cict">AI-driven CI/CT</h1>
-<h2 id="test-reports">Test Reports</h2>
-<h3 id="continuous-tests">Continuous Tests</h3>
+<h1 id="ai-driven-continuous-testing">AI-driven Continuous Testing</h1>
+<h2 id="1-ct-python">1. CT 환경 구성 — Python</h2>
+<h3 id="_1">구성 요소</h3>
 <table>
 <thead>
 <tr>
-<th>Category</th>
-<th>Test ID</th>
-<th>Latest</th>
-<th style="text-align: right;">Executions</th>
+<th>항목</th>
+<th>구성</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>timing</td>
-<td><code>CT-UART-001</code></td>
-<td><a href="test/ct/timing/CT-UART-001.html">Open</a></td>
-<td style="text-align: right;">5</td>
+<td>Runtime</td>
+<td>Python project-local virtual environment</td>
+</tr>
+<tr>
+<td>Virtual environment</td>
+<td><code>.venv</code></td>
+</tr>
+<tr>
+<td>Dependency manifest</td>
+<td><code>requirements.txt</code></td>
+</tr>
+<tr>
+<td>Unit test</td>
+<td><code>unittest</code></td>
+</tr>
+<tr>
+<td>Continuous test</td>
+<td><code>pytest</code></td>
+</tr>
+<tr>
+<td>Hardware libraries</td>
+<td><code>pyserial</code>, <code>pyusb</code></td>
+</tr>
+<tr>
+<td>Report tools</td>
+<td>MkDocs, Pandoc integration</td>
 </tr>
 </tbody>
 </table>
-<h3 id="unit-tests">Unit Tests</h3>
-<table>
-<thead>
-<tr>
-<th>Test ID</th>
-<th>Latest</th>
-<th style="text-align: right;">Executions</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-</td>
-<td>-</td>
-<td style="text-align: right;">0</td>
-</tr>
-</tbody>
-</table>
-<h3 id="recent-executions">Recent Executions</h3>
+<h3 id="_2">설치 흐름</h3>
+<pre class="mermaid"><code>flowchart TD
+    A[System Python] --&gt; B[python -m venv .venv]
+    B --&gt; C[.venv Python]
+    C --&gt; D[ensurepip]
+    D --&gt; E[pip install requirements.txt]
+    E --&gt; F[CT Runtime Ready]</code></pre>
+<h3 id="_3">실행 경로</h3>
+<div class="highlight"><pre><span></span><code>.venv/
+└── Scripts/
+    ├── python.exe
+    ├── pytest.exe
+    ├── mkdocs.exe
+    └── pip.exe
+</code></pre></div>
+<h3 id="vs-code">VS Code 실행</h3>
 <ul>
-<li><a href="test/ct/timing/CT-UART-001/20260813-015049-884986.html"><code>20260813-015049-884986</code></a></li>
-<li><a href="test/ct/timing/CT-UART-001/20260813-014919-691948.html"><code>20260813-014919-691948</code></a></li>
-<li><a href="test/ct/timing/CT-UART-001/20260813-004323-383189.html"><code>20260813-004323-383189</code></a></li>
-<li><a href="test/ct/timing/CT-UART-001/20260813-001038-341669.html"><code>20260813-001038-341669</code></a></li>
-<li><a href="test/ct/timing/CT-UART-001/20260813-000735-891978.html"><code>20260813-000735-891978</code></a></li>
+<li>Run and Debug: <code>Setup 1: Install Python Virtual Environment</code></li>
+<li>Task: <code>Setup: Create Python Virtual Environment</code></li>
+<li>Setup module: <code>python -m tools.environment_setup python</code></li>
 </ul>
+<h2 id="2-ollama">2. Ollama 환경 구성</h2>
+<h3 id="_4">구성 요소</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>구성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local LLM runtime</td>
+<td>Ollama</td>
+</tr>
+<tr>
+<td>Primary model</td>
+<td><code>deepseek-r1:7b</code></td>
+</tr>
+<tr>
+<td>Default endpoint</td>
+<td><code>http://127.0.0.1:11434</code></td>
+</tr>
+<tr>
+<td>Endpoint variable</td>
+<td><code>OLLAMA_URL</code></td>
+</tr>
+<tr>
+<td>Model variable</td>
+<td><code>DEEPSEEK_MODEL</code></td>
+</tr>
+<tr>
+<td>Offline fallback</td>
+<td>Deterministic analyzer</td>
+</tr>
+<tr>
+<td>Escalation</td>
+<td>Codex</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">설치 흐름</h3>
+<pre class="mermaid"><code>flowchart TD
+    A[Ollama Check] --&gt; B{Installed?}
+    B -- No --&gt; C[OS Package Installation]
+    B -- Yes --&gt; D[Server Health Check]
+    C --&gt; D
+    D --&gt; E{Server Ready?}
+    E -- No --&gt; F[ollama serve]
+    E -- Yes --&gt; G[Model Check]
+    F --&gt; G
+    G --&gt; H[ollama pull deepseek-r1:7b]
+    H --&gt; I[DeepSeek Ready]</code></pre>
+<h3 id="os">OS 설치 방식</h3>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>Installer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td><code>winget install Ollama.Ollama</code></td>
+</tr>
+<tr>
+<td>macOS</td>
+<td><code>brew install ollama</code></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>Ollama official installer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vs-code_1">VS Code 실행</h3>
+<ul>
+<li>Run and Debug: <code>Setup 2: Install Ollama and DeepSeek</code></li>
+<li>Task: <code>Setup: Install Ollama and Pull DeepSeek</code></li>
+<li>Setup module: <code>python -m tools.environment_setup ollama --model deepseek-r1:7b</code></li>
+</ul>
+<h2 id="3-vs-code">3. VS Code 환경 구성</h2>
+<h3 id="_6">설정 파일</h3>
+<div class="highlight"><pre><span></span><code>.vscode/
+├── settings.json
+├── launch.json
+└── tasks.json
+</code></pre></div>
+<h3 id="run-and-debug">Run and Debug</h3>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>기능</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Setup 1: Install Python Virtual Environment</code></td>
+<td><code>.venv</code> 생성 및 Python dependency 설치</td>
+</tr>
+<tr>
+<td><code>Setup 2: Install Ollama and DeepSeek</code></td>
+<td>Ollama 설치, 서버 실행, DeepSeek pull</td>
+</tr>
+<tr>
+<td><code>Run 3: Extension Module</code></td>
+<td>확장 모듈 <code>main()</code> 실행</td>
+</tr>
+<tr>
+<td><code>Test Result: Generate Latest Markdown</code></td>
+<td>최근 TEST 결과 Markdown 생성</td>
+</tr>
+<tr>
+<td><code>Debug: Current Python File</code></td>
+<td>현재 Python 파일 디버그</td>
+</tr>
+<tr>
+<td><code>Debug: Current pytest File</code></td>
+<td>현재 pytest 파일 디버그</td>
+</tr>
+</tbody>
+</table>
+<h3 id="testing">Testing</h3>
+<pre class="mermaid"><code>flowchart TD
+    A[VS Code Testing] --&gt; B[pytest Adapter]
+    B --&gt; C[tests/pytest]
+    B --&gt; D[tests/unittest]
+    C --&gt; E[Integration / Functional / Hardware CT]
+    D --&gt; F[unittest.TestCase]</code></pre>
+<h3 id="tasks">Tasks</h3>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>Python <code>.venv</code></td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Ollama + DeepSeek</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>pytest all</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>Continuous Tests</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>unittest suite</td>
+</tr>
+<tr>
+<td>Report</td>
+<td>Latest Markdown</td>
+</tr>
+<tr>
+<td>Report</td>
+<td>Pandoc HTML</td>
+</tr>
+<tr>
+<td>MkDocs</td>
+<td>Serve / Build / Strict Build</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-test">4. TEST 구조도</h2>
+<h3 id="repository-structure">Repository Structure</h3>
+<div class="highlight"><pre><span></span><code>tests/
+├── pytest/
+│   ├── test_cases/
+│   │   ├── communication/
+│   │   ├── timing/
+│   │   ├── functional/
+│   │   ├── performance/
+│   │   ├── stability/
+│   │   └── regression/
+│   ├── test_equipments/
+│   │   ├── fpga/
+│   │   ├── saleae/
+│   │   └── digilent/
+│   ├── test_interfaces/
+│   │   ├── usb/
+│   │   ├── uart/
+│   │   ├── jtag/
+│   │   └── network/
+│   └── conftest.py
+└── unittest/
+    ├── python/
+    ├── c_cpp/
+    ├── firmware/
+    └── common/
+</code></pre></div>
+<h3 id="layer-structure">Layer Structure</h3>
+<pre class="mermaid"><code>flowchart TD
+    A[TEST Case] --&gt; B[Test Interface]
+    A --&gt; C[Test Equipment]
+    B --&gt; D[DUT]
+    C --&gt; D
+    B --&gt; E[USB / UART / JTAG / Network]
+    C --&gt; F[FPGA / Saleae / Digilent]</code></pre>
+<h3 id="layer-responsibility">Layer Responsibility</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>책임</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test Case</td>
+<td>Scenario, parameters, assertions</td>
+</tr>
+<tr>
+<td>Test Interface</td>
+<td>DUT communication transport</td>
+</tr>
+<tr>
+<td>Test Equipment</td>
+<td>Measurement and external control</td>
+</tr>
+<tr>
+<td>Fixture</td>
+<td>Connect, initialize, yield, cleanup</td>
+</tr>
+<tr>
+<td>Result Recorder</td>
+<td>Result, log, measurement 저장</td>
+</tr>
+</tbody>
+</table>
+<h3 id="interface-contract">Interface Contract</h3>
+<div class="highlight"><pre><span></span><code><span class="n">connect</span><span class="p">()</span>
+<span class="n">disconnect</span><span class="p">()</span>
+<span class="n">read</span><span class="p">()</span>
+<span class="n">write</span><span class="p">()</span>
+<span class="n">execute</span><span class="p">()</span>
+</code></pre></div>
+<h2 id="5-test-result-report">5. TEST Result Report 구조도</h2>
+<h3 id="data-flow">Data Flow</h3>
+<pre class="mermaid"><code>flowchart TD
+    A[unittest / pytest] --&gt; B[Result]
+    A --&gt; C[Log]
+    A --&gt; D[Measurement]
+    B --&gt; E[Latest Result Selection]
+    C --&gt; E
+    D --&gt; E
+    E --&gt; F[Ollama + DeepSeek]
+    F --&gt; G[Markdown Report]
+    G --&gt; H[reports/markdown]
+    G --&gt; I[test_result/markdown/latest.md]
+    G --&gt; J[docs/test]
+    G --&gt; K[Pandoc DOCX / PDF / HTML]
+    F --&gt; L{Escalation?}
+    L -- Yes --&gt; M[Codex]</code></pre>
+<h3 id="runtime-data">Runtime Data</h3>
+<div class="highlight"><pre><span></span><code>reports/
+├── logs/&lt;test-id&gt;/&lt;execution-id&gt;/
+│   ├── result.json
+│   ├── analysis.json
+│   ├── codex-escalation.json
+│   ├── test.log
+│   ├── stdout.log
+│   ├── stderr.log
+│   ├── equipment.log
+│   └── interface.log
+├── measurements/&lt;test-id&gt;/&lt;execution-id&gt;/
+│   ├── measurement.json
+│   └── measurement.csv
+└── markdown/&lt;test-id&gt;/
+    ├── latest.md
+    └── &lt;execution-id&gt;/result.md
+</code></pre></div>
+<h3 id="mkdocs-data">MkDocs Data</h3>
+<div class="highlight"><pre><span></span><code>docs/
+├── index.md
+└── test/
+    ├── index.md
+    ├── unit/
+    │   ├── &lt;test-id&gt;.md
+    │   └── &lt;test-id&gt;/&lt;execution-id&gt;.md
+    └── ct/&lt;category&gt;/
+        ├── &lt;test-id&gt;.md
+        └── &lt;test-id&gt;/&lt;execution-id&gt;.md
+</code></pre></div>
+<h3 id="index-responsibility">Index Responsibility</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>구성</th>
+<th>갱신 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docs/index.md</code></td>
+<td>기본 시스템 5개 구성</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td><code>docs/test/index.md</code></td>
+<td>TEST 목록, 최신 링크, 실행 이력</td>
+<td>Automatic</td>
+</tr>
+<tr>
+<td><code>&lt;test-id&gt;.md</code></td>
+<td>TEST별 최신 결과</td>
+<td>Automatic</td>
+</tr>
+<tr>
+<td><code>&lt;test-id&gt;/&lt;execution-id&gt;.md</code></td>
+<td>실행별 결과</td>
+<td>Append-only</td>
+</tr>
+</tbody>
+</table>
+<h3 id="report-generation">Report Generation</h3>
+<div class="highlight"><pre><span></span><code>python -m test_result --docs
+├── Latest result selection
+├── DeepSeek analysis
+├── Canonical Markdown generation
+├── Execution snapshot creation
+├── Latest TEST page update
+└── docs/test/index.md update
+</code></pre></div>
 </article>
 </div>
 <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
@@ -328,11 +1207,27 @@
 </button>
 </main>
 <footer class="md-footer">
+<nav aria-label="하단/푸터" class="md-footer__inner md-grid">
+<a aria-label="다음: Pytest" class="md-footer__link md-footer__link--next" href="pytest.html">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                다음
+              </span>
+<div class="md-ellipsis">
+                Pytest
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+</div>
+</a>
+</nav>
 <div class="md-footer-meta md-typeset">
 <div class="md-footer-meta__inner md-grid">
 <div class="md-copyright">
 <div class="md-copyright__highlight">
       © 2026 Jeonghun Lee. <br/> All rights reserved.
+
     </div>
   
   
