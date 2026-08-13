@@ -57,10 +57,11 @@ jobs:
           files: |
             mkdocs-site.zip
           body: |
-            🚀 VS Code Documentation Release
+            🚀 Release
             ------------------------------------------
+            * **Project**: ${{ github.event.repository.name }}
             * **Version**: ${{ github.ref_name }}            
-            * **Release Date**: ${{ github.event.head_commit.timestamp }}      
+            * **Date**: ${{ github.event.head_commit.timestamp }}      
             
             <br/>
 
