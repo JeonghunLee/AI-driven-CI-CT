@@ -33,8 +33,8 @@ VS Code
 │   ├── Current Python Debug
 │   └── Current pytest Debug
 ├── Testing
-│   ├── tests/pytest
-│   └── tests/unittest
+│   ├── test_envs/tests/pytest
+│   └── test_envs/tests/unittest
 └── Tasks
     ├── Setup / Check
     ├── Foreground Ollama Server
@@ -63,8 +63,8 @@ Ollama + Local LLM
           │
           ▼
 Markdown
-├── reports/markdown
-├── test_result/markdown/latest.md
+├── test_envs/reports/markdown
+├── test_envs/tools/test_result/markdown/latest.md
 ├── MkDocs
 ├── Pandoc
 └── GitHub Issue
@@ -81,12 +81,12 @@ Source: `.vscode/launch.json`
 
 | Order | Configuration | Runtime | Entry point | Purpose |
 |---:|---|---|---|---|
-| 1 | `SETUP 1: Select Operating System` | Task delegation | `tools.configuration select-os` | OS config update |
+| 1 | `SETUP 1: Select Operating System` | Task delegation | `test_envs.tools.configuration select-os` | OS config update |
 | 2 | `SETUP 2: Install Python Virtual Environment` | Task delegation | `preLaunchTask` | `.venv` creation, dependency installation |
 | 3 | `SETUP 3: Install Ollama and Local LLM` | Task delegation | `preLaunchTask` | Ollama installation, selected model pull |
 | 4 | `CHECK 1: Refresh Environment Check File` | Task delegation | `preLaunchTask` | Environment check |
-| 5 | `Run 3: Extension Module` | `.venv` Python | `tools.extension_runner` | Future module execution |
-| 6 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_result --docs` | Latest result analysis, Markdown generation |
+| 5 | `Run 3: Extension Module` | `.venv` Python | `test_envs.tools.extension_runner` | Future module execution |
+| 6 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_envs.tools.test_result --docs` | Latest result analysis, Markdown generation |
 | 7 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
 | 8 | `Debug: Current pytest File` | `.venv` Python | pytest current file | Test debugging |
 
@@ -107,7 +107,7 @@ Source: `.vscode/launch.json`
 
 | Setup input | Options | Default | Validation |
 |---|---|---|---|
-| `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `config/config.json` |
+| `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `test_envs/config/config.json` |
 
 | VS Code Python path | Value |
 |---|---|
@@ -170,7 +170,7 @@ def main() -> int | None:
 ```
 
 ```text
-tools.extension_runner
+test_envs.tools.extension_runner
     │
     ├── --module <python.module>
     ├── import module
@@ -186,8 +186,8 @@ Source: `.vscode/settings.json`
 |---|---|
 | Interpreter | `${workspaceFolder}/.venv` |
 | Adapter | pytest |
-| pytest path 1 | `tests/pytest` |
-| pytest path 2 | `tests/unittest` |
+| pytest path 1 | `test_envs/tests/pytest` |
+| pytest path 2 | `test_envs/tests/unittest` |
 | unittest implementation | Standard `unittest.TestCase` |
 | unittest execution | VS Code Testing / pytest |
 | VS Code pytest cache | `-p no:cacheprovider` |
@@ -195,9 +195,9 @@ Source: `.vscode/settings.json`
 ```text
 VS Code Testing
 └── pytest adapter
-    ├── tests/pytest
+    ├── test_envs/tests/pytest
     │   └── Integration / Functional / Hardware CT
-    └── tests/unittest
+    └── test_envs/tests/unittest
         └── Standard unittest.TestCase
 ```
 
@@ -245,15 +245,15 @@ Source: `.vscode/tasks.json`
 
 | Test case registration | Value |
 |---|---|
-| Registry | `tests/pytest/test_cases/catalog.json` |
+| Registry | `test_envs/tests/pytest/test_cases/catalog.json` |
 | Registry key | `test_id` |
 | Collection validation | Marker ID + module path |
 | Missing registration | pytest collection error |
 
 | Tool registry | Path | IDs |
 |---|---|---|
-| Equipment | `tests/pytest/test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
-| Interface | `tests/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
+| Equipment | `test_envs/tests/pytest/test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
+| Interface | `test_envs/tests/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
 
 | Mode | Tool path | Result field |
 |---|---|---|
@@ -266,7 +266,7 @@ Source: `.vscode/tasks.json`
 | `test_cases/catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
 
 ```text
-tests/
+test_envs/tests/
 ├── pytest/
 │   ├── test_cases/
 │   │   ├── communication/
@@ -305,11 +305,12 @@ tests/
 
 | Directory | Scope |
 |---|---|
-| `tests/pytest` | Integration, functional, hardware, interface, regression |
-| `tests/unittest/python` | Python function, class, module, mock |
-| `tests/unittest/c_cpp` | C/C++ unit test extension |
-| `tests/unittest/firmware` | Firmware unit test extension |
-| `tests/unittest/common` | Shared unit-test assets |
+| `test_envs/tests/pytest` | Integration, functional, hardware, interface, regression |
+| `test_envs/tests/unittest/ct_framework/python` | CT framework unit tests |
+| `test_envs/tests/unittest/python` | Product Python unit-test extension |
+| `test_envs/tests/unittest/c_cpp` | C/C++ unit-test extension |
+| `test_envs/tests/unittest/firmware` | Firmware unit-test extension |
+| `test_envs/tests/unittest/common` | Shared unit-test assets |
 
 ### 6.2 Equipment and Interface Separation
 
@@ -359,12 +360,12 @@ Test Execution
 
 ## 8. Test Result Generation
 
-Entry point: `python -m test_result`
+Entry point: `python -m test_envs.tools.test_result`
 
 Input rule:
 
 ```text
-reports/logs/*/*/result.json
+test_envs/reports/logs/*/*/result.json
               │
               ▼
 Maximum execution ID
@@ -399,10 +400,10 @@ Latest execution logs
 Local LLM Analysis
       │
       ▼
-reports/markdown/<test-id>/<execution-id>/result.md
+test_envs/reports/markdown/<test-id>/<execution-id>/result.md
       │
-      ├── reports/markdown/<test-id>/latest.md
-      ├── test_result/markdown/latest.md
+      ├── test_envs/reports/markdown/<test-id>/latest.md
+      ├── test_envs/tools/test_result/markdown/latest.md
       └── docs/test/...  [--docs]
           ├── <test-id>.md                    # Latest
           └── <test-id>/<execution-id>.md     # Per execution
@@ -435,10 +436,10 @@ reports/markdown/<test-id>/<execution-id>/result.md
 | Runtime | Ollama |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Environment variable | `OLLAMA_URL` |
-| Configured model | `config/config.json` → `ollama.selected_model` |
+| Configured model | `test_envs/config/config.json` → `ollama.selected_model` |
 | Model variable | `OLLAMA_MODEL` |
-| Project config | `config/config.json` |
-| Environment check | `config/check.json` |
+| Project config | `test_envs/config/config.json` |
+| Environment check | `test_envs/config/check.json` |
 | Selection priority | CLI → Environment → Config |
 | Missing model | Configuration error |
 | Config selection | `ollama.selected_model` |
@@ -455,7 +456,7 @@ reports/markdown/<test-id>/<execution-id>/result.md
 Model config schema:
 
 ```text
-config/config.json
+test_envs/config/config.json
 ├── version
 ├── os
 └── ollama
@@ -466,7 +467,7 @@ config/config.json
 Environment check schema:
 
 ```text
-config/check.json
+test_envs/config/check.json
 ├── generated_at
 ├── os
 │   ├── configured
@@ -541,9 +542,9 @@ Local LLM
 
 | Output | Source | Destination |
 |---|---|---|
-| Canonical Markdown | Latest test execution | `reports/markdown/<test-id>/<execution-id>/result.md` |
-| Per-test latest Markdown | Canonical Markdown | `reports/markdown/<test-id>/latest.md` |
-| Global latest Markdown | Canonical Markdown | `test_result/markdown/latest.md` |
+| Canonical Markdown | Latest test execution | `test_envs/reports/markdown/<test-id>/<execution-id>/result.md` |
+| Per-test latest Markdown | Canonical Markdown | `test_envs/reports/markdown/<test-id>/latest.md` |
+| Global latest Markdown | Canonical Markdown | `test_envs/tools/test_result/markdown/latest.md` |
 | MkDocs latest page | Canonical Markdown | `docs/test/.../<test-id>.md` |
 | MkDocs execution page | Canonical Markdown | `docs/test/.../<test-id>/<execution-id>.md` |
 | MkDocs system index | System architecture | `docs/index.md` |
@@ -598,34 +599,7 @@ Excluded from GitHub Issue:
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
 │   └── workflows/
-├── config/
-│   ├── config.json                # Selected OS and Ollama model
-│   └── check.json                 # Generated environment check
 ├── .venv/                         # Git ignored
-├── tests/
-│   ├── pytest/
-│   └── unittest/
-├── test_result/
-│   ├── __init__.py
-│   ├── __main__.py
-│   └── markdown/
-│       └── latest.md              # Generated, Git ignored
-├── tools/
-│   ├── configuration/
-│   ├── local_llm/
-│   ├── extensions/
-│   ├── github_reporter/
-│   ├── log_parser/
-│   ├── mkdocs_reporter/
-│   ├── pandoc_reporter/
-│   ├── result_normalizer/
-│   ├── environment_setup.py
-│   ├── extension_runner.py
-│   └── pipeline.py
-├── reports/
-│   ├── logs/
-│   ├── measurements/
-│   └── markdown/
 ├── docs/
 │   ├── index.md                     # Manual system overview
 │   ├── pytest.md                    # pytest system description
@@ -633,6 +607,31 @@ Excluded from GitHub Issue:
 │   ├── pytest_results.md            # Auto-generated pytest catalog
 │   ├── unittest_results.md          # Auto-generated unittest catalog
 │   └── test/                        # Latest and execution reports
+├── test_envs/
+│   ├── config/
+│   │   ├── config.json
+│   │   └── check.json
+│   ├── tests/
+│   │   ├── pytest/
+│   │   └── unittest/
+│   │       ├── ct_framework/python/
+│   │       ├── python/
+│   │       ├── c_cpp/
+│   │       ├── firmware/
+│   │       └── common/
+│   ├── reports/
+│   │   ├── logs/
+│   │   ├── measurements/
+│   │   └── markdown/
+│   └── tools/
+│       ├── configuration/
+│       ├── local_llm/
+│       ├── mkdocs_reporter/
+│       ├── pandoc_reporter/
+│       ├── result_normalizer/
+│       ├── test_result/
+│       ├── environment_setup.py
+│       └── pipeline.py
 ├── DESIGN.md
 ├── mkdocs.yml
 ├── pytest.ini
@@ -650,14 +649,14 @@ Tasks: Environment Setup
               │
               ▼
 VS Code Testing
-├── tests/pytest
-└── tests/unittest
+├── test_envs/tests/pytest
+└── test_envs/tests/unittest
               │
               ▼
 Result + Log + Measurement + Warning
               │
               ▼
-test_result: Latest Result Selection
+test_envs.tools.test_result: Latest Result Selection
               │
               ▼
 Ollama + Local LLM

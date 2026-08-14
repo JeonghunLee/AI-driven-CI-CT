@@ -1,0 +1,93 @@
+{
+  "generated_at": "2026-08-14T00:03:07.181106+00:00",
+  "os": {
+    "configured": "auto",
+    "detected": "windows",
+    "name": "Windows-11-10.0.26200-SP0"
+  },
+  "python": {
+    "installed": true,
+    "executable": "D:\\Works\\projects\\Private\\AI-driven-CI-CT\\.venv\\Scripts\\python.exe",
+    "version": "3.14.6"
+  },
+  "ollama": {
+    "installed": true,
+    "executable": "C:\\Users\\LeeJeongHun\\AppData\\Local\\Programs\\Ollama\\ollama.EXE",
+    "version": "ollama version is 0.32.9",
+    "available": true,
+    "endpoint": "http://127.0.0.1:11434",
+    "selected_model": "deepseek-r1:7b",
+    "selected_model_installed": true,
+    "supported_models": [
+      {
+        "name": "deepseek-r1:7b",
+        "model": "deepseek-r1:7b",
+        "modified_at": "2026-08-13T14:57:44.2560963+09:00",
+        "size": 4683075440,
+        "digest": "755ced02ce7befdb13b7ca74e1e4d08cddba4986afdb63a480f2c93d3140383f",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen2",
+          "families": [
+            "qwen2"
+          ],
+          "parameter_size": "7.6B",
+          "quantization_level": "Q4_K_M",
+          "context_length": 131072,
+          "embedding_length": 3584
+        },
+        "capabilities": [
+          "completion",
+          "thinking"
+        ]
+      },
+      {
+        "name": "nomic-embed-text:latest",
+        "model": "nomic-embed-text:latest",
+        "modified_at": "2026-07-23T09:43:12.4483251+09:00",
+        "size": 274302450,
+        "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "nomic-bert",
+          "families": [
+            "nomic-bert"
+          ],
+          "parameter_size": "137M",
+          "quantization_level": "F16",
+          "context_length": 2048,
+          "embedding_length": 768
+        },
+        "capabilities": [
+          "embedding"
+        ]
+      },
+      {
+        "name": "qwen2.5-coder:3b",
+        "model": "qwen2.5-coder:3b",
+        "modified_at": "2026-07-23T09:17:32.2253431+09:00",
+        "size": 1929912626,
+        "digest": "f72c60cabf6237b07f6e632b2c48d533cef25eda2efbd34bed21c5e9c01e6225",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen2",
+          "families": [
+            "qwen2"
+          ],
+          "parameter_size": "3.1B",
+          "quantization_level": "Q4_K_M",
+          "context_length": 32768,
+          "embedding_length": 2048
+        },
+        "capabilities": [
+          "completion",
+          "tools",
+          "insert"
+        ]
+      }
+    ]
+  }
+}

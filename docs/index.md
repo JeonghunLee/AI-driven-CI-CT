@@ -40,7 +40,7 @@ flowchart TD
 
 - Run and Debug: `SETUP 2: Install Python Virtual Environment`
 - Task: `SETUP 2: Install Python Virtual Environment`
-- Setup module: `python -m tools.environment_setup python`
+- Setup module: `python -m test_envs.tools.environment_setup python`
 
 ## 2. Ollama 환경 구성
 
@@ -49,14 +49,14 @@ flowchart TD
 | 항목 | 구성 |
 |---|---|
 | Local LLM runtime | Ollama |
-| Primary model | `config/config.json` / `OLLAMA_MODEL` |
+| Primary model | `test_envs/config/config.json` / `OLLAMA_MODEL` |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Endpoint variable | `OLLAMA_URL` |
 | Model variable | `OLLAMA_MODEL` |
-| Project config | `config/config.json` |
-| Environment check | `config/check.json` |
+| Project config | `test_envs/config/config.json` |
+| Environment check | `test_envs/config/check.json` |
 | Model selection | `ollama.selected_model` |
-| Installed inventory | `python -m tools.configuration check` |
+| Installed inventory | `python -m test_envs.tools.configuration check` |
 | Offline fallback | Deterministic analyzer |
 | Escalation | Codex |
 
@@ -88,7 +88,7 @@ flowchart TD
 | 선택값 | 동작 |
 |---|---|
 | `auto` | 현재 운영체제 자동 감지 |
-| `config` | `config/config.json`의 `os` 사용 |
+| `config` | `test_envs/config/config.json` / `os` |
 | `windows` | Windows + winget |
 | `linux` | Linux + official installer |
 | `macos` | macOS + Homebrew |
@@ -101,7 +101,7 @@ flowchart TD
 
 - Run and Debug: `SETUP 3: Install Ollama and Local LLM`
 - Task: `SETUP 3: Install Ollama and Local LLM`
-- Setup module: `python -m tools.environment_setup ollama [--model <model>]`
+- Setup module: `python -m test_envs.tools.environment_setup ollama [--model <model>]`
 - Check task: `CHECK 1: Refresh Environment Check File`
 - Check launch: `CHECK 1: Refresh Environment Check File`
 - Foreground server task: `CHECK 3: Run Ollama Server (Foreground)`
@@ -124,7 +124,7 @@ flowchart TD
 
 | Configuration | 기능 |
 |---|---|
-| `SETUP 1: Select Operating System` | `config/config.json` OS update |
+| `SETUP 1: Select Operating System` | `test_envs/config/config.json` OS update |
 | `SETUP 2: Install Python Virtual Environment` | Python setup Task delegation |
 | `SETUP 3: Install Ollama and Local LLM` | Ollama setup Task delegation |
 
@@ -160,8 +160,8 @@ flowchart TD
 ```mermaid
 flowchart TD
     A[VS Code Testing] --> B[pytest Adapter]
-    B --> C[tests/pytest]
-    B --> D[tests/unittest]
+    B --> C[test_envs/tests/pytest]
+    B --> D[test_envs/tests/unittest]
     C --> E[Integration / Functional / Hardware CT]
     D --> F[unittest.TestCase]
 ```
@@ -204,37 +204,25 @@ flowchart TD
 ### Repository Structure
 
 ```text
-tests/
-├── pytest/
-│   ├── test_cases/
-│   │   ├── communication/
-│   │   ├── timing/
-│   │   ├── functional/
-│   │   ├── performance/
-│   │   ├── stability/
-│   │   └── regression/
-│   ├── fixtures/
-│   │   ├── fixture_001_uart.py
-│   │   ├── fixture_002_uart_saleae.py
-│   │   ├── fixture_003_usb_digilent.py
-│   │   ├── fixture_004_jtag_fpga.py
-│   │   ├── fixture_005_full_hil.py
-│   │   └── fixture_006_network.py
-│   ├── test_equipments/
-│   │   ├── fpga/{mock,hil}/
-│   │   ├── saleae/{mock,hil}/
-│   │   └── digilent/{mock,hil}/
-│   ├── test_interfaces/
-│   │   ├── usb/{mock,hil}/
-│   │   ├── uart/{mock,hil}/
-│   │   ├── jtag/{mock,hil}/
-│   │   └── network/{mock,hil}/
-│   └── conftest.py
-└── unittest/
-    ├── python/
-    ├── c_cpp/
-    ├── firmware/
-    └── common/
+.
+├── docs/
+└── test_envs/
+    ├── config/
+    ├── tests/
+    │   ├── pytest/
+    │   │   ├── test_cases/{communication,timing,functional,performance,stability,regression}/
+    │   │   ├── fixtures/
+    │   │   ├── test_equipments/{fpga,saleae,digilent}/{mock,hil}/
+    │   │   ├── test_interfaces/{usb,uart,jtag,network}/{mock,hil}/
+    │   │   └── conftest.py
+    │   └── unittest/
+    │       ├── ct_framework/python/
+    │       ├── python/
+    │       ├── c_cpp/
+    │       ├── firmware/
+    │       └── common/
+    ├── reports/
+    └── tools/
 ```
 
 ### Layer Structure
@@ -283,8 +271,8 @@ flowchart TD
     D --> E
     E --> F[Ollama + Local LLM]
     F --> G[Markdown Report]
-    G --> H[reports/markdown]
-    G --> I[test_result/markdown/latest.md]
+    G --> H[test_envs/reports/markdown]
+    G --> I[test_envs/tools/test_result/markdown/latest.md]
     G --> J[docs/test]
     G --> K[Pandoc DOCX / PDF / HTML]
     F --> L{Escalation?}
@@ -294,7 +282,7 @@ flowchart TD
 ### Runtime Data
 
 ```text
-reports/
+test_envs/reports/
 ├── logs/<test-id>/<execution-id>/
 │   ├── result.json
 │   ├── analysis.json
@@ -339,7 +327,7 @@ docs/
 ### Report Generation
 
 ```text
-python -m test_result --docs
+python -m test_envs.tools.test_result --docs
 ├── Latest result selection
 ├── Local LLM analysis
 ├── Canonical Markdown generation

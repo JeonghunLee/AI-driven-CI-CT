@@ -12,6 +12,18 @@
 | Document conversion | Pandoc |
 | Design | [DESIGN.md](DESIGN.md) |
 
+## Repository Structure
+
+```text
+.
+├── docs/
+└── test_envs/
+    ├── config/
+    ├── tests/
+    ├── reports/
+    └── tools/
+```
+
 ## 구성
 
 - VS Code Testing / Run and Debug
@@ -35,7 +47,7 @@
 | macOS | `python3` |
 
 ```text
-python -m tools.environment_setup python --platform config
+python -m test_envs.tools.environment_setup python --platform config
 ```
 
 ### VS Code 실행 구분
@@ -48,11 +60,11 @@ python -m tools.environment_setup python --platform config
 
 | Run and Debug Setup | 실행 방식 |
 |---|---|
-| Setup 1 | OS selection → `config/config.json` |
+| Setup 1 | OS selection → `test_envs/config/config.json` |
 | Setup 2 | `preLaunchTask` → Python setup Task |
 | Setup 3 | `preLaunchTask` → Ollama setup Task |
 | Check 1 | `preLaunchTask` → Environment check Task |
-| Launch completion | `tools.configuration config` → immediate exit |
+| Launch completion | `test_envs.tools.configuration config` → immediate exit |
 
 | Setup 1 runtime | 값 |
 |---|---|
@@ -66,7 +78,7 @@ python -m tools.environment_setup python --platform config
 |---|---|
 | Default | `auto` |
 | Options | `auto`, `windows`, `linux`, `macos` |
-| Config source | `config/config.json` → `os` |
+| Config source | `test_envs/config/config.json` → `os` |
 | Host mismatch | Setup stop |
 | Setup 1·2 Python | `python` |
 | Setup 3+ Python | `${config:python.defaultInterpreterPath}` |
@@ -79,9 +91,9 @@ python -m tools.environment_setup python --platform config
 
 | Adapter | Discovery path | Implementation |
 |---|---|---|
-| pytest | `tests/pytest` | pytest |
-| pytest | `tests/unittest` | `unittest.TestCase` |
-| Native unittest task | `tests/unittest` | unittest discovery |
+| pytest | `test_envs/tests/pytest` | pytest |
+| pytest | `test_envs/tests/unittest` | `unittest.TestCase` |
+| CT framework unittest | `test_envs/tests/unittest/ct_framework/python` | pytest |
 
 | TEST Task | Scope | VS Code group |
 |---|---|---|
@@ -93,20 +105,20 @@ python -m tools.environment_setup python --platform config
 | 작업 | 명령 |
 |---|---|
 | 전체 TEST | `python -m pytest` |
-| CT | `python -m pytest tests/pytest -m ct -s` |
-| Latest Markdown | `python -m test_result` |
-| MkDocs publish | `python -m test_result --docs` |
-| Source review | `python -m test_result --docs --source-review` |
+| CT | `python -m pytest test_envs/tests/pytest -m ct -s` |
+| Latest Markdown | `python -m test_envs.tools.test_result` |
+| MkDocs publish | `python -m test_envs.tools.test_result --docs` |
+| Source review | `python -m test_envs.tools.test_result --docs --source-review` |
 
 ## Configuration
 
 ```text
-config/
+test_envs/config/
 ├── config.json   # User selection
 └── check.json    # Generated environment state
 ```
 
-### `config/config.json`
+### `test_envs/config/config.json`
 
 ```json
 {
@@ -129,10 +141,10 @@ config/
 |---:|---|
 | 1 | CLI `--model` |
 | 2 | `OLLAMA_MODEL` |
-| 3 | `config/config.json` |
+| 3 | `test_envs/config/config.json` |
 | Missing | Configuration error |
 
-### `config/check.json`
+### `test_envs/config/check.json`
 
 | Check | Field |
 |---|---|
@@ -147,10 +159,10 @@ config/
 
 | 작업 | 명령 |
 |---|---|
-| Environment check | `python -m tools.configuration check` |
-| Model pull/update | `python -m tools.environment_setup ollama --platform config` |
-| Foreground server | `python -m tools.environment_setup serve --platform config` |
-| Report model override | `python -m test_result --model "<ollama-model>:<tag>"` |
+| Environment check | `python -m test_envs.tools.configuration check` |
+| Model pull/update | `python -m test_envs.tools.environment_setup ollama --platform config` |
+| Foreground server | `python -m test_envs.tools.environment_setup serve --platform config` |
+| Report model override | `python -m test_envs.tools.test_result --model "<ollama-model>:<tag>"` |
 
 | Ollama server state | Setup behavior | Completion behavior |
 |---|---|---|
@@ -163,7 +175,7 @@ config/
 ## 결과 구조
 
 ```text
-reports/
+test_envs/reports/
 ├── logs/<test-id>/<execution-id>/
 │   ├── result.json
 │   ├── analysis.json
@@ -183,9 +195,9 @@ reports/
 
 | Artifact | 역할 |
 |---|---|
-| `reports/markdown/.../result.md` | Canonical human-readable result |
+| `test_envs/reports/markdown/.../result.md` | Canonical human-readable result |
 | `result.json` | Machine-readable intermediate data |
-| `test_result/markdown/latest.md` | Latest report copy |
+| `test_envs/tools/test_result/markdown/latest.md` | Latest report copy |
 | `docs/test/.../<test-id>.md` | Latest MkDocs TEST page |
 | `docs/test/.../<test-id>/<execution-id>.md` | Append-only execution page |
 
@@ -193,18 +205,18 @@ reports/
 
 | Format | 명령 | 추가 요구사항 |
 |---|---|---|
-| HTML | `python -m tools.pandoc_reporter --latest --format html` | Pandoc PATH |
-| DOCX | `python -m tools.pandoc_reporter --latest --format docx` | Pandoc PATH |
-| PDF | `python -m tools.pandoc_reporter --latest --format pdf` | Pandoc PATH + PDF engine |
+| HTML | `python -m test_envs.tools.pandoc_reporter --latest --format html` | Pandoc PATH |
+| DOCX | `python -m test_envs.tools.pandoc_reporter --latest --format docx` | Pandoc PATH |
+| PDF | `python -m test_envs.tools.pandoc_reporter --latest --format pdf` | Pandoc PATH + PDF engine |
 
 ## 실제 장비 확장
 
 | Layer | Path |
 |---|---|
-| Test Case | `tests/pytest/test_cases/` |
-| Equipment Controller | `tests/pytest/test_equipments/` |
-| DUT Interface | `tests/pytest/test_interfaces/` |
-| Lifecycle fixture | `tests/pytest/conftest.py` |
+| Test Case | `test_envs/tests/pytest/test_cases/` |
+| Equipment Controller | `test_envs/tests/pytest/test_equipments/` |
+| DUT Interface | `test_envs/tests/pytest/test_interfaces/` |
+| Lifecycle fixture | `test_envs/tests/pytest/conftest.py` |
 | CT marker | `@pytest.mark.ct(...)` |
 | Result fixture | `ct_result` |
 
@@ -216,7 +228,7 @@ reports/
 
 | TEST CASE registration | 값 |
 |---|---|
-| Catalog | `tests/pytest/test_cases/catalog.json` |
+| Catalog | `test_envs/tests/pytest/test_cases/catalog.json` |
 | Validation | `pytest_collection_modifyitems` |
 | Unregistered CT | Collection error |
 | Module mismatch | Collection error |

@@ -14,20 +14,20 @@ jobs:
         with: {python-version: "3.12", cache: pip}
       - run: python -m venv .venv
       - run: .venv/bin/python -m pip install -r requirements.txt
-      - run: .venv/bin/python -m pytest tests/unittest --junitxml=reports/unit-junit.xml
+      - run: .venv/bin/python -m pytest test_envs/tests/unittest --junitxml=test_envs/reports/unit-junit.xml
       - name: Normalize unit-test result
         if: always()
-        run: .venv/bin/python -m tools.result_normalizer reports/unit-junit.xml --test-id UNIT-TEST
+        run: .venv/bin/python -m test_envs.tools.result_normalizer test_envs/reports/unit-junit.xml --test-id UNIT-TEST
       - name: Analyze and generate Markdown
         if: always()
         env:
           GITHUB_SHA: ${{ github.sha }}
           RUNNER_NAME: ${{ runner.name }}
-        run: .venv/bin/python -m tools.pipeline --docs --source-review
+        run: .venv/bin/python -m test_envs.tools.pipeline --docs --source-review
       - name: Upload unit-test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-${{ github.run_id }}
-          path: reports/
+          path: test_envs/reports/
           if-no-files-found: warn

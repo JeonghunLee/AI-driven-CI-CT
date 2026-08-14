@@ -22,7 +22,7 @@
 
 | Item | Value |
 |---|---|
-| File | `tests/pytest/test_cases/catalog.json` |
+| File | `test_envs/tests/pytest/test_cases/catalog.json` |
 | Key | `test_id` |
 | Mode selection | `test_mode` |
 | Derived modes | `interface_mode`, `equipment_mode` |
@@ -37,7 +37,7 @@
 ## Structure
 
 ```text
-tests/
+test_envs/tests/
 ├── pytest/
 │   ├── test_cases/
 │   │   ├── communication/
@@ -64,6 +64,8 @@ tests/
 │   │   └── network/{mock,hil}/
 │   └── conftest.py
 └── unittest/
+    ├── ct_framework/
+    │   └── python/
     ├── python/
     ├── c_cpp/
     ├── firmware/
@@ -86,13 +88,13 @@ flowchart TD
 ## Commands
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest tests/pytest
-.\.venv\Scripts\python.exe -m pytest tests/pytest -m ct -s
+.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest
+.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest -m ct -s
 ```
 
 ## VS Code
 
-- Testing path: `tests/pytest`
+- Testing path: `test_envs/tests/pytest`
 - Debug: `Debug: Current pytest File`
 - Task: `TEST CASE: ALL`
 - Task: `TEST CASE: TEST ID` / ID list

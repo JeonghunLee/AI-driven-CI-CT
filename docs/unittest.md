@@ -4,6 +4,7 @@
 
 | Area | Coverage |
 |---|---|
+| CT Framework | Configuration, tools, reports, mocks, VS Code contract |
 | Python | Function, class, module, mock |
 | C/C++ | Native unit-test extension |
 | Firmware | Hardware-independent firmware logic |
@@ -12,7 +13,9 @@
 ## Structure
 
 ```text
-tests/unittest/
+test_envs/tests/unittest/
+├── ct_framework/
+│   └── python/
 ├── python/
 ├── c_cpp/
 ├── firmware/
@@ -33,12 +36,12 @@ flowchart TD
 ## Commands
 
 ```powershell
-.\.venv\Scripts\python.exe -m unittest discover -v -s tests/unittest -p "test_*.py"
-.\.venv\Scripts\python.exe -m pytest tests/unittest
+.\.venv\Scripts\python.exe -m unittest discover -v -s test_envs/tests/unittest -p "test_*.py"
+.\.venv\Scripts\python.exe -m pytest test_envs/tests/unittest
 ```
 
 ## VS Code
 
-- Testing path: `tests/unittest`
+- Testing path: `test_envs/tests/unittest`
 - Implementation: `unittest.TestCase`
 - VS Code Testing: pytest adapter

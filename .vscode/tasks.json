@@ -7,7 +7,7 @@
             "command": "python",
             "args": [
                 "-m",
-                "tools.configuration",
+                "test_envs.tools.configuration",
                 "select-os"
             ],
             "presentation": {
@@ -23,7 +23,7 @@
             "command": "python",
             "args": [
                 "-m",
-                "tools.environment_setup",
+                "test_envs.tools.environment_setup",
                 "python"
             ],
             "problemMatcher": []
@@ -34,7 +34,7 @@
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "tools.environment_setup",
+                "test_envs.tools.environment_setup",
                 "ollama"
             ],
             "problemMatcher": []
@@ -45,7 +45,7 @@
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "tools.configuration",
+                "test_envs.tools.configuration",
                 "check"
             ],
             "problemMatcher": []
@@ -56,7 +56,7 @@
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "tools.configuration",
+                "test_envs.tools.configuration",
                 "config"
             ],
             "problemMatcher": []
@@ -67,7 +67,7 @@
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "tools.environment_setup",
+                "test_envs.tools.environment_setup",
                 "serve"
             ],
             "presentation": {
@@ -86,7 +86,7 @@
                 "pytest",
                 "-p",
                 "no:cacheprovider",
-                "tests/pytest/test_cases"
+                "test_envs/tests/pytest/test_cases"
             ],
             "group": {
                 "kind": "test",
@@ -103,7 +103,7 @@
                 "pytest",
                 "-p",
                 "no:cacheprovider",
-                "tests/pytest/test_cases",
+                "test_envs/tests/pytest/test_cases",
                 "--test-id",
                 "${input:testCaseId}"
             ],
@@ -119,7 +119,7 @@
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "test_result",
+                "test_envs.tools.test_result",
                 "--docs"
             ],
             "problemMatcher": []
@@ -130,7 +130,7 @@
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "tools.pandoc_reporter",
+                "test_envs.tools.pandoc_reporter",
                 "--latest",
                 "--format",
                 "html"
@@ -143,7 +143,7 @@
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "tools.pandoc_reporter",
+                "test_envs.tools.pandoc_reporter",
                 "--latest",
                 "--format",
                 "docx"

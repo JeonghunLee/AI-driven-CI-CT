@@ -5,7 +5,7 @@ on:
       test_path:
         description: pytest path for the special hardware/environment test
         required: true
-        default: tests/pytest
+        default: test_envs/tests/pytest
 
 jobs:
   special-test:
@@ -24,10 +24,10 @@ jobs:
       - name: Generate Markdown report
         if: always()
         shell: pwsh
-        run: .\.venv\Scripts\python.exe -m tools.pipeline --docs
+        run: .\.venv\Scripts\python.exe -m test_envs.tools.pipeline --docs
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: special-test-${{ github.run_id }}
-          path: reports/
+          path: test_envs/reports/

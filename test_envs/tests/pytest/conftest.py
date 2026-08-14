@@ -1,0 +1,173 @@
+from __future__ import annotations
+
+import os
+import json
+from dataclasses import dataclass, field
+from pathlib import Path
+from time import perf_counter
+from typing import Any
+
+import pytest
+
+from test_envs.tools.result_normalizer import ResultRecord, ResultStore
+from test_envs.tests.pytest.fixtures.fixture_001_uart import uart
+from test_envs.tests.pytest.fixtures.fixture_002_uart_saleae import saleae
+from test_envs.tests.pytest.fixtures.fixture_003_usb_digilent import digilent, usb
+from test_envs.tests.pytest.fixtures.fixture_004_jtag_fpga import fpga, jtag
+from test_envs.tests.pytest.fixtures.fixture_005_full_hil import full_hil
+from test_envs.tests.pytest.fixtures.fixture_006_network import network
+
+__all__ = ["digilent", "fpga", "full_hil", "jtag", "network", "saleae", "uart", "usb"]
+
+ROOT = Path(__file__).resolve().parents[3]
+TEST_CASE_CATALOG = Path(__file__).resolve().parent / "test_cases" / "catalog.json"
+EQUIPMENT_CATALOG = Path(__file__).resolve().parent / "test_equipments" / "catalog.json"
+INTERFACE_CATALOG = Path(__file__).resolve().parent / "test_interfaces" / "catalog.json"
+
+
+def pytest_addoption(parser: pytest.Parser) -> None:
+    parser.addoption("--test-id", action="store", help="Run one registered CT TEST ID")
+
+
+def load_test_case_catalog() -> dict[str, dict[str, Any]]:
+    payload = json.loads(TEST_CASE_CATALOG.read_text(encoding="utf-8"))
+    entries = payload.get("test_cases", [])
+    if not isinstance(entries, list):
+        raise pytest.UsageError("test_cases/catalog.json: test_cases must be a list")
+    catalog: dict[str, dict[str, Any]] = {}
+    for entry in entries:
+        if not isinstance(entry, dict) or not isinstance(entry.get("test_id"), str):
+            raise pytest.UsageError("test_cases/catalog.json: invalid test case entry")
+        test_id = entry["test_id"]
+        if test_id in catalog:
+            raise pytest.UsageError(f"test_cases/catalog.json: duplicate test_id: {test_id}")
+        catalog[test_id] = entry
+    return catalog
+
+
+def load_tool_catalog(path: Path) -> dict[str, dict[str, Any]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    entries = payload.get("tools", [])
+    if not isinstance(entries, list):
+        raise pytest.UsageError(f"{path.as_posix()}: tools must be a list")
+    catalog: dict[str, dict[str, Any]] = {}
+    for entry in entries:
+        if not isinstance(entry, dict) or not isinstance(entry.get("tool_id"), str):
+            raise pytest.UsageError(f"{path.as_posix()}: invalid tool entry")
+        tool_id = entry["tool_id"]
+        if tool_id in catalog:
+            raise pytest.UsageError(f"{path.as_posix()}: duplicate tool_id: {tool_id}")
+        catalog[tool_id] = entry
+    return catalog
+
+
+def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
+    catalog = load_test_case_catalog()
+    interfaces = load_tool_catalog(INTERFACE_CATALOG)
+    equipments = load_tool_catalog(EQUIPMENT_CATALOG)
+    selected_test_id = config.getoption("--test-id", default=None)
+    if selected_test_id:
+        if selected_test_id not in catalog:
+            raise pytest.UsageError(f"Unknown TEST ID: {selected_test_id}")
+        selected = [
+            item
+            for item in items
+            if (marker := item.get_closest_marker("ct")) is not None
+            and marker.kwargs.get("test_id") == selected_test_id
+        ]
+        deselected = [item for item in items if item not in selected]
+        config.hook.pytest_deselected(items=deselected)
+        items[:] = selected
+    for item in items:
+        marker = item.get_closest_marker("ct")
+        if marker is None:
+            continue
+        test_id = marker.kwargs.get("test_id")
+        if test_id not in catalog:
+            raise pytest.UsageError(f"Unregistered CT test_id: {test_id}")
+        module = Path(str(item.path)).resolve().relative_to(ROOT).as_posix()
+        if module != catalog[test_id].get("module"):
+            raise pytest.UsageError(
+                f"CT module mismatch for {test_id}: {module} != {catalog[test_id].get('module')}"
+            )
+        entry = catalog[test_id]
+        interface_tool = entry.get("interface_tool")
+        equipment_tool = entry.get("equipment_tool")
+        test_mode = entry.get("test_mode")
+        interface_mode = test_mode
+        equipment_mode = test_mode if equipment_tool is not None else "none"
+        if interface_tool not in interfaces:
+            raise pytest.UsageError(f"Unknown interface tool for {test_id}: {interface_tool}")
+        if equipment_tool is not None and equipment_tool not in equipments:
+            raise pytest.UsageError(f"Unknown equipment tool for {test_id}: {equipment_tool}")
+        if interface_mode not in interfaces[interface_tool].get("implementations", {}):
+            raise pytest.UsageError(f"Unknown interface mode for {test_id}: {interface_mode}")
+        if equipment_tool is not None and equipment_mode not in equipments[equipment_tool].get("implementations", {}):
+            raise pytest.UsageError(f"Unknown equipment mode for {test_id}: {equipment_mode}")
+        if marker.kwargs.get("interface") != interfaces[interface_tool].get("name"):
+            raise pytest.UsageError(f"Interface marker mismatch for {test_id}")
+        expected_equipment = equipments[equipment_tool]["name"] if equipment_tool else "None"
+        if marker.kwargs.get("equipment", "None") != expected_equipment:
+            raise pytest.UsageError(f"Equipment marker mismatch for {test_id}")
+
+
+@dataclass
+class CTResultRecorder:
+    metrics: dict[str, Any] = field(default_factory=dict)
+    statistics: dict[str, Any] = field(default_factory=dict)
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo[object]):
+    outcome = yield
+    setattr(item, f"rep_{call.when}", outcome.get_result())
+
+
+@pytest.fixture
+def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
+    marker = request.node.get_closest_marker("ct")
+    if marker is None:
+        raise RuntimeError("ct_result can only be used by a test marked with @pytest.mark.ct")
+    test_id = marker.kwargs.get("test_id", request.node.name.upper())
+    entry = load_test_case_catalog().get(test_id)
+    if entry is None:
+        raise RuntimeError(f"Unregistered CT test_id: {test_id}")
+    recorder = CTResultRecorder()
+    started = perf_counter()
+    yield recorder
+    report = getattr(request.node, "rep_call", None)
+    status = "PASS" if report is not None and report.passed else "FAIL"
+    if report is not None and report.skipped:
+        status = "SKIP"
+    values = marker.kwargs
+    test_mode = entry["test_mode"]
+    equipment = values.get("equipment", "None")
+    result_path = ResultStore().save(ResultRecord(
+        test_id=test_id,
+        status=status,
+        category=values.get("category", "functional"),
+        duration=perf_counter() - started,
+        description=values.get("description", request.node.name),
+        environment=os.getenv("CI", "local"),
+        configuration={key: value for key, value in values.items() if key not in {"test_id", "description"}},
+        test_mode=test_mode,
+        interface=values.get("interface", "None"),
+        interface_mode=test_mode,
+        equipment=equipment,
+        equipment_mode=test_mode if equipment != "None" else "none",
+        commit=os.getenv("GITHUB_SHA", "local")[:7],
+        runner=os.getenv("RUNNER_NAME", "local"),
+        metrics=recorder.metrics,
+        statistics=recorder.statistics,
+    ))
+    execution_dir = result_path.parent
+    detail = str(report.longrepr) if report is not None and report.failed else ""
+    (execution_dir / "test.log").write_text(f"status={status}\n{detail}", encoding="utf-8")
+    (execution_dir / "stdout.log").write_text(getattr(report, "capstdout", ""), encoding="utf-8")
+    (execution_dir / "stderr.log").write_text(getattr(report, "capstderr", ""), encoding="utf-8")
+    (execution_dir / "equipment.log").write_text(
+        "\n".join(f"{key}={value}" for key, value in recorder.statistics.items()), encoding="utf-8"
+    )
+    (execution_dir / "interface.log").write_text(
+        "\n".join(f"{key}={value}" for key, value in recorder.metrics.items()), encoding="utf-8"
+    )

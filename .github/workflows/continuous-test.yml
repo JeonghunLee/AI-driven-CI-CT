@@ -32,16 +32,16 @@ jobs:
       - run: .venv/bin/python -m pip install -r requirements.txt
       - name: Read test request
         id: request
-        run: .venv/bin/python -m tools.issue_parser
+        run: .venv/bin/python -m test_envs.tools.issue_parser
       - name: Run unit tests
         if: steps.request.outputs.test_type == 'Unit Test'
-        run: .venv/bin/python -m pytest tests/unittest -s --junitxml=reports/unit-junit.xml
+        run: .venv/bin/python -m pytest test_envs/tests/unittest -s --junitxml=test_envs/reports/unit-junit.xml
       - name: Normalize unit-test result
         if: always() && steps.request.outputs.test_type == 'Unit Test'
-        run: .venv/bin/python -m tools.result_normalizer reports/unit-junit.xml --test-id UNIT-TEST
+        run: .venv/bin/python -m test_envs.tools.result_normalizer test_envs/reports/unit-junit.xml --test-id UNIT-TEST
       - name: Run mock CT
         if: steps.request.outputs.test_type != 'Unit Test'
-        run: .venv/bin/python -m pytest tests/pytest/test_cases/timing/test_uart_timing.py -m ct -s
+        run: .venv/bin/python -m pytest test_envs/tests/pytest/test_cases --test-id "${TEST_ID}" -m ct -s
       - name: Analyze and generate reports
         if: always()
         env:
@@ -49,18 +49,18 @@ jobs:
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_SHA: ${{ github.sha }}
           RUNNER_NAME: ${{ runner.name }}
-        run: .venv/bin/python -m tools.pipeline --docs
+        run: .venv/bin/python -m test_envs.tools.pipeline --docs
       - name: Comment on request issue
         if: always() && github.event.issue.number
         env:
           GH_TOKEN: ${{ github.token }}
-        run: .venv/bin/python -m tools.github_reporter --latest --issue "${{ env.ISSUE_NUMBER }}"
+        run: .venv/bin/python -m test_envs.tools.github_reporter --latest --issue "${{ env.ISSUE_NUMBER }}"
       - name: Upload CT evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.TEST_ID }}-${{ github.run_id }}
           path: |
-            reports/
+            test_envs/reports/
             docs/test/ct/
           if-no-files-found: warn

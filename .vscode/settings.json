@@ -6,8 +6,8 @@
   "python.testing.pytestArgs": [
     "-p",
     "no:cacheprovider",
-    "tests/pytest",
-    "tests/unittest"
+    "test_envs/tests/pytest",
+    "test_envs/tests/unittest"
   ],
   "python.testing.cwd": "${workspaceFolder}",
   "python.testing.autoTestDiscoverOnSaveEnabled": true,
