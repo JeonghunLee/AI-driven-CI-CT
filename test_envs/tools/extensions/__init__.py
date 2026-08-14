@@ -1,1 +1,1 @@
-"""Extension modules launched by tools.extension_runner."""
+"""Extension modules launched by test_envs.tools.extension_runner."""

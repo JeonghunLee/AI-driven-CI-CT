@@ -222,9 +222,9 @@ test_envs/reports/
 
 | Interface | Mock implementation | unittest | CT |
 |---|---|---|---|
-| UART | `test_interfaces/uart/mock_uart.py` | `test_mock_uart.py` | `CT-UART-001` |
-| USB | `test_interfaces/usb/mock_usb.py` | `test_mock_usb.py` | `CT-USB-001` |
-| Network | `test_interfaces/network/mock_network.py` | `test_mock_network.py` | `CT-NETWORK-001` |
+| UART | `test_interfaces/uart/mock/mock_uart.py` | `test_mock_uart.py` | `CT-UART-001` |
+| USB | `test_interfaces/usb/mock/mock_usb.py` | `test_mock_usb.py` | `CT-USB-001` |
+| Network | `test_interfaces/network/mock/mock_network.py` | `test_mock_network.py` | `CT-NETWORK-001` |
 
 | TEST CASE registration | 값 |
 |---|---|
