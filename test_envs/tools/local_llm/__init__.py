@@ -40,7 +40,7 @@ def selected_model(explicit: str | None = None) -> str:
     config = load_config()
     model = explicit or os.getenv("OLLAMA_MODEL") or _resolve_model_from_config(config)
     if not model:
-        raise RuntimeError("Ollama model is not configured in test_envs/config/config.json")
+        raise RuntimeError("Ollama model is not configured in test_envs/configs/unittest/config.json")
     return model
 
 

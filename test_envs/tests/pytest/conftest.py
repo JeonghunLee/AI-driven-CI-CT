@@ -20,9 +20,10 @@ from test_envs.tests.pytest.fixtures.fixture_006_network import network
 __all__ = ["digilent", "fpga", "full_hil", "jtag", "network", "saleae", "uart", "usb"]
 
 ROOT = Path(__file__).resolve().parents[3]
-TEST_CASE_CATALOG = Path(__file__).resolve().parent / "test_cases" / "catalog.json"
-EQUIPMENT_CATALOG = Path(__file__).resolve().parent / "test_equipments" / "catalog.json"
-INTERFACE_CATALOG = Path(__file__).resolve().parent / "test_interfaces" / "catalog.json"
+PYTEST_CONFIG_ROOT = ROOT / "test_envs" / "configs" / "pytest"
+TEST_CASE_CATALOG = PYTEST_CONFIG_ROOT / "test_cases" / "catalog.json"
+EQUIPMENT_CATALOG = PYTEST_CONFIG_ROOT / "test_equipments" / "catalog.json"
+INTERFACE_CATALOG = PYTEST_CONFIG_ROOT / "test_interfaces" / "catalog.json"
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
@@ -33,14 +34,14 @@ def load_test_case_catalog() -> dict[str, dict[str, Any]]:
     payload = json.loads(TEST_CASE_CATALOG.read_text(encoding="utf-8"))
     entries = payload.get("test_cases", [])
     if not isinstance(entries, list):
-        raise pytest.UsageError("test_cases/catalog.json: test_cases must be a list")
+        raise pytest.UsageError("configs/pytest/test_cases/catalog.json: test_cases must be a list")
     catalog: dict[str, dict[str, Any]] = {}
     for entry in entries:
         if not isinstance(entry, dict) or not isinstance(entry.get("test_id"), str):
-            raise pytest.UsageError("test_cases/catalog.json: invalid test case entry")
+            raise pytest.UsageError("configs/pytest/test_cases/catalog.json: invalid test case entry")
         test_id = entry["test_id"]
         if test_id in catalog:
-            raise pytest.UsageError(f"test_cases/catalog.json: duplicate test_id: {test_id}")
+            raise pytest.UsageError(f"configs/pytest/test_cases/catalog.json: duplicate test_id: {test_id}")
         catalog[test_id] = entry
     return catalog
 
@@ -142,7 +143,7 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
     values = marker.kwargs
     test_mode = entry["test_mode"]
     equipment = values.get("equipment", "None")
-    result_path = ResultStore().save(ResultRecord(
+    result = ResultRecord(
         test_id=test_id,
         status=status,
         category=values.get("category", "functional"),
@@ -159,15 +160,17 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
         runner=os.getenv("RUNNER_NAME", "local"),
         metrics=recorder.metrics,
         statistics=recorder.statistics,
-    ))
-    execution_dir = result_path.parent
+    )
+    store = ResultStore()
+    result_path = store.save(result)
+    report_dir = result_path.parent
     detail = str(report.longrepr) if report is not None and report.failed else ""
-    (execution_dir / "test.log").write_text(f"status={status}\n{detail}", encoding="utf-8")
-    (execution_dir / "stdout.log").write_text(getattr(report, "capstdout", ""), encoding="utf-8")
-    (execution_dir / "stderr.log").write_text(getattr(report, "capstderr", ""), encoding="utf-8")
-    (execution_dir / "equipment.log").write_text(
+    (report_dir / result.logs["main"]).write_text(f"status={status}\n{detail}", encoding="utf-8")
+    (report_dir / result.logs["stdout"]).write_text(getattr(report, "capstdout", ""), encoding="utf-8")
+    (report_dir / result.logs["stderr"]).write_text(getattr(report, "capstderr", ""), encoding="utf-8")
+    (report_dir / result.logs["equipment"]).write_text(
         "\n".join(f"{key}={value}" for key, value in recorder.statistics.items()), encoding="utf-8"
     )
-    (execution_dir / "interface.log").write_text(
+    (report_dir / result.logs["interface"]).write_text(
         "\n".join(f"{key}={value}" for key, value in recorder.metrics.items()), encoding="utf-8"
     )

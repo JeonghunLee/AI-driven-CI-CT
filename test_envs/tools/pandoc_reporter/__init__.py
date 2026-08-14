@@ -17,7 +17,11 @@ def convert(source: str | Path, output_format: str, output_dir: str | Path | Non
     executable = shutil.which("pandoc")
     if not executable:
         raise RuntimeError("Pandoc is not installed or is not available on PATH")
-    destination_dir = Path(output_dir) if output_dir else source_path.parent
+    destination_dir = (
+        Path(output_dir)
+        if output_dir
+        else Path("test_envs/reports/pandoc") / source_path.parent.name
+    )
     destination_dir.mkdir(parents=True, exist_ok=True)
     destination = destination_dir / f"{source_path.stem}{FORMATS[output_format]}"
     command = [executable, str(source_path), "-o", str(destination), "--standalone"]
@@ -26,10 +30,10 @@ def convert(source: str | Path, output_format: str, output_dir: str | Path | Non
 
 
 def latest_markdown(root: str | Path = "test_envs/reports") -> Path:
-    candidates = list((Path(root) / "markdown").glob("*/*/result.md"))
+    candidates = list((Path(root) / "markdown").glob("*/*_result.md"))
     if not candidates:
         raise FileNotFoundError("No Markdown report exists under test_envs/reports/markdown")
-    return max(candidates, key=lambda path: path.parent.name)
+    return max(candidates, key=lambda path: path.name)
 
 
 __all__ = ["FORMATS", "convert", "latest_markdown"]

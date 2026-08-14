@@ -14,10 +14,10 @@ jobs:
         with: {python-version: "3.12", cache: pip}
       - run: python -m venv .venv
       - run: .venv/bin/python -m pip install -r requirements.txt
-      - run: .venv/bin/python -m pytest test_envs/tests/unittest --junitxml=test_envs/reports/unit-junit.xml
+      - run: .venv/bin/python -m pytest test_envs/tests/unittest --junitxml=${{ runner.temp }}/unit-junit.xml
       - name: Normalize unit-test result
         if: always()
-        run: .venv/bin/python -m test_envs.tools.result_normalizer test_envs/reports/unit-junit.xml --test-id UNIT-TEST
+        run: .venv/bin/python -m test_envs.tools.result_normalizer ${{ runner.temp }}/unit-junit.xml --test-id UNIT-TEST
       - name: Analyze and generate Markdown
         if: always()
         env:

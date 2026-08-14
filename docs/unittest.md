@@ -40,6 +40,16 @@ flowchart TD
 .\.venv\Scripts\python.exe -m pytest test_envs/tests/unittest
 ```
 
+## Report Files
+
+| Type | Path |
+|---|---|
+| Result / Raw | `test_envs/reports/unittest/<test-id>/<timestamp>_{result,raw}.json` |
+| Measurement | `test_envs/reports/unittest/<test-id>/<timestamp>_measurement.{json,csv}` |
+| Logs | `test_envs/reports/unittest/<test-id>/<timestamp>_<log-name>.log` |
+| Markdown | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` |
+| Pandoc | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.<format>` |
+
 ## VS Code
 
 - Testing path: `test_envs/tests/unittest`

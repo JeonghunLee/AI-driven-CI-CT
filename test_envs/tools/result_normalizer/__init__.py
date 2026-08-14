@@ -13,7 +13,7 @@ VALID_STATUSES = {"PASS", "FAIL", "ERROR", "SKIP"}
 
 
 def _execution_id() -> str:
-    return datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S-%f")
+    return datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S_%f")
 
 
 @dataclass
@@ -73,23 +73,34 @@ class ResultStore:
         self.root = Path(root)
 
     def save(self, record: ResultRecord) -> Path:
-        log_dir = self.root / "logs" / record.test_id / record.execution_id
-        log_dir.mkdir(parents=True, exist_ok=True)
+        report_dir = self._report_dir(record)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        record.logs = {
+            name: (
+                Path(filename).name
+                if Path(filename).name.startswith(f"{record.execution_id}_")
+                else f"{record.execution_id}_{Path(filename).name}"
+            )
+            for name, filename in record.logs.items()
+        }
         for filename in record.logs.values():
-            path = log_dir / filename
+            path = report_dir / filename
             if not path.exists():
                 path.write_text("", encoding="utf-8")
 
         payload = record.to_dict()
-        result_path = log_dir / "result.json"
+        result_path = report_dir / f"{record.execution_id}_result.json"
         result_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
-        measurement_dir = self.root / "measurements" / record.test_id / record.execution_id
-        measurement_dir.mkdir(parents=True, exist_ok=True)
-        (measurement_dir / "measurement.json").write_text(
+        (report_dir / f"{record.execution_id}_raw.json").write_text(
+            json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+        (report_dir / f"{record.execution_id}_measurement.json").write_text(
             json.dumps({"metrics": payload["metrics"], "statistics": payload["statistics"]}, indent=2),
             encoding="utf-8",
         )
-        with (measurement_dir / "measurement.csv").open("w", newline="", encoding="utf-8") as stream:
+        with (report_dir / f"{record.execution_id}_measurement.csv").open(
+            "w", newline="", encoding="utf-8"
+        ) as stream:
             writer = csv.writer(stream)
             writer.writerow(["type", "name", "value"])
             writer.writerows(("metric", key, value) for key, value in record.metrics.items())
@@ -98,14 +109,40 @@ class ResultStore:
         return result_path
 
     def latest(self) -> Path:
-        candidates = list((self.root / "logs").glob("*/*/result.json"))
+        candidates = self.result_paths()
         if not candidates:
-            raise FileNotFoundError("No normalized result exists under test_envs/reports/logs")
-        return max(candidates, key=lambda path: path.parent.name)
+            raise FileNotFoundError("No normalized result exists under test_envs/reports")
+        return max(candidates, key=lambda path: path.name)
+
+    def result_paths(self, test_id: str | None = None) -> list[Path]:
+        name = test_id or "*"
+        return list((self.root / "pytest" / "test_cases").glob(f"{name}/*_result.json")) + list(
+            (self.root / "unittest").glob(f"{name}/*_result.json")
+        )
+
+    @staticmethod
+    def artifact_path(result_path: str | Path, artifact: str, extension: str) -> Path:
+        source = Path(result_path)
+        execution_id = source.name.removesuffix("_result.json")
+        return source.parent / f"{execution_id}_{artifact}.{extension}"
+
+    def _report_dir(self, record: ResultRecord) -> Path:
+        if record.category.lower() == "unit":
+            return self.root / "unittest" / record.test_id
+        return self.root / "pytest" / "test_cases" / record.test_id
 
     def load(self, path: str | Path | None = None) -> ResultRecord:
         source = Path(path) if path else self.latest()
-        return ResultRecord.from_dict(json.loads(source.read_text(encoding="utf-8")))
+        record = ResultRecord.from_dict(json.loads(source.read_text(encoding="utf-8")))
+        record.logs = {
+            name: (
+                filename
+                if (source.parent / filename).exists()
+                else f"{record.execution_id}_{Path(filename).name}"
+            )
+            for name, filename in record.logs.items()
+        }
+        return record
 
 
 def from_junit(path: str | Path, test_id: str = "UNIT-TEST") -> ResultRecord:

@@ -22,7 +22,7 @@
 
 | Item | Value |
 |---|---|
-| File | `test_envs/tests/pytest/test_cases/catalog.json` |
+| File | `test_envs/configs/pytest/test_cases/catalog.json` |
 | Key | `test_id` |
 | Mode selection | `test_mode` |
 | Derived modes | `interface_mode`, `equipment_mode` |
@@ -31,8 +31,8 @@
 
 | Registry | Tools |
 |---|---|
-| `test_equipments/catalog.json` | FPGA, Saleae, Digilent |
-| `test_interfaces/catalog.json` | USB, UART, JTAG, Network |
+| `test_envs/configs/pytest/test_equipments/catalog.json` | FPGA, Saleae, Digilent |
+| `test_envs/configs/pytest/test_interfaces/catalog.json` | USB, UART, JTAG, Network |
 
 ## Structure
 
@@ -91,6 +91,16 @@ flowchart TD
 .\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest
 .\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest -m ct -s
 ```
+
+## Report Files
+
+| Type | Path |
+|---|---|
+| Result / Raw | `test_envs/reports/pytest/test_cases/<test-id>/<timestamp>_{result,raw}.json` |
+| Measurement | `test_envs/reports/pytest/test_cases/<test-id>/<timestamp>_measurement.{json,csv}` |
+| Logs | `test_envs/reports/pytest/test_cases/<test-id>/<timestamp>_<log-name>.log` |
+| Markdown | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` |
+| Pandoc | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.<format>` |
 
 ## VS Code
 

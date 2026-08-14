@@ -18,7 +18,9 @@
 .
 ├── docs/
 └── test_envs/
-    ├── config/
+    ├── configs/
+    │   ├── unittest/
+    │   └── pytest/
     ├── tests/
     ├── reports/
     └── tools/
@@ -60,7 +62,7 @@ python -m test_envs.tools.environment_setup python --platform config
 
 | Run and Debug Setup | 실행 방식 |
 |---|---|
-| Setup 1 | OS selection → `test_envs/config/config.json` |
+| Setup 1 | OS selection → `test_envs/configs/unittest/config.json` |
 | Setup 2 | `preLaunchTask` → Python setup Task |
 | Setup 3 | `preLaunchTask` → Ollama setup Task |
 | Check 1 | `preLaunchTask` → Environment check Task |
@@ -78,7 +80,7 @@ python -m test_envs.tools.environment_setup python --platform config
 |---|---|
 | Default | `auto` |
 | Options | `auto`, `windows`, `linux`, `macos` |
-| Config source | `test_envs/config/config.json` → `os` |
+| Config source | `test_envs/configs/unittest/config.json` → `os` |
 | Host mismatch | Setup stop |
 | Setup 1·2 Python | `python` |
 | Setup 3+ Python | `${config:python.defaultInterpreterPath}` |
@@ -113,12 +115,17 @@ python -m test_envs.tools.environment_setup python --platform config
 ## Configuration
 
 ```text
-test_envs/config/
-├── config.json   # User selection
-└── check.json    # Generated environment state
+test_envs/configs/
+├── unittest/
+│   ├── config.json
+│   └── check.json
+└── pytest/
+    ├── test_cases/catalog.json
+    ├── test_equipments/catalog.json
+    └── test_interfaces/catalog.json
 ```
 
-### `test_envs/config/config.json`
+### `test_envs/configs/unittest/config.json`
 
 ```json
 {
@@ -141,10 +148,10 @@ test_envs/config/
 |---:|---|
 | 1 | CLI `--model` |
 | 2 | `OLLAMA_MODEL` |
-| 3 | `test_envs/config/config.json` |
+| 3 | `test_envs/configs/unittest/config.json` |
 | Missing | Configuration error |
 
-### `test_envs/config/check.json`
+### `test_envs/configs/unittest/check.json`
 
 | Check | Field |
 |---|---|
@@ -176,28 +183,25 @@ test_envs/config/
 
 ```text
 test_envs/reports/
-├── logs/<test-id>/<execution-id>/
-│   ├── result.json
-│   ├── analysis.json
-│   ├── codex-escalation.json
-│   ├── test.log
-│   ├── stdout.log
-│   ├── stderr.log
-│   ├── equipment.log
-│   └── interface.log
-├── measurements/<test-id>/<execution-id>/
-│   ├── measurement.json
-│   └── measurement.csv
+├── pytest/test_cases/<test-id>/
+│   ├── <timestamp>_result.json
+│   ├── <timestamp>_raw.json
+│   ├── <timestamp>_measurement.{json,csv}
+│   ├── <timestamp>_{test,stdout,stderr}.log
+│   └── <timestamp>_{equipment,interface}.log
+├── unittest/<test-id>/
+│   └── <timestamp>_<artifact>.<extension>
+├── pandoc/<test-id>/
+│   └── <timestamp>_result.{html,pdf,docx}
 └── markdown/<test-id>/
-    ├── latest.md
-    └── <execution-id>/result.md
+    └── <timestamp>_result.md
 ```
 
 | Artifact | 역할 |
 |---|---|
-| `test_envs/reports/markdown/.../result.md` | Canonical human-readable result |
-| `result.json` | Machine-readable intermediate data |
-| `test_envs/tools/test_result/markdown/latest.md` | Latest report copy |
+| `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` | Canonical human-readable result |
+| `<timestamp>_result.json` | Machine-readable intermediate data |
+| `<timestamp>_raw.json` | Raw normalized result |
 | `docs/test/.../<test-id>.md` | Latest MkDocs TEST page |
 | `docs/test/.../<test-id>/<execution-id>.md` | Append-only execution page |
 
@@ -228,15 +232,15 @@ test_envs/reports/
 
 | TEST CASE registration | 값 |
 |---|---|
-| Catalog | `test_envs/tests/pytest/test_cases/catalog.json` |
+| Catalog | `test_envs/configs/pytest/test_cases/catalog.json` |
 | Validation | `pytest_collection_modifyitems` |
 | Unregistered CT | Collection error |
 | Module mismatch | Collection error |
 
 | Tool registry | Tool IDs |
 |---|---|
-| `test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
-| `test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
+| `test_envs/configs/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
+| `test_envs/configs/pytest/test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
 
 | Tool implementation | 구분 |
 |---|---|

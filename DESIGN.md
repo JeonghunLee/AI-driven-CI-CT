@@ -64,7 +64,7 @@ Ollama + Local LLM
           ▼
 Markdown
 ├── test_envs/reports/markdown
-├── test_envs/tools/test_result/markdown/latest.md
+├── test_envs/reports/pandoc
 ├── MkDocs
 ├── Pandoc
 └── GitHub Issue
@@ -107,7 +107,7 @@ Source: `.vscode/launch.json`
 
 | Setup input | Options | Default | Validation |
 |---|---|---|---|
-| `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `test_envs/config/config.json` |
+| `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `test_envs/configs/unittest/config.json` |
 
 | VS Code Python path | Value |
 |---|---|
@@ -245,15 +245,15 @@ Source: `.vscode/tasks.json`
 
 | Test case registration | Value |
 |---|---|
-| Registry | `test_envs/tests/pytest/test_cases/catalog.json` |
+| Registry | `test_envs/configs/pytest/test_cases/catalog.json` |
 | Registry key | `test_id` |
 | Collection validation | Marker ID + module path |
 | Missing registration | pytest collection error |
 
 | Tool registry | Path | IDs |
 |---|---|---|
-| Equipment | `test_envs/tests/pytest/test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
-| Interface | `test_envs/tests/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
+| Equipment | `test_envs/configs/pytest/test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
+| Interface | `test_envs/configs/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
 
 | Mode | Tool path | Result field |
 |---|---|---|
@@ -263,7 +263,7 @@ Source: `.vscode/tasks.json`
 
 | Selection | Derived result fields |
 |---|---|
-| `test_cases/catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
+| `test_envs/configs/pytest/test_cases/catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
 
 ```text
 test_envs/tests/
@@ -365,23 +365,20 @@ Entry point: `python -m test_envs.tools.test_result`
 Input rule:
 
 ```text
-test_envs/reports/logs/*/*/result.json
-              │
-              ▼
-Maximum execution ID
-              │
-              ▼
-Latest result
+test_envs/reports/{pytest/test_cases,unittest}/*/*_result.json
+                                      │
+                                      ▼
+                              Maximum timestamp
 ```
 
 Execution rule:
 
 - Test re-execution: prohibited
-- Input: newest `result.json`
-- Logs: same execution directory
+- Input: newest `<timestamp>_result.json`
+- Logs: same TEST ID directory
 - Analysis: Local LLM or deterministic fallback
 - Canonical output: execution-specific Markdown
-- Latest output: fixed latest Markdown path
+- Duplicate latest output: none
 - Optional MkDocs latest copy: `--docs`
 - MkDocs execution snapshot: append-only
 - Previous canonical reports: snapshot backfill
@@ -400,10 +397,9 @@ Latest execution logs
 Local LLM Analysis
       │
       ▼
-test_envs/reports/markdown/<test-id>/<execution-id>/result.md
+test_envs/reports/markdown/<test-id>/<timestamp>_result.md
       │
-      ├── test_envs/reports/markdown/<test-id>/latest.md
-      ├── test_envs/tools/test_result/markdown/latest.md
+      ├── test_envs/reports/pandoc/<test-id>/<timestamp>_result.<format>
       └── docs/test/...  [--docs]
           ├── <test-id>.md                    # Latest
           └── <test-id>/<execution-id>.md     # Per execution
@@ -436,10 +432,10 @@ test_envs/reports/markdown/<test-id>/<execution-id>/result.md
 | Runtime | Ollama |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Environment variable | `OLLAMA_URL` |
-| Configured model | `test_envs/config/config.json` → `ollama.selected_model` |
+| Configured model | `test_envs/configs/unittest/config.json` → `ollama.selected_model` |
 | Model variable | `OLLAMA_MODEL` |
-| Project config | `test_envs/config/config.json` |
-| Environment check | `test_envs/config/check.json` |
+| Project config | `test_envs/configs/unittest/config.json` |
+| Environment check | `test_envs/configs/unittest/check.json` |
 | Selection priority | CLI → Environment → Config |
 | Missing model | Configuration error |
 | Config selection | `ollama.selected_model` |
@@ -456,7 +452,7 @@ test_envs/reports/markdown/<test-id>/<execution-id>/result.md
 Model config schema:
 
 ```text
-test_envs/config/config.json
+test_envs/configs/unittest/config.json
 ├── version
 ├── os
 └── ollama
@@ -467,7 +463,7 @@ test_envs/config/config.json
 Environment check schema:
 
 ```text
-test_envs/config/check.json
+test_envs/configs/unittest/check.json
 ├── generated_at
 ├── os
 │   ├── configured
@@ -542,17 +538,16 @@ Local LLM
 
 | Output | Source | Destination |
 |---|---|---|
-| Canonical Markdown | Latest test execution | `test_envs/reports/markdown/<test-id>/<execution-id>/result.md` |
-| Per-test latest Markdown | Canonical Markdown | `test_envs/reports/markdown/<test-id>/latest.md` |
-| Global latest Markdown | Canonical Markdown | `test_envs/tools/test_result/markdown/latest.md` |
+| Canonical Markdown | Latest test execution | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` |
+| Duplicate latest Markdown | None | None |
 | MkDocs latest page | Canonical Markdown | `docs/test/.../<test-id>.md` |
 | MkDocs execution page | Canonical Markdown | `docs/test/.../<test-id>/<execution-id>.md` |
 | MkDocs system index | System architecture | `docs/index.md` |
 | MkDocs pytest result index | Published CT page scan | `docs/pytest_results.md` |
 | MkDocs unittest result index | Published unit page scan | `docs/unittest_results.md` |
-| DOCX | Canonical Markdown | Pandoc output |
-| PDF | Canonical Markdown | Pandoc output |
-| HTML | Canonical Markdown | Pandoc output |
+| DOCX | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.docx` |
+| PDF | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.pdf` |
+| HTML | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.html` |
 
 ## 13. GitHub Automation
 
@@ -608,9 +603,14 @@ Excluded from GitHub Issue:
 │   ├── unittest_results.md          # Auto-generated unittest catalog
 │   └── test/                        # Latest and execution reports
 ├── test_envs/
-│   ├── config/
-│   │   ├── config.json
-│   │   └── check.json
+│   ├── configs/
+│   │   ├── unittest/
+│   │   │   ├── config.json
+│   │   │   └── check.json
+│   │   └── pytest/
+│   │       ├── test_cases/catalog.json
+│   │       ├── test_equipments/catalog.json
+│   │       └── test_interfaces/catalog.json
 │   ├── tests/
 │   │   ├── pytest/
 │   │   └── unittest/
@@ -620,9 +620,10 @@ Excluded from GitHub Issue:
 │   │       ├── firmware/
 │   │       └── common/
 │   ├── reports/
-│   │   ├── logs/
-│   │   ├── measurements/
-│   │   └── markdown/
+│   │   ├── pytest/test_cases/<test-id>/
+│   │   ├── unittest/<test-id>/
+│   │   ├── pandoc/<test-id>/
+│   │   └── markdown/<test-id>/
 │   └── tools/
 │       ├── configuration/
 │       ├── local_llm/

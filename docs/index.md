@@ -49,12 +49,12 @@ flowchart TD
 | 항목 | 구성 |
 |---|---|
 | Local LLM runtime | Ollama |
-| Primary model | `test_envs/config/config.json` / `OLLAMA_MODEL` |
+| Primary model | `test_envs/configs/unittest/config.json` / `OLLAMA_MODEL` |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Endpoint variable | `OLLAMA_URL` |
 | Model variable | `OLLAMA_MODEL` |
-| Project config | `test_envs/config/config.json` |
-| Environment check | `test_envs/config/check.json` |
+| Project config | `test_envs/configs/unittest/config.json` |
+| Environment check | `test_envs/configs/unittest/check.json` |
 | Model selection | `ollama.selected_model` |
 | Installed inventory | `python -m test_envs.tools.configuration check` |
 | Offline fallback | Deterministic analyzer |
@@ -88,7 +88,7 @@ flowchart TD
 | 선택값 | 동작 |
 |---|---|
 | `auto` | 현재 운영체제 자동 감지 |
-| `config` | `test_envs/config/config.json` / `os` |
+| `config` | `test_envs/configs/unittest/config.json` / `os` |
 | `windows` | Windows + winget |
 | `linux` | Linux + official installer |
 | `macos` | macOS + Homebrew |
@@ -124,7 +124,7 @@ flowchart TD
 
 | Configuration | 기능 |
 |---|---|
-| `SETUP 1: Select Operating System` | `test_envs/config/config.json` OS update |
+| `SETUP 1: Select Operating System` | `test_envs/configs/unittest/config.json` OS update |
 | `SETUP 2: Install Python Virtual Environment` | Python setup Task delegation |
 | `SETUP 3: Install Ollama and Local LLM` | Ollama setup Task delegation |
 
@@ -189,8 +189,8 @@ flowchart TD
 
 | Tool group | Registry | Tools |
 |---|---|---|
-| Equipment | `test_equipments/catalog.json` | FPGA, Saleae, Digilent |
-| Interface | `test_interfaces/catalog.json` | USB, UART, JTAG, Network |
+| Equipment | `test_envs/configs/pytest/test_equipments/catalog.json` | FPGA, Saleae, Digilent |
+| Interface | `test_envs/configs/pytest/test_interfaces/catalog.json` | USB, UART, JTAG, Network |
 
 | Mode | Directory | Result |
 |---|---|---|
@@ -199,7 +199,7 @@ flowchart TD
 
 | Selection | Derived |
 |---|---|
-| `test_cases/catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
+| `test_envs/configs/pytest/test_cases/catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
 
 ### Repository Structure
 
@@ -207,7 +207,9 @@ flowchart TD
 .
 ├── docs/
 └── test_envs/
-    ├── config/
+    ├── configs/
+    │   ├── unittest/
+    │   └── pytest/{test_cases,test_equipments,test_interfaces}/catalog.json
     ├── tests/
     │   ├── pytest/
     │   │   ├── test_cases/{communication,timing,functional,performance,stability,regression}/
@@ -272,9 +274,8 @@ flowchart TD
     E --> F[Ollama + Local LLM]
     F --> G[Markdown Report]
     G --> H[test_envs/reports/markdown]
-    G --> I[test_envs/tools/test_result/markdown/latest.md]
     G --> J[docs/test]
-    G --> K[Pandoc DOCX / PDF / HTML]
+    G --> K[test_envs/reports/pandoc]
     F --> L{Escalation?}
     L -- Yes --> M[Codex]
 ```
@@ -283,21 +284,14 @@ flowchart TD
 
 ```text
 test_envs/reports/
-├── logs/<test-id>/<execution-id>/
-│   ├── result.json
-│   ├── analysis.json
-│   ├── codex-escalation.json
-│   ├── test.log
-│   ├── stdout.log
-│   ├── stderr.log
-│   ├── equipment.log
-│   └── interface.log
-├── measurements/<test-id>/<execution-id>/
-│   ├── measurement.json
-│   └── measurement.csv
+├── pytest/test_cases/<test-id>/
+│   └── <timestamp>_{result,raw,measurement,test,stdout,stderr,equipment,interface}.*
+├── unittest/<test-id>/
+│   └── <timestamp>_<artifact>.<extension>
+├── pandoc/<test-id>/
+│   └── <timestamp>_result.{html,pdf,docx}
 └── markdown/<test-id>/
-    ├── latest.md
-    └── <execution-id>/result.md
+    └── <timestamp>_result.md
 ```
 
 ### MkDocs Data

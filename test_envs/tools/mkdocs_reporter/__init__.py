@@ -37,12 +37,9 @@ class MarkdownReporter:
         important_logs: list[str] | None = None,
         publish_docs: bool = False,
     ) -> Path:
-        destination = self.store.root / "markdown" / result.test_id / result.execution_id / "result.md"
+        destination = self.store.root / "markdown" / result.test_id / f"{result.execution_id}_result.md"
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(self.render(result, analysis, important_logs), encoding="utf-8")
-
-        latest = self.store.root / "markdown" / result.test_id / "latest.md"
-        latest.write_text(destination.read_text(encoding="utf-8"), encoding="utf-8")
         if publish_docs:
             self.publish(destination, result)
         return destination
@@ -57,8 +54,8 @@ class MarkdownReporter:
         execution_dir.mkdir(parents=True, exist_ok=True)
 
         canonical_dir = self.store.root / "markdown" / result.test_id
-        for canonical in canonical_dir.glob("*/result.md"):
-            execution_id = canonical.parent.name
+        for canonical in canonical_dir.glob("*_result.md"):
+            execution_id = canonical.stem.removesuffix("_result")
             (execution_dir / f"{execution_id}.md").write_text(
                 canonical.read_text(encoding="utf-8"), encoding="utf-8"
             )
@@ -211,7 +208,7 @@ class MarkdownReporter:
 
     def _history(self, test_id: str) -> list[ResultRecord]:
         records: list[ResultRecord] = []
-        for path in (self.store.root / "logs" / test_id).glob("*/result.json"):
+        for path in self.store.result_paths(test_id):
             try:
                 records.append(self.store.load(path))
             except (ValueError, TypeError):

@@ -5,11 +5,12 @@
 | Category | Test ID | Mode | Latest | Executions |
 |---|---|---|---|---:|
 | communication | `CT-NETWORK-001` | mock | [Open](test/ct/communication/CT-NETWORK-001.md) | 3 |
-| communication | `CT-USB-001` | mock | [Open](test/ct/communication/CT-USB-001.md) | 6 |
+| communication | `CT-USB-001` | mock | [Open](test/ct/communication/CT-USB-001.md) | 7 |
 | timing | `CT-UART-001` | mock | [Open](test/ct/timing/CT-UART-001.md) | 11 |
 
 ## Recent Executions
 
+- [`20260814_004411_750615`](test/ct/communication/CT-USB-001/20260814_004411_750615.md)
 - [`20260814-000307-648687`](test/ct/communication/CT-NETWORK-001/20260814-000307-648687.md)
 - [`20260813-074738-432387`](test/ct/timing/CT-UART-001/20260813-074738-432387.md)
 - [`20260813-074329-493399`](test/ct/communication/CT-USB-001/20260813-074329-493399.md)
@@ -29,4 +30,3 @@
 - [`20260813-014919-691948`](test/ct/timing/CT-UART-001/20260813-014919-691948.md)
 - [`20260813-004323-383189`](test/ct/timing/CT-UART-001/20260813-004323-383189.md)
 - [`20260813-001038-341669`](test/ct/timing/CT-UART-001/20260813-001038-341669.md)
-- [`20260813-000735-891978`](test/ct/timing/CT-UART-001/20260813-000735-891978.md)

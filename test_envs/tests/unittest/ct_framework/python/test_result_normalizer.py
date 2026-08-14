@@ -7,15 +7,15 @@ from test_envs.tools.result_normalizer import ResultRecord, ResultStore, from_ju
 
 class ResultNormalizerTests(unittest.TestCase):
     def test_result_store_creates_canonical_result_and_logs(self) -> None:
-        test_root = Path("test_envs/reports/test-artifacts/unit-result-store")
+        test_root = Path("test_envs/reports/unittest/.tmp/unit-result-store")
         record = ResultRecord("UT-NORMALIZER-001", "pass", "functional", 0.1)
         path = ResultStore(test_root).save(record)
         self.assertEqual(json.loads(path.read_text())["status"], "PASS")
         self.assertEqual(ResultStore(test_root).latest(), path)
-        self.assertTrue((path.parent / "test.log").exists())
-        self.assertTrue(
-            (test_root / "measurements" / record.test_id / record.execution_id / "measurement.csv").exists()
-        )
+        self.assertEqual(path.name, f"{record.execution_id}_result.json")
+        self.assertTrue((path.parent / record.logs["main"]).exists())
+        self.assertTrue((path.parent / f"{record.execution_id}_measurement.csv").exists())
+        self.assertTrue((path.parent / f"{record.execution_id}_raw.json").exists())
 
     def test_result_rejects_unknown_status(self) -> None:
         with self.assertRaisesRegex(ValueError, "unsupported"):

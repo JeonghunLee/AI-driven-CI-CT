@@ -11,7 +11,7 @@ from test_envs.tools.configuration import __main__ as configuration_main
 
 class ConfigurationTests(unittest.TestCase):
     def test_project_config_contains_os_and_selected_model(self) -> None:
-        value = json.loads(Path("test_envs/config/config.json").read_text(encoding="utf-8"))
+        value = json.loads(Path("test_envs/configs/unittest/config.json").read_text(encoding="utf-8"))
         self.assertIn(value["os"], configuration.SUPPORTED_OS)
         self.assertTrue(value["ollama"]["selected_model"])
 

@@ -5,10 +5,7 @@ from shutil import copyfile
 
 from test_envs.tools.pipeline import run
 
-LATEST_MARKDOWN = Path(__file__).resolve().parent / "markdown" / "latest.md"
-
-
-def publish_latest(source: str | Path, destination: str | Path = LATEST_MARKDOWN) -> Path:
+def publish_latest(source: str | Path, destination: str | Path) -> Path:
     source_path = Path(source)
     destination_path = Path(destination)
     destination_path.parent.mkdir(parents=True, exist_ok=True)
@@ -23,8 +20,8 @@ def generate_latest_markdown(
 ) -> dict[str, object]:
     """Generate Markdown from the newest result without running tests."""
     output = run(publish_docs=publish_docs, review_source=review_source, model=model)
-    output["latest_markdown"] = str(publish_latest(str(output["markdown"])))
+    output["latest_markdown"] = str(output["markdown"])
     return output
 
 
-__all__ = ["LATEST_MARKDOWN", "generate_latest_markdown", "publish_latest"]
+__all__ = ["generate_latest_markdown", "publish_latest"]

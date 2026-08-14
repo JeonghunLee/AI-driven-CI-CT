@@ -8,7 +8,7 @@ from test_envs.tools.result_normalizer import ResultRecord, ResultStore
 
 class MarkdownReporterTests(unittest.TestCase):
     def test_markdown_first_report_contains_required_sections(self) -> None:
-        root = "test_envs/reports/test-artifacts/markdown-reporter"
+        root = Path("test_envs/reports/unittest/.tmp/markdown-reporter")
         result = ResultRecord(
             "CT-MD-001",
             "PASS",
@@ -29,8 +29,8 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertIn("**Test mode:** mock", text)
 
     def test_mkdocs_publish_preserves_each_execution(self) -> None:
-        reports_root = "test_envs/reports/test-artifacts/multi-execution-reports"
-        docs_root = "test_envs/reports/test-artifacts/multi-execution-docs"
+        reports_root = Path("test_envs/reports/unittest/.tmp/multi-execution-reports")
+        docs_root = Path("test_envs/reports/unittest/.tmp/multi-execution-docs")
         reporter = MarkdownReporter(reports_root, docs_root)
         root_index = Path(docs_root) / "index.md"
         root_index.parent.mkdir(parents=True, exist_ok=True)

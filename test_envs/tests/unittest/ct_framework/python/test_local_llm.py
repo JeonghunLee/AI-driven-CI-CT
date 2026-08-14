@@ -24,12 +24,12 @@ class LocalLLMTests(unittest.TestCase):
 
     def test_missing_configured_model_is_rejected(self) -> None:
         with patch("test_envs.tools.local_llm.load_config", return_value={}), patch.dict(os.environ, {}, clear=True):
-            with self.assertRaisesRegex(RuntimeError, "test_envs/config/config.json"):
+            with self.assertRaisesRegex(RuntimeError, "test_envs/configs/unittest/config.json"):
                 selected_model()
 
     def test_internal_json_model_is_used_when_environment_is_missing(self) -> None:
         config = '{"model": "custom:latest"}'
-        config_path = Path("test_envs/reports/test-artifacts/local-llm/model-config.json")
+        config_path = Path("test_envs/reports/unittest/.tmp/local-llm/model-config.json")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(config, encoding="utf-8")
         with patch.dict(os.environ, {"LOCAL_LLM_CONFIG": str(config_path)}, clear=True):
@@ -37,7 +37,7 @@ class LocalLLMTests(unittest.TestCase):
 
     def test_internal_json_url_is_used_when_environment_is_missing(self) -> None:
         config = '{"url": "http://192.168.0.10:11434"}'
-        config_path = Path("test_envs/reports/test-artifacts/local-llm/url-config.json")
+        config_path = Path("test_envs/reports/unittest/.tmp/local-llm/url-config.json")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(config, encoding="utf-8")
         with patch.dict(os.environ, {"LOCAL_LLM_CONFIG": str(config_path)}, clear=True):

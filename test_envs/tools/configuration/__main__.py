@@ -20,7 +20,7 @@ def _ensure_system_python() -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Manage project environment configuration")
     parser.add_argument("command", choices=["config", "check", "set-os", "select-os"], nargs="?", default="check")
-    parser.add_argument("--os", choices=SUPPORTED_OS, help="Operating system stored in test_envs/config/config.json")
+    parser.add_argument("--os", choices=SUPPORTED_OS, help="Operating system stored in test_envs/configs/unittest/config.json")
     args = parser.parse_args()
     if args.command == "config":
         value = load_config()

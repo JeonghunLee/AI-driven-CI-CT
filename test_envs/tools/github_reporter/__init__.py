@@ -51,7 +51,7 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
 ### Evidence
 - [Workflow run and artifacts]({artifact})
 - MkDocs source: `{mkdocs_source}`
-- Markdown result: `test_envs/reports/markdown/{result.test_id}/{result.execution_id}/result.md`
+- Markdown result: `test_envs/reports/markdown/{result.test_id}/{result.execution_id}_result.md`
 - Commit: `{result.commit}`
 - Runner: {result.runner}
 - Execution ID: `{result.execution_id}`

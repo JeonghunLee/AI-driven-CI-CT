@@ -11,13 +11,15 @@ from . import post_comment, render_comment
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Post a normalized result to a GitHub issue")
-    parser.add_argument("--latest", action="store_true", help="Use the newest result under test_envs/reports/logs")
+    parser.add_argument("--latest", action="store_true", help="Use the newest result under test_envs/reports")
     parser.add_argument("--issue", required=True, type=int)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     store = ResultStore()
     result = store.load()
-    analysis = Analysis(**json.loads((store.latest().parent / "analysis.json").read_text(encoding="utf-8")))
+    result_path = store.latest()
+    analysis_path = store.artifact_path(result_path, "analysis", "json")
+    analysis = Analysis(**json.loads(analysis_path.read_text(encoding="utf-8")))
     comment = render_comment(result, analysis)
     if args.dry_run:
         print(comment)
