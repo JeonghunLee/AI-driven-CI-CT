@@ -2,62 +2,81 @@
 
 ## Test summary
 
-- **Description:** test_network_packet_loopback
-- **Category:** communication
-- **Environment:** local
-- **Configuration:** {'category': 'communication', 'fixture_id': 'FIXTURE-003', 'fixture_mode': 'mock', 'interface': 'Network', 'equipment': 'None'}
-- **Test mode:** mock
-- **Equipment:** None
-- **Equipment mode:** none
-- **Interface:** Network
-- **Interface mode:** mock
-- **Result:** **PASS**
-- **Execution time:** 0.000 seconds
-- **Execution date:** 2026-08-18T15:18:48.781220+09:00
-- **Execution ID:** `20260818_151848_781098`
+| Item | Value |
+|---|---|
+| Description | test_network_packet_loopback |
+| Category | communication |
+| Environment | local |
+| Result | PASS |
+| Execution time | 0.000 seconds |
+| Execution date | 2026-08-18T15:18:48.781220+09:00 |
+| Execution ID | 20260818_151848_781098 |
 
-## Test Source
+### Test configs
 
 | Item | Value |
 |---|---|
-| Commit | `a51f1d40f8bf5857567efae02683d2875598fded` |
-| Branch | `main` |
+| Category | communication |
+| Fixture ID | FIXTURE-003 |
+| Fixture mode | mock |
+| Test mode | mock |
+| Equipment | None |
+| Equipment mode | none |
+| Interface | Network |
+| Interface mode | mock |
 
-## Measurement
+### Test Source
 
-- **bytes_transferred:** 33
-- **packet_count:** 1
-- **latency_ms:** 1.25
-- **integrity_error:** 0.0
+| Item | Value |
+|---|---|
+| Commit | a51f1d40f8bf5857567efae02683d2875598fded |
+| Branch | main |
 
-## Statistics
+### Measurement
 
-- **host:** 127.0.0.1
-- **port:** 9000
+| Item | Value |
+|---|---|
+| bytes_transferred | 33 |
+| packet_count | 1 |
+| latency_ms | 1.25 |
+| integrity_error | 0.0 |
 
-## Important logs
+### Statistics
 
-- None
+| Item | Value |
+|---|---|
+| host | 127.0.0.1 |
+| port | 9000 |
 
-## Warnings
+### Logs
 
-- None
+| Item | Value |
+|---|---|
+| Test log | 20260818_151848_781098_test.log |
+| Important | None |
 
 ## Local LLM analysis
 
-test_network_packet_loopback passed successfully
+| Item | Value |
+|---|---|
+| Classification | communication |
+| Confidence | 1.00 |
+| Analyzer | ollama/deepseek-r1:7b |
+| working | on |
 
-- **Classification:** `communication`
-- **Confidence:** 1.00
-- **Analyzer:** `ollama/deepseek-r1:7b`
+### LLM Prompt
 
-### Failure analysis
+result.json 분석
 
-Not applicable
+### LLM Review
 
-### Source review
-
-
+| Item | Value |
+|---|---|
+| Summary | Test completed successfully |
+| Failure analysis | Not applicable |
+| Source review | Not requested |
+| Warnings | None |
+| Needs escalation | off |
 
 ## Test History
 

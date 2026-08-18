@@ -24,12 +24,15 @@ class MarkdownReporterTests(unittest.TestCase):
         path = MarkdownReporter(root).generate(result, Analysis("Stable", "passed", 1.0, "test"))
         text = path.read_text(encoding="utf-8")
         self.assertIn("## Local LLM analysis", text)
-        self.assertIn("## Warnings", text)
-        self.assertIn("## Test Source", text)
+        self.assertIn("### LLM Prompt", text)
+        self.assertIn("### LLM Review", text)
+        self.assertIn("### Test Source", text)
+        self.assertIn("### Test configs", text)
         self.assertIn("| Commit |", text)
         self.assertIn("| Branch |", text)
         self.assertNotIn("## Test history", text)
-        self.assertIn("**Test mode:** mock", text)
+        self.assertIn("| Test mode | mock |", text)
+        self.assertIn("| working | off |", text)
 
     def test_mkdocs_publish_preserves_each_execution(self) -> None:
         reports_root = Path("test_envs/tests/.tmp/ct_framework/multi-execution-reports")
@@ -51,11 +54,12 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertTrue((base / "CT-MD-HISTORY__20260101-000001.md").exists())
         self.assertTrue((base / "CT-MD-HISTORY__20260101-000002.md").exists())
         latest = (base / "CT-MD-HISTORY.md").read_text(encoding="utf-8")
-        self.assertIn("**FAIL**", latest)
+        self.assertIn("| Result | FAIL |", latest)
         self.assertIn("## Test History", latest)
         self.assertIn("| Date | Time | Execution ID | Commit | Branch |", latest)
-        self.assertIn(f"| {first.commit[:7]} |", latest)
-        self.assertNotIn(f"| {first.commit} |", latest)
+        history = latest.partition("## Test History")[2]
+        self.assertIn(f"| {first.commit[:7]} |", history)
+        self.assertNotIn(f"| {first.commit} |", history)
         self.assertNotIn("## Execution documents", latest)
         self.assertIn(
             "[20260101-000001](CT-MD-HISTORY__20260101-000001.md)",

@@ -164,6 +164,7 @@ class Analysis:
     failure_analysis: str = ""
     source_review: str = "Not requested"
     needs_escalation: bool = False
+    prompt: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -238,6 +239,7 @@ class LocalLLMAnalyzer:
                     failure_analysis=str(value["failure_analysis"]),
                     source_review=str(value["source_review"]),
                     needs_escalation=bool(value["needs_escalation"]),
+                    prompt=self.prompt,
                 )
             except (URLError, TimeoutError, ValueError, KeyError, json.JSONDecodeError) as error:
                 entries.extend(
@@ -250,6 +252,7 @@ class LocalLLMAnalyzer:
                 )
                 self._write_log(result.execution_id, entries)
         fallback = self._fallback(result, logs)
+        fallback.prompt = self.prompt
         entries.extend(["\n[FALLBACK]", f"source={fallback.source}"])
         self._write_log(result.execution_id, entries)
         return fallback

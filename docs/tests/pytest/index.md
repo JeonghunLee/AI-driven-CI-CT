@@ -4,7 +4,7 @@
 
 | Category | Test ID | Mode | Latest | Executions |
 |---|---|---|---|---:|
-| communication | `CT-NETWORK-001` | mock | [Open](CT-NETWORK-001.md) | 16 |
+| communication | `CT-NETWORK-001` | unknown | [Open](CT-NETWORK-001.md) | 16 |
 | timing | `CT-UART-001` | mock | [Open](CT-UART-001.md) | 22 |
 | communication | `CT-USB-001` | mock | [Open](CT-USB-001.md) | 15 |
 

@@ -12,8 +12,9 @@ def _safe(value: Any) -> str:
     return str(value).replace("|", "\\|").replace("\n", " ")
 
 
-def _items(values: dict[str, Any]) -> str:
-    return "\n".join(f"- **{_safe(key)}:** {_safe(value)}" for key, value in values.items()) or "- None"
+def _table(values: dict[str, Any]) -> str:
+    rows = "\n".join(f"| {_safe(key)} | {_safe(value)} |" for key, value in values.items())
+    return f"| Item | Value |\n|---|---|\n{rows or '| - | None |'}"
 
 
 def _report_mode(path: Path) -> str:
@@ -185,67 +186,92 @@ class MarkdownReporter:
 {rendered_rows}"""
 
     def render(self, result: ResultRecord, analysis: Analysis, important_logs: list[str] | None = None) -> str:
-        logs = "\n".join(f"- `{_safe(line)}`" for line in (important_logs or [])) or "- None"
-        warnings = "\n".join(
-            f"- **{_safe(item.get('severity', 'Important'))}:** {_safe(item.get('message', ''))}"
+        logs = "<br>".join(_safe(line) for line in (important_logs or [])) or "None"
+        warnings = "<br>".join(
+            f"{_safe(item.get('severity', 'Important'))}: {_safe(item.get('message', ''))}"
             for item in analysis.warnings
-        ) or "- None"
+        ) or "None"
+        test_summary = _table(
+            {
+                "Description": result.description,
+                "Category": result.category,
+                "Environment": result.environment,
+                "Result": result.status,
+                "Execution time": f"{result.duration:.3f} seconds",
+                "Execution date": result.timestamp,
+                "Execution ID": result.execution_id,
+            }
+        )
+        test_configs = _table(
+            {
+                "Category": result.configuration.get("category", result.category),
+                "Fixture ID": result.configuration.get("fixture_id", "None"),
+                "Fixture mode": result.configuration.get("fixture_mode", result.test_mode),
+                "Test mode": result.test_mode,
+                "Equipment": result.equipment,
+                "Equipment mode": result.equipment_mode,
+                "Interface": result.interface,
+                "Interface mode": result.interface_mode,
+            }
+        )
+        test_source = _table({"Commit": result.commit, "Branch": result.branch})
+        measurements = _table(dict(result.metrics))
+        statistics = _table(dict(result.statistics))
+        log_table = _table({"Test log": result.logs.get("main", "None"), "Important": logs})
+        analysis_table = _table(
+            {
+                "Classification": analysis.classification,
+                "Confidence": f"{analysis.confidence:.2f}",
+                "Analyzer": analysis.source,
+                "working": "on" if analysis.source.startswith("ollama/") else "off",
+            }
+        )
+        review_table = _table(
+            {
+                "Summary": analysis.summary,
+                "Failure analysis": analysis.failure_analysis or "Not applicable",
+                "Source review": analysis.source_review or "Not requested",
+                "Warnings": warnings,
+                "Needs escalation": "on" if analysis.needs_escalation else "off",
+            }
+        )
         return f"""# {result.test_id} Test Result
 
 ## Test summary
 
-- **Description:** {_safe(result.description)}
-- **Category:** {_safe(result.category)}
-- **Environment:** {_safe(result.environment)}
-- **Configuration:** {_safe(dict(result.configuration))}
-- **Test mode:** {_safe(result.test_mode)}
-- **Equipment:** {_safe(result.equipment)}
-- **Equipment mode:** {_safe(result.equipment_mode)}
-- **Interface:** {_safe(result.interface)}
-- **Interface mode:** {_safe(result.interface_mode)}
-- **Result:** **{result.status}**
-- **Execution time:** {result.duration:.3f} seconds
-- **Execution date:** {_safe(result.timestamp)}
-- **Execution ID:** `{_safe(result.execution_id)}`
+{test_summary}
 
-## Test Source
+### Test configs
 
-| Item | Value |
-|---|---|
-| Commit | `{_safe(result.commit)}` |
-| Branch | `{_safe(result.branch)}` |
+{test_configs}
 
-## Measurement
+### Test Source
 
-{_items(dict(result.metrics))}
+{test_source}
 
-## Statistics
+### Measurement
 
-{_items(dict(result.statistics))}
+{measurements}
 
-## Important logs
+### Statistics
 
-{logs}
+{statistics}
 
-## Warnings
+### Logs
 
-{warnings}
+{log_table}
 
 ## Local LLM analysis
 
-{analysis.summary}
+{analysis_table}
 
-- **Classification:** `{_safe(analysis.classification)}`
-- **Confidence:** {analysis.confidence:.2f}
-- **Analyzer:** `{_safe(analysis.source)}`
+### LLM Prompt
 
-### Failure analysis
+{_safe(analysis.prompt) or "Not configured"}
 
-{analysis.failure_analysis or "Not applicable"}
+### LLM Review
 
-### Source review
-
-{analysis.source_review}
+{review_table}
 """
 
 

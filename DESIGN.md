@@ -420,18 +420,18 @@ test_envs/reports/markdown/<test-id>/<timestamp>_result.md
 ```text
 # <Test ID> Test Result
 ├── Test summary
-├── Measurement
-├── Statistics
-├── Important logs
-├── Warnings
-├── Local LLM analysis
-│   ├── Classification
-│   ├── Confidence
-│   ├── Failure analysis
-│   └── Source review
-└── Test Source
-    ├── Commit
-    └── Branch
+│   ├── Test configs
+│   ├── Test Source
+│   ├── Measurement
+│   ├── Statistics
+│   └── Logs
+└── Local LLM analysis
+    ├── Classification
+    ├── Confidence
+    ├── Analyzer
+    ├── working
+    ├── LLM Prompt
+    └── LLM Review
 ```
 
 ## 10. Local LLM Analysis
