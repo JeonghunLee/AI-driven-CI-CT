@@ -14,8 +14,8 @@ nav:
     - Pytest: pytest.md
     - Unittest: unittest.md
   - TEST RESULTS:
-    - Pytest: pytest_results.md
-    - Unittest: unittest_results.md
+    - Pytest: tests/pytest/index.md
+    - Unittest: tests/unittest/index.md
 
 
 plugins:
