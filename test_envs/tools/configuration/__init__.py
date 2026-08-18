@@ -6,7 +6,7 @@ import platform
 import shutil
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.error import URLError
@@ -42,6 +42,23 @@ def configured_os() -> str:
     if not isinstance(value, str) or value not in SUPPORTED_OS:
         raise RuntimeError(f"Invalid configured OS: {value!r}")
     return value
+
+
+def configured_timezone() -> timezone:
+    value = load_config().get("time", {})
+    if not isinstance(value, dict):
+        raise RuntimeError("Invalid project configuration: time must be an object")
+    name = value.get("timezone", "Asia/Seoul")
+    offset = value.get("utc_offset_hours", 9)
+    if not isinstance(name, str) or not name:
+        raise RuntimeError(f"Invalid configured timezone: {name!r}")
+    if isinstance(offset, bool) or not isinstance(offset, (int, float)) or not -24 < offset < 24:
+        raise RuntimeError(f"Invalid configured UTC offset hours: {offset!r}")
+    return timezone(timedelta(hours=offset), name=name)
+
+
+def configured_now() -> datetime:
+    return datetime.now(configured_timezone())
 
 
 def set_configured_os(value: str) -> Path:
@@ -132,7 +149,7 @@ def build_check() -> dict[str, Any]:
     available, models, error = _ollama_inventory(url)
     model_names = [str(model.get("name") or model.get("model") or "") for model in models]
     result: dict[str, Any] = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": configured_now().isoformat(),
         "os": {
             "configured": configured_os(),
             "detected": detected_os(),
@@ -171,7 +188,9 @@ __all__ = [
     "SUPPORTED_OS",
     "build_check",
     "config_path",
+    "configured_now",
     "configured_os",
+    "configured_timezone",
     "detected_os",
     "load_config",
     "set_configured_os",

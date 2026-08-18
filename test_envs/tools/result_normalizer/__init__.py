@@ -5,15 +5,16 @@ import os
 import subprocess
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
+
+from test_envs.tools.configuration import configured_now
 
 VALID_STATUSES = {"PASS", "FAIL", "ERROR", "SKIP"}
 
 
 def _execution_id() -> str:
-    return datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S_%f")
+    return configured_now().strftime("%Y%m%d_%H%M%S_%f")
 
 
 def _git_value(environment_names: tuple[str, ...], command: list[str], fallback: str) -> str:
@@ -64,7 +65,7 @@ class ResultRecord:
     branch: str = field(default_factory=_branch)
     runner: str = "local"
     execution_id: str = field(default_factory=_execution_id)
-    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    timestamp: str = field(default_factory=lambda: configured_now().isoformat())
     metrics: Mapping[str, Any] = field(default_factory=dict)
     statistics: Mapping[str, Any] = field(default_factory=dict)
     logs: Mapping[str, str] = field(default_factory=lambda: {"main": "test.log"})

@@ -129,6 +129,10 @@ test_envs/configs/
 {
   "version": 1,
   "os": "auto",
+  "time": {
+    "timezone": "Asia/Seoul",
+    "utc_offset_hours": 9
+  },
   "ollama": {
     "url": "http://127.0.0.1:11434",
     "selected_model": "deepseek-r1:7b"
@@ -139,6 +143,8 @@ test_envs/configs/
 | Key | 값 |
 |---|---|
 | `os` | `auto`, `windows`, `linux`, `macos` |
+| `time.timezone` | `Asia/Seoul` |
+| `time.utc_offset_hours` | `9` |
 | `ollama.url` | Local LLM endpoint |
 | `ollama.selected_model` | Ollama model name |
 

@@ -121,7 +121,7 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
     report_dir = result_path.parent
     detail = str(report.longrepr) if report is not None and report.failed else ""
     sections = {
-        "TEST": f"status={status}\n{detail}".rstrip(),
+        "TEST": f"timestamp={result.timestamp}\nstatus={status}\n{detail}".rstrip(),
         "STDOUT": getattr(report, "capstdout", ""),
         "STDERR": getattr(report, "capstderr", ""),
         "EQUIPMENT": "\n".join(f"{key}={value}" for key, value in recorder.statistics.items()),

@@ -14,6 +14,7 @@ class ResultNormalizerTests(unittest.TestCase):
         self.assertEqual(payload["test_case"]["status"], "PASS")
         self.assertTrue(payload["test_src"]["commit"])
         self.assertTrue(payload["test_src"]["branch"])
+        self.assertTrue(payload["test_result"]["timestamp"].endswith("+09:00"))
         self.assertEqual(ResultStore(test_root).latest(), path)
         self.assertEqual(path.name, f"{record.execution_id}_result.json")
         self.assertTrue((path.parent / record.logs["main"]).exists())

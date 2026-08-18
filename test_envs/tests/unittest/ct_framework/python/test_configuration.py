@@ -14,6 +14,17 @@ class ConfigurationTests(unittest.TestCase):
         value = json.loads(Path("test_envs/configs/config.json").read_text(encoding="utf-8"))
         self.assertIn(value["os"], configuration.SUPPORTED_OS)
         self.assertTrue(value["ollama"]["selected_model"])
+        self.assertEqual(value["time"]["timezone"], "Asia/Seoul")
+        self.assertEqual(value["time"]["utc_offset_hours"], 9)
+
+    def test_configured_time_uses_project_utc_offset(self) -> None:
+        with patch(
+            "test_envs.tools.configuration.load_config",
+            return_value={"time": {"timezone": "Asia/Seoul", "utc_offset_hours": 9}},
+        ):
+            current = configuration.configured_now()
+        self.assertEqual(current.utcoffset().total_seconds(), 9 * 60 * 60)
+        self.assertEqual(current.tzname(), "Asia/Seoul")
 
     def test_set_configured_os_preserves_ollama_config(self) -> None:
         path = Mock()

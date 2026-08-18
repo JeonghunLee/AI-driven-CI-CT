@@ -463,6 +463,9 @@ Model config schema:
 test_envs/configs/config.json
 ├── version
 ├── os
+├── time
+│   ├── timezone
+│   └── utc_offset_hours
 └── ollama
     ├── url
     └── selected_model
