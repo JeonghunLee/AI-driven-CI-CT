@@ -105,7 +105,7 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
         category=values.get("category", "functional"),
         duration=perf_counter() - started,
         description=values.get("description", request.node.name),
-        environment=os.getenv("CI", "local"),
+        environment="github_local_runner" if os.getenv("GITHUB_ACTIONS") == "true" else "local",
         configuration={key: value for key, value in values.items() if key not in {"test_id", "description"}},
         test_mode=test_mode,
         interface=values.get("interface", "None"),

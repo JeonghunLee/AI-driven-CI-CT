@@ -11,7 +11,7 @@ def main() -> None:
     result_path = store.latest()
     payload = json.loads(result_path.read_text(encoding="utf-8"))
     result = store.load(result_path)
-    analysis = Analysis(**payload["analysis"])
+    analysis = Analysis(**payload["test_analysis"]["analysis"])
     print(MkDocsReporter().generate(result, analysis, publish_docs=True))
 
 

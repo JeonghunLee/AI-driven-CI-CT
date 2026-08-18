@@ -4,7 +4,7 @@ import json
 import os
 import subprocess
 import xml.etree.ElementTree as ET
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
@@ -83,10 +83,53 @@ class ResultRecord:
                 raise ValueError(f"{name} must be mock, hil, or none: {value}")
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        return {
+            "test_case": {
+                "test_id": self.test_id,
+                "status": self.status,
+                "category": self.category,
+                "duration": self.duration,
+                "description": self.description,
+                "environment": self.environment,
+            },
+            "test_configs": dict(self.configuration),
+            "fixture_configs": {
+                "test_mode": self.test_mode,
+                "interface_mode": self.interface_mode,
+                "equipment_mode": self.equipment_mode,
+                "interface": self.interface,
+                "equipment": self.equipment,
+            },
+            "test_src": {
+                "commit": self.commit,
+                "branch": self.branch,
+            },
+            "test_result": {
+                "execution_id": self.execution_id,
+                "timestamp": self.timestamp,
+                "metrics": dict(self.metrics),
+                "statistics": dict(self.statistics),
+                "logs": dict(self.logs),
+            },
+        }
 
     @classmethod
     def from_dict(cls, value: Mapping[str, Any]) -> "ResultRecord":
+        if "test_case" in value:
+            test_case = dict(value["test_case"])
+            test_configs = dict(value.get("test_configs", {}))
+            fixture_configs = dict(
+                value.get("fixture_configs", value.get("fixure_configs", value.get("fixure configs", {})))
+            )
+            test_src = dict(value.get("test_src", {}))
+            test_result = dict(value.get("test_result", {}))
+            value = {
+                **test_case,
+                "configuration": test_configs,
+                **fixture_configs,
+                **test_src,
+                **test_result,
+            }
         known = {item.name for item in cls.__dataclass_fields__.values()}
         payload = {key: val for key, val in value.items() if key in known}
         payload.setdefault("commit", "unknown")
@@ -153,7 +196,7 @@ def from_junit(path: str | Path, test_id: str = "UNIT-TEST") -> ResultRecord:
         category="unit",
         duration=duration,
         description="Unit test suite",
-        environment=os.getenv("CI", "local"),
+        environment="github_local_runner" if os.getenv("GITHUB_ACTIONS") == "true" else "local",
         runner=os.getenv("RUNNER_NAME", "local"),
         metrics=totals,
     )

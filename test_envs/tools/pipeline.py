@@ -28,8 +28,10 @@ def run(
     decision = evaluate(result, analysis, repeated_failures=_consecutive_failures(store, result.test_id))
 
     payload = json.loads(result_path.read_text(encoding="utf-8"))
-    payload["analysis"] = analysis.to_dict()
-    payload["escalation"] = {"required": decision.required, "reasons": decision.reasons}
+    payload["test_analysis"] = {
+        "analysis": analysis.to_dict(),
+        "escalation": {"required": decision.required, "reasons": decision.reasons},
+    }
     result_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     markdown = MarkdownReporter(reports_root=store.root).generate(
         result, analysis, logs.important, publish_docs=publish_docs

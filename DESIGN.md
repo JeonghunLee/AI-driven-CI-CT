@@ -349,18 +349,13 @@ execute()
 
 ```text
 Test Execution
-├── Result
-│   ├── Test ID
-│   ├── PASS / FAIL / ERROR / SKIP
-│   ├── Duration
-│   ├── Environment
-│   ├── Configuration
-│   └── Commit
 ├── <execution-id>_result.json
-│   ├── Result
-│   ├── Measurement
-│   ├── Analysis
-│   └── Escalation
+│   ├── test_case
+│   ├── test_configs
+│   ├── fixture_configs
+│   ├── test_src
+│   ├── test_result
+│   └── test_analysis
 └── <execution-id>_test.log
     ├── Test
     ├── Stdout

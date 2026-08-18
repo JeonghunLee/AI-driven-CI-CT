@@ -19,7 +19,7 @@ def main() -> None:
     result_path = store.latest()
     payload = json.loads(result_path.read_text(encoding="utf-8"))
     result = store.load(result_path)
-    analysis = Analysis(**payload["analysis"])
+    analysis = Analysis(**payload["test_analysis"]["analysis"])
     comment = render_comment(result, analysis)
     if args.dry_run:
         print(comment)

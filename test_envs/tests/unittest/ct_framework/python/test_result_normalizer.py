@@ -11,9 +11,9 @@ class ResultNormalizerTests(unittest.TestCase):
         record = ResultRecord("UT-NORMALIZER-001", "pass", "functional", 0.1)
         path = ResultStore(test_root).save(record)
         payload = json.loads(path.read_text())
-        self.assertEqual(payload["status"], "PASS")
-        self.assertTrue(payload["commit"])
-        self.assertTrue(payload["branch"])
+        self.assertEqual(payload["test_case"]["status"], "PASS")
+        self.assertTrue(payload["test_src"]["commit"])
+        self.assertTrue(payload["test_src"]["branch"])
         self.assertEqual(ResultStore(test_root).latest(), path)
         self.assertEqual(path.name, f"{record.execution_id}_result.json")
         self.assertTrue((path.parent / record.logs["main"]).exists())
@@ -26,8 +26,8 @@ class ResultNormalizerTests(unittest.TestCase):
             },
             {f"{record.execution_id}_result.json", f"{record.execution_id}_test.log"},
         )
-        self.assertIn("metrics", payload)
-        self.assertIn("statistics", payload)
+        self.assertIn("metrics", payload["test_result"])
+        self.assertIn("statistics", payload["test_result"])
 
     def test_result_rejects_unknown_status(self) -> None:
         with self.assertRaisesRegex(ValueError, "unsupported"):
@@ -49,9 +49,10 @@ class ResultNormalizerTests(unittest.TestCase):
             equipment="FPGA",
             equipment_mode="hil",
         )
-        self.assertEqual(result.to_dict()["test_mode"], "hil")
-        self.assertEqual(result.to_dict()["interface_mode"], "hil")
-        self.assertEqual(result.to_dict()["equipment_mode"], "hil")
+        fixture_configs = result.to_dict()["fixture_configs"]
+        self.assertEqual(fixture_configs["test_mode"], "hil")
+        self.assertEqual(fixture_configs["interface_mode"], "hil")
+        self.assertEqual(fixture_configs["equipment_mode"], "hil")
 
     def test_junit_normalization(self) -> None:
         record = from_junit("test_envs/tests/fixtures/junit.xml", "UNIT-SAMPLE")
