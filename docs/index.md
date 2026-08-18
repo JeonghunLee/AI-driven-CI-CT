@@ -275,7 +275,7 @@ flowchart TD
     E --> F[Ollama + Local LLM]
     F --> G[Markdown Report]
     G --> H[test_envs/reports/markdown]
-    G --> J[docs/test]
+    G --> J[docs/tests/pytest + docs/tests/unittest]
     G --> K[test_envs/reports/pandoc]
     F --> L{Escalation?}
     L -- Yes --> M[Codex]
@@ -315,7 +315,8 @@ docs/
 | File | 구성 | 갱신 방식 |
 |---|---|---|
 | `docs/index.md` | 기본 시스템 5개 구성 | Manual |
-| `docs/test/index.md` | TEST 목록, 최신 링크, 실행 이력 | Automatic |
+| `docs/tests/pytest/index.md` | pytest 목록, 최신 링크, 실행 이력 | Automatic |
+| `docs/tests/unittest/index.md` | unittest 목록, 최신 링크, 실행 이력 | Automatic |
 | `<test-id>.md` | TEST별 최신 결과 | Automatic |
 | `<test-id>/<execution-id>.md` | 실행별 결과 | Append-only |
 
@@ -328,5 +329,5 @@ python -m test_envs.tools.test_result --docs
 ├── Canonical Markdown generation
 ├── Execution snapshot creation
 ├── Latest TEST page update
-└── docs/test/index.md update
+└── docs/tests/{pytest,unittest}/index.md update
 ```

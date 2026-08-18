@@ -55,6 +55,16 @@ class RepositoryStructureTests(unittest.TestCase):
         for relative in ("pytest/test_cases", "unittest", "pandoc", "markdown"):
             self.assertTrue((root / relative).is_dir())
 
+    def test_docs_test_structure(self) -> None:
+        root = Path("docs/tests")
+        self.assertFalse(Path("docs/test").exists())
+        self.assertEqual(
+            {path.name for path in root.iterdir() if path.is_dir()},
+            {"pytest", "unittest"},
+        )
+        self.assertFalse(any(path.is_dir() for path in root.glob("*/*")))
+        self.assertTrue(all(path.suffix == ".md" for path in root.glob("*/*") if path.is_file()))
+
 
 if __name__ == "__main__":
     unittest.main()

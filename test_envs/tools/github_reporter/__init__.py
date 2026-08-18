@@ -16,8 +16,8 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
     repository = os.getenv("GITHUB_REPOSITORY", "owner/repository")
     run_id = os.getenv("GITHUB_RUN_ID")
     artifact = f"https://github.com/{repository}/actions/runs/{run_id}" if run_id else "Available in the workflow run"
-    category_path = "unit" if result.category.lower() == "unit" else f"ct/{result.category.lower()}"
-    mkdocs_source = f"docs/test/{category_path}/{result.test_id}.md"
+    report_type = "unittest" if result.category.lower() == "unit" else "pytest"
+    mkdocs_source = f"docs/tests/{report_type}/{result.test_id}.md"
     warnings = "\n".join(
         f"- {item.get('severity', 'Important')}: {item.get('message', '')}" for item in analysis.warnings
     ) or "- None"

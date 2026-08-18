@@ -200,8 +200,10 @@ test_envs/reports/
 | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` | Canonical human-readable result |
 | `<timestamp>_result.json` | Machine-readable intermediate data |
 | `<timestamp>_raw.json` | Raw normalized result |
-| `docs/test/.../<test-id>.md` | Latest MkDocs TEST page |
-| `docs/test/.../<test-id>/<execution-id>.md` | Append-only execution page |
+| `docs/tests/pytest/<test-id>.md` | Latest pytest page |
+| `docs/tests/pytest/<test-id>__<execution-id>.md` | pytest execution page |
+| `docs/tests/unittest/<test-id>.md` | Latest unittest page |
+| `docs/tests/unittest/<test-id>__<execution-id>.md` | unittest execution page |
 
 ## Pandoc 변환
 

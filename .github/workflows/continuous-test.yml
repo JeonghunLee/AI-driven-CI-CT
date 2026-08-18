@@ -62,5 +62,6 @@ jobs:
           name: ${{ env.TEST_ID }}-${{ github.run_id }}
           path: |
             test_envs/reports/
-            docs/test/ct/
+            docs/tests/pytest/
+            docs/tests/unittest/
           if-no-files-found: warn

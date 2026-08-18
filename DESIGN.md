@@ -409,12 +409,12 @@ Local LLM Analysis
 test_envs/reports/markdown/<test-id>/<timestamp>_result.md
       │
       ├── test_envs/reports/pandoc/<test-id>/<timestamp>_result.<format>
-      └── docs/test/...  [--docs]
+      └── docs/tests/{pytest,unittest}/  [--docs]
           ├── <test-id>.md                    # Latest
-          └── <test-id>/<execution-id>.md     # Per execution
+          └── <test-id>__<execution-id>.md    # Per execution
       │
-      ├── docs/pytest_results.md              # Auto-generated pytest index
-      └── docs/unittest_results.md            # Auto-generated unittest index
+      ├── docs/tests/pytest/index.md           # Auto-generated pytest index
+      └── docs/tests/unittest/index.md         # Auto-generated unittest index
 ```
 
 ## 9. Markdown Report Schema
@@ -549,11 +549,11 @@ Local LLM
 |---|---|---|
 | Canonical Markdown | Latest test execution | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` |
 | Duplicate latest Markdown | None | None |
-| MkDocs latest page | Canonical Markdown | `docs/test/.../<test-id>.md` |
-| MkDocs execution page | Canonical Markdown | `docs/test/.../<test-id>/<execution-id>.md` |
+| MkDocs latest page | Canonical Markdown | `docs/tests/{pytest,unittest}/<test-id>.md` |
+| MkDocs execution page | Canonical Markdown | `docs/tests/{pytest,unittest}/<test-id>__<execution-id>.md` |
 | MkDocs system index | System architecture | `docs/index.md` |
-| MkDocs pytest result index | Published CT page scan | `docs/pytest_results.md` |
-| MkDocs unittest result index | Published unit page scan | `docs/unittest_results.md` |
+| MkDocs pytest result index | Published pytest page scan | `docs/tests/pytest/index.md` |
+| MkDocs unittest result index | Published unittest page scan | `docs/tests/unittest/index.md` |
 | DOCX | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.docx` |
 | PDF | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.pdf` |
 | HTML | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.html` |
@@ -608,9 +608,9 @@ Excluded from GitHub Issue:
 │   ├── index.md                     # Manual system overview
 │   ├── pytest.md                    # pytest system description
 │   ├── unittest.md                  # unittest system description
-│   ├── pytest_results.md            # Auto-generated pytest index
-│   ├── unittest_results.md          # Auto-generated unittest index
-│   └── test/                        # Latest and execution reports
+│   └── tests/
+│       ├── pytest/                  # Markdown only
+│       └── unittest/                # Markdown only
 ├── test_envs/
 │   ├── configs/
 │   │   ├── config.json
