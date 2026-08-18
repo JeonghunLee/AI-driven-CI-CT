@@ -53,6 +53,7 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
 - MkDocs source: `{mkdocs_source}`
 - Markdown result: `test_envs/reports/markdown/{result.test_id}/{result.execution_id}_result.md`
 - Commit: `{result.commit}`
+- Branch: `{result.branch}`
 - Runner: {result.runner}
 - Execution ID: `{result.execution_id}`
 """

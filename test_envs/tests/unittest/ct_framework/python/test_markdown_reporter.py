@@ -25,7 +25,10 @@ class MarkdownReporterTests(unittest.TestCase):
         text = path.read_text(encoding="utf-8")
         self.assertIn("## Local LLM analysis", text)
         self.assertIn("## Warnings", text)
-        self.assertIn("## Test history", text)
+        self.assertIn("## Test Source", text)
+        self.assertIn("| Commit |", text)
+        self.assertIn("| Branch |", text)
+        self.assertNotIn("## Test history", text)
         self.assertIn("**Test mode:** mock", text)
 
     def test_mkdocs_publish_preserves_each_execution(self) -> None:
@@ -49,7 +52,15 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertTrue((base / "CT-MD-HISTORY__20260101-000002.md").exists())
         latest = (base / "CT-MD-HISTORY.md").read_text(encoding="utf-8")
         self.assertIn("**FAIL**", latest)
-        self.assertIn("## Execution documents", latest)
+        self.assertIn("## Test History", latest)
+        self.assertIn("| Date | Time | Execution ID | Commit | Branch |", latest)
+        self.assertIn(f"| {first.commit[:7]} |", latest)
+        self.assertNotIn(f"| {first.commit} |", latest)
+        self.assertNotIn("## Execution documents", latest)
+        self.assertIn(
+            "[20260101-000001](CT-MD-HISTORY__20260101-000001.md)",
+            latest,
+        )
         self.assertIn("20260101-000001", latest)
         self.assertIn("20260101-000002", latest)
         pytest_index = (Path(docs_root) / "tests/pytest/index.md").read_text(encoding="utf-8")

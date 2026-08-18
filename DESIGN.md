@@ -431,7 +431,9 @@ test_envs/reports/markdown/<test-id>/<timestamp>_result.md
 │   ├── Confidence
 │   ├── Failure analysis
 │   └── Source review
-└── Test history
+└── Test Source
+    ├── Commit
+    └── Branch
 ```
 
 ## 10. Local LLM Analysis
@@ -551,6 +553,8 @@ Local LLM
 | Duplicate latest Markdown | None | None |
 | MkDocs latest page | Canonical Markdown | `docs/tests/{pytest,unittest}/<test-id>.md` |
 | MkDocs execution page | Canonical Markdown | `docs/tests/{pytest,unittest}/<test-id>__<execution-id>.md` |
+| Latest page history | Normalized TEST results | Date + Time + linked Execution ID + 7-character commit |
+| Execution page history | None | None |
 | MkDocs system index | System architecture | `docs/index.md` |
 | MkDocs pytest result index | Published pytest page scan | `docs/tests/pytest/index.md` |
 | MkDocs unittest result index | Published unittest page scan | `docs/tests/unittest/index.md` |

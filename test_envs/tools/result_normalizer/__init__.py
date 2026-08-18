@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import csv
+import subprocess
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -14,6 +15,36 @@ VALID_STATUSES = {"PASS", "FAIL", "ERROR", "SKIP"}
 
 def _execution_id() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S_%f")
+
+
+def _git_value(environment_names: tuple[str, ...], command: list[str], fallback: str) -> str:
+    for name in environment_names:
+        if value := os.getenv(name):
+            return value
+    try:
+        result = subprocess.run(
+            command,
+            cwd=Path(__file__).resolve().parents[3],
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
+        )
+        return result.stdout.strip() or fallback
+    except (OSError, subprocess.TimeoutExpired):
+        return fallback
+
+
+def _commit() -> str:
+    return _git_value(("GITHUB_SHA", "CI_COMMIT_SHA"), ["git", "rev-parse", "HEAD"], "unknown")
+
+
+def _branch() -> str:
+    return _git_value(
+        ("GITHUB_HEAD_REF", "GITHUB_REF_NAME", "CI_COMMIT_REF_NAME"),
+        ["git", "branch", "--show-current"],
+        "unknown",
+    )
 
 
 @dataclass
@@ -30,7 +61,8 @@ class ResultRecord:
     interface_mode: str = "none"
     equipment: str = "None"
     equipment_mode: str = "none"
-    commit: str = "local"
+    commit: str = field(default_factory=_commit)
+    branch: str = field(default_factory=_branch)
     runner: str = "local"
     execution_id: str = field(default_factory=_execution_id)
     timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
@@ -65,7 +97,10 @@ class ResultRecord:
     @classmethod
     def from_dict(cls, value: Mapping[str, Any]) -> "ResultRecord":
         known = {item.name for item in cls.__dataclass_fields__.values()}
-        return cls(**{key: val for key, val in value.items() if key in known})
+        payload = {key: val for key, val in value.items() if key in known}
+        payload.setdefault("commit", "unknown")
+        payload.setdefault("branch", "unknown")
+        return cls(**payload)
 
 
 class ResultStore:
@@ -161,7 +196,6 @@ def from_junit(path: str | Path, test_id: str = "UNIT-TEST") -> ResultRecord:
         duration=duration,
         description="Unit test suite",
         environment=os.getenv("CI", "local"),
-        commit=os.getenv("GITHUB_SHA", "local")[:7],
         runner=os.getenv("RUNNER_NAME", "local"),
         metrics=totals,
     )

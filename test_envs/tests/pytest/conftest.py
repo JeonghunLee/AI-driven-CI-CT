@@ -112,7 +112,6 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
         interface_mode=test_mode,
         equipment=equipment,
         equipment_mode=test_mode if equipment != "None" else "none",
-        commit=os.getenv("GITHUB_SHA", "local")[:7],
         runner=os.getenv("RUNNER_NAME", "local"),
         metrics=recorder.metrics,
         statistics=recorder.statistics,
