@@ -1,3 +1,5 @@
+import io
+import json
 import os
 import unittest
 from pathlib import Path
@@ -11,6 +13,8 @@ from test_envs.tools.local_llm import (
     selected_model,
     selected_url,
 )
+from test_envs.tools.log_parser import ParsedLog
+from test_envs.tools.result_normalizer import ResultRecord
 
 
 class LocalLLMTests(unittest.TestCase):
@@ -60,6 +64,48 @@ class LocalLLMTests(unittest.TestCase):
         )
         self.assertEqual(model.name, "example:latest")
         self.assertEqual(model.size, 42)
+
+    def test_analysis_retries_invalid_json_and_writes_diagnostic_log(self) -> None:
+        valid = {
+            "summary": "ok",
+            "classification": "passed",
+            "confidence": 1.0,
+            "warnings": [],
+            "failure_analysis": "",
+            "source_review": "Not requested",
+            "needs_escalation": False,
+        }
+        responses = iter(
+            [
+                io.BytesIO(json.dumps({"response": "{}"}).encode()),
+                io.BytesIO(json.dumps({"response": json.dumps(valid)}).encode()),
+            ]
+        )
+        log_root = Path("test_envs/tests/.tmp/ct_framework/local-llm/logs")
+        analyzer = LocalLLMAnalyzer(
+            url="http://local.test",
+            model="model:test",
+            timeout=1,
+            max_retry=1,
+            prompt="analyze",
+            log_root=log_root,
+        )
+        result = ResultRecord(
+            "CT-LLM-001",
+            "PASS",
+            "timing",
+            0.1,
+            execution_id="20260101_000001_000001",
+        )
+        with patch("test_envs.tools.local_llm.urlopen", side_effect=lambda *_args, **_kwargs: next(responses)):
+            analysis = analyzer.analyze(result, ParsedLog())
+
+        self.assertEqual(analysis.source, "ollama/model:test")
+        diagnostic = log_root / f"{result.execution_id}_local_llm.log"
+        text = diagnostic.read_text(encoding="utf-8")
+        self.assertIn("[ATTEMPT 1]", text)
+        self.assertIn("[ATTEMPT 2]", text)
+        self.assertIn("status=success", text)
 
 
 if __name__ == "__main__":

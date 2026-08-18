@@ -289,6 +289,8 @@ test_envs/reports/
 ├── unittest/<test-id>/
 │   ├── <timestamp>_result.json
 │   └── <timestamp>_test.log
+├── local_llm/
+│   └── <execution-id>_local_llm.log
 ├── pandoc/<test-id>/
 │   └── <timestamp>_result.{html,pdf,docx}
 └── markdown/<test-id>/

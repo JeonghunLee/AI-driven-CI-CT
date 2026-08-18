@@ -136,7 +136,10 @@ test_envs/configs/
   },
   "ollama": {
     "url": "http://127.0.0.1:11434",
-    "selected_model": "deepseek-r1:7b"
+    "selected_model": "deepseek-r1:7b",
+    "prompt": "result.json 분석",
+    "max_timeout_s": 20,
+    "max_retry": 3
   }
 }
 ```
@@ -148,6 +151,9 @@ test_envs/configs/
 | `time.utc_offset_hours` | `9` |
 | `ollama.url` | Local LLM endpoint |
 | `ollama.selected_model` | Ollama model name |
+| `ollama.prompt` | Analysis instruction |
+| `ollama.max_timeout_s` | Request timeout |
+| `ollama.max_retry` | Retry count |
 
 | Model selection priority | Source |
 |---:|---|
@@ -194,6 +200,8 @@ test_envs/reports/
 ├── unittest/<test-id>/
 │   ├── <timestamp>_result.json
 │   └── <timestamp>_test.log
+├── local_llm/
+│   └── <execution-id>_local_llm.log
 ├── pandoc/<test-id>/
 │   └── <timestamp>_result.{html,pdf,docx}
 └── markdown/<test-id>/

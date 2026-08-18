@@ -14,6 +14,9 @@ class ConfigurationTests(unittest.TestCase):
         value = json.loads(Path("test_envs/configs/config.json").read_text(encoding="utf-8"))
         self.assertIn(value["os"], configuration.SUPPORTED_OS)
         self.assertTrue(value["ollama"]["selected_model"])
+        self.assertTrue(value["ollama"]["prompt"])
+        self.assertGreater(value["ollama"]["max_timeout_s"], 0)
+        self.assertGreaterEqual(value["ollama"]["max_retry"], 0)
         self.assertEqual(value["time"]["timezone"], "Asia/Seoul")
         self.assertEqual(value["time"]["utc_offset_hours"], 9)
 

@@ -450,6 +450,11 @@ test_envs/reports/markdown/<test-id>/<timestamp>_result.md
 | Config selection | `ollama.selected_model` |
 | Installed inventory | Ollama `/api/tags` |
 | Offline fallback | Deterministic analysis |
+| Prompt | `ollama.prompt` |
+| Timeout | `ollama.max_timeout_s` |
+| Retry | `ollama.max_retry` |
+| Diagnostic log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` |
+| Markdown input | `result.json`, `test.log` only |
 
 | Process | Execution mode | Stop rule |
 |---|---|---|
@@ -469,7 +474,10 @@ test_envs/configs/config.json
 │   └── utc_offset_hours
 └── ollama
     ├── url
-    └── selected_model
+    ├── selected_model
+    ├── prompt
+    ├── max_timeout_s
+    └── max_retry
 ```
 
 Environment check schema:

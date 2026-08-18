@@ -11,4 +11,5 @@ test_envs/reports/pytest/*
 test_envs/reports/unittest/*
 test_envs/reports/pandoc/*
 test_envs/reports/markdown/*
+test_envs/reports/local_llm/*
 !test_envs/reports/**/.gitkeep
