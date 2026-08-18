@@ -13,14 +13,14 @@
 - **Interface mode:** mock
 - **Result:** **PASS**
 - **Execution time:** 0.000 seconds
-- **Execution date:** 2026-08-18T14:52:41.132082+09:00
-- **Execution ID:** `20260818_145241_131991`
+- **Execution date:** 2026-08-18T15:18:47.350502+09:00
+- **Execution ID:** `20260818_151847_350402`
 
 ## Test Source
 
 | Item | Value |
 |---|---|
-| Commit | `9ebc289c9ebaf284b8d464f10dae20cd0f7e955f` |
+| Commit | `a51f1d40f8bf5857567efae02683d2875598fded` |
 | Branch | `main` |
 
 ## Measurement
@@ -46,11 +46,11 @@
 
 ## Local LLM analysis
 
-CT-USB-001 passed in 0.000s.
+Test completed successfully with no errors or warnings.
 
-- **Classification:** `passed`
+- **Classification:** `Pass`
 - **Confidence:** 1.00
-- **Analyzer:** `deterministic-fallback`
+- **Analyzer:** `ollama/deepseek-r1:7b`
 
 ### Failure analysis
 
@@ -58,12 +58,16 @@ Not applicable
 
 ### Source review
 
-Not requested
+
 
 ## Test History
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-18 | 15:18:47.350502+09:00 | [20260818_151847_350402](CT-USB-001__20260818_151847_350402.md) | a51f1d4 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:18:00.235255+09:00 | [20260818_151800_235171](CT-USB-001__20260818_151800_235171.md) | a51f1d4 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:16:56.992797+09:00 | [20260818_151656_992705](CT-USB-001__20260818_151656_992705.md) | a51f1d4 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:16:36.261811+09:00 | [20260818_151636_261722](CT-USB-001__20260818_151636_261722.md) | a51f1d4 | main | PASS | 0.000 | local |
 | 2026-08-18 | 14:52:41.132082+09:00 | [20260818_145241_131991](CT-USB-001__20260818_145241_131991.md) | 9ebc289 | main | PASS | 0.000 | local |
 | 2026-08-18 | 14:39:18.386808+09:00 | [20260818_143918_386717](CT-USB-001__20260818_143918_386717.md) | 54ffa7d | main | PASS | 0.000 | local |
 | 2026-08-18 | 14:36:34.974472+09:00 | [20260818_143634_974388](CT-USB-001__20260818_143634_974388.md) | ee3794c | main | PASS | 0.000 | local |

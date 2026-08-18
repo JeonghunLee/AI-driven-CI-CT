@@ -12,15 +12,15 @@
 - **Interface:** Network
 - **Interface mode:** mock
 - **Result:** **PASS**
-- **Execution time:** 0.001 seconds
-- **Execution date:** 2026-08-18T14:52:42.758069+09:00
-- **Execution ID:** `20260818_145242_757972`
+- **Execution time:** 0.000 seconds
+- **Execution date:** 2026-08-18T15:18:48.781220+09:00
+- **Execution ID:** `20260818_151848_781098`
 
 ## Test Source
 
 | Item | Value |
 |---|---|
-| Commit | `9ebc289c9ebaf284b8d464f10dae20cd0f7e955f` |
+| Commit | `a51f1d40f8bf5857567efae02683d2875598fded` |
 | Branch | `main` |
 
 ## Measurement
@@ -45,11 +45,11 @@
 
 ## Local LLM analysis
 
-CT-NETWORK-001 passed in 0.001s.
+test_network_packet_loopback passed successfully
 
-- **Classification:** `passed`
+- **Classification:** `communication`
 - **Confidence:** 1.00
-- **Analyzer:** `deterministic-fallback`
+- **Analyzer:** `ollama/deepseek-r1:7b`
 
 ### Failure analysis
 
@@ -57,12 +57,16 @@ Not applicable
 
 ### Source review
 
-Not requested
+
 
 ## Test History
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-18 | 15:18:48.781220+09:00 | [20260818_151848_781098](CT-NETWORK-001__20260818_151848_781098.md) | a51f1d4 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:18:00.276838+09:00 | [20260818_151800_276748](CT-NETWORK-001__20260818_151800_276748.md) | a51f1d4 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:16:57.034196+09:00 | [20260818_151657_034116](CT-NETWORK-001__20260818_151657_034116.md) | a51f1d4 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:16:36.302386+09:00 | [20260818_151636_302296](CT-NETWORK-001__20260818_151636_302296.md) | a51f1d4 | main | PASS | 0.000 | local |
 | 2026-08-18 | 14:52:42.758069+09:00 | [20260818_145242_757972](CT-NETWORK-001__20260818_145242_757972.md) | 9ebc289 | main | PASS | 0.001 | local |
 | 2026-08-18 | 14:39:19.350468+09:00 | [20260818_143919_350374](CT-NETWORK-001__20260818_143919_350374.md) | 54ffa7d | main | PASS | 0.000 | local |
 | 2026-08-18 | 14:36:35.021060+09:00 | [20260818_143635_020976](CT-NETWORK-001__20260818_143635_020976.md) | ee3794c | main | PASS | 0.000 | local |

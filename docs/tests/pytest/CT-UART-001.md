@@ -12,15 +12,15 @@
 - **Interface:** UART
 - **Interface mode:** mock
 - **Result:** **PASS**
-- **Execution time:** 0.001 seconds
-- **Execution date:** 2026-08-18T14:52:39.800141+09:00
-- **Execution ID:** `20260818_145239_800032`
+- **Execution time:** 0.000 seconds
+- **Execution date:** 2026-08-18T15:18:45.688737+09:00
+- **Execution ID:** `20260818_151845_688646`
 
 ## Test Source
 
 | Item | Value |
 |---|---|
-| Commit | `9ebc289c9ebaf284b8d464f10dae20cd0f7e955f` |
+| Commit | `a51f1d40f8bf5857567efae02683d2875598fded` |
 | Branch | `main` |
 
 ## Measurement
@@ -48,11 +48,11 @@
 
 ## Local LLM analysis
 
-CT-UART-001 passed in 0.001s.
+All tests passed with minimal error and low jitter.
 
-- **Classification:** `passed`
-- **Confidence:** 1.00
-- **Analyzer:** `deterministic-fallback`
+- **Classification:** `SUCCESS`
+- **Confidence:** 0.98
+- **Analyzer:** `ollama/deepseek-r1:7b`
 
 ### Failure analysis
 
@@ -60,12 +60,16 @@ Not applicable
 
 ### Source review
 
-Not requested
+
 
 ## Test History
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-18 | 15:18:45.688737+09:00 | [20260818_151845_688646](CT-UART-001__20260818_151845_688646.md) | a51f1d4 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:18:00.193731+09:00 | [20260818_151800_193627](CT-UART-001__20260818_151800_193627.md) | a51f1d4 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:16:56.950743+09:00 | [20260818_151656_950645](CT-UART-001__20260818_151656_950645.md) | a51f1d4 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:16:36.220726+09:00 | [20260818_151636_220637](CT-UART-001__20260818_151636_220637.md) | a51f1d4 | main | PASS | 0.000 | local |
 | 2026-08-18 | 14:52:39.800141+09:00 | [20260818_145239_800032](CT-UART-001__20260818_145239_800032.md) | 9ebc289 | main | PASS | 0.001 | local |
 | 2026-08-18 | 14:39:17.419249+09:00 | [20260818_143917_419150](CT-UART-001__20260818_143917_419150.md) | 54ffa7d | main | PASS | 0.001 | local |
 | 2026-08-18 | 14:36:34.925452+09:00 | [20260818_143634_925356](CT-UART-001__20260818_143634_925356.md) | ee3794c | main | PASS | 0.000 | local |
