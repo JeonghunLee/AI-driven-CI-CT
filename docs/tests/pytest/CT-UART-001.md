@@ -12,15 +12,15 @@
 - **Interface:** UART
 - **Interface mode:** mock
 - **Result:** **PASS**
-- **Execution time:** 0.000 seconds
-- **Execution date:** 2026-08-18T14:36:34.925452+09:00
-- **Execution ID:** `20260818_143634_925356`
+- **Execution time:** 0.001 seconds
+- **Execution date:** 2026-08-18T14:39:17.419249+09:00
+- **Execution ID:** `20260818_143917_419150`
 
 ## Test Source
 
 | Item | Value |
 |---|---|
-| Commit | `ee3794cde68a3471d30369001f0169409b5b9054` |
+| Commit | `54ffa7df10aed55126f29f05c8ddadb56123bb94` |
 | Branch | `main` |
 
 ## Measurement
@@ -48,7 +48,7 @@
 
 ## Local LLM analysis
 
-CT-UART-001 passed in 0.000s.
+CT-UART-001 passed in 0.001s.
 
 - **Classification:** `passed`
 - **Confidence:** 1.00
@@ -66,6 +66,7 @@ Not requested
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-18 | 14:39:17.419249+09:00 | [20260818_143917_419150](CT-UART-001__20260818_143917_419150.md) | 54ffa7d | main | PASS | 0.001 | local |
 | 2026-08-18 | 14:36:34.925452+09:00 | [20260818_143634_925356](CT-UART-001__20260818_143634_925356.md) | ee3794c | main | PASS | 0.000 | local |
 | 2026-08-18 | 14:30:00.730977+09:00 | [20260818_143000_730890](CT-UART-001__20260818_143000_730890.md) | 19c3b95 | main | PASS | 0.001 | local |
 | 2026-08-18 | 04:49:04.884511+00:00 | [20260818_044904_884486](CT-UART-001__20260818_044904_884486.md) | 9d6d0e0 | main | PASS | 0.000 | local |
