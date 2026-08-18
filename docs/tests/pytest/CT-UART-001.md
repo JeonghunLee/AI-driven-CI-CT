@@ -13,14 +13,14 @@
 - **Interface mode:** mock
 - **Result:** **PASS**
 - **Execution time:** 0.001 seconds
-- **Execution date:** 2026-08-18T03:01:37.727119+00:00
-- **Execution ID:** `20260818_030137_727071`
+- **Execution date:** 2026-08-18T04:04:01.493533+00:00
+- **Execution ID:** `20260818_040401_493506`
 
 ## Test Source
 
 | Item | Value |
 |---|---|
-| Commit | `33bd0ee3c39f477eebaa9065804a5fd55ed46f8e` |
+| Commit | `ddeca593ac3567e182612ed095f754c240220bd0` |
 | Branch | `main` |
 
 ## Measurement
@@ -66,6 +66,7 @@ Not requested
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-18 | 04:04:01.493533+00:00 | [20260818_040401_493506](CT-UART-001__20260818_040401_493506.md) | ddeca59 | main | PASS | 0.001 | local |
 | 2026-08-18 | 03:01:37.727119+00:00 | [20260818_030137_727071](CT-UART-001__20260818_030137_727071.md) | 33bd0ee | main | PASS | 0.001 | local |
 | 2026-08-13 | 07:47:38.432406+00:00 | [20260813-074738-432387](CT-UART-001__20260813-074738-432387.md) | local | unknown | PASS | 0.001 | local |
 | 2026-08-13 | 06:54:50.655858+00:00 | [20260813-065450-655846](CT-UART-001__20260813-065450-655846.md) | local | unknown | PASS | 0.000 | local |
