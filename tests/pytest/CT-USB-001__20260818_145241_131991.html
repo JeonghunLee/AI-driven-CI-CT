@@ -6,11 +6,9 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Test results and execution history" name="description"/>
-<link href="../../unittest.html" rel="prev"/>
-<link href="../unittest/index.html" rel="next"/>
 <link href="../../imgs/logo.jpg" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
-<title>Pytest - AI-driven CI/CT</title>
+<title>CT-USB-001 Test Result - AI-driven CI/CT</title>
 <link href="../../assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/iframe-worker/shim"></script>
@@ -28,7 +26,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#pytest-results">
+<a class="md-skip" href="#ct-usb-001-test-result">
           콘텐츠로 이동
         </a>
 </div>
@@ -52,7 +50,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Pytest
+              CT-USB-001 Test Result
             
           </span>
 </div>
@@ -202,8 +200,8 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
 <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
 <span class="md-ellipsis">
     
@@ -215,7 +213,7 @@
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_3">
 <span class="md-nav__icon md-icon"></span>
             
@@ -225,20 +223,8 @@
 
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-<span class="md-ellipsis">
-    
-  
-    Pytest
-  
-
-    
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="index.html">
+<li class="md-nav__item">
+<a class="md-nav__link" href="index.html">
 <span class="md-ellipsis">
     
   
@@ -248,32 +234,6 @@
     
   </span>
 </a>
-<nav aria-label="목차" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      목차
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#continuous-tests">
-<span class="md-ellipsis">
-      
-        Continuous Tests
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#recent-executions">
-<span class="md-ellipsis">
-      
-        Recent Executions
-      
-    </span>
-</a>
-</li>
-</ul>
-</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../unittest/index.html">
@@ -305,22 +265,89 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#continuous-tests">
+<a class="md-nav__link" href="#test-summary">
 <span class="md-ellipsis">
       
-        Continuous Tests
+        Test summary
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#recent-executions">
+<a class="md-nav__link" href="#test-source">
 <span class="md-ellipsis">
       
-        Recent Executions
+        Test Source
       
     </span>
 </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#measurement">
+<span class="md-ellipsis">
+      
+        Measurement
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#statistics">
+<span class="md-ellipsis">
+      
+        Statistics
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#important-logs">
+<span class="md-ellipsis">
+      
+        Important logs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#warnings">
+<span class="md-ellipsis">
+      
+        Warnings
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#local-llm-analysis">
+<span class="md-ellipsis">
+      
+        Local LLM analysis
+      
+    </span>
+</a>
+<nav aria-label="Local LLM analysis" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#failure-analysis">
+<span class="md-ellipsis">
+      
+        Failure analysis
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-review">
+<span class="md-ellipsis">
+      
+        Source review
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -328,84 +355,75 @@
 </div>
 </div>
 <div class="md-content" data-md-component="content">
-<nav aria-label="네비게이션" class="md-path">
-<ol class="md-path__list">
-<li class="md-path__item">
-<a class="md-path__link" href="../../index.html">
-<span class="md-ellipsis">
-    Overview
-  </span>
-</a>
-</li>
-<li class="md-path__item">
-<a class="md-path__link" href="index.html">
-<span class="md-ellipsis">
-    TEST RESULTS
-  </span>
-</a>
-</li>
-</ol>
-</nav>
 <article class="md-content__inner md-typeset">
-<h1 id="pytest-results">pytest Results</h1>
-<h2 id="continuous-tests">Continuous Tests</h2>
+<h1 id="ct-usb-001-test-result">CT-USB-001 Test Result</h1>
+<h2 id="test-summary">Test summary</h2>
+<ul>
+<li><strong>Description:</strong> test_usb_bulk_loopback</li>
+<li><strong>Category:</strong> communication</li>
+<li><strong>Environment:</strong> local</li>
+<li><strong>Configuration:</strong> {'category': 'communication', 'fixture_id': 'FIXTURE-002', 'fixture_mode': 'mock', 'interface': 'USB', 'equipment': 'Digilent'}</li>
+<li><strong>Test mode:</strong> mock</li>
+<li><strong>Equipment:</strong> Digilent</li>
+<li><strong>Equipment mode:</strong> mock</li>
+<li><strong>Interface:</strong> USB</li>
+<li><strong>Interface mode:</strong> mock</li>
+<li><strong>Result:</strong> <strong>PASS</strong></li>
+<li><strong>Execution time:</strong> 0.000 seconds</li>
+<li><strong>Execution date:</strong> 2026-08-18T14:52:41.132082+09:00</li>
+<li><strong>Execution ID:</strong> <code>20260818_145241_131991</code></li>
+</ul>
+<h2 id="test-source">Test Source</h2>
 <table>
 <thead>
 <tr>
-<th>Category</th>
-<th>Test ID</th>
-<th>Mode</th>
-<th>Latest</th>
-<th style="text-align: right;">Executions</th>
+<th>Item</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>communication</td>
-<td><code>CT-NETWORK-001</code></td>
-<td>mock</td>
-<td><a href="CT-NETWORK-001.html">Open</a></td>
-<td style="text-align: right;">12</td>
+<td>Commit</td>
+<td><code>9ebc289c9ebaf284b8d464f10dae20cd0f7e955f</code></td>
 </tr>
 <tr>
-<td>timing</td>
-<td><code>CT-UART-001</code></td>
-<td>mock</td>
-<td><a href="CT-UART-001.html">Open</a></td>
-<td style="text-align: right;">18</td>
-</tr>
-<tr>
-<td>communication</td>
-<td><code>CT-USB-001</code></td>
-<td>mock</td>
-<td><a href="CT-USB-001.html">Open</a></td>
-<td style="text-align: right;">11</td>
+<td>Branch</td>
+<td><code>main</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="recent-executions">Recent Executions</h2>
+<h2 id="measurement">Measurement</h2>
 <ul>
-<li><a href="CT-NETWORK-001__20260818_145242_757972.html"><code>20260818_145242_757972</code></a></li>
-<li><a href="CT-USB-001__20260818_145241_131991.html"><code>20260818_145241_131991</code></a></li>
-<li><a href="CT-UART-001__20260818_145239_800032.html"><code>20260818_145239_800032</code></a></li>
-<li><a href="CT-NETWORK-001__20260818_143919_350374.html"><code>20260818_143919_350374</code></a></li>
-<li><a href="CT-USB-001__20260818_143918_386717.html"><code>20260818_143918_386717</code></a></li>
-<li><a href="CT-UART-001__20260818_143917_419150.html"><code>20260818_143917_419150</code></a></li>
-<li><a href="CT-NETWORK-001__20260818_143635_020976.html"><code>20260818_143635_020976</code></a></li>
-<li><a href="CT-USB-001__20260818_143634_974388.html"><code>20260818_143634_974388</code></a></li>
-<li><a href="CT-UART-001__20260818_143634_925356.html"><code>20260818_143634_925356</code></a></li>
-<li><a href="CT-NETWORK-001__20260818_143002_787927.html"><code>20260818_143002_787927</code></a></li>
-<li><a href="CT-USB-001__20260818_143001_781332.html"><code>20260818_143001_781332</code></a></li>
-<li><a href="CT-UART-001__20260818_143000_730890.html"><code>20260818_143000_730890</code></a></li>
-<li><a href="CT-NETWORK-001__20260818_050827_805849.html"><code>20260818_050827_805849</code></a></li>
-<li><a href="CT-NETWORK-001__20260818_050651_011104.html"><code>20260818_050651_011104</code></a></li>
-<li><a href="CT-UART-001__20260818_044904_884486.html"><code>20260818_044904_884486</code></a></li>
-<li><a href="CT-NETWORK-001__20260818_042533_151165.html"><code>20260818_042533_151165</code></a></li>
-<li><a href="CT-NETWORK-001__20260818_041454_461731.html"><code>20260818_041454_461731</code></a></li>
-<li><a href="CT-UART-001__20260818_040401_493506.html"><code>20260818_040401_493506</code></a></li>
-<li><a href="CT-UART-001__20260818_030137_727071.html"><code>20260818_030137_727071</code></a></li>
-<li><a href="CT-NETWORK-001__20260818_025309_516286.html"><code>20260818_025309_516286</code></a></li>
+<li><strong>bytes_transferred:</strong> 256</li>
+<li><strong>packet_count:</strong> 4</li>
+<li><strong>max_packet_size:</strong> 64</li>
+<li><strong>bus_voltage:</strong> 5.0</li>
+<li><strong>integrity_error:</strong> 0.0</li>
 </ul>
+<h2 id="statistics">Statistics</h2>
+<ul>
+<li><strong>endpoint:</strong> 1</li>
+<li><strong>transfer_count:</strong> 1</li>
+</ul>
+<h2 id="important-logs">Important logs</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="warnings">Warnings</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="local-llm-analysis">Local LLM analysis</h2>
+<p>CT-USB-001 passed in 0.000s.</p>
+<ul>
+<li><strong>Classification:</strong> <code>passed</code></li>
+<li><strong>Confidence:</strong> 1.00</li>
+<li><strong>Analyzer:</strong> <code>deterministic-fallback</code></li>
+</ul>
+<h3 id="failure-analysis">Failure analysis</h3>
+<p>Not applicable</p>
+<h3 id="source-review">Source review</h3>
+<p>Not requested</p>
 </article>
 </div>
 <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
@@ -417,34 +435,6 @@
 </button>
 </main>
 <footer class="md-footer">
-<nav aria-label="하단/푸터" class="md-footer__inner md-grid">
-<a aria-label="이전: Unittest" class="md-footer__link md-footer__link--prev" href="../../unittest.html">
-<div class="md-footer__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
-</div>
-<div class="md-footer__title">
-<span class="md-footer__direction">
-                이전
-              </span>
-<div class="md-ellipsis">
-                Unittest
-              </div>
-</div>
-</a>
-<a aria-label="다음: Unittest" class="md-footer__link md-footer__link--next" href="../unittest/index.html">
-<div class="md-footer__title">
-<span class="md-footer__direction">
-                다음
-              </span>
-<div class="md-ellipsis">
-                Unittest
-              </div>
-</div>
-<div class="md-footer__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
-</div>
-</a>
-</nav>
 <div class="md-footer-meta md-typeset">
 <div class="md-footer-meta__inner md-grid">
 <div class="md-copyright">
