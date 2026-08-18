@@ -17,22 +17,6 @@ def _table(values: dict[str, Any]) -> str:
     return f"| Item | Value |\n|---|---|\n{rows or '| - | None |'}"
 
 
-def _report_mode(path: Path) -> str:
-    prefix = "- **Test mode:**"
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if line.startswith(prefix):
-            return line.removeprefix(prefix).strip()
-    return "unknown"
-
-
-def _report_category(path: Path) -> str:
-    prefix = "- **Category:**"
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if line.startswith(prefix):
-            return line.removeprefix(prefix).strip()
-    return "unknown"
-
-
 class MarkdownReporter:
     """Create the canonical human-readable report and optionally publish it to MkDocs."""
 
@@ -97,15 +81,17 @@ class MarkdownReporter:
                     continue
                 test_id = path.stem
                 count = len(list(report_dir.glob(f"{test_id}__*.md")))
-                mode = _report_mode(path)
+                result_paths = self.store.result_paths(test_id)
+                latest_result = (
+                    self.store.load(max(result_paths, key=lambda item: item.name))
+                    if result_paths
+                    else None
+                )
+                mode = latest_result.test_mode if latest_result else "unknown"
                 if report_type == "unittest":
                     unit_rows.append(f"| `{_safe(test_id)}` | {_safe(mode)} | [Open]({link}) | {count} |")
                 else:
-                    category = _report_category(path)
-                    if category == "unknown":
-                        result_paths = self.store.result_paths(test_id)
-                        if result_paths:
-                            category = self.store.load(max(result_paths, key=lambda item: item.name)).category
+                    category = latest_result.category if latest_result else "unknown"
                     ct_rows.append(
                         f"| {_safe(category)} | `{_safe(test_id)}` | {_safe(mode)} | [Open]({link}) | {count} |"
                     )

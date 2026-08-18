@@ -9,8 +9,8 @@
 | Environment | local |
 | Result | PASS |
 | Execution time | 0.001 seconds |
-| Execution date | 2026-08-18T15:38:43.343459+09:00 |
-| Execution ID | 20260818_153843_343352 |
+| Execution date | 2026-08-18T15:42:39.380143+09:00 |
+| Execution ID | 20260818_154239_380041 |
 
 ### Test configs
 
@@ -29,7 +29,7 @@
 
 | Item | Value |
 |---|---|
-| Commit | 31a3aa23c16241e3ac127c3311981afb8e38521a |
+| Commit | f8b4f74c10877a0dd859c5f444480b57ac137a29 |
 | Branch | main |
 
 ### Measurement
@@ -55,7 +55,7 @@
 
 | Item | Value |
 |---|---|
-| Test log | 20260818_153843_343352_test.log |
+| Test log | 20260818_154239_380041_test.log |
 | Important | None |
 
 ## Local LLM analysis
@@ -63,7 +63,7 @@
 | Item | Value |
 |---|---|
 | Classification | Pass |
-| Confidence | 0.99 |
+| Confidence | 0.95 |
 | Analyzer | ollama/deepseek-r1:7b |
 | working | on |
 
@@ -75,7 +75,7 @@ result.json 분석
 
 | Item | Value |
 |---|---|
-| Summary | The test for UART timing passed successfully with minimal deviation from the expected values. |
+| Summary | All tests passed with minimal timing discrepancies. |
 | Failure analysis | Not applicable |
 | Source review | Not requested |
 | Warnings | None |
@@ -85,6 +85,7 @@ result.json 분석
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-18 | 15:42:39.380143+09:00 | [20260818_154239_380041](CT-UART-001__20260818_154239_380041.md) | f8b4f74 | main | PASS | 0.001 | local |
 | 2026-08-18 | 15:38:43.343459+09:00 | [20260818_153843_343352](CT-UART-001__20260818_153843_343352.md) | 31a3aa2 | main | PASS | 0.001 | local |
 | 2026-08-18 | 15:36:58.921402+09:00 | [20260818_153658_921304](CT-UART-001__20260818_153658_921304.md) | 0501967 | main | PASS | 0.000 | local |
 | 2026-08-18 | 15:36:45.023008+09:00 | [20260818_153645_022911](CT-UART-001__20260818_153645_022911.md) | 0501967 | main | PASS | 0.000 | local |

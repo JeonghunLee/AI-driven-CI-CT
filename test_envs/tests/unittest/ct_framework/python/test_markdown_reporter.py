@@ -43,7 +43,14 @@ class MarkdownReporterTests(unittest.TestCase):
         root_index.write_text("# System Overview", encoding="utf-8")
         analysis = Analysis("Stable", "passed", 1.0, "test")
         first = ResultRecord("CT-MD-HISTORY", "PASS", "timing", 0.1, execution_id="20260101-000001")
-        second = ResultRecord("CT-MD-HISTORY", "FAIL", "timing", 0.2, execution_id="20260101-000002")
+        second = ResultRecord(
+            "CT-MD-HISTORY",
+            "FAIL",
+            "timing",
+            0.2,
+            test_mode="hil",
+            execution_id="20260101-000002",
+        )
 
         ResultStore(reports_root).save(first)
         reporter.generate(first, analysis, publish_docs=True)
@@ -70,6 +77,7 @@ class MarkdownReporterTests(unittest.TestCase):
         pytest_index = (Path(docs_root) / "tests/pytest/index.md").read_text(encoding="utf-8")
         unittest_index = (Path(docs_root) / "tests/unittest/index.md").read_text(encoding="utf-8")
         self.assertIn("| timing | `CT-MD-HISTORY` |", pytest_index)
+        self.assertIn("| timing | `CT-MD-HISTORY` | hil |", pytest_index)
         self.assertIn("(CT-MD-HISTORY.md)", pytest_index)
         self.assertIn("20260101-000001", pytest_index)
         self.assertIn("20260101-000002", pytest_index)

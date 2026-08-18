@@ -434,6 +434,12 @@ test_envs/reports/markdown/<test-id>/<timestamp>_result.md
     └── LLM Review
 ```
 
+| Index field | Source |
+|---|---|
+| Category | Latest `result.json` → `test_case.category` |
+| Mode | Latest `result.json` → `fixture_configs.test_mode` |
+| Executions | `docs/tests/<type>/<test-id>__<execution-id>.md` count |
+
 ## 10. Local LLM Analysis
 
 | Component | Value |
