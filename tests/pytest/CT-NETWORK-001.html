@@ -272,6 +272,16 @@
       
     </span>
 </a>
+<nav aria-label="Test summary" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-configs">
+<span class="md-ellipsis">
+      
+        Test configs
+      
+    </span>
+</a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#test-source">
@@ -301,22 +311,16 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#important-logs">
+<a class="md-nav__link" href="#logs">
 <span class="md-ellipsis">
       
-        Important logs
+        Logs
       
     </span>
 </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#warnings">
-<span class="md-ellipsis">
-      
-        Warnings
-      
-    </span>
-</a>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#local-llm-analysis">
@@ -329,19 +333,19 @@
 <nav aria-label="Local LLM analysis" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#failure-analysis">
+<a class="md-nav__link" href="#llm-prompt">
 <span class="md-ellipsis">
       
-        Failure analysis
+        LLM Prompt
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#source-review">
+<a class="md-nav__link" href="#llm-review">
 <span class="md-ellipsis">
       
-        Source review
+        LLM Review
       
     </span>
 </a>
@@ -367,22 +371,88 @@
 <article class="md-content__inner md-typeset">
 <h1 id="ct-network-001-test-result">CT-NETWORK-001 Test Result</h1>
 <h2 id="test-summary">Test summary</h2>
-<ul>
-<li><strong>Description:</strong> test_network_packet_loopback</li>
-<li><strong>Category:</strong> communication</li>
-<li><strong>Environment:</strong> local</li>
-<li><strong>Configuration:</strong> {'category': 'communication', 'fixture_id': 'FIXTURE-003', 'fixture_mode': 'mock', 'interface': 'Network', 'equipment': 'None'}</li>
-<li><strong>Test mode:</strong> mock</li>
-<li><strong>Equipment:</strong> None</li>
-<li><strong>Equipment mode:</strong> none</li>
-<li><strong>Interface:</strong> Network</li>
-<li><strong>Interface mode:</strong> mock</li>
-<li><strong>Result:</strong> <strong>PASS</strong></li>
-<li><strong>Execution time:</strong> 0.001 seconds</li>
-<li><strong>Execution date:</strong> 2026-08-18T14:52:42.758069+09:00</li>
-<li><strong>Execution ID:</strong> <code>20260818_145242_757972</code></li>
-</ul>
-<h2 id="test-source">Test Source</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Description</td>
+<td>test_network_packet_loopback</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>communication</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>local</td>
+</tr>
+<tr>
+<td>Result</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>Execution time</td>
+<td>0.000 seconds</td>
+</tr>
+<tr>
+<td>Execution date</td>
+<td>2026-08-18T15:38:45.760733+09:00</td>
+</tr>
+<tr>
+<td>Execution ID</td>
+<td>20260818_153845_760638</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-configs">Test configs</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Category</td>
+<td>communication</td>
+</tr>
+<tr>
+<td>Fixture ID</td>
+<td>FIXTURE-003</td>
+</tr>
+<tr>
+<td>Fixture mode</td>
+<td>mock</td>
+</tr>
+<tr>
+<td>Test mode</td>
+<td>mock</td>
+</tr>
+<tr>
+<td>Equipment</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Equipment mode</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Interface</td>
+<td>Network</td>
+</tr>
+<tr>
+<td>Interface mode</td>
+<td>mock</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-source">Test Source</h3>
 <table>
 <thead>
 <tr>
@@ -393,45 +463,139 @@
 <tbody>
 <tr>
 <td>Commit</td>
-<td><code>9ebc289c9ebaf284b8d464f10dae20cd0f7e955f</code></td>
+<td>31a3aa23c16241e3ac127c3311981afb8e38521a</td>
 </tr>
 <tr>
 <td>Branch</td>
-<td><code>main</code></td>
+<td>main</td>
 </tr>
 </tbody>
 </table>
-<h2 id="measurement">Measurement</h2>
-<ul>
-<li><strong>bytes_transferred:</strong> 33</li>
-<li><strong>packet_count:</strong> 1</li>
-<li><strong>latency_ms:</strong> 1.25</li>
-<li><strong>integrity_error:</strong> 0.0</li>
-</ul>
-<h2 id="statistics">Statistics</h2>
-<ul>
-<li><strong>host:</strong> 127.0.0.1</li>
-<li><strong>port:</strong> 9000</li>
-</ul>
-<h2 id="important-logs">Important logs</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="warnings">Warnings</h2>
-<ul>
-<li>None</li>
-</ul>
+<h3 id="measurement">Measurement</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bytes_transferred</td>
+<td>33</td>
+</tr>
+<tr>
+<td>packet_count</td>
+<td>1</td>
+</tr>
+<tr>
+<td>latency_ms</td>
+<td>1.25</td>
+</tr>
+<tr>
+<td>integrity_error</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="statistics">Statistics</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>host</td>
+<td>127.0.0.1</td>
+</tr>
+<tr>
+<td>port</td>
+<td>9000</td>
+</tr>
+</tbody>
+</table>
+<h3 id="logs">Logs</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test log</td>
+<td>20260818_153845_760638_test.log</td>
+</tr>
+<tr>
+<td>Important</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
 <h2 id="local-llm-analysis">Local LLM analysis</h2>
-<p>CT-NETWORK-001 passed in 0.001s.</p>
-<ul>
-<li><strong>Classification:</strong> <code>passed</code></li>
-<li><strong>Confidence:</strong> 1.00</li>
-<li><strong>Analyzer:</strong> <code>deterministic-fallback</code></li>
-</ul>
-<h3 id="failure-analysis">Failure analysis</h3>
-<p>Not applicable</p>
-<h3 id="source-review">Source review</h3>
-<p>Not requested</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classification</td>
+<td>communication</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>Analyzer</td>
+<td>ollama/deepseek-r1:7b</td>
+</tr>
+<tr>
+<td>working</td>
+<td>on</td>
+</tr>
+</tbody>
+</table>
+<h3 id="llm-prompt">LLM Prompt</h3>
+<p>result.json 분석</p>
+<h3 id="llm-review">LLM Review</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Summary</td>
+<td>successful completion of test case CT-NETWORK-001</td>
+</tr>
+<tr>
+<td>Failure analysis</td>
+<td>Not applicable</td>
+</tr>
+<tr>
+<td>Source review</td>
+<td>Not requested</td>
+</tr>
+<tr>
+<td>Warnings</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Needs escalation</td>
+<td>off</td>
+</tr>
+</tbody>
+</table>
 <h2 id="test-history">Test History</h2>
 <table>
 <thead>
@@ -447,6 +611,86 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>2026-08-18</td>
+<td>15:38:45.760733+09:00</td>
+<td><a href="CT-NETWORK-001__20260818_153845_760638.html">20260818_153845_760638</a></td>
+<td>31a3aa2</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-18</td>
+<td>15:36:59.009240+09:00</td>
+<td><a href="CT-NETWORK-001__20260818_153659_009158.html">20260818_153659_009158</a></td>
+<td>0501967</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-18</td>
+<td>15:36:45.114648+09:00</td>
+<td><a href="CT-NETWORK-001__20260818_153645_114564.html">20260818_153645_114564</a></td>
+<td>0501967</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-18</td>
+<td>15:36:21.171395+09:00</td>
+<td><a href="CT-NETWORK-001__20260818_153621_171305.html">20260818_153621_171305</a></td>
+<td>0501967</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-18</td>
+<td>15:18:48.781220+09:00</td>
+<td><a href="CT-NETWORK-001__20260818_151848_781098.html">20260818_151848_781098</a></td>
+<td>a51f1d4</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-18</td>
+<td>15:18:00.276838+09:00</td>
+<td><a href="CT-NETWORK-001__20260818_151800_276748.html">20260818_151800_276748</a></td>
+<td>a51f1d4</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-18</td>
+<td>15:16:57.034196+09:00</td>
+<td><a href="CT-NETWORK-001__20260818_151657_034116.html">20260818_151657_034116</a></td>
+<td>a51f1d4</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-18</td>
+<td>15:16:36.302386+09:00</td>
+<td><a href="CT-NETWORK-001__20260818_151636_302296.html">20260818_151636_302296</a></td>
+<td>a51f1d4</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
 <tr>
 <td>2026-08-18</td>
 <td>14:52:42.758069+09:00</td>
