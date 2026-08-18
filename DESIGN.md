@@ -356,15 +356,17 @@ Test Execution
 │   ├── Environment
 │   ├── Configuration
 │   └── Commit
-├── Log
-│   ├── test.log
-│   ├── stdout.log
-│   ├── stderr.log
-│   ├── equipment.log
-│   └── interface.log
-└── Measurement
-    ├── measurement.json
-    └── measurement.csv
+├── <execution-id>_result.json
+│   ├── Result
+│   ├── Measurement
+│   ├── Analysis
+│   └── Escalation
+└── <execution-id>_test.log
+    ├── Test
+    ├── Stdout
+    ├── Stderr
+    ├── Equipment
+    └── Interface
 ```
 
 ## 8. Test Result Generation

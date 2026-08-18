@@ -120,12 +120,12 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
     result_path = store.save(result)
     report_dir = result_path.parent
     detail = str(report.longrepr) if report is not None and report.failed else ""
-    (report_dir / result.logs["main"]).write_text(f"status={status}\n{detail}", encoding="utf-8")
-    (report_dir / result.logs["stdout"]).write_text(getattr(report, "capstdout", ""), encoding="utf-8")
-    (report_dir / result.logs["stderr"]).write_text(getattr(report, "capstderr", ""), encoding="utf-8")
-    (report_dir / result.logs["equipment"]).write_text(
-        "\n".join(f"{key}={value}" for key, value in recorder.statistics.items()), encoding="utf-8"
-    )
-    (report_dir / result.logs["interface"]).write_text(
-        "\n".join(f"{key}={value}" for key, value in recorder.metrics.items()), encoding="utf-8"
-    )
+    sections = {
+        "TEST": f"status={status}\n{detail}".rstrip(),
+        "STDOUT": getattr(report, "capstdout", ""),
+        "STDERR": getattr(report, "capstderr", ""),
+        "EQUIPMENT": "\n".join(f"{key}={value}" for key, value in recorder.statistics.items()),
+        "INTERFACE": "\n".join(f"{key}={value}" for key, value in recorder.metrics.items()),
+    }
+    combined = "\n\n".join(f"[{name}]\n{content}" for name, content in sections.items()) + "\n"
+    (report_dir / result.logs["main"]).write_text(combined, encoding="utf-8")

@@ -17,8 +17,17 @@ class ResultNormalizerTests(unittest.TestCase):
         self.assertEqual(ResultStore(test_root).latest(), path)
         self.assertEqual(path.name, f"{record.execution_id}_result.json")
         self.assertTrue((path.parent / record.logs["main"]).exists())
-        self.assertTrue((path.parent / f"{record.execution_id}_measurement.csv").exists())
-        self.assertTrue((path.parent / f"{record.execution_id}_raw.json").exists())
+        self.assertEqual(record.logs, {"main": f"{record.execution_id}_test.log"})
+        self.assertEqual(
+            {
+                item.name
+                for item in path.parent.iterdir()
+                if item.name.startswith(f"{record.execution_id}_")
+            },
+            {f"{record.execution_id}_result.json", f"{record.execution_id}_test.log"},
+        )
+        self.assertIn("metrics", payload)
+        self.assertIn("statistics", payload)
 
     def test_result_rejects_unknown_status(self) -> None:
         with self.assertRaisesRegex(ValueError, "unsupported"):

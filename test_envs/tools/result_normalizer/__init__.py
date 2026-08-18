@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import os
-import csv
 import subprocess
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass, field
@@ -68,15 +67,7 @@ class ResultRecord:
     timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     metrics: Mapping[str, Any] = field(default_factory=dict)
     statistics: Mapping[str, Any] = field(default_factory=dict)
-    logs: Mapping[str, str] = field(
-        default_factory=lambda: {
-            "main": "test.log",
-            "stdout": "stdout.log",
-            "stderr": "stderr.log",
-            "equipment": "equipment.log",
-            "interface": "interface.log",
-        }
-    )
+    logs: Mapping[str, str] = field(default_factory=lambda: {"main": "test.log"})
 
     def __post_init__(self) -> None:
         self.status = self.status.upper()
@@ -110,36 +101,14 @@ class ResultStore:
     def save(self, record: ResultRecord) -> Path:
         report_dir = self._report_dir(record)
         report_dir.mkdir(parents=True, exist_ok=True)
-        record.logs = {
-            name: (
-                Path(filename).name
-                if Path(filename).name.startswith(f"{record.execution_id}_")
-                else f"{record.execution_id}_{Path(filename).name}"
-            )
-            for name, filename in record.logs.items()
-        }
-        for filename in record.logs.values():
-            path = report_dir / filename
-            if not path.exists():
-                path.write_text("", encoding="utf-8")
+        record.logs = {"main": f"{record.execution_id}_test.log"}
+        log_path = report_dir / record.logs["main"]
+        if not log_path.exists():
+            log_path.write_text("", encoding="utf-8")
 
         payload = record.to_dict()
         result_path = report_dir / f"{record.execution_id}_result.json"
         result_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
-        (report_dir / f"{record.execution_id}_raw.json").write_text(
-            json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8"
-        )
-        (report_dir / f"{record.execution_id}_measurement.json").write_text(
-            json.dumps({"metrics": payload["metrics"], "statistics": payload["statistics"]}, indent=2),
-            encoding="utf-8",
-        )
-        with (report_dir / f"{record.execution_id}_measurement.csv").open(
-            "w", newline="", encoding="utf-8"
-        ) as stream:
-            writer = csv.writer(stream)
-            writer.writerow(["type", "name", "value"])
-            writer.writerows(("metric", key, value) for key, value in record.metrics.items())
-            writer.writerows(("statistic", key, value) for key, value in record.statistics.items())
         os.environ["CICT_RESULT_PATH"] = str(result_path)
         return result_path
 
@@ -155,12 +124,6 @@ class ResultStore:
             (self.root / "unittest").glob(f"{name}/*_result.json")
         )
 
-    @staticmethod
-    def artifact_path(result_path: str | Path, artifact: str, extension: str) -> Path:
-        source = Path(result_path)
-        execution_id = source.name.removesuffix("_result.json")
-        return source.parent / f"{execution_id}_{artifact}.{extension}"
-
     def _report_dir(self, record: ResultRecord) -> Path:
         if record.category.lower() == "unit":
             return self.root / "unittest" / record.test_id
@@ -169,14 +132,9 @@ class ResultStore:
     def load(self, path: str | Path | None = None) -> ResultRecord:
         source = Path(path) if path else self.latest()
         record = ResultRecord.from_dict(json.loads(source.read_text(encoding="utf-8")))
-        record.logs = {
-            name: (
-                filename
-                if (source.parent / filename).exists()
-                else f"{record.execution_id}_{Path(filename).name}"
-            )
-            for name, filename in record.logs.items()
-        }
+        expected = f"{record.execution_id}_test.log"
+        configured = Path(record.logs.get("main", expected)).name
+        record.logs = {"main": configured if (source.parent / configured).exists() else expected}
         return record
 
 

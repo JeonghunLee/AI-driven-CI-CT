@@ -248,7 +248,7 @@ flowchart TD
 | Test Interface | DUT communication transport |
 | Test Equipment | Measurement and external control |
 | Fixture | Connect, initialize, yield, cleanup |
-| Result Recorder | Result, log, measurement 저장 |
+| Result Recorder | `result.json`, `test.log` |
 
 ### Interface Contract
 
@@ -268,10 +268,8 @@ execute()
 flowchart TD
     A[unittest / pytest] --> B[Result]
     A --> C[Log]
-    A --> D[Measurement]
     B --> E[Latest Result Selection]
     C --> E
-    D --> E
     E --> F[Ollama + Local LLM]
     F --> G[Markdown Report]
     G --> H[test_envs/reports/markdown]
@@ -286,9 +284,11 @@ flowchart TD
 ```text
 test_envs/reports/
 ├── pytest/test_cases/<test-id>/
-│   └── <timestamp>_{result,raw,measurement,test,stdout,stderr,equipment,interface}.*
+│   ├── <timestamp>_result.json
+│   └── <timestamp>_test.log
 ├── unittest/<test-id>/
-│   └── <timestamp>_<artifact>.<extension>
+│   ├── <timestamp>_result.json
+│   └── <timestamp>_test.log
 ├── pandoc/<test-id>/
 │   └── <timestamp>_result.{html,pdf,docx}
 └── markdown/<test-id>/

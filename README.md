@@ -183,12 +183,10 @@ test_envs/configs/
 test_envs/reports/
 ├── pytest/test_cases/<test-id>/
 │   ├── <timestamp>_result.json
-│   ├── <timestamp>_raw.json
-│   ├── <timestamp>_measurement.{json,csv}
-│   ├── <timestamp>_{test,stdout,stderr}.log
-│   └── <timestamp>_{equipment,interface}.log
+│   └── <timestamp>_test.log
 ├── unittest/<test-id>/
-│   └── <timestamp>_<artifact>.<extension>
+│   ├── <timestamp>_result.json
+│   └── <timestamp>_test.log
 ├── pandoc/<test-id>/
 │   └── <timestamp>_result.{html,pdf,docx}
 └── markdown/<test-id>/
@@ -198,8 +196,8 @@ test_envs/reports/
 | Artifact | 역할 |
 |---|---|
 | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` | Canonical human-readable result |
-| `<timestamp>_result.json` | Machine-readable intermediate data |
-| `<timestamp>_raw.json` | Raw normalized result |
+| `<timestamp>_result.json` | Result, measurement, analysis, escalation |
+| `<timestamp>_test.log` | Test, stdout, stderr, equipment, interface log |
 | `docs/tests/pytest/<test-id>.md` | Latest pytest page |
 | `docs/tests/pytest/<test-id>__<execution-id>.md` | pytest execution page |
 | `docs/tests/unittest/<test-id>.md` | Latest unittest page |

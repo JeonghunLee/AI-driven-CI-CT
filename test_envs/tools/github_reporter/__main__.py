@@ -16,10 +16,10 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     store = ResultStore()
-    result = store.load()
     result_path = store.latest()
-    analysis_path = store.artifact_path(result_path, "analysis", "json")
-    analysis = Analysis(**json.loads(analysis_path.read_text(encoding="utf-8")))
+    payload = json.loads(result_path.read_text(encoding="utf-8"))
+    result = store.load(result_path)
+    analysis = Analysis(**payload["analysis"])
     comment = render_comment(result, analysis)
     if args.dry_run:
         print(comment)

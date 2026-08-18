@@ -8,9 +8,10 @@ from . import MkDocsReporter
 
 def main() -> None:
     store = ResultStore()
-    result = store.load()
-    analysis_path = store.latest().parent / "analysis.json"
-    analysis = Analysis(**json.loads(analysis_path.read_text(encoding="utf-8")))
+    result_path = store.latest()
+    payload = json.loads(result_path.read_text(encoding="utf-8"))
+    result = store.load(result_path)
+    analysis = Analysis(**payload["analysis"])
     print(MkDocsReporter().generate(result, analysis, publish_docs=True))
 
 

@@ -112,9 +112,8 @@ flowchart TD
 
 | Type | Path |
 |---|---|
-| Result / Raw | `test_envs/reports/pytest/test_cases/<test-id>/<timestamp>_{result,raw}.json` |
-| Measurement | `test_envs/reports/pytest/test_cases/<test-id>/<timestamp>_measurement.{json,csv}` |
-| Logs | `test_envs/reports/pytest/test_cases/<test-id>/<timestamp>_<log-name>.log` |
+| Result | `test_envs/reports/pytest/test_cases/<test-id>/<timestamp>_result.json` |
+| Log | `test_envs/reports/pytest/test_cases/<test-id>/<timestamp>_test.log` |
 | Markdown | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` |
 | Pandoc | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.<format>` |
 

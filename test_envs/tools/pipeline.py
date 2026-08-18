@@ -27,20 +27,17 @@ def run(
     analysis = analyzer.analyze(result, logs, source_diff)
     decision = evaluate(result, analysis, repeated_failures=_consecutive_failures(store, result.test_id))
 
-    analysis_path = store.artifact_path(result_path, "analysis", "json")
-    analysis_path.write_text(json.dumps(analysis.to_dict(), indent=2, ensure_ascii=False), encoding="utf-8")
-    escalation_path = store.artifact_path(result_path, "codex-escalation", "json")
-    escalation_path.write_text(
-        json.dumps({"required": decision.required, "reasons": decision.reasons}, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
+    payload = json.loads(result_path.read_text(encoding="utf-8"))
+    payload["analysis"] = analysis.to_dict()
+    payload["escalation"] = {"required": decision.required, "reasons": decision.reasons}
+    result_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     markdown = MarkdownReporter(reports_root=store.root).generate(
         result, analysis, logs.important, publish_docs=publish_docs
     )
     return {
         "result_data": str(result_path),
         "markdown": str(markdown),
-        "analysis": str(analysis_path),
+        "analysis": str(result_path),
         "local_llm_model": analyzer.model,
         "published_to_mkdocs": publish_docs,
         "codex_escalation": decision.required,
