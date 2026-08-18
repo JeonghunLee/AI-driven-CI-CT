@@ -29,7 +29,7 @@ class LocalLLMTests(unittest.TestCase):
 
     def test_internal_json_model_is_used_when_environment_is_missing(self) -> None:
         config = '{"model": "custom:latest"}'
-        config_path = Path("test_envs/reports/unittest/.tmp/local-llm/model-config.json")
+        config_path = Path("test_envs/tests/.tmp/ct_framework/local-llm/model-config.json")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(config, encoding="utf-8")
         with patch.dict(os.environ, {"LOCAL_LLM_CONFIG": str(config_path)}, clear=True):
@@ -37,7 +37,7 @@ class LocalLLMTests(unittest.TestCase):
 
     def test_internal_json_url_is_used_when_environment_is_missing(self) -> None:
         config = '{"url": "http://192.168.0.10:11434"}'
-        config_path = Path("test_envs/reports/unittest/.tmp/local-llm/url-config.json")
+        config_path = Path("test_envs/tests/.tmp/ct_framework/local-llm/url-config.json")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(config, encoding="utf-8")
         with patch.dict(os.environ, {"LOCAL_LLM_CONFIG": str(config_path)}, clear=True):

@@ -54,6 +54,8 @@ class RepositoryStructureTests(unittest.TestCase):
         root = Path("test_envs/reports")
         for relative in ("pytest/test_cases", "unittest", "pandoc", "markdown"):
             self.assertTrue((root / relative).is_dir())
+        self.assertFalse((root / "unittest/.tmp").exists())
+        self.assertFalse(any(path.name == "pytest" for path in (root / "unittest").rglob("*")))
 
     def test_docs_test_structure(self) -> None:
         root = Path("docs/tests")

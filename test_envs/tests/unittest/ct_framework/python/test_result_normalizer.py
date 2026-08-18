@@ -7,7 +7,7 @@ from test_envs.tools.result_normalizer import ResultRecord, ResultStore, from_ju
 
 class ResultNormalizerTests(unittest.TestCase):
     def test_result_store_creates_canonical_result_and_logs(self) -> None:
-        test_root = Path("test_envs/reports/unittest/.tmp/unit-result-store")
+        test_root = Path("test_envs/tests/.tmp/ct_framework/unit-result-store")
         record = ResultRecord("UT-NORMALIZER-001", "pass", "functional", 0.1)
         path = ResultStore(test_root).save(record)
         payload = json.loads(path.read_text())

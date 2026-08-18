@@ -6,7 +6,7 @@ from test_envs.tools.test_result import publish_latest
 
 class LatestResultTests(unittest.TestCase):
     def test_publish_latest_copies_markdown(self) -> None:
-        root = Path("test_envs/reports/unittest/.tmp/latest-result")
+        root = Path("test_envs/tests/.tmp/ct_framework/latest-result")
         source = root / "source.md"
         destination = root / "output" / "latest.md"
         source.parent.mkdir(parents=True, exist_ok=True)
