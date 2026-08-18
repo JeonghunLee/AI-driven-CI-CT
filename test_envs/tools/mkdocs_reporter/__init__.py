@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -153,7 +154,7 @@ class MarkdownReporter:
                 records.append(self.store.load(path))
             except (ValueError, TypeError):
                 continue
-        rows: list[str] = []
+        rows: dict[str, str] = {}
         for item in sorted(records, key=lambda value: value.timestamp, reverse=True):
             execution_file = f"{test_id}__{item.execution_id}.md"
             if not (target_dir / execution_file).is_file():
@@ -161,12 +162,22 @@ class MarkdownReporter:
             date, separator, time = item.timestamp.partition("T")
             if not separator:
                 date, time = item.timestamp, "unknown"
-            rows.append(
+            rows[item.execution_id] = (
                 f"| {_safe(date)} | {_safe(time)} | [{_safe(item.execution_id)}]({execution_file}) | "
                 f"{_safe(item.commit[:7])} | {_safe(item.branch)} | {item.status} | "
                 f"{item.duration:.3f} | {_safe(item.environment)} |"
             )
-        rendered_rows = "\n".join(rows) or "| - | - | - | - | - | - | - | - |"
+        latest_target = target_dir / f"{test_id}.md"
+        if latest_target.is_file():
+            history = latest_target.read_text(encoding="utf-8").partition("## Test History")[2]
+            for row in history.splitlines():
+                match = re.search(r"\[([^]]+)\]\([^)]*\)", row)
+                if match:
+                    rows.setdefault(match.group(1), row)
+        rendered_rows = (
+            "\n".join(rows[key] for key in sorted(rows, reverse=True))
+            or "| - | - | - | - | - | - | - | - |"
+        )
         return f"""## Test History
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
