@@ -111,8 +111,9 @@ python -m test_envs.tools.environment_setup python --platform config
 | 전체 TEST | `python -m pytest` |
 | CT | `python -m pytest test_envs/tests/pytest -m ct -s` |
 | Latest Markdown | `python -m test_envs.tools.test_result` |
-| MkDocs publish | `python -m test_envs.tools.test_result --docs` |
-| Source review | `python -m test_envs.tools.test_result --docs --source-review` |
+| Pending Markdown | `python -m test_envs.tools.test_result --pending` |
+| MkDocs publish | `python -m test_envs.tools.test_result --pending --docs` |
+| Source review | `python -m test_envs.tools.test_result --pending --docs --source-review` |
 
 ## Configuration
 

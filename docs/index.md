@@ -135,7 +135,7 @@ flowchart TD
 | System environment | Direct execution |
 | `CHECK 1: Refresh Environment Check File` | Environment check Task delegation |
 | `Run 3: Extension Module` | 확장 모듈 `main()` 실행 |
-| `Test Result: Generate Latest Markdown` | 최근 TEST 결과 Markdown 생성 |
+| `Test Result: Generate Pending Markdown` | Missing Execution ID Markdown 생성 |
 | `Debug: Current Python File` | 현재 Python 파일 디버그 |
 | `Debug: Current pytest File` | 현재 pytest 파일 디버그 |
 
@@ -323,7 +323,7 @@ docs/
 ### Report Generation
 
 ```text
-python -m test_envs.tools.test_result --docs
+python -m test_envs.tools.test_result --pending --docs
 ├── Latest result selection
 ├── Local LLM analysis
 ├── Canonical Markdown generation

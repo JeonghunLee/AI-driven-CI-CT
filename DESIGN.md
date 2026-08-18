@@ -86,7 +86,7 @@ Source: `.vscode/launch.json`
 | 3 | `SETUP 3: Install Ollama and Local LLM` | Task delegation | `preLaunchTask` | Ollama installation, selected model pull |
 | 4 | `CHECK 1: Refresh Environment Check File` | Task delegation | `preLaunchTask` | Environment check |
 | 5 | `Run 3: Extension Module` | `.venv` Python | `test_envs.tools.extension_runner` | Future module execution |
-| 6 | `Test Result: Generate Latest Markdown` | `.venv` Python | `test_envs.tools.test_result --docs` | Latest result analysis, Markdown generation |
+| 6 | `Test Result: Generate Pending Markdown` | `.venv` Python | `test_envs.tools.test_result --pending --docs` | Missing Execution ID analysis, Markdown generation |
 | 7 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
 | 8 | `Debug: Current pytest File` | `.venv` Python | pytest current file | Test debugging |
 
@@ -221,7 +221,7 @@ Source: `.vscode/tasks.json`
 | CHECK | `CHECK 3: Run Ollama Server (Foreground)` |
 | TEST CASE | `TEST CASE: ALL` |
 | TEST CASE | `TEST CASE: TEST ID` / marker ID picker |
-| REPORT | `REPORT: Generate Latest Markdown` |
+| REPORT | `REPORT: Generate Pending Markdown` |
 | REPORT | `REPORT: Convert Latest Markdown to HTML` |
 | REPORT | `REPORT: Convert Latest Markdown to DOCX` |
 | MkDocs | `MkDocs: Serve Locally` |
@@ -381,6 +381,7 @@ Execution rule:
 
 - Test re-execution: prohibited
 - Input: newest `<timestamp>_result.json`
+- Pending input: Execution ID without Markdown or MkDocs document
 - Logs: same TEST ID directory
 - Analysis: Local LLM or deterministic fallback
 - Canonical output: execution-specific Markdown
