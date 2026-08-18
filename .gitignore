@@ -7,6 +7,8 @@ htmlcov/
 .venv/
 site/
 test_envs/reports/pytest/*
+!test_envs/reports/pytest/test_cases
+test_envs/reports/pytest/test_cases/*
 test_envs/reports/unittest/*
 test_envs/reports/pandoc/*
 test_envs/reports/markdown/*
