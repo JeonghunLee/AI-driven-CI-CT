@@ -1,16 +1,19 @@
 import pytest
 
 from test_envs.tests.pytest.conftest import CTResultRecorder
-from test_envs.tests.pytest.test_interfaces.network import MockNetworkInterface
+from test_envs.tests.pytest.fixtures.fixture_003_network import Fixture003, fixture_003
 
 
 @pytest.mark.ct(
     test_id="CT-NETWORK-001",
     category="communication",
+    fixture_id="FIXTURE-003",
+    fixture_mode="mock",
     interface="Network",
     equipment="None",
 )
-def test_network_packet_loopback(network: MockNetworkInterface, ct_result: CTResultRecorder) -> None:
+def test_network_packet_loopback(fixture_003: Fixture003, ct_result: CTResultRecorder) -> None:
+    network = fixture_003.network
     payload = b'{"command":"health","sequence":1}'
     assert network.write(payload) == len(payload)
     assert network.read() == payload

@@ -1,21 +1,23 @@
 import pytest
 
 from test_envs.tests.pytest.conftest import CTResultRecorder
-from test_envs.tests.pytest.test_interfaces.usb import MockUSBInterface
-from test_envs.tests.pytest.test_equipments.digilent import MockDigilentController
+from test_envs.tests.pytest.fixtures.fixture_002_usb_digilent import Fixture002, fixture_002
 
 
 @pytest.mark.ct(
     test_id="CT-USB-001",
     category="communication",
+    fixture_id="FIXTURE-002",
+    fixture_mode="mock",
     interface="USB",
     equipment="Digilent",
 )
 def test_usb_bulk_loopback(
-    usb: MockUSBInterface,
-    digilent: MockDigilentController,
+    fixture_002: Fixture002,
     ct_result: CTResultRecorder,
 ) -> None:
+    usb = fixture_002.usb
+    digilent = fixture_002.digilent
     payload = bytes(range(256))
     assert usb.write(payload) == len(payload)
     assert usb.read() == payload

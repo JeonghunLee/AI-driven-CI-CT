@@ -15,10 +15,7 @@ class RepositoryStructureTests(unittest.TestCase):
         self.assertTrue((root / "config.json").is_file())
         self.assertTrue((root / "check.json").is_file())
         self.assertTrue((root / "unittest").is_dir())
-        for group in ("test_cases", "test_equipments", "test_interfaces"):
-            self.assertTrue((root / "pytest" / f"{group}_catalog.json").is_file())
-            self.assertFalse((root / "pytest" / group).exists())
-            self.assertFalse((Path("test_envs/tests/pytest") / group / "catalog.json").exists())
+        self.assertFalse((root / "pytest").exists())
 
     def test_unittest_structure(self) -> None:
         root = Path("test_envs/tests/unittest")
@@ -41,6 +38,17 @@ class RepositoryStructureTests(unittest.TestCase):
         self.assertEqual({path.name for path in root.glob("test_*.py")}, expected)
         for name in ("communication", "timing", "functional", "performance", "stability", "regression"):
             self.assertFalse((root / name).exists())
+
+    def test_pytest_fixture_structure(self) -> None:
+        root = Path("test_envs/tests/pytest/fixtures")
+        for name in (
+            "fixture_001_uart_saleae.py",
+            "fixture_002_usb_digilent.py",
+            "fixture_003_network.py",
+            "fixture_004_jtag_fpga.py",
+            "fixture_005_full_hil.py",
+        ):
+            self.assertTrue((root / name).is_file())
 
     def test_report_structure(self) -> None:
         root = Path("test_envs/reports")

@@ -220,7 +220,7 @@ Source: `.vscode/tasks.json`
 | CHECK | `CHECK 2: Show Environment Configuration` |
 | CHECK | `CHECK 3: Run Ollama Server (Foreground)` |
 | TEST CASE | `TEST CASE: ALL` |
-| TEST CASE | `TEST CASE: TEST ID` / catalog ID picker |
+| TEST CASE | `TEST CASE: TEST ID` / marker ID picker |
 | REPORT | `REPORT: Generate Latest Markdown` |
 | REPORT | `REPORT: Convert Latest Markdown to HTML` |
 | REPORT | `REPORT: Convert Latest Markdown to DOCX` |
@@ -245,15 +245,15 @@ Source: `.vscode/tasks.json`
 
 | Test case registration | Value |
 |---|---|
-| Registry | `test_envs/configs/pytest/test_cases_catalog.json` |
-| Registry key | `test_id` |
-| Collection validation | Marker ID + module path |
-| Missing registration | pytest collection error |
+| Source | `@pytest.mark.ct` |
+| Required fields | `test_id`, `category`, `fixture_id`, `fixture_mode` |
+| Collection validation | Required fields + unique TEST ID + filename/fixture ID + fixture mode |
+| Missing field / duplicate ID | pytest collection error |
 
-| Tool registry | Path | IDs |
+| Tool implementation | Path | IDs |
 |---|---|---|
-| Equipment | `test_envs/configs/pytest/test_equipments_catalog.json` | `fpga`, `saleae`, `digilent` |
-| Interface | `test_envs/configs/pytest/test_interfaces_catalog.json` | `uart`, `usb`, `jtag`, `network` |
+| Equipment | `test_envs/tests/pytest/test_equipments/` | `fpga`, `saleae`, `digilent` |
+| Interface | `test_envs/tests/pytest/test_interfaces/` | `uart`, `usb`, `jtag`, `network` |
 
 | Mode | Tool path | Result field |
 |---|---|---|
@@ -263,7 +263,7 @@ Source: `.vscode/tasks.json`
 
 | Selection | Derived result fields |
 |---|---|
-| `test_envs/configs/pytest/test_cases_catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
+| `@pytest.mark.ct:fixture_mode` | `test_mode`, `interface_mode`, `equipment_mode` |
 
 ```text
 test_envs/tests/
@@ -273,12 +273,11 @@ test_envs/tests/
 │   │   ├── test_fixture_002_usb_loopback.py
 │   │   └── test_fixture_003_network_loopback.py
 │   ├── fixtures/
-│   │   ├── fixture_001_uart.py
-│   │   ├── fixture_002_uart_saleae.py
-│   │   ├── fixture_003_usb_digilent.py
+│   │   ├── fixture_001_uart_saleae.py
+│   │   ├── fixture_002_usb_digilent.py
+│   │   ├── fixture_003_network.py
 │   │   ├── fixture_004_jtag_fpga.py
-│   │   ├── fixture_005_full_hil.py
-│   │   └── fixture_006_network.py
+│   │   └── fixture_005_full_hil.py
 │   ├── test_equipments/
 │   │   ├── fpga/{mock,hil}/
 │   │   ├── saleae/{mock,hil}/
@@ -313,9 +312,14 @@ test_envs/tests/
 
 | Order | Fixture composition | Test case | TEST ID |
 |---:|---|---|---|
-| 1 | `fixture_001_uart.py` + `fixture_002_uart_saleae.py` | `test_fixture_001_uart_timing.py` | `CT-UART-001` |
-| 2 | `fixture_003_usb_digilent.py` | `test_fixture_002_usb_loopback.py` | `CT-USB-001` |
-| 3 | `fixture_006_network.py` | `test_fixture_003_network_loopback.py` | `CT-NETWORK-001` |
+| 1 | `fixture_001_uart_saleae.py` | `test_fixture_001_uart_timing.py` | `CT-UART-001` |
+| 2 | `fixture_002_usb_digilent.py` | `test_fixture_002_usb_loopback.py` | `CT-USB-001` |
+| 3 | `fixture_003_network.py` | `test_fixture_003_network_loopback.py` | `CT-NETWORK-001` |
+
+| Fixture mode source | Priority |
+|---|---:|
+| CLI `--fixture-mode=mock|hil` | 1 |
+| Marker `fixture_mode` | 2 |
 
 ### 6.3 Equipment and Interface Separation
 
@@ -409,8 +413,8 @@ test_envs/reports/markdown/<test-id>/<timestamp>_result.md
           ├── <test-id>.md                    # Latest
           └── <test-id>/<execution-id>.md     # Per execution
       │
-      ├── docs/pytest_results.md              # Auto-generated pytest catalog
-      └── docs/unittest_results.md            # Auto-generated unittest catalog
+      ├── docs/pytest_results.md              # Auto-generated pytest index
+      └── docs/unittest_results.md            # Auto-generated unittest index
 ```
 
 ## 9. Markdown Report Schema
@@ -604,17 +608,13 @@ Excluded from GitHub Issue:
 │   ├── index.md                     # Manual system overview
 │   ├── pytest.md                    # pytest system description
 │   ├── unittest.md                  # unittest system description
-│   ├── pytest_results.md            # Auto-generated pytest catalog
-│   ├── unittest_results.md          # Auto-generated unittest catalog
+│   ├── pytest_results.md            # Auto-generated pytest index
+│   ├── unittest_results.md          # Auto-generated unittest index
 │   └── test/                        # Latest and execution reports
 ├── test_envs/
 │   ├── configs/
 │   │   ├── config.json
 │   │   ├── check.json
-│   │   ├── pytest/
-│   │   │   ├── test_cases_catalog.json
-│   │   │   ├── test_equipments_catalog.json
-│   │   │   └── test_interfaces_catalog.json
 │   │   └── unittest/                 # Future extension
 │   ├── tests/
 │   │   ├── pytest/

@@ -1,115 +1,74 @@
 from __future__ import annotations
 
 import os
-import json
 from dataclasses import dataclass, field
-from pathlib import Path
 from time import perf_counter
 from typing import Any
 
 import pytest
 
 from test_envs.tools.result_normalizer import ResultRecord, ResultStore
-from test_envs.tests.pytest.fixtures.fixture_001_uart import uart
-from test_envs.tests.pytest.fixtures.fixture_002_uart_saleae import saleae
-from test_envs.tests.pytest.fixtures.fixture_003_usb_digilent import digilent, usb
-from test_envs.tests.pytest.fixtures.fixture_004_jtag_fpga import fpga, jtag
-from test_envs.tests.pytest.fixtures.fixture_005_full_hil import full_hil
-from test_envs.tests.pytest.fixtures.fixture_006_network import network
-
-__all__ = ["digilent", "fpga", "full_hil", "jtag", "network", "saleae", "uart", "usb"]
-
-ROOT = Path(__file__).resolve().parents[3]
-PYTEST_CONFIG_ROOT = ROOT / "test_envs" / "configs" / "pytest"
-TEST_CASE_CATALOG = PYTEST_CONFIG_ROOT / "test_cases_catalog.json"
-EQUIPMENT_CATALOG = PYTEST_CONFIG_ROOT / "test_equipments_catalog.json"
-INTERFACE_CATALOG = PYTEST_CONFIG_ROOT / "test_interfaces_catalog.json"
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
-    parser.addoption("--test-id", action="store", help="Run one registered CT TEST ID")
+    parser.addoption("--test-id", action="store", help="Run one CT TEST ID")
+    parser.addoption(
+        "--fixture-mode",
+        action="store",
+        choices=("marker", "mock", "hil"),
+        default="marker",
+        help="Override @pytest.mark.ct fixture_mode; marker uses the marker value",
+    )
 
 
-def load_test_case_catalog() -> dict[str, dict[str, Any]]:
-    payload = json.loads(TEST_CASE_CATALOG.read_text(encoding="utf-8"))
-    entries = payload.get("test_cases", [])
-    if not isinstance(entries, list):
-        raise pytest.UsageError("configs/pytest/test_cases_catalog.json: test_cases must be a list")
-    catalog: dict[str, dict[str, Any]] = {}
-    for entry in entries:
-        if not isinstance(entry, dict) or not isinstance(entry.get("test_id"), str):
-            raise pytest.UsageError("configs/pytest/test_cases_catalog.json: invalid test case entry")
-        test_id = entry["test_id"]
-        if test_id in catalog:
-            raise pytest.UsageError(f"configs/pytest/test_cases_catalog.json: duplicate test_id: {test_id}")
-        catalog[test_id] = entry
-    return catalog
-
-
-def load_tool_catalog(path: Path) -> dict[str, dict[str, Any]]:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    entries = payload.get("tools", [])
-    if not isinstance(entries, list):
-        raise pytest.UsageError(f"{path.as_posix()}: tools must be a list")
-    catalog: dict[str, dict[str, Any]] = {}
-    for entry in entries:
-        if not isinstance(entry, dict) or not isinstance(entry.get("tool_id"), str):
-            raise pytest.UsageError(f"{path.as_posix()}: invalid tool entry")
-        tool_id = entry["tool_id"]
-        if tool_id in catalog:
-            raise pytest.UsageError(f"{path.as_posix()}: duplicate tool_id: {tool_id}")
-        catalog[tool_id] = entry
-    return catalog
+def effective_fixture_mode(request: pytest.FixtureRequest) -> str:
+    override = request.config.getoption("--fixture-mode")
+    if override in {"mock", "hil"}:
+        return override
+    marker = request.node.get_closest_marker("ct")
+    if marker is None:
+        raise RuntimeError("Fixture mode requires @pytest.mark.ct")
+    return str(marker.kwargs["fixture_mode"])
 
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
-    catalog = load_test_case_catalog()
-    interfaces = load_tool_catalog(INTERFACE_CATALOG)
-    equipments = load_tool_catalog(EQUIPMENT_CATALOG)
-    selected_test_id = config.getoption("--test-id", default=None)
-    if selected_test_id:
-        if selected_test_id not in catalog:
-            raise pytest.UsageError(f"Unknown TEST ID: {selected_test_id}")
-        selected = [
-            item
-            for item in items
-            if (marker := item.get_closest_marker("ct")) is not None
-            and marker.kwargs.get("test_id") == selected_test_id
-        ]
-        deselected = [item for item in items if item not in selected]
-        config.hook.pytest_deselected(items=deselected)
-        items[:] = selected
+    ct_items: dict[str, pytest.Item] = {}
+    required = {"test_id", "category", "fixture_id", "fixture_mode"}
     for item in items:
         marker = item.get_closest_marker("ct")
         if marker is None:
             continue
-        test_id = marker.kwargs.get("test_id")
-        if test_id not in catalog:
-            raise pytest.UsageError(f"Unregistered CT test_id: {test_id}")
-        module = Path(str(item.path)).resolve().relative_to(ROOT).as_posix()
-        if module != catalog[test_id].get("module"):
+        missing = sorted(required - marker.kwargs.keys())
+        if missing:
+            raise pytest.UsageError(f"CT marker missing fields for {item.nodeid}: {', '.join(missing)}")
+        test_id = marker.kwargs["test_id"]
+        if not isinstance(test_id, str) or not test_id:
+            raise pytest.UsageError(f"Invalid CT test_id for {item.nodeid}: {test_id!r}")
+        if test_id in ct_items:
+            raise pytest.UsageError(f"Duplicate CT test_id: {test_id}")
+        name_parts = item.path.stem.split("_", 3)
+        expected_fixture_id = (
+            f"FIXTURE-{name_parts[2]}"
+            if len(name_parts) == 4 and name_parts[:2] == ["test", "fixture"]
+            else None
+        )
+        if marker.kwargs["fixture_id"] != expected_fixture_id:
             raise pytest.UsageError(
-                f"CT module mismatch for {test_id}: {module} != {catalog[test_id].get('module')}"
+                f"Fixture ID mismatch for {item.nodeid}: "
+                f"{marker.kwargs['fixture_id']} != {expected_fixture_id}"
             )
-        entry = catalog[test_id]
-        interface_tool = entry.get("interface_tool")
-        equipment_tool = entry.get("equipment_tool")
-        test_mode = entry.get("test_mode")
-        interface_mode = test_mode
-        equipment_mode = test_mode if equipment_tool is not None else "none"
-        if interface_tool not in interfaces:
-            raise pytest.UsageError(f"Unknown interface tool for {test_id}: {interface_tool}")
-        if equipment_tool is not None and equipment_tool not in equipments:
-            raise pytest.UsageError(f"Unknown equipment tool for {test_id}: {equipment_tool}")
-        if interface_mode not in interfaces[interface_tool].get("implementations", {}):
-            raise pytest.UsageError(f"Unknown interface mode for {test_id}: {interface_mode}")
-        if equipment_tool is not None and equipment_mode not in equipments[equipment_tool].get("implementations", {}):
-            raise pytest.UsageError(f"Unknown equipment mode for {test_id}: {equipment_mode}")
-        if marker.kwargs.get("interface") != interfaces[interface_tool].get("name"):
-            raise pytest.UsageError(f"Interface marker mismatch for {test_id}")
-        expected_equipment = equipments[equipment_tool]["name"] if equipment_tool else "None"
-        if marker.kwargs.get("equipment", "None") != expected_equipment:
-            raise pytest.UsageError(f"Equipment marker mismatch for {test_id}")
+        if marker.kwargs["fixture_mode"] not in {"mock", "hil"}:
+            raise pytest.UsageError(f"Invalid fixture_mode for {test_id}: {marker.kwargs['fixture_mode']}")
+        ct_items[test_id] = item
+
+    selected_test_id = config.getoption("--test-id", default=None)
+    if selected_test_id:
+        if selected_test_id not in ct_items:
+            raise pytest.UsageError(f"Unknown TEST ID: {selected_test_id}")
+        selected = [ct_items[selected_test_id]]
+        deselected = [item for item in items if item not in selected]
+        config.hook.pytest_deselected(items=deselected)
+        items[:] = selected
 
 
 @dataclass
@@ -130,9 +89,6 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
     if marker is None:
         raise RuntimeError("ct_result can only be used by a test marked with @pytest.mark.ct")
     test_id = marker.kwargs.get("test_id", request.node.name.upper())
-    entry = load_test_case_catalog().get(test_id)
-    if entry is None:
-        raise RuntimeError(f"Unregistered CT test_id: {test_id}")
     recorder = CTResultRecorder()
     started = perf_counter()
     yield recorder
@@ -141,7 +97,7 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
     if report is not None and report.skipped:
         status = "SKIP"
     values = marker.kwargs
-    test_mode = entry["test_mode"]
+    test_mode = effective_fixture_mode(request)
     equipment = values.get("equipment", "None")
     result = ResultRecord(
         test_id=test_id,

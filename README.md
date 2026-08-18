@@ -102,7 +102,7 @@ python -m test_envs.tools.environment_setup python --platform config
 | TEST Task | Scope | VS Code group |
 |---|---|---|
 | `TEST CASE: ALL` | All registered TEST cases | Default test |
-| `TEST CASE: TEST ID` | Catalog `test_id` picker | Test |
+| `TEST CASE: TEST ID` | Marker `test_id` picker | Test |
 
 ## 테스트와 리포트
 
@@ -120,10 +120,6 @@ python -m test_envs.tools.environment_setup python --platform config
 test_envs/configs/
 ├── config.json
 ├── check.json
-├── pytest/
-│   ├── test_cases_catalog.json
-│   ├── test_equipments_catalog.json
-│   └── test_interfaces_catalog.json
 └── unittest/                 # Future extension
 ```
 
@@ -241,15 +237,16 @@ test_envs/reports/
 
 | TEST CASE registration | 값 |
 |---|---|
-| Catalog | `test_envs/configs/pytest/test_cases_catalog.json` |
+| Source | `@pytest.mark.ct` |
 | Validation | `pytest_collection_modifyitems` |
-| Unregistered CT | Collection error |
-| Module mismatch | Collection error |
+| Required fields | `test_id`, `category`, `fixture_id`, `fixture_mode` |
+| Fixture ID validation | `test_fixture_<NNN>_*.py` = `FIXTURE-<NNN>` |
+| Duplicate TEST ID | Collection error |
 
-| Tool registry | Tool IDs |
+| Tool implementation | Tool IDs |
 |---|---|
-| `test_envs/configs/pytest/test_interfaces_catalog.json` | `uart`, `usb`, `jtag`, `network` |
-| `test_envs/configs/pytest/test_equipments_catalog.json` | `fpga`, `saleae`, `digilent` |
+| `test_interfaces/` | `uart`, `usb`, `jtag`, `network` |
+| `test_equipments/` | `fpga`, `saleae`, `digilent` |
 
 | Tool implementation | 구분 |
 |---|---|
@@ -258,18 +255,22 @@ test_envs/reports/
 
 | Mode | Field | Source |
 |---|---|---|
-| TEST | `test_mode` | `test_cases/catalog.json` |
-| Interface | `interface_mode` | `test_mode` |
-| Equipment | `equipment_mode` | `test_mode` / `none` |
+| TEST | `fixture_mode` | `@pytest.mark.ct` |
+| Interface | `interface_mode` | `fixture_mode` |
+| Equipment | `equipment_mode` | `fixture_mode` / `none` |
 
 | Fixture | Combination |
 |---|---|
-| `fixture_001_uart.py` | UART mock |
-| `fixture_002_uart_saleae.py` | UART mock + Saleae mock |
-| `fixture_003_usb_digilent.py` | USB mock + Digilent mock |
+| `fixture_001_uart_saleae.py` | UART + Saleae |
+| `fixture_002_usb_digilent.py` | USB + Digilent |
+| `fixture_003_network.py` | Network |
 | `fixture_004_jtag_fpga.py` | JTAG mock + FPGA mock |
 | `fixture_005_full_hil.py` | Full HIL gate |
-| `fixture_006_network.py` | Network mock |
+
+| Mode source | Priority |
+|---|---:|
+| CLI `--fixture-mode=mock|hil` | 1 |
+| Marker `fixture_mode` | 2 |
 
 | TEST Program | Interface Tool | Equipment Tool |
 |---|---|---|

@@ -86,7 +86,9 @@
                 "pytest",
                 "-p",
                 "no:cacheprovider",
-                "test_envs/tests/pytest/test_cases"
+                "test_envs/tests/pytest/test_cases",
+                "--fixture-mode",
+                "${input:fixtureMode}"
             ],
             "group": {
                 "kind": "test",
@@ -105,7 +107,9 @@
                 "no:cacheprovider",
                 "test_envs/tests/pytest/test_cases",
                 "--test-id",
-                "${input:testCaseId}"
+                "${input:testCaseId}",
+                "--fixture-mode",
+                "${input:fixtureMode}"
             ],
             "group": {
                 "kind": "test",
@@ -206,6 +210,17 @@
                 "CT-NETWORK-001"
             ],
             "default": "CT-UART-001"
+        },
+        {
+            "id": "fixtureMode",
+            "type": "pickString",
+            "description": "Fixture mode",
+            "options": [
+                "marker",
+                "mock",
+                "hil"
+            ],
+            "default": "marker"
         }
     ]
 }

@@ -91,10 +91,19 @@
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
       "module": "pytest",
-      "args": ["${file}", "-s", "-vv"],
+      "args": ["${file}", "-s", "-vv", "--fixture-mode", "${input:fixtureMode}"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": false
+    }
+  ],
+  "inputs": [
+    {
+      "id": "fixtureMode",
+      "type": "pickString",
+      "description": "Fixture mode",
+      "options": ["marker", "mock", "hil"],
+      "default": "marker"
     }
   ]
 }

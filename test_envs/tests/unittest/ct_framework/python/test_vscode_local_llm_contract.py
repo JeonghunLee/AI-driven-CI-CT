@@ -28,7 +28,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             self.assertEqual(configuration["module"], "test_envs.tools.configuration")
             self.assertEqual(configuration["args"], ["config"])
             self.assertNotEqual(configuration["module"], "test_envs.tools.environment_setup")
-        self.assertNotIn("inputs", self.launch)
+        self.assertEqual([item["id"] for item in self.launch["inputs"]], ["fixtureMode"])
 
     def test_python_setup_uses_platform_picker(self) -> None:
         task = next(
@@ -64,7 +64,11 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         )
 
     def test_vscode_json_contains_no_os_metadata(self) -> None:
-        self.assertEqual([item["id"] for item in self.tasks["inputs"]], ["testCaseId"])
+        self.assertEqual(
+            [item["id"] for item in self.tasks["inputs"]],
+            ["testCaseId", "fixtureMode"],
+        )
+        self.assertNotIn("targetOS", {item["id"] for item in self.tasks["inputs"]})
         for configuration in self.launch["configurations"]:
             expected_python = (
                 "python"
@@ -129,17 +133,22 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         self.assertTrue(tasks[0]["group"]["isDefault"])
         self.assertFalse(tasks[1]["group"]["isDefault"])
         self.assertIn("${input:testCaseId}", tasks[1]["args"])
+        for task in tasks:
+            self.assertIn("--fixture-mode", task["args"])
+            self.assertIn("${input:fixtureMode}", task["args"])
 
-    def test_test_case_id_picker_matches_catalog(self) -> None:
+    def test_test_case_id_picker_matches_ct_markers(self) -> None:
         picker = next(item for item in self.tasks["inputs"] if item["id"] == "testCaseId")
-        catalog = json.loads(
-            Path("test_envs/configs/pytest/test_cases_catalog.json").read_text(encoding="utf-8")
-        )
-        test_ids = [item["test_id"] for item in catalog["test_cases"]]
+        test_ids = ["CT-UART-001", "CT-USB-001", "CT-NETWORK-001"]
 
         self.assertEqual(picker["type"], "pickString")
         self.assertEqual(picker["options"], test_ids)
         self.assertIn(picker["default"], test_ids)
+
+    def test_fixture_mode_picker_supports_override(self) -> None:
+        picker = next(item for item in self.tasks["inputs"] if item["id"] == "fixtureMode")
+        self.assertEqual(picker["options"], ["marker", "mock", "hil"])
+        self.assertEqual(picker["default"], "marker")
 
     def test_report_tasks_include_html_and_docx(self) -> None:
         labels = {item["label"] for item in self.tasks["tasks"]}

@@ -18,21 +18,21 @@
 | `CT-USB-001` | USB | Bulk loopback / packetization / integrity |
 | `CT-NETWORK-001` | Network | Packet loopback / latency / integrity |
 
-## TEST CASE Registry
+## TEST CASE Marker
 
 | Item | Value |
 |---|---|
-| File | `test_envs/configs/pytest/test_cases_catalog.json` |
-| Key | `test_id` |
-| Mode selection | `test_mode` |
+| Source | `@pytest.mark.ct` |
+| Required fields | `test_id`, `category`, `fixture_id`, `fixture_mode` |
+| Mode selection | `fixture_mode` |
 | Derived modes | `interface_mode`, `equipment_mode` |
-| Validation | pytest collection hook |
-| Missing / mismatch | Collection error |
+| Validation | pytest collection hook + filename/fixture ID match |
+| Missing / duplicate / invalid mode | Collection error |
 
-| Registry | Tools |
+| Directory | Tools |
 |---|---|
-| `test_envs/configs/pytest/test_equipments_catalog.json` | FPGA, Saleae, Digilent |
-| `test_envs/configs/pytest/test_interfaces_catalog.json` | USB, UART, JTAG, Network |
+| `test_envs/tests/pytest/test_equipments/` | FPGA, Saleae, Digilent |
+| `test_envs/tests/pytest/test_interfaces/` | USB, UART, JTAG, Network |
 
 ## Structure
 
@@ -44,12 +44,11 @@ test_envs/tests/
 │   │   ├── test_fixture_002_usb_loopback.py
 │   │   └── test_fixture_003_network_loopback.py
 │   ├── fixtures/
-│   │   ├── fixture_001_uart.py
-│   │   ├── fixture_002_uart_saleae.py
-│   │   ├── fixture_003_usb_digilent.py
+│   │   ├── fixture_001_uart_saleae.py
+│   │   ├── fixture_002_usb_digilent.py
+│   │   ├── fixture_003_network.py
 │   │   ├── fixture_004_jtag_fpga.py
-│   │   ├── fixture_005_full_hil.py
-│   │   └── fixture_006_network.py
+│   │   └── fixture_005_full_hil.py
 │   ├── test_equipments/
 │   │   ├── fpga/{mock,hil}/
 │   │   ├── saleae/{mock,hil}/
@@ -76,6 +75,18 @@ test_envs/tests/
 | 1 | UART + Saleae | `test_fixture_001_uart_timing.py` | `CT-UART-001` |
 | 2 | USB + Digilent | `test_fixture_002_usb_loopback.py` | `CT-USB-001` |
 | 3 | Network | `test_fixture_003_network_loopback.py` | `CT-NETWORK-001` |
+
+## Fixture Mode
+
+| Source | Priority | Value |
+|---|---:|---|
+| CLI | 1 | `--fixture-mode=mock`, `--fixture-mode=hil` |
+| Marker | 2 | `fixture_mode="mock"`, `fixture_mode="hil"` |
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=mock
+.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=hil
+```
 
 ## Execution Model
 

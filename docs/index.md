@@ -187,10 +187,10 @@ flowchart TD
 | USB | `CT-USB-001` | bytes, packets, integrity |
 | Network | `CT-NETWORK-001` | bytes, packets, latency, integrity |
 
-| Tool group | Registry | Tools |
+| Tool group | Directory | Tools |
 |---|---|---|
-| Equipment | `test_envs/configs/pytest/test_equipments_catalog.json` | FPGA, Saleae, Digilent |
-| Interface | `test_envs/configs/pytest/test_interfaces_catalog.json` | USB, UART, JTAG, Network |
+| Equipment | `test_envs/tests/pytest/test_equipments/` | FPGA, Saleae, Digilent |
+| Interface | `test_envs/tests/pytest/test_interfaces/` | USB, UART, JTAG, Network |
 
 | Mode | Directory | Result |
 |---|---|---|
@@ -199,7 +199,7 @@ flowchart TD
 
 | Selection | Derived |
 |---|---|
-| `test_envs/configs/pytest/test_cases_catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
+| `@pytest.mark.ct:fixture_mode` | `test_mode`, `interface_mode`, `equipment_mode` |
 
 ### Repository Structure
 
@@ -210,7 +210,6 @@ flowchart TD
     ├── configs/
     │   ├── config.json
     │   ├── check.json
-    │   ├── pytest/{test_cases,test_equipments,test_interfaces}_catalog.json
     │   └── unittest/                     # Future extension
     ├── tests/
     │   ├── pytest/

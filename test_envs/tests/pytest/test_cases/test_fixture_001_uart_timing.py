@@ -1,19 +1,22 @@
 import pytest
 
 from test_envs.tests.pytest.conftest import CTResultRecorder
-from test_envs.tests.pytest.test_equipments.saleae import MockSaleaeController
-from test_envs.tests.pytest.test_interfaces.uart import MockUARTInterface
+from test_envs.tests.pytest.fixtures.fixture_001_uart_saleae import Fixture001, fixture_001
 
 
 @pytest.mark.ct(
     test_id="CT-UART-001",
     category="timing",
+    fixture_id="FIXTURE-001",
+    fixture_mode="mock",
     interface="UART",
     equipment="Saleae",
 )
 def test_uart_timing(
-    uart: MockUARTInterface, saleae: MockSaleaeController, ct_result: CTResultRecorder
+    fixture_001: Fixture001, ct_result: CTResultRecorder
 ) -> None:
+    uart = fixture_001.uart
+    saleae = fixture_001.saleae
     uart.write(b"CI/CT timing probe")
     assert uart.read() == b"CI/CT timing probe"
 
