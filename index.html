@@ -517,7 +517,7 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="pytest_results.html">
+<a class="md-nav__link" href="tests/pytest/index.html">
 <span class="md-ellipsis">
     
   
@@ -529,7 +529,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="unittest_results.html">
+<a class="md-nav__link" href="tests/unittest/index.html">
 <span class="md-ellipsis">
     
   
@@ -894,10 +894,9 @@
 </code></pre></div>
 <h3 id="vs-code">VS Code 실행</h3>
 <ul>
-<li>Run and Debug: <code>Setup 2: Install Python Virtual Environment</code></li>
-<li>Task: <code>Setup 2: Install Python Virtual Environment</code></li>
-<li>Task: <code>Setup 2: Install Python Virtual Environment</code></li>
-<li>Setup module: <code>python -m tools.environment_setup python</code></li>
+<li>Run and Debug: <code>SETUP 2: Install Python Virtual Environment</code></li>
+<li>Task: <code>SETUP 2: Install Python Virtual Environment</code></li>
+<li>Setup module: <code>python -m test_envs.tools.environment_setup python</code></li>
 </ul>
 <h2 id="2-ollama">2. Ollama 환경 구성</h2>
 <h3 id="_4">구성 요소</h3>
@@ -915,7 +914,7 @@
 </tr>
 <tr>
 <td>Primary model</td>
-<td><code>config/config.json</code> / <code>OLLAMA_MODEL</code></td>
+<td><code>test_envs/configs/config.json</code> / <code>OLLAMA_MODEL</code></td>
 </tr>
 <tr>
 <td>Default endpoint</td>
@@ -931,11 +930,11 @@
 </tr>
 <tr>
 <td>Project config</td>
-<td><code>config/config.json</code></td>
+<td><code>test_envs/configs/config.json</code></td>
 </tr>
 <tr>
 <td>Environment check</td>
-<td><code>config/check.json</code></td>
+<td><code>test_envs/configs/check.json</code></td>
 </tr>
 <tr>
 <td>Model selection</td>
@@ -943,7 +942,7 @@
 </tr>
 <tr>
 <td>Installed inventory</td>
-<td><code>python -m tools.configuration check</code></td>
+<td><code>python -m test_envs.tools.configuration check</code></td>
 </tr>
 <tr>
 <td>Offline fallback</td>
@@ -1004,7 +1003,7 @@
 </tr>
 <tr>
 <td><code>config</code></td>
-<td><code>config/config.json</code>의 <code>os</code> 사용</td>
+<td><code>test_envs/configs/config.json</code> / <code>os</code></td>
 </tr>
 <tr>
 <td><code>windows</code></td>
@@ -1027,14 +1026,15 @@
 </ul>
 <h3 id="vs-code_1">VS Code 실행</h3>
 <ul>
-<li>Run and Debug: <code>Setup 3: Install Ollama and Local LLM</code></li>
-<li>Task: <code>Setup 3: Install Ollama and Local LLM</code></li>
-<li>Setup module: <code>python -m tools.environment_setup ollama [--model &lt;model&gt;]</code></li>
-<li>Check task: <code>Check: Refresh Environment Check File</code></li>
-<li>Check launch: <code>Check 1: Refresh Environment Check File</code></li>
-<li>Foreground server task: <code>Local LLM: Run Ollama Server (Foreground)</code></li>
+<li>Run and Debug: <code>SETUP 3: Install Ollama and Local LLM</code></li>
+<li>Task: <code>SETUP 3: Install Ollama and Local LLM</code></li>
+<li>Setup module: <code>python -m test_envs.tools.environment_setup ollama [--model &lt;model&gt;]</code></li>
+<li>Check task: <code>CHECK 1: Refresh Environment Check File</code></li>
+<li>Check launch: <code>CHECK 1: Refresh Environment Check File</code></li>
+<li>Foreground server task: <code>CHECK 3: Run Ollama Server (Foreground)</code></li>
 <li>Setup child server: None</li>
 <li>Server lifecycle: Foreground task ownership</li>
+<li>Existing server: Reuse / exit <code>0</code></li>
 </ul>
 <h2 id="3-vs-code">3. VS Code 환경 구성</h2>
 <h3 id="_7">설정 파일</h3>
@@ -1053,15 +1053,15 @@
 </thead>
 <tbody>
 <tr>
-<td><code>Setup 1: Select Operating System</code></td>
-<td><code>config/config.json</code> OS update</td>
+<td><code>SETUP 1: Select Operating System</code></td>
+<td><code>test_envs/configs/config.json</code> OS update</td>
 </tr>
 <tr>
-<td><code>Setup 2: Install Python Virtual Environment</code></td>
+<td><code>SETUP 2: Install Python Virtual Environment</code></td>
 <td>Python setup Task delegation</td>
 </tr>
 <tr>
-<td><code>Setup 3: Install Ollama and Local LLM</code></td>
+<td><code>SETUP 3: Install Ollama and Local LLM</code></td>
 <td>Ollama setup Task delegation</td>
 </tr>
 </tbody>
@@ -1087,7 +1087,7 @@
 <td>Direct execution</td>
 </tr>
 <tr>
-<td><code>Check 1: Refresh Environment Check File</code></td>
+<td><code>CHECK 1: Refresh Environment Check File</code></td>
 <td>Environment check Task delegation</td>
 </tr>
 <tr>
@@ -1095,8 +1095,8 @@
 <td>확장 모듈 <code>main()</code> 실행</td>
 </tr>
 <tr>
-<td><code>Test Result: Generate Latest Markdown</code></td>
-<td>최근 TEST 결과 Markdown 생성</td>
+<td><code>Test Result: Generate Pending Markdown</code></td>
+<td>Missing Execution ID Markdown 생성</td>
 </tr>
 <tr>
 <td><code>Debug: Current Python File</code></td>
@@ -1164,8 +1164,8 @@
 <h3 id="testing">Testing</h3>
 <pre class="mermaid"><code>flowchart TD
     A[VS Code Testing] --&gt; B[pytest Adapter]
-    B --&gt; C[tests/pytest]
-    B --&gt; D[tests/unittest]
+    B --&gt; C[test_envs/tests/pytest]
+    B --&gt; D[test_envs/tests/unittest]
     C --&gt; E[Integration / Functional / Hardware CT]
     D --&gt; F[unittest.TestCase]</code></pre>
 <h3 id="tasks">Tasks</h3>
@@ -1242,19 +1242,19 @@
 <thead>
 <tr>
 <th>Tool group</th>
-<th>Registry</th>
+<th>Directory</th>
 <th>Tools</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Equipment</td>
-<td><code>test_equipments/catalog.json</code></td>
+<td><code>test_envs/tests/pytest/test_equipments/</code></td>
 <td>FPGA, Saleae, Digilent</td>
 </tr>
 <tr>
 <td>Interface</td>
-<td><code>test_interfaces/catalog.json</code></td>
+<td><code>test_envs/tests/pytest/test_interfaces/</code></td>
 <td>USB, UART, JTAG, Network</td>
 </tr>
 </tbody>
@@ -1289,43 +1289,34 @@
 </thead>
 <tbody>
 <tr>
-<td><code>test_cases/catalog.json:test_mode</code></td>
-<td><code>interface_mode</code>, <code>equipment_mode</code></td>
+<td><code>@pytest.mark.ct:fixture_mode</code></td>
+<td><code>test_mode</code>, <code>interface_mode</code>, <code>equipment_mode</code></td>
 </tr>
 </tbody>
 </table>
 <h3 id="repository-structure">Repository Structure</h3>
-<div class="highlight"><pre><span></span><code>tests/
-├── pytest/
-│   ├── test_cases/
-│   │   ├── communication/
-│   │   ├── timing/
-│   │   ├── functional/
-│   │   ├── performance/
-│   │   ├── stability/
-│   │   └── regression/
-│   ├── fixtures/
-│   │   ├── fixture_001_uart.py
-│   │   ├── fixture_002_uart_saleae.py
-│   │   ├── fixture_003_usb_digilent.py
-│   │   ├── fixture_004_jtag_fpga.py
-│   │   ├── fixture_005_full_hil.py
-│   │   └── fixture_006_network.py
-│   ├── test_equipments/
-│   │   ├── fpga/{mock,hil}/
-│   │   ├── saleae/{mock,hil}/
-│   │   └── digilent/{mock,hil}/
-│   ├── test_interfaces/
-│   │   ├── usb/{mock,hil}/
-│   │   ├── uart/{mock,hil}/
-│   │   ├── jtag/{mock,hil}/
-│   │   └── network/{mock,hil}/
-│   └── conftest.py
-└── unittest/
-    ├── python/
-    ├── c_cpp/
-    ├── firmware/
-    └── common/
+<div class="highlight"><pre><span></span><code>.
+├── docs/
+└── test_envs/
+    ├── configs/
+    │   ├── config.json
+    │   ├── check.json
+    │   └── unittest/                     # Future extension
+    ├── tests/
+    │   ├── pytest/
+    │   │   ├── test_cases/test_fixture_&lt;NNN&gt;_&lt;test-content&gt;.py
+    │   │   ├── fixtures/
+    │   │   ├── test_equipments/{fpga,saleae,digilent}/{mock,hil}/
+    │   │   ├── test_interfaces/{usb,uart,jtag,network}/{mock,hil}/
+    │   │   └── conftest.py
+    │   └── unittest/
+    │       ├── ct_framework/python/
+    │       ├── python/
+    │       ├── c_cpp/
+    │       ├── firmware/
+    │       └── common/
+    ├── reports/
+    └── tools/
 </code></pre></div>
 <h3 id="layer-structure">Layer Structure</h3>
 <pre class="mermaid"><code>flowchart TD
@@ -1362,7 +1353,7 @@
 </tr>
 <tr>
 <td>Result Recorder</td>
-<td>Result, log, measurement 저장</td>
+<td><code>result.json</code>, <code>test.log</code></td>
 </tr>
 </tbody>
 </table>
@@ -1378,35 +1369,27 @@
 <pre class="mermaid"><code>flowchart TD
     A[unittest / pytest] --&gt; B[Result]
     A --&gt; C[Log]
-    A --&gt; D[Measurement]
     B --&gt; E[Latest Result Selection]
     C --&gt; E
-    D --&gt; E
     E --&gt; F[Ollama + Local LLM]
     F --&gt; G[Markdown Report]
-    G --&gt; H[reports/markdown]
-    G --&gt; I[test_result/markdown/latest.md]
-    G --&gt; J[docs/test]
-    G --&gt; K[Pandoc DOCX / PDF / HTML]
+    G --&gt; H[test_envs/reports/markdown]
+    G --&gt; J[docs/tests/pytest + docs/tests/unittest]
+    G --&gt; K[test_envs/reports/pandoc]
     F --&gt; L{Escalation?}
     L -- Yes --&gt; M[Codex]</code></pre>
 <h3 id="runtime-data">Runtime Data</h3>
-<div class="highlight"><pre><span></span><code>reports/
-├── logs/&lt;test-id&gt;/&lt;execution-id&gt;/
-│   ├── result.json
-│   ├── analysis.json
-│   ├── codex-escalation.json
-│   ├── test.log
-│   ├── stdout.log
-│   ├── stderr.log
-│   ├── equipment.log
-│   └── interface.log
-├── measurements/&lt;test-id&gt;/&lt;execution-id&gt;/
-│   ├── measurement.json
-│   └── measurement.csv
+<div class="highlight"><pre><span></span><code>test_envs/reports/
+├── pytest/test_cases/&lt;test-id&gt;/
+│   ├── &lt;timestamp&gt;_result.json
+│   └── &lt;timestamp&gt;_test.log
+├── unittest/&lt;test-id&gt;/
+│   ├── &lt;timestamp&gt;_result.json
+│   └── &lt;timestamp&gt;_test.log
+├── pandoc/&lt;test-id&gt;/
+│   └── &lt;timestamp&gt;_result.{html,pdf,docx}
 └── markdown/&lt;test-id&gt;/
-    ├── latest.md
-    └── &lt;execution-id&gt;/result.md
+    └── &lt;timestamp&gt;_result.md
 </code></pre></div>
 <h3 id="mkdocs-data">MkDocs Data</h3>
 <div class="highlight"><pre><span></span><code>docs/
@@ -1436,8 +1419,13 @@
 <td>Manual</td>
 </tr>
 <tr>
-<td><code>docs/test/index.md</code></td>
-<td>TEST 목록, 최신 링크, 실행 이력</td>
+<td><code>docs/tests/pytest/index.md</code></td>
+<td>pytest 목록, 최신 링크, 실행 이력</td>
+<td>Automatic</td>
+</tr>
+<tr>
+<td><code>docs/tests/unittest/index.md</code></td>
+<td>unittest 목록, 최신 링크, 실행 이력</td>
 <td>Automatic</td>
 </tr>
 <tr>
@@ -1453,13 +1441,13 @@
 </tbody>
 </table>
 <h3 id="report-generation">Report Generation</h3>
-<div class="highlight"><pre><span></span><code>python -m test_result --docs
+<div class="highlight"><pre><span></span><code>python -m test_envs.tools.test_result --pending --docs
 ├── Latest result selection
 ├── Local LLM analysis
 ├── Canonical Markdown generation
 ├── Execution snapshot creation
 ├── Latest TEST page update
-└── docs/test/index.md update
+└── docs/tests/{pytest,unittest}/index.md update
 </code></pre></div>
 </article>
 </div>

@@ -6,29 +6,28 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Test results and execution history" name="description"/>
-<link href="pytest.html" rel="prev"/>
-<link href="tests/pytest/index.html" rel="next"/>
-<link href="imgs/logo.jpg" rel="icon"/>
+<link href="../pytest/index.html" rel="prev"/>
+<link href="../../imgs/logo.jpg" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
 <title>Unittest - AI-driven CI/CT</title>
-<link href="assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
-<link href="assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/iframe-worker/shim"></script>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
 <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
-<link href="stylesheets/1_basic.css" rel="stylesheet"/>
-<link href="stylesheets/2_toc.css" rel="stylesheet"/>
-<link href="stylesheets/3_admonition.css" rel="stylesheet"/>
-<link href="stylesheets/4_numbering.css" rel="stylesheet"/>
-<script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<link href="../../stylesheets/1_basic.css" rel="stylesheet"/>
+<link href="../../stylesheets/2_toc.css" rel="stylesheet"/>
+<link href="../../stylesheets/3_admonition.css" rel="stylesheet"/>
+<link href="../../stylesheets/4_numbering.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
 </head>
 <body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
 <input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#unittest">
+<a class="md-skip" href="#unittest-results">
           콘텐츠로 이동
         </a>
 </div>
@@ -36,8 +35,8 @@
 </div>
 <header class="md-header md-header--shadow" data-md-component="header">
 <nav aria-label="상단/헤더" class="md-header__inner md-grid">
-<a aria-label="AI-driven CI/CT" class="md-header__button md-logo" data-md-component="logo" href="index.html" title="AI-driven CI/CT">
-<img alt="logo" src="imgs/logo.jpg"/>
+<a aria-label="AI-driven CI/CT" class="md-header__button md-logo" data-md-component="logo" href="../../index.html" title="AI-driven CI/CT">
+<img alt="logo" src="../../imgs/logo.jpg"/>
 </a>
 <label class="md-header__button md-icon" for="__drawer">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
@@ -124,8 +123,8 @@
 <div class="md-sidebar__inner">
 <nav aria-label="네비게이션" class="md-nav md-nav--primary" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="AI-driven CI/CT" class="md-nav__button md-logo" data-md-component="logo" href="index.html" title="AI-driven CI/CT">
-<img alt="logo" src="imgs/logo.jpg"/>
+<a aria-label="AI-driven CI/CT" class="md-nav__button md-logo" data-md-component="logo" href="../../index.html" title="AI-driven CI/CT">
+<img alt="logo" src="../../imgs/logo.jpg"/>
 </a>
     AI-driven CI/CT
   </label>
@@ -141,7 +140,7 @@
 </div>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="index.html">
+<a class="md-nav__link" href="../../index.html">
 <span class="md-ellipsis">
     
   
@@ -152,8 +151,8 @@
   </span>
 </a>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
 <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
 <span class="md-ellipsis">
     
@@ -165,7 +164,7 @@
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_2">
 <span class="md-nav__icon md-icon"></span>
             
@@ -176,7 +175,57 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="pytest.html">
+<a class="md-nav__link" href="../../pytest.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../unittest.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST RESULTS
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST RESULTS
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../pytest/index.html">
 <span class="md-ellipsis">
     
   
@@ -200,7 +249,7 @@
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<a class="md-nav__link md-nav__link--active" href="unittest.html">
+<a class="md-nav__link md-nav__link--active" href="index.html">
 <span class="md-ellipsis">
     
   
@@ -217,111 +266,25 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#scope">
+<a class="md-nav__link" href="#unit-tests">
 <span class="md-ellipsis">
       
-        Scope
+        Unit Tests
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#structure">
+<a class="md-nav__link" href="#recent-executions">
 <span class="md-ellipsis">
       
-        Structure
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#execution-model">
-<span class="md-ellipsis">
-      
-        Execution Model
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#commands">
-<span class="md-ellipsis">
-      
-        Commands
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#report-files">
-<span class="md-ellipsis">
-      
-        Report Files
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#vs-code">
-<span class="md-ellipsis">
-      
-        VS Code
+        Recent Executions
       
     </span>
 </a>
 </li>
 </ul>
 </nav>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
-<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-<span class="md-ellipsis">
-    
-  
-    TEST RESULTS
-  
-
-    
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_3">
-<span class="md-nav__icon md-icon"></span>
-            
-  
-    TEST RESULTS
-  
-
-          </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="tests/pytest/index.html">
-<span class="md-ellipsis">
-    
-  
-    Pytest
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="tests/unittest/index.html">
-<span class="md-ellipsis">
-    
-  
-    Unittest
-  
-
-    
-  </span>
-</a>
 </li>
 </ul>
 </nav>
@@ -341,55 +304,19 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#scope">
+<a class="md-nav__link" href="#unit-tests">
 <span class="md-ellipsis">
       
-        Scope
+        Unit Tests
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#structure">
+<a class="md-nav__link" href="#recent-executions">
 <span class="md-ellipsis">
       
-        Structure
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#execution-model">
-<span class="md-ellipsis">
-      
-        Execution Model
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#commands">
-<span class="md-ellipsis">
-      
-        Commands
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#report-files">
-<span class="md-ellipsis">
-      
-        Report Files
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#vs-code">
-<span class="md-ellipsis">
-      
-        VS Code
+        Recent Executions
       
     </span>
 </a>
@@ -403,106 +330,45 @@
 <nav aria-label="네비게이션" class="md-path">
 <ol class="md-path__list">
 <li class="md-path__item">
-<a class="md-path__link" href="index.html">
+<a class="md-path__link" href="../../index.html">
 <span class="md-ellipsis">
     Overview
   </span>
 </a>
 </li>
 <li class="md-path__item">
-<a class="md-path__link" href="pytest.html">
+<a class="md-path__link" href="../pytest/index.html">
 <span class="md-ellipsis">
-    TEST Architecture
+    TEST RESULTS
   </span>
 </a>
 </li>
 </ol>
 </nav>
 <article class="md-content__inner md-typeset">
-<h1 id="unittest">unittest</h1>
-<h2 id="scope">Scope</h2>
+<h1 id="unittest-results">unittest Results</h1>
+<h2 id="unit-tests">Unit Tests</h2>
 <table>
 <thead>
 <tr>
-<th>Area</th>
-<th>Coverage</th>
+<th>Test ID</th>
+<th>Mode</th>
+<th>Latest</th>
+<th style="text-align: right;">Executions</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>CT Framework</td>
-<td>Configuration, tools, reports, mocks, VS Code contract</td>
-</tr>
-<tr>
-<td>Python</td>
-<td>Function, class, module, mock</td>
-</tr>
-<tr>
-<td>C/C++</td>
-<td>Native unit-test extension</td>
-</tr>
-<tr>
-<td>Firmware</td>
-<td>Hardware-independent firmware logic</td>
-</tr>
-<tr>
-<td>Common</td>
-<td>Shared fixtures, data, utilities</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td style="text-align: right;">0</td>
 </tr>
 </tbody>
 </table>
-<h2 id="structure">Structure</h2>
-<div class="highlight"><pre><span></span><code>test_envs/tests/unittest/
-├── ct_framework/
-│   └── python/
-├── python/
-├── c_cpp/
-├── firmware/
-└── common/
-</code></pre></div>
-<h2 id="execution-model">Execution Model</h2>
-<pre class="mermaid"><code>flowchart TD
-    A[unittest.TestCase] --&gt; B[Setup]
-    B --&gt; C[Test Method]
-    C --&gt; D[Assertion]
-    D --&gt; E[Cleanup]
-    E --&gt; F[JUnit / Result Data]</code></pre>
-<h2 id="commands">Commands</h2>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">unittest</span> <span class="n">discover</span> <span class="n">-v</span> <span class="n">-s</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">unittest</span> <span class="n">-p</span> <span class="s2">"test_*.py"</span>
-<span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">unittest</span>
-</code></pre></div>
-<h2 id="report-files">Report Files</h2>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Path</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Result</td>
-<td><code>test_envs/reports/unittest/&lt;test-id&gt;/&lt;timestamp&gt;_result.json</code></td>
-</tr>
-<tr>
-<td>Log</td>
-<td><code>test_envs/reports/unittest/&lt;test-id&gt;/&lt;timestamp&gt;_test.log</code></td>
-</tr>
-<tr>
-<td>Markdown</td>
-<td><code>test_envs/reports/markdown/&lt;test-id&gt;/&lt;timestamp&gt;_result.md</code></td>
-</tr>
-<tr>
-<td>Pandoc</td>
-<td><code>test_envs/reports/pandoc/&lt;test-id&gt;/&lt;timestamp&gt;_result.&lt;format&gt;</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="vs-code">VS Code</h2>
+<h2 id="recent-executions">Recent Executions</h2>
 <ul>
-<li>Testing path: <code>test_envs/tests/unittest</code></li>
-<li>Implementation: <code>unittest.TestCase</code></li>
-<li>VS Code Testing: pytest adapter</li>
+<li>None</li>
 </ul>
 </article>
 </div>
@@ -516,7 +382,7 @@
 </main>
 <footer class="md-footer">
 <nav aria-label="하단/푸터" class="md-footer__inner md-grid">
-<a aria-label="이전: Pytest" class="md-footer__link md-footer__link--prev" href="pytest.html">
+<a aria-label="이전: Pytest" class="md-footer__link md-footer__link--prev" href="../pytest/index.html">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
 </div>
@@ -527,19 +393,6 @@
 <div class="md-ellipsis">
                 Pytest
               </div>
-</div>
-</a>
-<a aria-label="다음: Pytest" class="md-footer__link md-footer__link--next" href="tests/pytest/index.html">
-<div class="md-footer__title">
-<span class="md-footer__direction">
-                다음
-              </span>
-<div class="md-ellipsis">
-                Pytest
-              </div>
-</div>
-<div class="md-footer__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
 </div>
 </a>
 </nav>
@@ -565,10 +418,10 @@
 <div class="md-dialog__inner md-typeset"></div>
 </div>
 <div class="md-progress" data-md-component="progress" role="progressbar"></div>
-<script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["toc.follow", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.tooltips", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
-<script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+<script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["toc.follow", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.tooltips", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+<script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 <script src="https://unpkg.com/mermaid@11.12.0/dist/mermaid.min.js"></script>
-<script src="javascripts/mermaid-init.js"></script>
+<script src="../../javascripts/mermaid-init.js"></script>
 </body>
 </html>
