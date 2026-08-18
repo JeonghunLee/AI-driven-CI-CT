@@ -2,68 +2,91 @@
 
 ## Test summary
 
-- **Description:** test_usb_bulk_loopback
-- **Category:** communication
-- **Environment:** local
-- **Configuration:** {'category': 'communication', 'fixture_id': 'FIXTURE-002', 'fixture_mode': 'mock', 'interface': 'USB', 'equipment': 'Digilent'}
-- **Test mode:** mock
-- **Equipment:** Digilent
-- **Equipment mode:** mock
-- **Interface:** USB
-- **Interface mode:** mock
-- **Result:** **PASS**
-- **Execution time:** 0.000 seconds
-- **Execution date:** 2026-08-18T15:18:47.350502+09:00
-- **Execution ID:** `20260818_151847_350402`
+| Item | Value |
+|---|---|
+| Description | test_usb_bulk_loopback |
+| Category | communication |
+| Environment | local |
+| Result | PASS |
+| Execution time | 0.001 seconds |
+| Execution date | 2026-08-18T15:38:44.506839+09:00 |
+| Execution ID | 20260818_153844_506736 |
 
-## Test Source
+### Test configs
 
 | Item | Value |
 |---|---|
-| Commit | `a51f1d40f8bf5857567efae02683d2875598fded` |
-| Branch | `main` |
+| Category | communication |
+| Fixture ID | FIXTURE-002 |
+| Fixture mode | mock |
+| Test mode | mock |
+| Equipment | Digilent |
+| Equipment mode | mock |
+| Interface | USB |
+| Interface mode | mock |
 
-## Measurement
+### Test Source
 
-- **bytes_transferred:** 256
-- **packet_count:** 4
-- **max_packet_size:** 64
-- **bus_voltage:** 5.0
-- **integrity_error:** 0.0
+| Item | Value |
+|---|---|
+| Commit | 31a3aa23c16241e3ac127c3311981afb8e38521a |
+| Branch | main |
 
-## Statistics
+### Measurement
 
-- **endpoint:** 1
-- **transfer_count:** 1
+| Item | Value |
+|---|---|
+| bytes_transferred | 256 |
+| packet_count | 4 |
+| max_packet_size | 64 |
+| bus_voltage | 5.0 |
+| integrity_error | 0.0 |
 
-## Important logs
+### Statistics
 
-- None
+| Item | Value |
+|---|---|
+| endpoint | 1 |
+| transfer_count | 1 |
 
-## Warnings
+### Logs
 
-- None
+| Item | Value |
+|---|---|
+| Test log | 20260818_153844_506736_test.log |
+| Important | None |
 
 ## Local LLM analysis
 
-Test completed successfully with no errors or warnings.
+| Item | Value |
+|---|---|
+| Classification | pass |
+| Confidence | 1.00 |
+| Analyzer | ollama/deepseek-r1:7b |
+| working | on |
 
-- **Classification:** `Pass`
-- **Confidence:** 1.00
-- **Analyzer:** `ollama/deepseek-r1:7b`
+### LLM Prompt
 
-### Failure analysis
+result.json 분석
 
-Not applicable
+### LLM Review
 
-### Source review
-
-
+| Item | Value |
+|---|---|
+| Summary | USB test passed successfully |
+| Failure analysis | Not applicable |
+| Source review | Not requested |
+| Warnings | None |
+| Needs escalation | off |
 
 ## Test History
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-18 | 15:38:44.506839+09:00 | [20260818_153844_506736](CT-USB-001__20260818_153844_506736.md) | 31a3aa2 | main | PASS | 0.001 | local |
+| 2026-08-18 | 15:36:58.965057+09:00 | [20260818_153658_964960](CT-USB-001__20260818_153658_964960.md) | 0501967 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:36:45.069421+09:00 | [20260818_153645_069326](CT-USB-001__20260818_153645_069326.md) | 0501967 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:36:21.124344+09:00 | [20260818_153621_124258](CT-USB-001__20260818_153621_124258.md) | 0501967 | main | PASS | 0.000 | local |
 | 2026-08-18 | 15:18:47.350502+09:00 | [20260818_151847_350402](CT-USB-001__20260818_151847_350402.md) | a51f1d4 | main | PASS | 0.000 | local |
 | 2026-08-18 | 15:18:00.235255+09:00 | [20260818_151800_235171](CT-USB-001__20260818_151800_235171.md) | a51f1d4 | main | PASS | 0.000 | local |
 | 2026-08-18 | 15:16:56.992797+09:00 | [20260818_151656_992705](CT-USB-001__20260818_151656_992705.md) | a51f1d4 | main | PASS | 0.000 | local |
