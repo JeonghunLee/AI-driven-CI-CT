@@ -16,9 +16,10 @@ def run(
     publish_docs: bool = False,
     review_source: bool = False,
     model: str | None = None,
+    result_path: str | Path | None = None,
 ) -> dict[str, object]:
     store = ResultStore()
-    result_path = store.latest()
+    result_path = Path(result_path) if result_path else store.latest()
     result = store.load(result_path)
     report_dir = result_path.parent
     logs = parse_files([report_dir / filename for filename in result.logs.values()])

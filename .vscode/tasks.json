@@ -118,12 +118,13 @@
             "problemMatcher": []
         },
         {
-            "label": "REPORT: Generate Latest Markdown",
+            "label": "REPORT: Generate Pending Markdown",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
                 "test_envs.tools.test_result",
+                "--pending",
                 "--docs"
             ],
             "problemMatcher": []

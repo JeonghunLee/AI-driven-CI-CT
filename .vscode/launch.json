@@ -65,12 +65,12 @@
       "justMyCode": true
     },
     {
-      "name": "Test Result: Generate Latest Markdown",
+      "name": "Test Result: Generate Pending Markdown",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
       "module": "test_envs.tools.test_result",
-      "args": ["--docs"],
+      "args": ["--pending", "--docs"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
