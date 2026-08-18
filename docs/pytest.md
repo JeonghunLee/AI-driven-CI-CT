@@ -22,7 +22,7 @@
 
 | Item | Value |
 |---|---|
-| File | `test_envs/configs/pytest/test_cases/catalog.json` |
+| File | `test_envs/configs/pytest/test_cases_catalog.json` |
 | Key | `test_id` |
 | Mode selection | `test_mode` |
 | Derived modes | `interface_mode`, `equipment_mode` |
@@ -31,8 +31,8 @@
 
 | Registry | Tools |
 |---|---|
-| `test_envs/configs/pytest/test_equipments/catalog.json` | FPGA, Saleae, Digilent |
-| `test_envs/configs/pytest/test_interfaces/catalog.json` | USB, UART, JTAG, Network |
+| `test_envs/configs/pytest/test_equipments_catalog.json` | FPGA, Saleae, Digilent |
+| `test_envs/configs/pytest/test_interfaces_catalog.json` | USB, UART, JTAG, Network |
 
 ## Structure
 
@@ -40,12 +40,9 @@
 test_envs/tests/
 ├── pytest/
 │   ├── test_cases/
-│   │   ├── communication/
-│   │   ├── timing/
-│   │   ├── functional/
-│   │   ├── performance/
-│   │   ├── stability/
-│   │   └── regression/
+│   │   ├── test_fixture_001_uart_timing.py
+│   │   ├── test_fixture_002_usb_loopback.py
+│   │   └── test_fixture_003_network_loopback.py
 │   ├── fixtures/
 │   │   ├── fixture_001_uart.py
 │   │   ├── fixture_002_uart_saleae.py
@@ -71,6 +68,14 @@ test_envs/tests/
     ├── firmware/
     └── common/
 ```
+
+## Fixture-to-Test Mapping
+
+| Order | Fixture composition | Test case | TEST ID |
+|---:|---|---|---|
+| 1 | UART + Saleae | `test_fixture_001_uart_timing.py` | `CT-UART-001` |
+| 2 | USB + Digilent | `test_fixture_002_usb_loopback.py` | `CT-USB-001` |
+| 3 | Network | `test_fixture_003_network_loopback.py` | `CT-NETWORK-001` |
 
 ## Execution Model
 

@@ -8,7 +8,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         self.launch = json.loads(Path(".vscode/launch.json").read_text(encoding="utf-8"))
         self.tasks = json.loads(Path(".vscode/tasks.json").read_text(encoding="utf-8"))
         self.settings = json.loads(Path(".vscode/settings.json").read_text(encoding="utf-8"))
-        self.config = json.loads(Path("test_envs/configs/unittest/config.json").read_text(encoding="utf-8"))
+        self.config = json.loads(Path("test_envs/configs/config.json").read_text(encoding="utf-8"))
 
     def test_selected_preset_has_model_name(self) -> None:
         self.assertIn(self.config["os"], ["auto", "windows", "linux", "macos"])
@@ -133,7 +133,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
     def test_test_case_id_picker_matches_catalog(self) -> None:
         picker = next(item for item in self.tasks["inputs"] if item["id"] == "testCaseId")
         catalog = json.loads(
-            Path("test_envs/configs/pytest/test_cases/catalog.json").read_text(encoding="utf-8")
+            Path("test_envs/configs/pytest/test_cases_catalog.json").read_text(encoding="utf-8")
         )
         test_ids = [item["test_id"] for item in catalog["test_cases"]]
 

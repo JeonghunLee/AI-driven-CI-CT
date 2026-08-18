@@ -82,7 +82,7 @@ def main() -> None:
     parser.add_argument("--latest", action="store_true", help="Compatibility flag; latest is always processed")
     parser.add_argument("--docs", action="store_true", help="Also publish the canonical Markdown into docs/test")
     parser.add_argument("--source-review", action="store_true", help="Include the local git diff in Local LLM analysis")
-    parser.add_argument("--model", help="Override test_envs/configs/unittest/config.json for this analysis")
+    parser.add_argument("--model", help="Override test_envs/configs/config.json for this analysis")
     args = parser.parse_args()
     print(
         json.dumps(

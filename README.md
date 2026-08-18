@@ -19,8 +19,10 @@
 ├── docs/
 └── test_envs/
     ├── configs/
-    │   ├── unittest/
-    │   └── pytest/
+    │   ├── config.json
+    │   ├── check.json
+    │   ├── pytest/
+    │   └── unittest/
     ├── tests/
     ├── reports/
     └── tools/
@@ -62,7 +64,7 @@ python -m test_envs.tools.environment_setup python --platform config
 
 | Run and Debug Setup | 실행 방식 |
 |---|---|
-| Setup 1 | OS selection → `test_envs/configs/unittest/config.json` |
+| Setup 1 | OS selection → `test_envs/configs/config.json` |
 | Setup 2 | `preLaunchTask` → Python setup Task |
 | Setup 3 | `preLaunchTask` → Ollama setup Task |
 | Check 1 | `preLaunchTask` → Environment check Task |
@@ -80,7 +82,7 @@ python -m test_envs.tools.environment_setup python --platform config
 |---|---|
 | Default | `auto` |
 | Options | `auto`, `windows`, `linux`, `macos` |
-| Config source | `test_envs/configs/unittest/config.json` → `os` |
+| Config source | `test_envs/configs/config.json` → `os` |
 | Host mismatch | Setup stop |
 | Setup 1·2 Python | `python` |
 | Setup 3+ Python | `${config:python.defaultInterpreterPath}` |
@@ -116,16 +118,16 @@ python -m test_envs.tools.environment_setup python --platform config
 
 ```text
 test_envs/configs/
-├── unittest/
-│   ├── config.json
-│   └── check.json
-└── pytest/
-    ├── test_cases/catalog.json
-    ├── test_equipments/catalog.json
-    └── test_interfaces/catalog.json
+├── config.json
+├── check.json
+├── pytest/
+│   ├── test_cases_catalog.json
+│   ├── test_equipments_catalog.json
+│   └── test_interfaces_catalog.json
+└── unittest/                 # Future extension
 ```
 
-### `test_envs/configs/unittest/config.json`
+### `test_envs/configs/config.json`
 
 ```json
 {
@@ -148,10 +150,10 @@ test_envs/configs/
 |---:|---|
 | 1 | CLI `--model` |
 | 2 | `OLLAMA_MODEL` |
-| 3 | `test_envs/configs/unittest/config.json` |
+| 3 | `test_envs/configs/config.json` |
 | Missing | Configuration error |
 
-### `test_envs/configs/unittest/check.json`
+### `test_envs/configs/check.json`
 
 | Check | Field |
 |---|---|
@@ -220,9 +222,16 @@ test_envs/reports/
 | Test Case | `test_envs/tests/pytest/test_cases/` |
 | Equipment Controller | `test_envs/tests/pytest/test_equipments/` |
 | DUT Interface | `test_envs/tests/pytest/test_interfaces/` |
-| Lifecycle fixture | `test_envs/tests/pytest/conftest.py` |
+| Fixture composition | `test_envs/tests/pytest/fixtures/` |
+| Fixture registration / result lifecycle | `test_envs/tests/pytest/conftest.py` |
 | CT marker | `@pytest.mark.ct(...)` |
 | Result fixture | `ct_result` |
+
+| Fixture composition | Test case | TEST ID |
+|---|---|---|
+| UART + Saleae | `test_fixture_001_uart_timing.py` | `CT-UART-001` |
+| USB + Digilent | `test_fixture_002_usb_loopback.py` | `CT-USB-001` |
+| Network | `test_fixture_003_network_loopback.py` | `CT-NETWORK-001` |
 
 | Interface | Mock implementation | unittest | CT |
 |---|---|---|---|
@@ -232,15 +241,15 @@ test_envs/reports/
 
 | TEST CASE registration | 값 |
 |---|---|
-| Catalog | `test_envs/configs/pytest/test_cases/catalog.json` |
+| Catalog | `test_envs/configs/pytest/test_cases_catalog.json` |
 | Validation | `pytest_collection_modifyitems` |
 | Unregistered CT | Collection error |
 | Module mismatch | Collection error |
 
 | Tool registry | Tool IDs |
 |---|---|
-| `test_envs/configs/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
-| `test_envs/configs/pytest/test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
+| `test_envs/configs/pytest/test_interfaces_catalog.json` | `uart`, `usb`, `jtag`, `network` |
+| `test_envs/configs/pytest/test_equipments_catalog.json` | `fpga`, `saleae`, `digilent` |
 
 | Tool implementation | 구분 |
 |---|---|

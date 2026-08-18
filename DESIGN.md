@@ -107,7 +107,7 @@ Source: `.vscode/launch.json`
 
 | Setup input | Options | Default | Validation |
 |---|---|---|---|
-| `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `test_envs/configs/unittest/config.json` |
+| `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `test_envs/configs/config.json` |
 
 | VS Code Python path | Value |
 |---|---|
@@ -245,15 +245,15 @@ Source: `.vscode/tasks.json`
 
 | Test case registration | Value |
 |---|---|
-| Registry | `test_envs/configs/pytest/test_cases/catalog.json` |
+| Registry | `test_envs/configs/pytest/test_cases_catalog.json` |
 | Registry key | `test_id` |
 | Collection validation | Marker ID + module path |
 | Missing registration | pytest collection error |
 
 | Tool registry | Path | IDs |
 |---|---|---|
-| Equipment | `test_envs/configs/pytest/test_equipments/catalog.json` | `fpga`, `saleae`, `digilent` |
-| Interface | `test_envs/configs/pytest/test_interfaces/catalog.json` | `uart`, `usb`, `jtag`, `network` |
+| Equipment | `test_envs/configs/pytest/test_equipments_catalog.json` | `fpga`, `saleae`, `digilent` |
+| Interface | `test_envs/configs/pytest/test_interfaces_catalog.json` | `uart`, `usb`, `jtag`, `network` |
 
 | Mode | Tool path | Result field |
 |---|---|---|
@@ -263,18 +263,15 @@ Source: `.vscode/tasks.json`
 
 | Selection | Derived result fields |
 |---|---|
-| `test_envs/configs/pytest/test_cases/catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
+| `test_envs/configs/pytest/test_cases_catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
 
 ```text
 test_envs/tests/
 ├── pytest/
 │   ├── test_cases/
-│   │   ├── communication/
-│   │   ├── timing/
-│   │   ├── functional/
-│   │   ├── performance/
-│   │   ├── stability/
-│   │   └── regression/
+│   │   ├── test_fixture_001_uart_timing.py
+│   │   ├── test_fixture_002_usb_loopback.py
+│   │   └── test_fixture_003_network_loopback.py
 │   ├── fixtures/
 │   │   ├── fixture_001_uart.py
 │   │   ├── fixture_002_uart_saleae.py
@@ -312,7 +309,15 @@ test_envs/tests/
 | `test_envs/tests/unittest/firmware` | Firmware unit-test extension |
 | `test_envs/tests/unittest/common` | Shared unit-test assets |
 
-### 6.2 Equipment and Interface Separation
+### 6.2 Fixture-to-Test Mapping
+
+| Order | Fixture composition | Test case | TEST ID |
+|---:|---|---|---|
+| 1 | `fixture_001_uart.py` + `fixture_002_uart_saleae.py` | `test_fixture_001_uart_timing.py` | `CT-UART-001` |
+| 2 | `fixture_003_usb_digilent.py` | `test_fixture_002_usb_loopback.py` | `CT-USB-001` |
+| 3 | `fixture_006_network.py` | `test_fixture_003_network_loopback.py` | `CT-NETWORK-001` |
+
+### 6.3 Equipment and Interface Separation
 
 | Layer | Meaning | Examples |
 |---|---|---|
@@ -326,7 +331,7 @@ pytest Test Case
 └── Test Equipment ──► DUT
 ```
 
-### 6.3 Interface Contract
+### 6.4 Interface Contract
 
 ```python
 connect()
@@ -432,10 +437,10 @@ test_envs/reports/markdown/<test-id>/<timestamp>_result.md
 | Runtime | Ollama |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Environment variable | `OLLAMA_URL` |
-| Configured model | `test_envs/configs/unittest/config.json` → `ollama.selected_model` |
+| Configured model | `test_envs/configs/config.json` → `ollama.selected_model` |
 | Model variable | `OLLAMA_MODEL` |
-| Project config | `test_envs/configs/unittest/config.json` |
-| Environment check | `test_envs/configs/unittest/check.json` |
+| Project config | `test_envs/configs/config.json` |
+| Environment check | `test_envs/configs/check.json` |
 | Selection priority | CLI → Environment → Config |
 | Missing model | Configuration error |
 | Config selection | `ollama.selected_model` |
@@ -452,7 +457,7 @@ test_envs/reports/markdown/<test-id>/<timestamp>_result.md
 Model config schema:
 
 ```text
-test_envs/configs/unittest/config.json
+test_envs/configs/config.json
 ├── version
 ├── os
 └── ollama
@@ -463,7 +468,7 @@ test_envs/configs/unittest/config.json
 Environment check schema:
 
 ```text
-test_envs/configs/unittest/check.json
+test_envs/configs/check.json
 ├── generated_at
 ├── os
 │   ├── configured
@@ -604,13 +609,13 @@ Excluded from GitHub Issue:
 │   └── test/                        # Latest and execution reports
 ├── test_envs/
 │   ├── configs/
-│   │   ├── unittest/
-│   │   │   ├── config.json
-│   │   │   └── check.json
-│   │   └── pytest/
-│   │       ├── test_cases/catalog.json
-│   │       ├── test_equipments/catalog.json
-│   │       └── test_interfaces/catalog.json
+│   │   ├── config.json
+│   │   ├── check.json
+│   │   ├── pytest/
+│   │   │   ├── test_cases_catalog.json
+│   │   │   ├── test_equipments_catalog.json
+│   │   │   └── test_interfaces_catalog.json
+│   │   └── unittest/                 # Future extension
 │   ├── tests/
 │   │   ├── pytest/
 │   │   └── unittest/

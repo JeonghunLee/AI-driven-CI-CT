@@ -49,12 +49,12 @@ flowchart TD
 | 항목 | 구성 |
 |---|---|
 | Local LLM runtime | Ollama |
-| Primary model | `test_envs/configs/unittest/config.json` / `OLLAMA_MODEL` |
+| Primary model | `test_envs/configs/config.json` / `OLLAMA_MODEL` |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Endpoint variable | `OLLAMA_URL` |
 | Model variable | `OLLAMA_MODEL` |
-| Project config | `test_envs/configs/unittest/config.json` |
-| Environment check | `test_envs/configs/unittest/check.json` |
+| Project config | `test_envs/configs/config.json` |
+| Environment check | `test_envs/configs/check.json` |
 | Model selection | `ollama.selected_model` |
 | Installed inventory | `python -m test_envs.tools.configuration check` |
 | Offline fallback | Deterministic analyzer |
@@ -88,7 +88,7 @@ flowchart TD
 | 선택값 | 동작 |
 |---|---|
 | `auto` | 현재 운영체제 자동 감지 |
-| `config` | `test_envs/configs/unittest/config.json` / `os` |
+| `config` | `test_envs/configs/config.json` / `os` |
 | `windows` | Windows + winget |
 | `linux` | Linux + official installer |
 | `macos` | macOS + Homebrew |
@@ -124,7 +124,7 @@ flowchart TD
 
 | Configuration | 기능 |
 |---|---|
-| `SETUP 1: Select Operating System` | `test_envs/configs/unittest/config.json` OS update |
+| `SETUP 1: Select Operating System` | `test_envs/configs/config.json` OS update |
 | `SETUP 2: Install Python Virtual Environment` | Python setup Task delegation |
 | `SETUP 3: Install Ollama and Local LLM` | Ollama setup Task delegation |
 
@@ -189,8 +189,8 @@ flowchart TD
 
 | Tool group | Registry | Tools |
 |---|---|---|
-| Equipment | `test_envs/configs/pytest/test_equipments/catalog.json` | FPGA, Saleae, Digilent |
-| Interface | `test_envs/configs/pytest/test_interfaces/catalog.json` | USB, UART, JTAG, Network |
+| Equipment | `test_envs/configs/pytest/test_equipments_catalog.json` | FPGA, Saleae, Digilent |
+| Interface | `test_envs/configs/pytest/test_interfaces_catalog.json` | USB, UART, JTAG, Network |
 
 | Mode | Directory | Result |
 |---|---|---|
@@ -199,7 +199,7 @@ flowchart TD
 
 | Selection | Derived |
 |---|---|
-| `test_envs/configs/pytest/test_cases/catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
+| `test_envs/configs/pytest/test_cases_catalog.json:test_mode` | `interface_mode`, `equipment_mode` |
 
 ### Repository Structure
 
@@ -208,11 +208,13 @@ flowchart TD
 ├── docs/
 └── test_envs/
     ├── configs/
-    │   ├── unittest/
-    │   └── pytest/{test_cases,test_equipments,test_interfaces}/catalog.json
+    │   ├── config.json
+    │   ├── check.json
+    │   ├── pytest/{test_cases,test_equipments,test_interfaces}_catalog.json
+    │   └── unittest/                     # Future extension
     ├── tests/
     │   ├── pytest/
-    │   │   ├── test_cases/{communication,timing,functional,performance,stability,regression}/
+    │   │   ├── test_cases/test_fixture_<NNN>_<test-content>.py
     │   │   ├── fixtures/
     │   │   ├── test_equipments/{fpga,saleae,digilent}/{mock,hil}/
     │   │   ├── test_interfaces/{usb,uart,jtag,network}/{mock,hil}/

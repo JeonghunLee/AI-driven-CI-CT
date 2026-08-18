@@ -171,15 +171,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Set up local CI/CT development dependencies")
     subparsers = parser.add_subparsers(dest="command", required=True)
     python_setup = subparsers.add_parser("python", help="Create .venv and install Python dependencies")
-    python_setup.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/unittest/config.json")
+    python_setup.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/config.json")
     ollama = subparsers.add_parser("ollama", help="Install Ollama, start it, and pull the selected Local LLM")
     ollama.add_argument(
         "--model",
-        help="Ollama model override; defaults to OLLAMA_MODEL or test_envs/configs/unittest/config.json",
+        help="Ollama model override; defaults to OLLAMA_MODEL or test_envs/configs/config.json",
     )
-    ollama.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/unittest/config.json")
+    ollama.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/config.json")
     serve = subparsers.add_parser("serve", help="Run the local Ollama server in the foreground")
-    serve.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/unittest/config.json")
+    serve.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/config.json")
     args = parser.parse_args()
     if args.command == "python":
         setup_python(args.platform)

@@ -14,7 +14,7 @@ from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKSPACE_ROOT = ROOT.parent
-CONFIG_DIR = ROOT / "configs" / "unittest"
+CONFIG_DIR = ROOT / "configs"
 CONFIG_PATH = CONFIG_DIR / "config.json"
 CHECK_PATH = CONFIG_DIR / "check.json"
 VSCODE_SETTINGS_PATH = WORKSPACE_ROOT / ".vscode" / "settings.json"

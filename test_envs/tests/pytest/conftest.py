@@ -21,9 +21,9 @@ __all__ = ["digilent", "fpga", "full_hil", "jtag", "network", "saleae", "uart", 
 
 ROOT = Path(__file__).resolve().parents[3]
 PYTEST_CONFIG_ROOT = ROOT / "test_envs" / "configs" / "pytest"
-TEST_CASE_CATALOG = PYTEST_CONFIG_ROOT / "test_cases" / "catalog.json"
-EQUIPMENT_CATALOG = PYTEST_CONFIG_ROOT / "test_equipments" / "catalog.json"
-INTERFACE_CATALOG = PYTEST_CONFIG_ROOT / "test_interfaces" / "catalog.json"
+TEST_CASE_CATALOG = PYTEST_CONFIG_ROOT / "test_cases_catalog.json"
+EQUIPMENT_CATALOG = PYTEST_CONFIG_ROOT / "test_equipments_catalog.json"
+INTERFACE_CATALOG = PYTEST_CONFIG_ROOT / "test_interfaces_catalog.json"
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
@@ -34,14 +34,14 @@ def load_test_case_catalog() -> dict[str, dict[str, Any]]:
     payload = json.loads(TEST_CASE_CATALOG.read_text(encoding="utf-8"))
     entries = payload.get("test_cases", [])
     if not isinstance(entries, list):
-        raise pytest.UsageError("configs/pytest/test_cases/catalog.json: test_cases must be a list")
+        raise pytest.UsageError("configs/pytest/test_cases_catalog.json: test_cases must be a list")
     catalog: dict[str, dict[str, Any]] = {}
     for entry in entries:
         if not isinstance(entry, dict) or not isinstance(entry.get("test_id"), str):
-            raise pytest.UsageError("configs/pytest/test_cases/catalog.json: invalid test case entry")
+            raise pytest.UsageError("configs/pytest/test_cases_catalog.json: invalid test case entry")
         test_id = entry["test_id"]
         if test_id in catalog:
-            raise pytest.UsageError(f"configs/pytest/test_cases/catalog.json: duplicate test_id: {test_id}")
+            raise pytest.UsageError(f"configs/pytest/test_cases_catalog.json: duplicate test_id: {test_id}")
         catalog[test_id] = entry
     return catalog
 
