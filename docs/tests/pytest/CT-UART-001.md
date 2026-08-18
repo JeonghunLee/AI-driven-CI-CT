@@ -2,70 +2,93 @@
 
 ## Test summary
 
-- **Description:** test_uart_timing
-- **Category:** timing
-- **Environment:** local
-- **Configuration:** {'category': 'timing', 'fixture_id': 'FIXTURE-001', 'fixture_mode': 'mock', 'interface': 'UART', 'equipment': 'Saleae'}
-- **Test mode:** mock
-- **Equipment:** Saleae
-- **Equipment mode:** mock
-- **Interface:** UART
-- **Interface mode:** mock
-- **Result:** **PASS**
-- **Execution time:** 0.000 seconds
-- **Execution date:** 2026-08-18T15:18:45.688737+09:00
-- **Execution ID:** `20260818_151845_688646`
+| Item | Value |
+|---|---|
+| Description | test_uart_timing |
+| Category | timing |
+| Environment | local |
+| Result | PASS |
+| Execution time | 0.001 seconds |
+| Execution date | 2026-08-18T15:38:43.343459+09:00 |
+| Execution ID | 20260818_153843_343352 |
 
-## Test Source
+### Test configs
 
 | Item | Value |
 |---|---|
-| Commit | `a51f1d40f8bf5857567efae02683d2875598fded` |
-| Branch | `main` |
+| Category | timing |
+| Fixture ID | FIXTURE-001 |
+| Fixture mode | mock |
+| Test mode | mock |
+| Equipment | Saleae |
+| Equipment mode | mock |
+| Interface | UART |
+| Interface mode | mock |
 
-## Measurement
+### Test Source
 
-- **expected_baudrate:** 921600
-- **measured_baudrate:** 921596.667
-- **error:** 3.6168981481902543e-06
-- **jitter:** 0.00021701388888888888
+| Item | Value |
+|---|---|
+| Commit | 31a3aa23c16241e3ac127c3311981afb8e38521a |
+| Branch | main |
 
-## Statistics
+### Measurement
 
-- **mean:** 921596.6666666666
-- **median:** 921602.5
-- **min:** 921490.0
-- **max:** 921690.0
-- **stddev:** 67.55656066503748
+| Item | Value |
+|---|---|
+| expected_baudrate | 921600 |
+| measured_baudrate | 921596.667 |
+| error | 3.6168981481902543e-06 |
+| jitter | 0.00021701388888888888 |
 
-## Important logs
+### Statistics
 
-- None
+| Item | Value |
+|---|---|
+| mean | 921596.6666666666 |
+| median | 921602.5 |
+| min | 921490.0 |
+| max | 921690.0 |
+| stddev | 67.55656066503748 |
 
-## Warnings
+### Logs
 
-- None
+| Item | Value |
+|---|---|
+| Test log | 20260818_153843_343352_test.log |
+| Important | None |
 
 ## Local LLM analysis
 
-All tests passed with minimal error and low jitter.
+| Item | Value |
+|---|---|
+| Classification | Pass |
+| Confidence | 0.99 |
+| Analyzer | ollama/deepseek-r1:7b |
+| working | on |
 
-- **Classification:** `SUCCESS`
-- **Confidence:** 0.98
-- **Analyzer:** `ollama/deepseek-r1:7b`
+### LLM Prompt
 
-### Failure analysis
+result.json 분석
 
-Not applicable
+### LLM Review
 
-### Source review
-
-
+| Item | Value |
+|---|---|
+| Summary | The test for UART timing passed successfully with minimal deviation from the expected values. |
+| Failure analysis | Not applicable |
+| Source review | Not requested |
+| Warnings | None |
+| Needs escalation | off |
 
 ## Test History
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-18 | 15:38:43.343459+09:00 | [20260818_153843_343352](CT-UART-001__20260818_153843_343352.md) | 31a3aa2 | main | PASS | 0.001 | local |
+| 2026-08-18 | 15:36:58.921402+09:00 | [20260818_153658_921304](CT-UART-001__20260818_153658_921304.md) | 0501967 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:36:45.023008+09:00 | [20260818_153645_022911](CT-UART-001__20260818_153645_022911.md) | 0501967 | main | PASS | 0.000 | local |
+| 2026-08-18 | 15:36:21.075599+09:00 | [20260818_153621_075466](CT-UART-001__20260818_153621_075466.md) | 0501967 | main | PASS | 0.000 | local |
 | 2026-08-18 | 15:18:45.688737+09:00 | [20260818_151845_688646](CT-UART-001__20260818_151845_688646.md) | a51f1d4 | main | PASS | 0.000 | local |
 | 2026-08-18 | 15:18:00.193731+09:00 | [20260818_151800_193627](CT-UART-001__20260818_151800_193627.md) | a51f1d4 | main | PASS | 0.000 | local |
 | 2026-08-18 | 15:16:56.950743+09:00 | [20260818_151656_950645](CT-UART-001__20260818_151656_950645.md) | a51f1d4 | main | PASS | 0.000 | local |
