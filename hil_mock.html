@@ -6,11 +6,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Test results and execution history" name="description"/>
-<link href="operation.html" rel="prev"/>
-<link href="unittest.html" rel="next"/>
+<link href="unittest.html" rel="prev"/>
+<link href="tests/pytest/index.html" rel="next"/>
 <link href="imgs/logo.jpg" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
-<title>Pytest - AI-driven CI/CT</title>
+<title>HIL &amp; Mock - AI-driven CI/CT</title>
 <link href="assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
 <link href="assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/iframe-worker/shim"></script>
@@ -28,7 +28,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#pytest-continuous-testing">
+<a class="md-skip" href="#pytest-hil-mock">
           콘텐츠로 이동
         </a>
 </div>
@@ -52,7 +52,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Pytest
+              HIL &amp; Mock
             
           </span>
 </div>
@@ -225,20 +225,8 @@
 
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-<span class="md-ellipsis">
-    
-  
-    Pytest
-  
-
-    
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="pytest.html">
+<li class="md-nav__item">
+<a class="md-nav__link" href="pytest.html">
 <span class="md-ellipsis">
     
   
@@ -248,104 +236,6 @@
     
   </span>
 </a>
-<nav aria-label="목차" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      목차
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#scope">
-<span class="md-ellipsis">
-      
-        Scope
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#communication-ct">
-<span class="md-ellipsis">
-      
-        Communication CT
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#test-case-marker">
-<span class="md-ellipsis">
-      
-        TEST CASE Marker
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#structure">
-<span class="md-ellipsis">
-      
-        Structure
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#fixture-to-test-mapping">
-<span class="md-ellipsis">
-      
-        Fixture-to-Test Mapping
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#mock-hil">
-<span class="md-ellipsis">
-      
-        Mock / HIL
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#execution-model">
-<span class="md-ellipsis">
-      
-        Execution Model
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#commands">
-<span class="md-ellipsis">
-      
-        Commands
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#report-files">
-<span class="md-ellipsis">
-      
-        Report Files
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#vs-code">
-<span class="md-ellipsis">
-      
-        VS Code
-      
-    </span>
-</a>
-</li>
-</ul>
-</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="unittest.html">
@@ -359,8 +249,20 @@
   </span>
 </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="hil_mock.html">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    HIL &amp; Mock
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="hil_mock.html">
 <span class="md-ellipsis">
     
   
@@ -370,6 +272,153 @@
     
   </span>
 </a>
+<nav aria-label="목차" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      
+        적용 범위
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mode">
+<span class="md-ellipsis">
+      
+        Mode 정의
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mode_1">
+<span class="md-ellipsis">
+      
+        Mode 값
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      
+        선택 우선순위
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#marker">
+<span class="md-ellipsis">
+      
+        Marker
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#directory">
+<span class="md-ellipsis">
+      
+        Directory
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#fixture">
+<span class="md-ellipsis">
+      
+        Fixture 동작
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      
+        실행 명령
+      
+    </span>
+</a>
+<nav aria-label="실행 명령" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#marker-mode">
+<span class="md-ellipsis">
+      
+        Marker mode
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mock">
+<span class="md-ellipsis">
+      
+        Mock
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hil">
+<span class="md-ellipsis">
+      
+        HIL
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-id">
+<span class="md-ellipsis">
+      
+        TEST ID
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vs-code">
+<span class="md-ellipsis">
+      
+        VS Code
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#result-json">
+<span class="md-ellipsis">
+      
+        Result JSON
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hil-gate">
+<span class="md-ellipsis">
+      
+        HIL Gate
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -439,91 +488,140 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#scope">
+<a class="md-nav__link" href="#_1">
 <span class="md-ellipsis">
       
-        Scope
+        적용 범위
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#communication-ct">
+<a class="md-nav__link" href="#mode">
 <span class="md-ellipsis">
       
-        Communication CT
+        Mode 정의
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#test-case-marker">
+<a class="md-nav__link" href="#mode_1">
 <span class="md-ellipsis">
       
-        TEST CASE Marker
+        Mode 값
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#structure">
+<a class="md-nav__link" href="#_2">
 <span class="md-ellipsis">
       
-        Structure
+        선택 우선순위
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#fixture-to-test-mapping">
+<a class="md-nav__link" href="#marker">
 <span class="md-ellipsis">
       
-        Fixture-to-Test Mapping
+        Marker
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#mock-hil">
+<a class="md-nav__link" href="#directory">
 <span class="md-ellipsis">
       
-        Mock / HIL
+        Directory
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#execution-model">
+<a class="md-nav__link" href="#fixture">
 <span class="md-ellipsis">
       
-        Execution Model
+        Fixture 동작
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#commands">
+<a class="md-nav__link" href="#_3">
 <span class="md-ellipsis">
       
-        Commands
+        실행 명령
+      
+    </span>
+</a>
+<nav aria-label="실행 명령" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#marker-mode">
+<span class="md-ellipsis">
+      
+        Marker mode
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#report-files">
+<a class="md-nav__link" href="#mock">
 <span class="md-ellipsis">
       
-        Report Files
+        Mock
       
     </span>
 </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hil">
+<span class="md-ellipsis">
+      
+        HIL
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-id">
+<span class="md-ellipsis">
+      
+        TEST ID
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#vs-code">
 <span class="md-ellipsis">
       
         VS Code
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#result-json">
+<span class="md-ellipsis">
+      
+        Result JSON
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hil-gate">
+<span class="md-ellipsis">
+      
+        HIL Gate
       
     </span>
 </a>
@@ -553,65 +651,227 @@
 </ol>
 </nav>
 <article class="md-content__inner md-typeset">
-<h1 id="pytest-continuous-testing">pytest / Continuous Testing</h1>
-<h2 id="scope">Scope</h2>
+<h1 id="pytest-hil-mock">pytest HIL / Mock</h1>
+<h2 id="_1">적용 범위</h2>
 <table>
 <thead>
 <tr>
-<th>Area</th>
-<th>Coverage</th>
+<th>Runner</th>
+<th>Mock / HIL 적용</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Communication</td>
-<td>USB, UART, JTAG, Network</td>
+<td>pytest</td>
+<td>O</td>
 </tr>
 <tr>
-<td>Timing</td>
-<td>Baudrate, jitter, latency, frequency</td>
-</tr>
-<tr>
-<td>Functional</td>
-<td>DUT feature validation</td>
-</tr>
-<tr>
-<td>Performance</td>
-<td>Throughput, response time, load</td>
-</tr>
-<tr>
-<td>Stability</td>
-<td>Repetition, duration, recovery</td>
-</tr>
-<tr>
-<td>Regression</td>
-<td>Previous failure and baseline comparison</td>
+<td>unittest</td>
+<td>X</td>
 </tr>
 </tbody>
 </table>
-<h2 id="communication-ct">Communication CT</h2>
+<h2 id="mode">Mode 정의</h2>
 <table>
 <thead>
 <tr>
-<th>Test ID</th>
+<th>Mode</th>
 <th>Interface</th>
-<th>Scope</th>
+<th>Equipment</th>
+<th>DUT</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>CT-USB-001</code></td>
-<td>USB</td>
-<td>Bulk loopback / packetization / integrity</td>
+<td><code>mock</code></td>
+<td>Mock implementation</td>
+<td>Mock controller</td>
+<td>Simulation / loopback</td>
 </tr>
 <tr>
-<td><code>CT-NETWORK-001</code></td>
-<td>Network</td>
-<td>Packet loopback / latency / integrity</td>
+<td><code>hil</code></td>
+<td>Hardware implementation</td>
+<td>Hardware controller</td>
+<td>Physical DUT</td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>미사용</td>
+<td>미사용</td>
+<td>해당 없음</td>
 </tr>
 </tbody>
 </table>
-<h2 id="test-case-marker">TEST CASE Marker</h2>
+<h2 id="mode_1">Mode 값</h2>
+<table>
+<thead>
+<tr>
+<th>Result field</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_mode</code></td>
+<td>Effective fixture mode</td>
+</tr>
+<tr>
+<td><code>interface_mode</code></td>
+<td>Effective fixture mode</td>
+</tr>
+<tr>
+<td><code>equipment_mode</code></td>
+<td>Effective fixture mode / <code>none</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">선택 우선순위</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Priority</th>
+<th>Source</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>CLI</td>
+<td><code>--fixture-mode=mock</code>, <code>--fixture-mode=hil</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td><code>@pytest.mark.ct</code></td>
+<td><code>fixture_mode="mock"</code>, <code>fixture_mode="hil"</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>CLI mock / hil
+      │
+      ├── 지정됨 ──► CLI mode
+      │
+      └── marker ──► @pytest.mark.ct fixture_mode
+                         │
+                         ▼
+                  Effective fixture mode
+</code></pre></div>
+<h2 id="marker">Marker</h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">ct</span><span class="p">(</span>
+    <span class="n">test_id</span><span class="o">=</span><span class="s2">"CT-UART-001"</span><span class="p">,</span>
+    <span class="n">category</span><span class="o">=</span><span class="s2">"timing"</span><span class="p">,</span>
+    <span class="n">fixture_id</span><span class="o">=</span><span class="s2">"FIXTURE-001"</span><span class="p">,</span>
+    <span class="n">fixture_mode</span><span class="o">=</span><span class="s2">"mock"</span><span class="p">,</span>
+    <span class="n">interface</span><span class="o">=</span><span class="s2">"UART"</span><span class="p">,</span>
+    <span class="n">equipment</span><span class="o">=</span><span class="s2">"Saleae"</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test_id</code></td>
+<td>pytest TEST ID</td>
+</tr>
+<tr>
+<td><code>fixture_id</code></td>
+<td>Test filename mapping</td>
+</tr>
+<tr>
+<td><code>fixture_mode</code></td>
+<td>Marker 기본 mode</td>
+</tr>
+<tr>
+<td>CLI override</td>
+<td>Marker보다 우선</td>
+</tr>
+</tbody>
+</table>
+<h2 id="directory">Directory</h2>
+<div class="highlight"><pre><span></span><code>test_envs/tests/pytest/
+├── test_interfaces/
+│   ├── usb/{mock,hil}/
+│   ├── uart/{mock,hil}/
+│   ├── jtag/{mock,hil}/
+│   └── network/{mock,hil}/
+└── test_equipments/
+    ├── fpga/{mock,hil}/
+    ├── saleae/{mock,hil}/
+    └── digilent/{mock,hil}/
+</code></pre></div>
+<h2 id="fixture">Fixture 동작</h2>
+<div class="highlight"><pre><span></span><code>Test case
+   │
+   ▼
+Composite fixture
+   ├── Effective fixture mode
+   ├── Test Interface
+   ├── Test Equipment
+   ├── connect
+   ├── yield
+   └── disconnect
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Fixture</th>
+<th>Composition</th>
+<th>Mock</th>
+<th>HIL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FIXTURE-001</code></td>
+<td>UART + Saleae</td>
+<td>구현</td>
+<td>미구현·명시적 FAIL</td>
+</tr>
+<tr>
+<td><code>FIXTURE-002</code></td>
+<td>USB + Digilent</td>
+<td>구현</td>
+<td>미구현·명시적 FAIL</td>
+</tr>
+<tr>
+<td><code>FIXTURE-003</code></td>
+<td>Network</td>
+<td>구현</td>
+<td>미구현·명시적 FAIL</td>
+</tr>
+<tr>
+<td><code>FIXTURE-004</code></td>
+<td>JTAG + FPGA</td>
+<td>Mock fixture</td>
+<td>확장 대상</td>
+</tr>
+<tr>
+<td><code>FIXTURE-005</code></td>
+<td>Full HIL gate</td>
+<td>해당 없음</td>
+<td><code>CICT_HIL=1</code> gate</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">실행 명령</h2>
+<h3 id="marker-mode">Marker mode</h3>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">marker</span>
+</code></pre></div>
+<h3 id="mock">Mock</h3>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">mock</span>
+</code></pre></div>
+<h3 id="hil">HIL</h3>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">hil</span>
+</code></pre></div>
+<h3 id="test-id">TEST ID</h3>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-test-id</span> <span class="n">CT-UART</span><span class="p">-</span><span class="n">001</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">mock</span>
+</code></pre></div>
+<h2 id="vs-code">VS Code</h2>
 <table>
 <thead>
 <tr>
@@ -621,173 +881,70 @@
 </thead>
 <tbody>
 <tr>
-<td>Source</td>
-<td><code>@pytest.mark.ct</code></td>
+<td>Task</td>
+<td><code>TEST CASE: ALL</code></td>
 </tr>
 <tr>
-<td>Required fields</td>
-<td><code>test_id</code>, <code>category</code>, <code>fixture_id</code>, <code>fixture_mode</code></td>
+<td>Task</td>
+<td><code>TEST CASE: TEST ID</code></td>
 </tr>
 <tr>
-<td>Mode selection</td>
-<td><code>fixture_mode</code></td>
+<td>Input</td>
+<td><code>fixtureMode</code></td>
 </tr>
 <tr>
-<td>Derived modes</td>
-<td><code>interface_mode</code>, <code>equipment_mode</code></td>
-</tr>
-<tr>
-<td>Validation</td>
-<td>pytest collection hook + filename/fixture ID match</td>
-</tr>
-<tr>
-<td>Missing / duplicate / invalid mode</td>
-<td>Collection error</td>
+<td>Options</td>
+<td><code>marker</code>, <code>mock</code>, <code>hil</code></td>
 </tr>
 </tbody>
 </table>
-<table>
-<thead>
-<tr>
-<th>Directory</th>
-<th>Tools</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>test_envs/tests/pytest/test_equipments/</code></td>
-<td>FPGA, Saleae, Digilent</td>
-</tr>
-<tr>
-<td><code>test_envs/tests/pytest/test_interfaces/</code></td>
-<td>USB, UART, JTAG, Network</td>
-</tr>
-</tbody>
-</table>
-<h2 id="structure">Structure</h2>
-<div class="highlight"><pre><span></span><code>test_envs/tests/
-├── pytest/
-│   ├── test_cases/
-│   │   ├── test_fixture_001_uart_timing.py
-│   │   ├── test_fixture_002_usb_loopback.py
-│   │   └── test_fixture_003_network_loopback.py
-│   ├── fixtures/
-│   │   ├── fixture_001_uart_saleae.py
-│   │   ├── fixture_002_usb_digilent.py
-│   │   ├── fixture_003_network.py
-│   │   ├── fixture_004_jtag_fpga.py
-│   │   └── fixture_005_full_hil.py
-│   ├── test_equipments/
-│   │   ├── fpga/{mock,hil}/
-│   │   ├── saleae/{mock,hil}/
-│   │   └── digilent/{mock,hil}/
-│   ├── test_interfaces/
-│   │   ├── usb/{mock,hil}/
-│   │   ├── uart/{mock,hil}/
-│   │   ├── jtag/{mock,hil}/
-│   │   └── network/{mock,hil}/
-│   └── conftest.py
-└── unittest/
-    ├── ct_framework/
-    │   └── python/
-    ├── python/
-    ├── c_cpp/
-    ├── firmware/
-    └── common/
+<h2 id="result-json">Result JSON</h2>
+<div class="highlight"><pre><span></span><code>fixture_configs
+├── test_mode
+├── interface_mode
+├── equipment_mode
+├── interface
+└── equipment
 </code></pre></div>
-<h2 id="fixture-to-test-mapping">Fixture-to-Test Mapping</h2>
+<h2 id="hil-gate">HIL Gate</h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: right;">Order</th>
-<th>Fixture composition</th>
-<th>Test case</th>
-<th>TEST ID</th>
+<th>Check</th>
+<th>Rule</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: right;">1</td>
-<td>UART + Saleae</td>
-<td><code>test_fixture_001_uart_timing.py</code></td>
-<td><code>CT-UART-001</code></td>
+<td>Hardware implementation</td>
+<td>Required</td>
 </tr>
 <tr>
-<td style="text-align: right;">2</td>
-<td>USB + Digilent</td>
-<td><code>test_fixture_002_usb_loopback.py</code></td>
-<td><code>CT-USB-001</code></td>
+<td>Interface connection</td>
+<td>Required</td>
 </tr>
 <tr>
-<td style="text-align: right;">3</td>
-<td>Network</td>
-<td><code>test_fixture_003_network_loopback.py</code></td>
-<td><code>CT-NETWORK-001</code></td>
+<td>Equipment connection</td>
+<td>Required</td>
+</tr>
+<tr>
+<td>DUT availability</td>
+<td>Required</td>
+</tr>
+<tr>
+<td>Cleanup</td>
+<td><code>finally</code> disconnect</td>
+</tr>
+<tr>
+<td>Missing implementation</td>
+<td>Explicit FAIL / SKIP</td>
+</tr>
+<tr>
+<td>Silent Mock fallback</td>
+<td>Prohibited</td>
 </tr>
 </tbody>
 </table>
-<h2 id="mock-hil">Mock / HIL</h2>
-<table>
-<thead>
-<tr>
-<th>Scope</th>
-<th>Document</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>pytest only</td>
-<td><a href="hil_mock.html">Open</a></td>
-</tr>
-</tbody>
-</table>
-<h2 id="execution-model">Execution Model</h2>
-<pre class="mermaid"><code>flowchart TD
-    A[pytest Test Case] --&gt; B[Fixture]
-    B --&gt; C[Test Interface]
-    B --&gt; D[Test Equipment]
-    C --&gt; E[DUT]
-    D --&gt; E
-    A --&gt; F[Result Recorder]
-    F --&gt; G[Result + Log + Measurement]</code></pre>
-<h2 id="commands">Commands</h2>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span>
-<span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span> <span class="n">-m</span> <span class="n">ct</span> <span class="n">-s</span>
-</code></pre></div>
-<h2 id="report-files">Report Files</h2>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Path</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Result</td>
-<td><code>test_envs/reports/results/pytest/test_cases/&lt;test-id&gt;/&lt;timestamp&gt;_result.json</code></td>
-</tr>
-<tr>
-<td>Log</td>
-<td><code>test_envs/reports/results/pytest/test_cases/&lt;test-id&gt;/&lt;timestamp&gt;_test.log</code></td>
-</tr>
-<tr>
-<td>Markdown</td>
-<td><code>test_envs/reports/markdown/&lt;test-id&gt;/&lt;timestamp&gt;_result.md</code></td>
-</tr>
-<tr>
-<td>Pandoc</td>
-<td><code>test_envs/reports/pandoc/&lt;test-id&gt;/&lt;timestamp&gt;_result.&lt;format&gt;</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="vs-code">VS Code</h2>
-<ul>
-<li>Testing path: <code>test_envs/tests/pytest</code></li>
-<li>Debug: <code>Debug: Current pytest File</code></li>
-<li>Task: <code>TEST CASE: ALL</code></li>
-<li>Task: <code>TEST CASE: TEST ID</code> / ID list</li>
-</ul>
 </article>
 </div>
 <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
@@ -800,7 +957,7 @@
 </main>
 <footer class="md-footer">
 <nav aria-label="하단/푸터" class="md-footer__inner md-grid">
-<a aria-label="이전: Operation" class="md-footer__link md-footer__link--prev" href="operation.html">
+<a aria-label="이전: Unittest" class="md-footer__link md-footer__link--prev" href="unittest.html">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
 </div>
@@ -809,17 +966,17 @@
                 이전
               </span>
 <div class="md-ellipsis">
-                Operation
+                Unittest
               </div>
 </div>
 </a>
-<a aria-label="다음: Unittest" class="md-footer__link md-footer__link--next" href="unittest.html">
+<a aria-label="다음: Pytest" class="md-footer__link md-footer__link--next" href="tests/pytest/index.html">
 <div class="md-footer__title">
 <span class="md-footer__direction">
                 다음
               </span>
 <div class="md-ellipsis">
-                Unittest
+                Pytest
               </div>
 </div>
 <div class="md-footer__button md-icon">
