@@ -2,55 +2,89 @@
 
 ## Scope
 
-| Area | Coverage |
+| Item | Rule |
 |---|---|
-| CT Framework | Configuration, tools, reports, mocks, VS Code contract |
-| Python | Function, class, module, mock |
-| C/C++ | Native unit-test extension |
-| Firmware | Hardware-independent firmware logic |
-| Common | Shared fixtures, data, utilities |
+| TEST ID | Not used |
+| Fixture mode | Not used |
+| Identifier | Execution ID |
+| Result unit | Test Function |
+| Pass value | `PASS`, `FAIL` |
+| Failure search | `test_functions[].pass == false` |
 
-## Structure
-
-```text
-test_envs/tests/unittest/
-├── ct_framework/
-│   └── python/
-├── python/
-├── c_cpp/
-├── firmware/
-└── common/
-```
-
-## Execution Model
-
-```mermaid
-flowchart TD
-    A[unittest.TestCase] --> B[Setup]
-    B --> C[Test Method]
-    C --> D[Assertion]
-    D --> E[Cleanup]
-    E --> F[JUnit / Result Data]
-```
-
-## Commands
+## Execution
 
 ```powershell
-.\.venv\Scripts\python.exe -m unittest discover -v -s test_envs/tests/unittest -p "test_*.py"
 .\.venv\Scripts\python.exe -m pytest test_envs/tests/unittest
 ```
 
-## Report Files
-
-| Type | Path |
+| Runtime | Result capture |
 |---|---|
-| Result | `test_envs/reports/results/unittest/<test-id>/<timestamp>_result.json` |
-| Log | `test_envs/reports/results/unittest/<test-id>/<timestamp>_test.log` |
-| Markdown | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` |
-| Pandoc | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.<format>` |
+| pytest adapter | `test_envs/tests/unittest/conftest.py` |
+| VS Code Testing | pytest adapter |
+| Native `python -m unittest` | Result capture not applied |
 
-## VS Code
+## Result files
 
-- Testing path: `test_envs/tests/unittest`
-- Implementation: `unittest.TestCase`
-- VS Code Testing: pytest adapter
+```text
+test_envs/reports/results/unittest/
+├── <execution-id>_result.json
+└── <execution-id>_result.log
+```
+
+| File | Source |
+|---|---|
+| `<execution-id>_result.json` | unittest function reports |
+| `<execution-id>_result.log` | Function status + failure detail |
+
+## Result JSON
+
+```text
+execution
+├── execution_id
+├── timestamp
+├── status
+├── duration
+├── environment
+├── runner
+├── commit
+├── branch
+└── logs
+summary
+├── total
+├── passed
+├── failed
+├── errors
+└── skipped
+test_functions[]
+├── function
+├── pass
+├── status
+├── duration
+└── failure
+```
+
+## Markdown
+
+```text
+test_envs/reports/markdown/unittest/<execution-id>_result.md
+docs/tests/unittest/<execution-id>.md
+```
+
+```text
+# unittest Result
+├── Execution Summary
+├── Test Functions
+├── Failed Functions
+├── Test Source
+├── Logs
+└── Local LLM Analysis
+```
+
+## Index
+
+| Column | Source |
+|---|---|
+| Test Function | `test_functions[].function` |
+| Pass | Latest function status |
+| Latest | Latest Seoul timestamp date |
+| Test Function Count | Function execution count |

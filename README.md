@@ -261,20 +261,23 @@ test_envs/reports/
 │   │   └── <execution-id>_test.log
 │   └── unittest/
 │       ├── <execution-id>_result.json
-│       └── <execution-id>_test.log
+│       └── <execution-id>_result.log
 ├── local_llm/
 │   └── <execution-id>_local_llm.log
 ├── pandoc/<test-id>/
 │   └── <execution-id>_result.{html,pdf,docx}
-└── markdown/<test-id>/
-    └── <execution-id>_result.md
+└── markdown/
+    ├── <test-id>/<execution-id>_result.md
+    └── unittest/<execution-id>_result.md
 ```
 
 | Artifact | 역할 |
 |---|---|
 | `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` | Canonical human-readable result |
+| `test_envs/reports/markdown/unittest/<execution-id>_result.md` | unittest Execution Markdown |
 | `<execution-id>_result.json` | Result, measurement, analysis, escalation |
 | `<execution-id>_test.log` | Test, stdout, stderr, equipment, interface log |
+| `<execution-id>_result.log` | unittest function status and failure detail |
 | `docs/tests/pytest/<test-id>.md` | Latest pytest page |
 | `docs/tests/pytest/<test-id>__<execution-id>.md` | pytest execution page |
 | `docs/tests/unittest/<execution-id>.md` | unittest execution page |

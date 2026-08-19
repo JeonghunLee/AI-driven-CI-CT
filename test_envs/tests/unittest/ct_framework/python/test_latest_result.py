@@ -51,6 +51,40 @@ class LatestResultTests(unittest.TestCase):
         self.assertIn("[2/3] RUNNING 000s", output.getvalue())
         self.assertIn("[2/3] COMPLETE 000s", output.getvalue())
 
+    def test_pending_unittest_uses_execution_id_without_test_id(self) -> None:
+        root = Path("test_envs/tests/.tmp/ct_framework/pending-unit-results")
+        docs = Path("test_envs/tests/.tmp/ct_framework/pending-unit-docs")
+        store = ResultStore(root)
+        record = ResultRecord(
+            "unittest",
+            "PASS",
+            "unit",
+            0.1,
+            execution_id="20260101_010203_123456",
+            test_functions=(
+                {
+                    "function": "ExampleTests::test_ok",
+                    "pass": True,
+                    "status": "PASS",
+                    "duration": 0.1,
+                    "failure": "",
+                },
+            ),
+        )
+        result_path = store.save(record)
+        markdown = root / "markdown/unittest/20260101_010203_123456_result.md"
+        markdown.unlink(missing_ok=True)
+        document = docs / "tests/unittest/20260101_010203_123456.md"
+        document.unlink(missing_ok=True)
+        self.assertEqual(pending_result_paths(store=store, docs_root=docs), [result_path])
+        markdown.parent.mkdir(parents=True, exist_ok=True)
+        markdown.write_text("# unittest Result", encoding="utf-8")
+        self.assertEqual(pending_result_paths(store=store, docs_root=docs), [])
+        self.assertEqual(
+            pending_result_paths(publish_docs=True, store=store, docs_root=docs),
+            [result_path],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

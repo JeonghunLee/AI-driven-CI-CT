@@ -428,6 +428,7 @@ Input rule:
 ```text
 pytest   : test_envs/reports/results/pytest/test_cases/<test-id>/<execution-id>_result.json
 unittest : test_envs/reports/results/unittest/<execution-id>_result.json
+           test_envs/reports/results/unittest/<execution-id>_result.log
 ```
 
 Execution rule:
@@ -535,6 +536,24 @@ unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
 |---|---|
 | Test ID | pytest only |
 | Mode | pytest only |
+
+### unittest Result Contract
+
+| Field | Rule |
+|---|---|
+| TEST ID | Not serialized |
+| Mode | Not serialized |
+| Identifier | Execution ID |
+| `test_functions[].function` | Test Function name |
+| `test_functions[].pass` | Boolean pass result |
+| `test_functions[].status` | `PASS`, `FAIL`, `ERROR`, `SKIP` |
+| `test_functions[].failure` | Failure detail |
+
+```text
+execution
+summary
+test_functions[]
+```
 
 ## 10. Local LLM Analysis
 
@@ -663,9 +682,11 @@ Local LLM
 
 | Output | Source | Destination |
 |---|---|---|
-| Canonical Markdown | Latest test execution | `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` |
+| pytest Canonical Markdown | pytest execution | `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` |
+| unittest Canonical Markdown | unittest execution | `test_envs/reports/markdown/unittest/<execution-id>_result.md` |
 | Duplicate latest Markdown | None | None |
-| MkDocs latest page | Canonical Markdown | `docs/tests/{pytest,unittest}/<test-id>.md` |
+| MkDocs pytest latest page | Canonical Markdown | `docs/tests/pytest/<test-id>.md` |
+| MkDocs unittest execution page | Canonical Markdown | `docs/tests/unittest/<execution-id>.md` |
 | pytest MkDocs execution | Canonical Markdown | `docs/tests/pytest/<test-id>__<execution-id>.md` |
 | unittest MkDocs execution | Canonical Markdown | `docs/tests/unittest/<execution-id>.md` |
 | Latest page history | Normalized TEST results | Date + Time + linked Execution ID + 7-character commit |

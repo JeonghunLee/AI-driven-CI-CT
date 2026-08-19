@@ -31,7 +31,7 @@ _FUNCTION_RESULTS: dict[str, FunctionResult] = {}
 
 def _function_name(nodeid: str) -> str:
     parts = nodeid.split("::")
-    return "::".join(parts[1:]) if len(parts) > 1 else parts[0]
+    return parts[-1]
 
 
 def pytest_runtest_logreport(report: pytest.TestReport) -> None:
@@ -45,6 +45,12 @@ def pytest_runtest_logreport(report: pytest.TestReport) -> None:
             status="ERROR",
             duration=report.duration,
             failure=str(report.longrepr),
+        )
+    elif report.when == "setup" and report.skipped:
+        _FUNCTION_RESULTS[report.nodeid] = FunctionResult(
+            function=function,
+            status="SKIP",
+            duration=report.duration,
         )
     elif report.when == "call":
         status = "PASS" if report.passed else "SKIP" if report.skipped else "FAIL"
@@ -106,4 +112,3 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
         for item in failed:
             lines.extend([f"{item['function']} | {item['status']}", str(item["failure"]), ""])
     (result_path.parent / record.logs["main"]).write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
-    session.config._unittest_result_path = result_path

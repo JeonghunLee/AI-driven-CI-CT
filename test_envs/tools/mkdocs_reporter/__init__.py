@@ -46,7 +46,8 @@ class MarkdownReporter:
         important_logs: list[str] | None = None,
         publish_docs: bool = False,
     ) -> Path:
-        destination = self.store.root / "markdown" / result.test_id / f"{result.execution_id}_result.md"
+        markdown_group = "unittest" if result.category.lower() == "unit" else result.test_id
+        destination = self.store.root / "markdown" / markdown_group / f"{result.execution_id}_result.md"
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(self.render(result, analysis, important_logs), encoding="utf-8")
         if publish_docs:
@@ -57,6 +58,11 @@ class MarkdownReporter:
         report_type = "unittest" if result.category.lower() == "unit" else "pytest"
         target_dir = self.docs_root / "tests" / report_type
         target_dir.mkdir(parents=True, exist_ok=True)
+        if report_type == "unittest":
+            target = target_dir / f"{result.execution_id}.md"
+            target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+            self.update_indexes()
+            return target
         latest_target = target_dir / f"{result.test_id}.md"
 
         canonical_dir = self.store.root / "markdown" / result.test_id
@@ -78,56 +84,63 @@ class MarkdownReporter:
     def update_indexes(self) -> tuple[Path, Path]:
         test_root = self.docs_root / "tests"
         ct_rows: list[str] = []
-        unit_rows: list[str] = []
         ct_execution_rows: list[tuple[str, str, str, str]] = []
-        unit_execution_rows: list[tuple[str, str]] = []
         execution_categories: dict[tuple[str, str], str] = {}
+        unit_function_runs: dict[str, list[tuple[str, str, str]]] = {}
+        unit_execution_rows: list[tuple[str, str, str]] = []
+        unittest_dir = test_root / "unittest"
+        seen_unit_executions: set[str] = set()
         for result_path in self.store.result_paths():
             try:
                 stored_result = self.store.load(result_path)
             except (ValueError, TypeError):
                 continue
             execution_categories[(stored_result.test_id, stored_result.execution_id)] = stored_result.category
+            if stored_result.category.lower() == "unit":
+                link = f"{stored_result.execution_id}.md"
+                if stored_result.execution_id in seen_unit_executions or not (unittest_dir / link).is_file():
+                    continue
+                seen_unit_executions.add(stored_result.execution_id)
+                unit_execution_rows.append((stored_result.execution_id, stored_result.status, link))
+                for function in stored_result.test_functions:
+                    function_name = str(function.get("function", "unknown")).split("::")[-1]
+                    unit_function_runs.setdefault(function_name, []).append(
+                        (stored_result.timestamp, str(function.get("status", "ERROR")), link)
+                    )
 
-        for report_type in ("pytest", "unittest"):
-            report_dir = test_root / report_type
-            report_dir.mkdir(parents=True, exist_ok=True)
-            for path in sorted(report_dir.glob("*.md")):
-                if path.name == "index.md":
-                    continue
-                link = path.name
-                if "__" in path.stem:
-                    test_id, execution_id = path.stem.split("__", 1)
-                    if report_type == "unittest":
-                        unit_execution_rows.append((execution_id, link))
-                    else:
-                        category = execution_categories.get((test_id, execution_id), "unknown")
-                        ct_execution_rows.append((execution_id, category, test_id, link))
-                    continue
-                test_id = path.stem
-                count = len(list(report_dir.glob(f"{test_id}__*.md")))
-                result_paths = self.store.result_paths(test_id)
-                latest_result = (
-                    self.store.load(max(result_paths, key=lambda item: item.name))
-                    if result_paths
-                    else None
-                )
-                mode = latest_result.test_mode if latest_result else "unknown"
-                if report_type == "unittest":
-                    test_function = latest_result.description if latest_result else test_id
-                    pass_status = latest_result.status if latest_result else "unknown"
-                    latest_date = latest_result.timestamp.partition("T")[0] if latest_result else "unknown"
-                    unit_rows.append(
-                        f"| [{_safe(test_function)}]({link}) | {_safe(pass_status)} | "
-                        f"{_safe(latest_date)} | {count} |"
-                    )
-                else:
-                    category = latest_result.category if latest_result else "unknown"
-                    latest_date = latest_result.timestamp.partition("T")[0] if latest_result else "unknown"
-                    ct_rows.append(
-                        f"| {_safe(category)} | [`{_safe(test_id)}`]({link}) | {_safe(mode)} | "
-                        f"{_safe(latest_date)} | {count} |"
-                    )
+        pytest_dir = test_root / "pytest"
+        pytest_dir.mkdir(parents=True, exist_ok=True)
+        unittest_dir.mkdir(parents=True, exist_ok=True)
+        for path in sorted(pytest_dir.glob("*.md")):
+            if path.name == "index.md":
+                continue
+            link = path.name
+            if "__" in path.stem:
+                test_id, execution_id = path.stem.split("__", 1)
+                category = execution_categories.get((test_id, execution_id), "unknown")
+                ct_execution_rows.append((execution_id, category, test_id, link))
+                continue
+            test_id = path.stem
+            count = len(list(pytest_dir.glob(f"{test_id}__*.md")))
+            result_paths = self.store.result_paths(test_id)
+            latest_result = (
+                self.store.load(max(result_paths, key=lambda item: item.name)) if result_paths else None
+            )
+            mode = latest_result.test_mode if latest_result else "unknown"
+            category = latest_result.category if latest_result else "unknown"
+            latest_date = latest_result.timestamp.partition("T")[0] if latest_result else "unknown"
+            ct_rows.append(
+                f"| {_safe(category)} | [`{_safe(test_id)}`]({link}) | {_safe(mode)} | "
+                f"{_safe(latest_date)} | {count} |"
+            )
+
+        unit_rows = []
+        for function_name, runs in sorted(unit_function_runs.items()):
+            latest_timestamp, latest_status, link = max(runs, key=lambda item: item[0])
+            unit_rows.append(
+                f"| [{_safe(function_name)}]({link}) | {_safe(latest_status)} | "
+                f"{_safe(latest_timestamp.partition('T')[0])} | {len(runs)} |"
+            )
 
         ct_recent = "\n".join(
             f"| [`{_safe(execution_id)}`]({link}) | {_safe(category)} | `{_safe(test_id)}` |"
@@ -136,9 +149,11 @@ class MarkdownReporter:
             )[:20]
         ) or "| - | - | - |"
         unit_recent = "\n".join(
-            f"- [`{execution_id}`]({link})"
-            for execution_id, link in sorted(unit_execution_rows, key=lambda item: item[0], reverse=True)[:20]
-        ) or "- None"
+            f"| [`{execution_id}`]({link}) | {_safe(status)} |"
+            for execution_id, status, link in sorted(
+                unit_execution_rows, key=lambda item: item[0], reverse=True
+            )[:20]
+        ) or "| - | - |"
         pytest_index = f"""# pytest Results
 
 ## Continuous Tests
@@ -165,6 +180,8 @@ class MarkdownReporter:
 
 ## Recent Executions
 
+| Execution ID | Pass |
+|---|---|
 {unit_recent}
 """
         pytest_destination = test_root / "pytest" / "index.md"
@@ -211,6 +228,8 @@ class MarkdownReporter:
 {rendered_rows}"""
 
     def render(self, result: ResultRecord, analysis: Analysis, important_logs: list[str] | None = None) -> str:
+        if result.category.lower() == "unit":
+            return self._render_unittest(result, analysis, important_logs)
         logs = "<br>".join(_safe(line) for line in (important_logs or [])) or "None"
         warnings = "<br>".join(_safe(item.get("message", "")) for item in analysis.warnings) or "None"
         warning_count = len(analysis.warnings)
@@ -311,6 +330,110 @@ class MarkdownReporter:
 ### LLM Test Prompt
 
 {_safe(analysis.prompt) or "Not configured"}
+
+### Test Result
+
+{analysis_result}
+
+### Test Summary
+
+{analysis_summary}
+"""
+
+    def _render_unittest(
+        self,
+        result: ResultRecord,
+        analysis: Analysis,
+        important_logs: list[str] | None = None,
+    ) -> str:
+        payload = result.to_dict()
+        summary = payload["summary"]
+        function_rows = "\n".join(
+            f"| {_safe(item.get('function', 'unknown'))} | "
+            f"{'PASS' if item.get('pass') else 'FAIL'} | {_safe(item.get('status', 'ERROR'))} | "
+            f"{float(item.get('duration', 0.0)):.6f} |"
+            for item in result.test_functions
+        ) or "| - | - | - | 0.000000 |"
+        failed_rows = "\n".join(
+            f"| {_safe(item.get('function', 'unknown'))} | {_safe(item.get('status', 'ERROR'))} | "
+            f"{_safe(item.get('failure', '')) or 'No failure detail'} |"
+            for item in result.test_functions
+            if not item.get("pass") and item.get("status") != "SKIP"
+        ) or "| - | - | None |"
+        warnings = "<br>".join(_safe(item.get("message", "")) for item in analysis.warnings) or "None"
+        warning_count = len(analysis.warnings)
+        logs = "<br>".join(_safe(line) for line in (important_logs or [])) or "None"
+        execution_summary = _table(
+            {
+                "Execution ID": result.execution_id,
+                "Pass": result.status,
+                "Latest": result.timestamp,
+                "Duration": f"{result.duration:.6f} seconds",
+                "Total": summary["total"],
+                "Passed": summary["passed"],
+                "Failed": summary["failed"],
+                "Errors": summary["errors"],
+                "Skipped": summary["skipped"],
+            }
+        )
+        analysis_table = _table(
+            {
+                "Classification": analysis.classification,
+                "Confidence": f"{analysis.confidence:.2f}",
+                "Analyzer": analysis.source,
+                "Status": "enabled" if analysis.source.startswith("ollama/") else "disabled",
+            }
+        )
+        analysis_result = _table(
+            {
+                "**Status**": result.status,
+                "**Severity**": _warning_severity(warning_count),
+                "**Warnings**": warning_count,
+                "**Needs Escalation**": "ON" if analysis.needs_escalation else "OFF",
+            }
+        )
+        analysis_summary = _table(
+            {
+                "Summary": analysis.summary,
+                "Failure Analysis": analysis.failure_analysis or "Not applicable",
+                "Source Review": analysis.source_review or "Not requested",
+                "Warnings": warnings,
+                "Recommendations": analysis.recommendations or "No recommendation provided.",
+            }
+        )
+        return f"""# unittest Result
+
+## Execution Summary
+
+{execution_summary}
+
+## Test Functions
+
+| Test Function | Pass | Status | Duration (s) |
+|---|---|---|---:|
+{function_rows}
+
+## Failed Functions
+
+| Test Function | Status | Failure |
+|---|---|---|
+{failed_rows}
+
+## Test Source
+
+{_table({'Commit': result.commit, 'Branch': result.branch})}
+
+## Logs
+
+{_table({'Result log': result.logs.get('main', 'None'), 'Important': logs})}
+
+## Local LLM Analysis
+
+{analysis_table}
+
+### LLM Test Prompt
+
+{_safe(analysis.prompt) or 'Not configured'}
 
 ### Test Result
 

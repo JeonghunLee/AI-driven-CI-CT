@@ -67,6 +67,38 @@ class ResultNormalizerTests(unittest.TestCase):
         self.assertEqual(record.status, "FAIL")
         self.assertEqual(record.metrics, {"tests": 2, "failures": 1, "errors": 0, "skipped": 0})
         self.assertAlmostEqual(record.duration, 0.3)
+        self.assertEqual(len(record.test_functions), 2)
+        self.assertEqual([item["status"] for item in record.test_functions], ["PASS", "FAIL"])
+
+    def test_unittest_result_uses_flat_execution_files(self) -> None:
+        root = Path("test_envs/tests/.tmp/ct_framework/unit-flat-result")
+        record = ResultRecord(
+            "unittest",
+            "FAIL",
+            "unit",
+            0.2,
+            execution_id="20260101_010203_123456",
+            test_functions=(
+                {
+                    "function": "ExampleTests::test_failure",
+                    "pass": False,
+                    "status": "FAIL",
+                    "duration": 0.2,
+                    "failure": "expected true",
+                },
+            ),
+        )
+        path = ResultStore(root).save(record)
+        self.assertEqual(
+            path,
+            root / "results/unittest/20260101_010203_123456_result.json",
+        )
+        self.assertTrue((path.parent / "20260101_010203_123456_result.log").exists())
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        self.assertNotIn("test_case", payload)
+        self.assertNotIn("test_id", json.dumps(payload))
+        self.assertEqual(payload["summary"]["failed"], 1)
+        self.assertFalse(payload["test_functions"][0]["pass"])
 
 
 if __name__ == "__main__":

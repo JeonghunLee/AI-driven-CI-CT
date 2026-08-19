@@ -226,7 +226,8 @@ class ResultStore:
         unit_root = self.root / "results" / "unittest"
         unit_paths = list(unit_root.glob("*_result.json")) if test_id in {None, "unittest"} else []
         legacy_unit_paths = list(unit_root.glob(f"{name}/*_result.json"))
-        return pytest_paths + unit_paths + legacy_unit_paths
+        paths = pytest_paths + unit_paths + legacy_unit_paths
+        return list(dict.fromkeys(paths))
 
     def _report_dir(self, record: ResultRecord) -> Path:
         if record.category.lower() == "unit":
@@ -258,7 +259,7 @@ def from_junit(path: str | Path, test_id: str = "UNIT-TEST") -> ResultRecord:
         error = testcase.find("error")
         skipped = testcase.find("skipped")
         status = "ERROR" if error is not None else "FAIL" if failure is not None else "SKIP" if skipped is not None else "PASS"
-        detail_element = error or failure or skipped
+        detail_element = error if error is not None else failure if failure is not None else skipped
         name = testcase.attrib.get("name", "unknown")
         class_name = testcase.attrib.get("classname", "")
         functions.append(

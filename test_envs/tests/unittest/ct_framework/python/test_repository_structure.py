@@ -19,6 +19,7 @@ class RepositoryStructureTests(unittest.TestCase):
 
     def test_unittest_structure(self) -> None:
         root = Path("test_envs/tests/unittest")
+        self.assertTrue((root / "conftest.py").is_file())
         for relative in (
             "ct_framework/python",
             "python",

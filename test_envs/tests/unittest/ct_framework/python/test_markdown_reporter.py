@@ -82,6 +82,32 @@ class MarkdownReporterTests(unittest.TestCase):
             with self.subTest(warning_count=warning_count):
                 self.assertEqual(_warning_severity(warning_count), severity)
 
+    def test_unittest_markdown_lists_failed_functions(self) -> None:
+        result = ResultRecord(
+            "unittest",
+            "FAIL",
+            "unit",
+            0.1,
+            execution_id="20260101_020304_123456",
+            test_functions=(
+                {
+                    "function": "test_device_timeout",
+                    "pass": False,
+                    "status": "FAIL",
+                    "duration": 0.1,
+                    "failure": "device timeout",
+                },
+            ),
+        )
+        text = MarkdownReporter("test_envs/tests/.tmp/ct_framework/unit-render").render(
+            result,
+            Analysis("Failure detected", "unittest", 1.0, "test"),
+        )
+        self.assertIn("| test_device_timeout | FAIL | FAIL |", text)
+        self.assertIn("| test_device_timeout | FAIL | device timeout |", text)
+        self.assertNotIn("Test ID", text)
+        self.assertNotIn("Fixture mode", text)
+
     def test_mkdocs_publish_preserves_each_execution(self) -> None:
         reports_root = Path("test_envs/tests/.tmp/ct_framework/multi-execution-reports")
         docs_root = Path("test_envs/tests/.tmp/ct_framework/multi-execution-docs")
@@ -112,6 +138,15 @@ class MarkdownReporterTests(unittest.TestCase):
             0.05,
             description="test_result_parser",
             execution_id="20260101-000003",
+            test_functions=(
+                {
+                    "function": "test_result_parser",
+                    "pass": True,
+                    "status": "PASS",
+                    "duration": 0.05,
+                    "failure": "",
+                },
+            ),
         )
         ResultStore(reports_root).save(unit_result)
         reporter.generate(unit_result, analysis, publish_docs=True)
@@ -152,9 +187,15 @@ class MarkdownReporterTests(unittest.TestCase):
             unittest_index,
         )
         self.assertIn(
-            "| [test_result_parser](UNIT-INTERNAL-001.md) | PASS |",
+            "| [test_result_parser](20260101-000003.md) | PASS |",
             unittest_index,
         )
+        unit_document = Path(docs_root) / "tests/unittest/20260101-000003.md"
+        self.assertTrue(unit_document.exists())
+        unit_text = unit_document.read_text(encoding="utf-8")
+        self.assertIn("# unittest Result", unit_text)
+        self.assertIn("| test_result_parser | PASS | PASS |", unit_text)
+        self.assertIn("## Failed Functions", unit_text)
         self.assertNotIn("| Test ID | Mode |", unittest_index)
         self.assertEqual(root_index.read_text(encoding="utf-8"), "# System Overview")
 
