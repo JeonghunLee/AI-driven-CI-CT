@@ -4,7 +4,9 @@
 
 | Scope | Document | Components |
 |---|---|---|
-| Environment | [environment.md](environment.md) | Python, Ollama, VS Code, OS, Config |
+| Python Environment | [python_environment.md](python_environment.md) | OS, Python, venv, dependencies |
+| Local LLM Environment | [local_llm_environment.md](local_llm_environment.md) | Ollama, model, prompt, check |
+| VS Code Environment | [vscode_environment.md](vscode_environment.md) | Settings, Launch, Tasks, Testing |
 | Pytest Operation | [pytest_operation.md](pytest_operation.md) | TEST ID, Fixture, Mock/HIL, Local LLM |
 | Unittest Operation | [unittest_operation.md](unittest_operation.md) | Function, Execution ID, Result, Markdown |
 | Pytest | [pytest.md](pytest.md) | Test cases, Fixture mapping |
