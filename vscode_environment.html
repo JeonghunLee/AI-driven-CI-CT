@@ -1,0 +1,1569 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Test results and execution history" name="description"/>
+<link href="local_llm_environment.html" rel="prev"/>
+<link href="pytest_operation.html" rel="next"/>
+<link href="imgs/logo.jpg" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
+<title>Envs VSCode - AI-driven CI/CT</title>
+<link href="assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
+<link href="assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<script src="https://unpkg.com/iframe-worker/shim"></script>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="stylesheets/1_basic.css" rel="stylesheet"/>
+<link href="stylesheets/2_toc.css" rel="stylesheet"/>
+<link href="stylesheets/3_admonition.css" rel="stylesheet"/>
+<link href="stylesheets/4_numbering.css" rel="stylesheet"/>
+<script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#vs-code-environment">
+          콘텐츠로 이동
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="상단/헤더" class="md-header__inner md-grid">
+<a aria-label="AI-driven CI/CT" class="md-header__button md-logo" data-md-component="logo" href="index.html" title="AI-driven CI/CT">
+<img alt="logo" src="imgs/logo.jpg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            AI-driven CI/CT
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Envs VSCode
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
+</label>
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_2" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to system preference" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to system preference">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="검색" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="검색" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="검색" class="md-search__options">
+<button aria-label="지우기" class="md-search__icon md-icon" tabindex="-1" title="지우기" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            검색 초기화
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/JeonghunLee/AI-driven-CI-CT" title="저장소로 이동">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+</div>
+<div class="md-source__repository">
+    JeonghunLee/AI-driven-CI-CT
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="네비게이션" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="AI-driven CI/CT" class="md-nav__button md-logo" data-md-component="logo" href="index.html" title="AI-driven CI/CT">
+<img alt="logo" src="imgs/logo.jpg"/>
+</a>
+    AI-driven CI/CT
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/JeonghunLee/AI-driven-CI-CT" title="저장소로 이동">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+</div>
+<div class="md-source__repository">
+    JeonghunLee/AI-driven-CI-CT
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="index.html">
+<span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="python_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Envs Python
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="local_llm_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Envs LLM
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    Envs VSCode
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="vscode_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Envs VSCode
+  
+
+    
+  </span>
+</a>
+<nav aria-label="목차" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#files">
+<span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#settingsjson">
+<span class="md-ellipsis">
+      
+        settings.json
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing">
+<span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+</a>
+<nav aria-label="Testing" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adapter">
+<span class="md-ellipsis">
+      
+        Adapter
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#discovery">
+<span class="md-ellipsis">
+      
+        Discovery
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pytest-execution">
+<span class="md-ellipsis">
+      
+        Pytest execution
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#unittest-execution">
+<span class="md-ellipsis">
+      
+        Unittest execution
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing-actions">
+<span class="md-ellipsis">
+      
+        Testing actions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#result-flow">
+<span class="md-ellipsis">
+      
+        Result flow
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#related-documents">
+<span class="md-ellipsis">
+      
+        Related documents
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#run-and-debug">
+<span class="md-ellipsis">
+      
+        Run and Debug
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tasks">
+<span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#process-lifecycle">
+<span class="md-ellipsis">
+      
+        Process lifecycle
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#inputs">
+<span class="md-ellipsis">
+      
+        Inputs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reports">
+<span class="md-ellipsis">
+      
+        Reports
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST Operation
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST Operation
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="pytest_operation.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="unittest_operation.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST Framework
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST Framework
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="pytest.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="unittest.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="hil_mock.html">
+<span class="md-ellipsis">
+    
+  
+    HIL &amp; Mock
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
+<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST Reports
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_5">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST Reports
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="tests/pytest/index.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="tests/unittest/index.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="목차" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#files">
+<span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#settingsjson">
+<span class="md-ellipsis">
+      
+        settings.json
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing">
+<span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+</a>
+<nav aria-label="Testing" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adapter">
+<span class="md-ellipsis">
+      
+        Adapter
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#discovery">
+<span class="md-ellipsis">
+      
+        Discovery
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pytest-execution">
+<span class="md-ellipsis">
+      
+        Pytest execution
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#unittest-execution">
+<span class="md-ellipsis">
+      
+        Unittest execution
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing-actions">
+<span class="md-ellipsis">
+      
+        Testing actions
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#result-flow">
+<span class="md-ellipsis">
+      
+        Result flow
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#related-documents">
+<span class="md-ellipsis">
+      
+        Related documents
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#run-and-debug">
+<span class="md-ellipsis">
+      
+        Run and Debug
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tasks">
+<span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#process-lifecycle">
+<span class="md-ellipsis">
+      
+        Process lifecycle
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#inputs">
+<span class="md-ellipsis">
+      
+        Inputs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reports">
+<span class="md-ellipsis">
+      
+        Reports
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<nav aria-label="네비게이션" class="md-path">
+<ol class="md-path__list">
+<li class="md-path__item">
+<a class="md-path__link" href="index.html">
+<span class="md-ellipsis">
+    Overview
+  </span>
+</a>
+</li>
+<li class="md-path__item">
+<a class="md-path__link" href="python_environment.html">
+<span class="md-ellipsis">
+    Getting Started
+  </span>
+</a>
+</li>
+</ol>
+</nav>
+<article class="md-content__inner md-typeset">
+<h1 id="vs-code-environment">VS Code Environment</h1>
+<h2 id="files">Files</h2>
+<div class="highlight"><pre><span></span><code>.vscode/
+├── settings.json
+├── launch.json
+└── tasks.json
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>settings.json</code></td>
+<td>Interpreter, Testing adapter, discovery scope, analysis path</td>
+</tr>
+<tr>
+<td><code>launch.json</code></td>
+<td>Run and Debug configurations</td>
+</tr>
+<tr>
+<td><code>tasks.json</code></td>
+<td>Setup, Check, Test, Report, MkDocs processes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="settingsjson">settings.json</h2>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"python.defaultInterpreterPath"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${workspaceFolder}/.venv/Scripts/python.exe"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"python.terminal.activateEnvironment"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"python.testing.pytestEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"python.testing.unittestEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"python.testing.pytestArgs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">"-p"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"no:cacheprovider"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"test_envs/tests/pytest"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"test_envs/tests/unittest"</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"python.testing.cwd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${workspaceFolder}"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"python.testing.autoTestDiscoverOnSaveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"python.analysis.extraPaths"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">"${workspaceFolder}"</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+<th>Function</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>python.defaultInterpreterPath</code></td>
+<td>Project <code>.venv</code></td>
+<td>Python runtime selection</td>
+<td>Testing, Debug, Terminal use project packages</td>
+</tr>
+<tr>
+<td><code>python.terminal.activateEnvironment</code></td>
+<td><code>true</code></td>
+<td>Terminal venv activation</td>
+<td>New Python terminal activates <code>.venv</code></td>
+</tr>
+<tr>
+<td><code>python.testing.pytestEnabled</code></td>
+<td><code>true</code></td>
+<td>pytest adapter enablement</td>
+<td>Testing panel uses pytest</td>
+</tr>
+<tr>
+<td><code>python.testing.unittestEnabled</code></td>
+<td><code>false</code></td>
+<td>Native unittest adapter disablement</td>
+<td>Duplicate unittest nodes prevented</td>
+</tr>
+<tr>
+<td><code>python.testing.pytestArgs</code></td>
+<td>Options + paths</td>
+<td>Discovery and execution scope</td>
+<td>pytest and unittest share one test tree</td>
+</tr>
+<tr>
+<td><code>python.testing.cwd</code></td>
+<td>Workspace root</td>
+<td>pytest working directory</td>
+<td><code>test_envs.*</code> imports resolve from root</td>
+</tr>
+<tr>
+<td><code>python.testing.autoTestDiscoverOnSaveEnabled</code></td>
+<td><code>true</code></td>
+<td>Automatic rediscovery</td>
+<td>Saved test files update the tree</td>
+</tr>
+<tr>
+<td><code>python.analysis.extraPaths</code></td>
+<td>Workspace root</td>
+<td>Pylance import path</td>
+<td>Editor resolves <code>test_envs.*</code> imports</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><code>pytestArgs</code> entry</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code></td>
+<td>pytest plugin option</td>
+</tr>
+<tr>
+<td><code>no:cacheprovider</code></td>
+<td>Disable <code>.pytest_cache</code> provider</td>
+</tr>
+<tr>
+<td><code>test_envs/tests/pytest</code></td>
+<td>Discover Continuous Test cases</td>
+</tr>
+<tr>
+<td><code>test_envs/tests/unittest</code></td>
+<td>Discover <code>unittest.TestCase</code> through pytest</td>
+</tr>
+</tbody>
+</table>
+<h2 id="testing">Testing</h2>
+<p><br/></p>
+<p><img alt="VS Code Testing panel" src="imgs/vscode_testing_00.png"/></p>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Image</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vscode_testing_00.png</code></td>
+<td>Testing tree, Run/Debug controls, test status</td>
+</tr>
+</tbody>
+</table>
+<h3 id="adapter">Adapter</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role</th>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VS Code Testing panel</td>
+<td>Test tree and controls</td>
+<td>Adapter discovery result</td>
+<td>Run/Debug status</td>
+</tr>
+<tr>
+<td>Microsoft Python extension</td>
+<td>VS Code–pytest integration</td>
+<td><code>settings.json</code></td>
+<td>pytest process</td>
+</tr>
+<tr>
+<td>pytest adapter</td>
+<td>Single project adapter</td>
+<td><code>python.testing.pytestArgs</code></td>
+<td>pytest + unittest nodes</td>
+</tr>
+<tr>
+<td>pytest collector</td>
+<td>Python test discovery</td>
+<td><code>test_*.py</code></td>
+<td>Modules, classes, functions</td>
+</tr>
+<tr>
+<td>pytest CT hook</td>
+<td>CT result normalization</td>
+<td><code>@pytest.mark.ct</code></td>
+<td>TEST ID Result JSON + Test log</td>
+</tr>
+<tr>
+<td>unittest hook</td>
+<td>Function result normalization</td>
+<td>pytest reports under <code>tests/unittest</code></td>
+<td>Execution Result JSON + Result log</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Adapter rule</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pytest adapter enabled</td>
+<td>Unified pytest and unittest execution</td>
+</tr>
+<tr>
+<td>Native unittest adapter disabled</td>
+<td>Duplicate discovery and execution prevention</td>
+</tr>
+<tr>
+<td>Project <code>.venv</code> interpreter</td>
+<td>Same dependencies for discover, run, debug</td>
+</tr>
+<tr>
+<td>Workspace <code>cwd</code></td>
+<td>Repository package import resolution</td>
+</tr>
+</tbody>
+</table>
+<h3 id="discovery">Discovery</h3>
+<div class="highlight"><pre><span></span><code>settings.json load
+      ↓
+Project interpreter selection
+      ↓
+Workspace cwd selection
+      ↓
+pytest discovery with pytestArgs
+├── test_envs/tests/pytest
+└── test_envs/tests/unittest
+      ↓
+Testing tree update
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Discovery function</th>
+<th>Trigger</th>
+<th>Action</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Initial discovery</td>
+<td>Workspace open</td>
+<td>Load settings and collect tests</td>
+<td>Full Testing tree</td>
+</tr>
+<tr>
+<td>Automatic discovery</td>
+<td>Test file save</td>
+<td>Recollect affected files</td>
+<td>Updated nodes</td>
+</tr>
+<tr>
+<td>Manual discovery</td>
+<td>Refresh Tests</td>
+<td>Full pytest collection</td>
+<td>Rebuilt tree</td>
+</tr>
+<tr>
+<td>Configuration discovery</td>
+<td>Testing setting change</td>
+<td>Restart adapter</td>
+<td>New discovery scope</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Test tree node</th>
+<th>Source</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Folder</td>
+<td>Test directory</td>
+<td>Group modules</td>
+</tr>
+<tr>
+<td>Module</td>
+<td><code>test_*.py</code></td>
+<td>Group classes/functions</td>
+</tr>
+<tr>
+<td>Class</td>
+<td><code>unittest.TestCase</code> or pytest class</td>
+<td>Group test methods</td>
+</tr>
+<tr>
+<td>Function</td>
+<td><code>test_*</code> function/method</td>
+<td>Executable test node</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Discovery failure</th>
+<th>Check</th>
+<th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No tests found</td>
+<td><code>python.testing.pytestArgs</code></td>
+<td>Correct test paths</td>
+</tr>
+<tr>
+<td>Import error</td>
+<td>Interpreter + <code>extraPaths</code></td>
+<td>Select <code>.venv</code>, verify workspace root</td>
+</tr>
+<tr>
+<td><code>.venv</code> missing</td>
+<td><code>python.defaultInterpreterPath</code></td>
+<td>Run Setup 2</td>
+</tr>
+<tr>
+<td>Duplicate unittest nodes</td>
+<td><code>unittestEnabled</code></td>
+<td>Set <code>false</code></td>
+</tr>
+<tr>
+<td>Cache path warning</td>
+<td>pytest cache provider</td>
+<td>Use <code>-p no:cacheprovider</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="pytest-execution">Pytest execution</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Rule</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identification</td>
+<td>TEST ID</td>
+<td>Identify CT test case</td>
+</tr>
+<tr>
+<td>Fixture</td>
+<td><code>fixture_id</code></td>
+<td>Select composite Fixture</td>
+</tr>
+<tr>
+<td>Default mode</td>
+<td>Marker <code>fixture_mode</code></td>
+<td>Select default Mock/HIL mode</td>
+</tr>
+<tr>
+<td>CLI override</td>
+<td><code>--fixture-mode</code></td>
+<td>Override marker mode</td>
+</tr>
+<tr>
+<td>Result</td>
+<td><code>&lt;execution-id&gt;_result.json</code></td>
+<td>Structured test result</td>
+</tr>
+<tr>
+<td>Log</td>
+<td><code>&lt;execution-id&gt;_test.log</code></td>
+<td>Combined test/interface/equipment log</td>
+</tr>
+</tbody>
+</table>
+<h3 id="unittest-execution">Unittest execution</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Rule</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identification</td>
+<td>Function name</td>
+<td>Identify unit-test function</td>
+</tr>
+<tr>
+<td>TEST ID</td>
+<td>Not used</td>
+<td>pytest-only identifier excluded</td>
+</tr>
+<tr>
+<td>Fixture mode</td>
+<td>Not used</td>
+<td>pytest CT mode excluded</td>
+</tr>
+<tr>
+<td>Result capture</td>
+<td>unittest <code>conftest.py</code></td>
+<td>Collect function reports</td>
+</tr>
+<tr>
+<td>Result</td>
+<td><code>&lt;execution-id&gt;_result.json</code></td>
+<td>Function status list and summary</td>
+</tr>
+<tr>
+<td>Log</td>
+<td><code>&lt;execution-id&gt;_result.log</code></td>
+<td>Function status and failure detail</td>
+</tr>
+<tr>
+<td>Local LLM</td>
+<td>Not used</td>
+<td>Direct Markdown conversion</td>
+</tr>
+</tbody>
+</table>
+<h3 id="testing-actions">Testing actions</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Scope</th>
+<th>Function</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Run All Tests</td>
+<td>pytest + unittest</td>
+<td>Execute every discovered node</td>
+<td>Framework Result files</td>
+</tr>
+<tr>
+<td>Run Tests in Folder</td>
+<td>Selected folder</td>
+<td>Execute directory subtree</td>
+<td>Scoped execution result</td>
+</tr>
+<tr>
+<td>Run Test</td>
+<td>Selected node</td>
+<td>Execute module/class/function</td>
+<td>Single scoped execution</td>
+</tr>
+<tr>
+<td>Debug Test</td>
+<td>Selected node</td>
+<td>Execute with debugger</td>
+<td>Breakpoints, variables, call stack</td>
+</tr>
+<tr>
+<td>Refresh Tests</td>
+<td>Workspace</td>
+<td>Rerun discovery</td>
+<td>Updated Testing tree</td>
+</tr>
+<tr>
+<td>Show Test Output</td>
+<td>Latest run</td>
+<td>Open Python Test Log</td>
+<td>Collection/execution diagnostics</td>
+</tr>
+<tr>
+<td>Cancel Test Run</td>
+<td>Active run</td>
+<td>Stop pytest process</td>
+<td>Interrupted execution</td>
+</tr>
+</tbody>
+</table>
+<h3 id="result-flow">Result flow</h3>
+<div class="highlight"><pre><span></span><code>Testing Run
+├── pytest
+│   ├── TEST ID Result JSON
+│   └── Test log
+└── unittest
+    ├── Function Result JSON
+    └── Result log
+         ↓
+REPORT: Generate Pending Markdown
+         ↓
+docs/tests/{pytest,unittest}
+</code></pre></div>
+<h3 id="related-documents">Related documents</h3>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Document</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pytest operation</td>
+<td><a href="pytest_operation.html">pytest_operation.md</a></td>
+</tr>
+<tr>
+<td>Unittest operation</td>
+<td><a href="unittest_operation.html">unittest_operation.md</a></td>
+</tr>
+<tr>
+<td>Pytest results</td>
+<td><a href="tests/pytest/index.html">tests/pytest/index.md</a></td>
+</tr>
+<tr>
+<td>Unittest results</td>
+<td><a href="tests/unittest/index.html">tests/unittest/index.md</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="run-and-debug">Run and Debug</h2>
+<p><br/></p>
+<p><img alt="VS Code Run and Debug panel" src="imgs/vscode_runanddebug_00.png"/></p>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Image</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vscode_runanddebug_00.png</code></td>
+<td>Launch configuration selection and debugger start</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Interpreter</th>
+<th>Function</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SETUP 1: Select Operating System</code></td>
+<td>System Python</td>
+<td>Select config OS before venv</td>
+<td>Updated <code>config.json</code></td>
+</tr>
+<tr>
+<td><code>SETUP 2: Install Python Virtual Environment</code></td>
+<td>System Python</td>
+<td>Create <code>.venv</code> and dependencies</td>
+<td>Project Python runtime</td>
+</tr>
+<tr>
+<td><code>SETUP 3: Install Ollama and Local LLM</code></td>
+<td>Project Python</td>
+<td>Install Ollama and pull selected model</td>
+<td>Local LLM runtime</td>
+</tr>
+<tr>
+<td><code>CHECK 1: Refresh Environment Check File</code></td>
+<td>Project Python</td>
+<td>Inspect OS, Python, Ollama, models</td>
+<td>Updated <code>check.json</code></td>
+</tr>
+<tr>
+<td><code>Run 1: Extension Module</code></td>
+<td>Project Python</td>
+<td>Execute extension entry point</td>
+<td>Extension output</td>
+</tr>
+<tr>
+<td><code>Test Result: Generate Pending Markdown</code></td>
+<td>Project Python</td>
+<td>Convert pending Results</td>
+<td>Markdown + MkDocs documents</td>
+</tr>
+<tr>
+<td><code>Debug: Current Python File</code></td>
+<td>Project Python</td>
+<td>Debug open Python file</td>
+<td>Terminal + debugger</td>
+</tr>
+<tr>
+<td><code>Debug: Current pytest File</code></td>
+<td>Project Python</td>
+<td>Debug open pytest file</td>
+<td>Fixture-mode debugging</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tasks">Tasks</h2>
+<p><br/></p>
+<p><img alt="" src="imgs/vscode_task_00.png"/></p>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Label</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SETUP</td>
+<td><code>SETUP 1: Select Operating System</code></td>
+<td>Store selected OS</td>
+</tr>
+<tr>
+<td>SETUP</td>
+<td><code>SETUP 2: Install Python Virtual Environment</code></td>
+<td>Create project <code>.venv</code></td>
+</tr>
+<tr>
+<td>SETUP</td>
+<td><code>SETUP 3: Install Ollama and Local LLM</code></td>
+<td>Install runtime and model</td>
+</tr>
+<tr>
+<td>CHECK</td>
+<td><code>CHECK 1: Refresh Environment Check File</code></td>
+<td>Regenerate environment inventory</td>
+</tr>
+<tr>
+<td>CHECK</td>
+<td><code>CHECK 2: Show Environment Configuration</code></td>
+<td>Print project configuration</td>
+</tr>
+<tr>
+<td>CHECK</td>
+<td><code>CHECK 3: Run Ollama Server (Foreground)</code></td>
+<td>Own Ollama foreground lifecycle</td>
+</tr>
+<tr>
+<td>TEST CASE</td>
+<td><code>TEST CASE: ALL</code></td>
+<td>Execute all pytest CT cases</td>
+</tr>
+<tr>
+<td>TEST CASE</td>
+<td><code>TEST CASE: TEST ID</code></td>
+<td>Execute selected TEST ID</td>
+</tr>
+<tr>
+<td>REPORT</td>
+<td><code>REPORT: Generate Pending Markdown</code></td>
+<td>Process missing Execution documents</td>
+</tr>
+<tr>
+<td>REPORT</td>
+<td><code>REPORT: Convert Latest Markdown to HTML</code></td>
+<td>Convert latest Markdown to HTML</td>
+</tr>
+<tr>
+<td>REPORT</td>
+<td><code>REPORT: Convert Latest Markdown to DOCX</code></td>
+<td>Convert latest Markdown to DOCX</td>
+</tr>
+<tr>
+<td>MkDocs</td>
+<td><code>MkDocs: Serve Locally</code></td>
+<td>Local documentation server</td>
+</tr>
+<tr>
+<td>MkDocs</td>
+<td><code>MkDocs: Serve on Network</code></td>
+<td>Network documentation server</td>
+</tr>
+<tr>
+<td>MkDocs</td>
+<td><code>MkDocs: Build</code></td>
+<td>Static site build</td>
+</tr>
+<tr>
+<td>MkDocs</td>
+<td><code>MkDocs: Build Strict</code></td>
+<td>Warning-as-error static build</td>
+</tr>
+</tbody>
+</table>
+<h2 id="process-lifecycle">Process lifecycle</h2>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Value</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task type</td>
+<td><code>process</code></td>
+<td>Direct child-process ownership</td>
+</tr>
+<tr>
+<td>Background flag</td>
+<td>None</td>
+<td>Prevent orphan background tasks</td>
+</tr>
+<tr>
+<td>Ollama server</td>
+<td>Foreground</td>
+<td>Terminal owns server lifetime</td>
+</tr>
+<tr>
+<td>Setup/Check launch</td>
+<td><code>preLaunchTask</code></td>
+<td>Delegate mutation to Task</td>
+</tr>
+<tr>
+<td>OS metadata in Task/Launch</td>
+<td>Prohibited</td>
+<td>Centralize OS selection in config</td>
+</tr>
+</tbody>
+</table>
+<h2 id="inputs">Inputs</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Options</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>testCaseId</code></td>
+<td>UART, USB, Network TEST IDs</td>
+<td>Select one CT test case</td>
+</tr>
+<tr>
+<td><code>fixtureMode</code></td>
+<td><code>marker</code>, <code>mock</code>, <code>hil</code></td>
+<td>Select effective Fixture mode</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reports">Reports</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pending command</td>
+<td><code>python -m test_envs.tools.test_result --pending --docs</code></td>
+<td>Generate missing Execution documents</td>
+</tr>
+<tr>
+<td>Progress interval</td>
+<td>1 second</td>
+<td>Display active report-processing duration</td>
+</tr>
+<tr>
+<td>HTML</td>
+<td>Pandoc</td>
+<td>Convert latest Markdown to HTML</td>
+</tr>
+<tr>
+<td>DOCX</td>
+<td>Pandoc</td>
+<td>Convert latest Markdown to Word</td>
+</tr>
+</tbody>
+</table>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  맨위로
+</button>
+</main>
+<footer class="md-footer">
+<nav aria-label="하단/푸터" class="md-footer__inner md-grid">
+<a aria-label="이전: Envs LLM" class="md-footer__link md-footer__link--prev" href="local_llm_environment.html">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                이전
+              </span>
+<div class="md-ellipsis">
+                Envs LLM
+              </div>
+</div>
+</a>
+<a aria-label="다음: Pytest" class="md-footer__link md-footer__link--next" href="pytest_operation.html">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                다음
+              </span>
+<div class="md-ellipsis">
+                Pytest
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      © 2026 Jeonghun Lee. <br/> All rights reserved.
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<div class="md-progress" data-md-component="progress" role="progressbar"></div>
+<script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["toc.follow", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.tooltips", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+<script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script src="https://unpkg.com/mermaid@11.12.0/dist/mermaid.min.js"></script>
+<script src="javascripts/mermaid-init.js"></script>
+</body>
+</html>
