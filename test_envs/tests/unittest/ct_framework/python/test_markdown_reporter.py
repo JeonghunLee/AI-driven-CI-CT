@@ -91,6 +91,7 @@ class MarkdownReporterTests(unittest.TestCase):
             execution_id="20260101_020304_123456",
             test_functions=(
                 {
+                    "path": "test_envs/tests/unittest/python/test_device.py",
                     "function": "test_device_timeout",
                     "pass": False,
                     "status": "FAIL",
@@ -103,10 +104,11 @@ class MarkdownReporterTests(unittest.TestCase):
             result,
             Analysis("Failure detected", "unittest", 1.0, "test"),
         )
-        self.assertIn("| test_device_timeout | FAIL | FAIL |", text)
+        self.assertIn("| 0 | test_device_timeout | FAIL |", text)
         self.assertIn("| test_device_timeout | FAIL | device timeout |", text)
         self.assertNotIn("Test ID", text)
         self.assertNotIn("Fixture mode", text)
+        self.assertNotIn("Local LLM", text)
 
     def test_mkdocs_publish_preserves_each_execution(self) -> None:
         reports_root = Path("test_envs/tests/.tmp/ct_framework/multi-execution-reports")
@@ -140,6 +142,7 @@ class MarkdownReporterTests(unittest.TestCase):
             execution_id="20260101-000003",
             test_functions=(
                 {
+                    "path": "test_envs/tests/unittest/python/test_result_parser.py",
                     "function": "test_result_parser",
                     "pass": True,
                     "status": "PASS",
@@ -181,21 +184,33 @@ class MarkdownReporterTests(unittest.TestCase):
             "| [`20260101-000002`](CT-MD-HISTORY__20260101-000002.md) | timing | `CT-MD-HISTORY` |",
             pytest_index,
         )
-        self.assertIn("# unittest Results", unittest_index)
+        self.assertIn("# Pytest Results Index", pytest_index)
+        self.assertIn("# Unittest Results Index", unittest_index)
         self.assertIn(
-            "| Test Function | Pass | Latest | Test Function Count |",
+            "| Test Function Count | Pass | Latest |",
             unittest_index,
         )
+        self.assertIn("| 1 | PASS |", unittest_index)
         self.assertIn(
-            "| [test_result_parser](20260101-000003.md) | PASS |",
+            f"[{unit_result.timestamp.partition('T')[0]}](20260101-000003.md)",
+            unittest_index,
+        )
+        self.assertIn("| Execution ID | Result | Tests | Passed | Failed |", unittest_index)
+        self.assertIn(
+            "| [`20260101-000003`](20260101-000003.md) | PASS | 1 | 1 | 0 |",
             unittest_index,
         )
         unit_document = Path(docs_root) / "tests/unittest/20260101-000003.md"
         self.assertTrue(unit_document.exists())
         unit_text = unit_document.read_text(encoding="utf-8")
         self.assertIn("# unittest Result", unit_text)
-        self.assertIn("| test_result_parser | PASS | PASS |", unit_text)
-        self.assertIn("## Failed Functions", unit_text)
+        self.assertIn("## Test Summary", unit_text)
+        self.assertIn("* PATH0: `test_envs/tests/unittest/python`", unit_text)
+        self.assertNotIn("PATH1", unit_text)
+        self.assertIn("| 0 | test_result_parser | PASS |", unit_text)
+        self.assertIn("### Failed Functions", unit_text)
+        self.assertIn("| Result json | 20260101-000003_result.json |", unit_text)
+        self.assertNotIn("Local LLM", unit_text)
         self.assertNotIn("| Test ID | Mode |", unittest_index)
         self.assertEqual(root_index.read_text(encoding="utf-8"), "# System Overview")
 

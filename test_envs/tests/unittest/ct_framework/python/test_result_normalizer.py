@@ -80,6 +80,7 @@ class ResultNormalizerTests(unittest.TestCase):
             execution_id="20260101_010203_123456",
             test_functions=(
                 {
+                    "path": "test_envs/tests/unittest/python/test_example.py",
                     "function": "ExampleTests::test_failure",
                     "pass": False,
                     "status": "FAIL",

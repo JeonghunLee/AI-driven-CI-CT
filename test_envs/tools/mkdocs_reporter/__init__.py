@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from test_envs.tools.local_llm import Analysis
@@ -86,8 +86,7 @@ class MarkdownReporter:
         ct_rows: list[str] = []
         ct_execution_rows: list[tuple[str, str, str, str]] = []
         execution_categories: dict[tuple[str, str], str] = {}
-        unit_function_runs: dict[str, list[tuple[str, str, str]]] = {}
-        unit_execution_rows: list[tuple[str, str, str]] = []
+        unit_execution_rows: list[tuple[str, str, int, int, int, str, str]] = []
         unittest_dir = test_root / "unittest"
         seen_unit_executions: set[str] = set()
         for result_path in self.store.result_paths():
@@ -101,12 +100,18 @@ class MarkdownReporter:
                 if stored_result.execution_id in seen_unit_executions or not (unittest_dir / link).is_file():
                     continue
                 seen_unit_executions.add(stored_result.execution_id)
-                unit_execution_rows.append((stored_result.execution_id, stored_result.status, link))
-                for function in stored_result.test_functions:
-                    function_name = str(function.get("function", "unknown")).split("::")[-1]
-                    unit_function_runs.setdefault(function_name, []).append(
-                        (stored_result.timestamp, str(function.get("status", "ERROR")), link)
+                summary = stored_result.to_dict()["summary"]
+                unit_execution_rows.append(
+                    (
+                        stored_result.execution_id,
+                        stored_result.status,
+                        int(summary["total"]),
+                        int(summary["passed"]),
+                        int(summary["failed"]) + int(summary["errors"]),
+                        link,
+                        stored_result.timestamp,
                     )
+                )
 
         pytest_dir = test_root / "pytest"
         pytest_dir.mkdir(parents=True, exist_ok=True)
@@ -134,13 +139,14 @@ class MarkdownReporter:
                 f"{_safe(latest_date)} | {count} |"
             )
 
-        unit_rows = []
-        for function_name, runs in sorted(unit_function_runs.items()):
-            latest_timestamp, latest_status, link = max(runs, key=lambda item: item[0])
-            unit_rows.append(
-                f"| [{_safe(function_name)}]({link}) | {_safe(latest_status)} | "
-                f"{_safe(latest_timestamp.partition('T')[0])} | {len(runs)} |"
+        if unit_execution_rows:
+            latest_unit = max(unit_execution_rows, key=lambda item: item[0])
+            unit_summary = (
+                f"| {latest_unit[2]} | {_safe(latest_unit[1])} | "
+                f"[{_safe(latest_unit[6].partition('T')[0])}]({latest_unit[5]}) |"
             )
+        else:
+            unit_summary = "| 0 | - | - |"
 
         ct_recent = "\n".join(
             f"| [`{_safe(execution_id)}`]({link}) | {_safe(category)} | `{_safe(test_id)}` |"
@@ -149,12 +155,12 @@ class MarkdownReporter:
             )[:20]
         ) or "| - | - | - |"
         unit_recent = "\n".join(
-            f"| [`{execution_id}`]({link}) | {_safe(status)} |"
-            for execution_id, status, link in sorted(
+            f"| [`{execution_id}`]({link}) | {_safe(status)} | {total} | {passed} | {failed} |"
+            for execution_id, status, total, passed, failed, link, _timestamp in sorted(
                 unit_execution_rows, key=lambda item: item[0], reverse=True
             )[:20]
-        ) or "| - | - |"
-        pytest_index = f"""# pytest Results
+        ) or "| - | - | 0 | 0 | 0 |"
+        pytest_index = f"""# Pytest Results Index
 
 ## Continuous Tests
 
@@ -170,18 +176,18 @@ class MarkdownReporter:
 |---|---|---|
 {ct_recent}
 """
-        unittest_index = f"""# unittest Results
+        unittest_index = f"""# Unittest Results Index
 
 ## Unit Tests
 
-| Test Function | Pass | Latest | Test Function Count |
-|---|---|---|---:|
-{chr(10).join(unit_rows) or '| - | - | - | 0 |'}
+| Test Function Count | Pass | Latest |
+|---:|---|---|
+{unit_summary}
 
 ## Recent Executions
 
-| Execution ID | Pass |
-|---|---|
+| Execution ID | Result | Tests | Passed | Failed |
+|---|---|---:|---:|---:|
 {unit_recent}
 """
         pytest_destination = test_root / "pytest" / "index.md"
@@ -348,9 +354,18 @@ class MarkdownReporter:
     ) -> str:
         payload = result.to_dict()
         summary = payload["summary"]
+        function_paths = {
+            id(item): str(PurePosixPath(str(item.get("path", "unknown"))).parent)
+            for item in result.test_functions
+        }
+        paths = list(dict.fromkeys(function_paths[id(item)] for item in result.test_functions))
+        path_indexes = {path: index for index, path in enumerate(paths)}
+        path_list = "\n".join(
+            ["* Unit TEST"] + [f"    * PATH{index}: `{_safe(path)}`" for index, path in enumerate(paths)]
+        )
         function_rows = "\n".join(
-            f"| {_safe(item.get('function', 'unknown'))} | "
-            f"{'PASS' if item.get('pass') else 'FAIL'} | {_safe(item.get('status', 'ERROR'))} | "
+            f"| {path_indexes[function_paths[id(item)]]} | {_safe(item.get('function', 'unknown'))} | "
+            f"{'PASS' if item.get('pass') else 'FAIL'} | "
             f"{float(item.get('duration', 0.0)):.6f} |"
             for item in result.test_functions
         ) or "| - | - | - | 0.000000 |"
@@ -360,9 +375,6 @@ class MarkdownReporter:
             for item in result.test_functions
             if not item.get("pass") and item.get("status") != "SKIP"
         ) or "| - | - | None |"
-        warnings = "<br>".join(_safe(item.get("message", "")) for item in analysis.warnings) or "None"
-        warning_count = len(analysis.warnings)
-        logs = "<br>".join(_safe(line) for line in (important_logs or [])) or "None"
         execution_summary = _table(
             {
                 "Execution ID": result.execution_id,
@@ -376,72 +388,33 @@ class MarkdownReporter:
                 "Skipped": summary["skipped"],
             }
         )
-        analysis_table = _table(
-            {
-                "Classification": analysis.classification,
-                "Confidence": f"{analysis.confidence:.2f}",
-                "Analyzer": analysis.source,
-                "Status": "enabled" if analysis.source.startswith("ollama/") else "disabled",
-            }
-        )
-        analysis_result = _table(
-            {
-                "**Status**": result.status,
-                "**Severity**": _warning_severity(warning_count),
-                "**Warnings**": warning_count,
-                "**Needs Escalation**": "ON" if analysis.needs_escalation else "OFF",
-            }
-        )
-        analysis_summary = _table(
-            {
-                "Summary": analysis.summary,
-                "Failure Analysis": analysis.failure_analysis or "Not applicable",
-                "Source Review": analysis.source_review or "Not requested",
-                "Warnings": warnings,
-                "Recommendations": analysis.recommendations or "No recommendation provided.",
-            }
-        )
         return f"""# unittest Result
 
-## Execution Summary
+## Test Summary
 
 {execution_summary}
 
-## Test Functions
+### Test Functions
 
-| Test Function | Pass | Status | Duration (s) |
-|---|---|---|---:|
+{path_list}
+
+| PATH | Test Function | Pass | Duration (s) |
+|---:|---|---|---:|
 {function_rows}
 
-## Failed Functions
+### Failed Functions
 
 | Test Function | Status | Failure |
 |---|---|---|
 {failed_rows}
 
-## Test Source
+### Test Source
 
 {_table({'Commit': result.commit, 'Branch': result.branch})}
 
-## Logs
+### Logs
 
-{_table({'Result log': result.logs.get('main', 'None'), 'Important': logs})}
-
-## Local LLM Analysis
-
-{analysis_table}
-
-### LLM Test Prompt
-
-{_safe(analysis.prompt) or 'Not configured'}
-
-### Test Result
-
-{analysis_result}
-
-### Test Summary
-
-{analysis_summary}
+{_table({'Result log': result.logs.get('main', 'None'), 'Result json': f'{result.execution_id}_result.json'})}
 """
 
 

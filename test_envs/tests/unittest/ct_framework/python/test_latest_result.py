@@ -2,7 +2,9 @@ import io
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
+from test_envs.tools.pipeline import run
 from test_envs.tools.result_normalizer import ResultRecord, ResultStore
 from test_envs.tools.test_result import _run_with_progress, pending_result_paths, publish_latest
 
@@ -51,6 +53,36 @@ class LatestResultTests(unittest.TestCase):
         self.assertIn("[2/3] RUNNING 000s", output.getvalue())
         self.assertIn("[2/3] COMPLETE 000s", output.getvalue())
 
+    def test_unittest_report_does_not_call_local_llm(self) -> None:
+        root = Path("test_envs/tests/.tmp/ct_framework/unit-no-llm")
+        store = ResultStore(root)
+        record = ResultRecord(
+            "unittest",
+            "PASS",
+            "unit",
+            0.1,
+            execution_id="20260101_030405_123456",
+            test_functions=(
+                {
+                    "path": "test_envs/tests/unittest/python/test_sample.py",
+                    "function": "test_sample",
+                    "pass": True,
+                    "status": "PASS",
+                    "duration": 0.1,
+                    "failure": "",
+                },
+            ),
+        )
+        result_path = store.save(record)
+        with patch("test_envs.tools.pipeline.ResultStore", return_value=store), patch(
+            "test_envs.tools.pipeline.LocalLLMAnalyzer",
+            side_effect=AssertionError("Local LLM must not run for unittest"),
+        ):
+            output = run(result_path=result_path)
+        self.assertEqual(output["local_llm_model"], "not-used")
+        self.assertTrue(Path(output["markdown"]).is_file())
+        self.assertFalse((root / "local_llm/20260101_030405_123456_local_llm.log").exists())
+
     def test_pending_unittest_uses_execution_id_without_test_id(self) -> None:
         root = Path("test_envs/tests/.tmp/ct_framework/pending-unit-results")
         docs = Path("test_envs/tests/.tmp/ct_framework/pending-unit-docs")
@@ -63,6 +95,7 @@ class LatestResultTests(unittest.TestCase):
             execution_id="20260101_010203_123456",
             test_functions=(
                 {
+                    "path": "test_envs/tests/unittest/python/test_example.py",
                     "function": "ExampleTests::test_ok",
                     "pass": True,
                     "status": "PASS",

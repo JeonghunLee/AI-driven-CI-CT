@@ -11,6 +11,7 @@ from test_envs.tools.result_normalizer import ResultRecord, ResultStore
 
 @dataclass
 class FunctionResult:
+    path: str
     function: str
     status: str
     duration: float
@@ -18,6 +19,7 @@ class FunctionResult:
 
     def to_dict(self) -> dict[str, Any]:
         return {
+            "path": self.path,
             "function": self.function,
             "pass": self.status == "PASS",
             "status": self.status,
@@ -34,13 +36,19 @@ def _function_name(nodeid: str) -> str:
     return parts[-1]
 
 
+def _test_path(nodeid: str) -> str:
+    return nodeid.split("::", 1)[0].replace("\\", "/")
+
+
 def pytest_runtest_logreport(report: pytest.TestReport) -> None:
     if not report.nodeid.replace("\\", "/").startswith("test_envs/tests/unittest/"):
         return
     function = _function_name(report.nodeid)
+    test_path = _test_path(report.nodeid)
     current = _FUNCTION_RESULTS.get(report.nodeid)
     if report.when == "setup" and report.failed:
         _FUNCTION_RESULTS[report.nodeid] = FunctionResult(
+            path=test_path,
             function=function,
             status="ERROR",
             duration=report.duration,
@@ -48,6 +56,7 @@ def pytest_runtest_logreport(report: pytest.TestReport) -> None:
         )
     elif report.when == "setup" and report.skipped:
         _FUNCTION_RESULTS[report.nodeid] = FunctionResult(
+            path=test_path,
             function=function,
             status="SKIP",
             duration=report.duration,
@@ -55,6 +64,7 @@ def pytest_runtest_logreport(report: pytest.TestReport) -> None:
     elif report.when == "call":
         status = "PASS" if report.passed else "SKIP" if report.skipped else "FAIL"
         _FUNCTION_RESULTS[report.nodeid] = FunctionResult(
+            path=test_path,
             function=function,
             status=status,
             duration=report.duration,
@@ -63,6 +73,7 @@ def pytest_runtest_logreport(report: pytest.TestReport) -> None:
     elif report.when == "teardown" and report.failed:
         duration = report.duration + (current.duration if current else 0.0)
         _FUNCTION_RESULTS[report.nodeid] = FunctionResult(
+            path=test_path,
             function=function,
             status="ERROR",
             duration=duration,

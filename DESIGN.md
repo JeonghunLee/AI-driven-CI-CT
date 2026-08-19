@@ -527,10 +527,17 @@ unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
 
 | unittest index column | Source |
 |---|---|
-| Test Function | `ResultRecord.description`; latest document link |
-| Pass | Latest unittest status |
-| Latest | Latest unittest Seoul timestamp date |
-| Test Function Count | Function execution document count |
+| Test Function Count | Latest unittest `summary.total` |
+| Pass | Latest unittest Execution status |
+| Latest | Latest unittest Seoul timestamp date + Execution document link |
+
+| unittest Recent Executions column | Source |
+|---|---|
+| Execution ID | Execution document link |
+| Result | Execution status |
+| Tests | `summary.total` |
+| Passed | `summary.passed` |
+| Failed | `summary.failed + summary.errors` |
 
 | unittest excluded field | Rule |
 |---|---|
@@ -545,6 +552,7 @@ unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
 | Mode | Not serialized |
 | Identifier | Execution ID |
 | `test_functions[].function` | Test Function name |
+| `test_functions[].path` | Test source file path; Markdown PATH uses parent directory |
 | `test_functions[].pass` | Boolean pass result |
 | `test_functions[].status` | `PASS`, `FAIL`, `ERROR`, `SKIP` |
 | `test_functions[].failure` | Failure detail |
@@ -554,6 +562,12 @@ execution
 summary
 test_functions[]
 ```
+
+| unittest Local LLM | Rule |
+|---|---|
+| Analysis | Not used |
+| Ollama request | Not used |
+| Local LLM log | Not generated |
 
 ## 10. Local LLM Analysis
 

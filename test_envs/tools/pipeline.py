@@ -5,8 +5,8 @@ import json
 import subprocess
 from pathlib import Path
 
-from test_envs.tools.codex_escalation import evaluate
-from test_envs.tools.local_llm import LocalLLMAnalyzer
+from test_envs.tools.codex_escalation import EscalationDecision, evaluate
+from test_envs.tools.local_llm import Analysis, LocalLLMAnalyzer
 from test_envs.tools.log_parser import parse_files
 from test_envs.tools.mkdocs_reporter import MarkdownReporter
 from test_envs.tools.result_normalizer import ResultStore
@@ -23,16 +23,22 @@ def run(
     result = store.load(result_path)
     report_dir = result_path.parent
     logs = parse_files([report_dir / filename for filename in result.logs.values()])
-    source_diff = _source_diff() if review_source else ""
-    analyzer = LocalLLMAnalyzer(model=model)
-    analysis = analyzer.analyze(result, logs, source_diff)
-    decision = evaluate(result, analysis, repeated_failures=_consecutive_failures(store, result.test_id))
-
     payload = json.loads(result_path.read_text(encoding="utf-8"))
-    payload["test_analysis"] = {
-        "analysis": analysis.to_dict(),
-        "escalation": {"required": decision.required, "reasons": decision.reasons},
-    }
+    if result.category.lower() == "unit":
+        analysis = Analysis("", "unittest", 1.0, "not-used")
+        decision = EscalationDecision(False, ())
+        local_llm_model = "not-used"
+        payload.pop("test_analysis", None)
+    else:
+        source_diff = _source_diff() if review_source else ""
+        analyzer = LocalLLMAnalyzer(model=model)
+        analysis = analyzer.analyze(result, logs, source_diff)
+        decision = evaluate(result, analysis, repeated_failures=_consecutive_failures(store, result.test_id))
+        local_llm_model = analyzer.model
+        payload["test_analysis"] = {
+            "analysis": analysis.to_dict(),
+            "escalation": {"required": decision.required, "reasons": decision.reasons},
+        }
     result_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     markdown = MarkdownReporter(reports_root=store.root).generate(
         result, analysis, logs.important, publish_docs=publish_docs
@@ -41,7 +47,7 @@ def run(
         "result_data": str(result_path),
         "markdown": str(markdown),
         "analysis": str(result_path),
-        "local_llm_model": analyzer.model,
+        "local_llm_model": local_llm_model,
         "published_to_mkdocs": publish_docs,
         "codex_escalation": decision.required,
         "escalation_reasons": decision.reasons,

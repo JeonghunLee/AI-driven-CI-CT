@@ -72,19 +72,33 @@ docs/tests/unittest/<execution-id>.md
 
 ```text
 # unittest Result
-├── Execution Summary
-├── Test Functions
-├── Failed Functions
-├── Test Source
-├── Logs
-└── Local LLM Analysis
+└── Test Summary
+    ├── Test Functions
+    │   ├── PATH directory mapping
+    │   └── Function result table
+    ├── Failed Functions
+    ├── Test Source
+    └── Logs
 ```
+
+| Local LLM | Rule |
+|---|---|
+| Ollama request | Not used |
+| Analysis | Not used |
+| Local LLM log | Not generated |
 
 ## Index
 
 | Column | Source |
 |---|---|
-| Test Function | `test_functions[].function` |
-| Pass | Latest function status |
-| Latest | Latest Seoul timestamp date |
-| Test Function Count | Function execution count |
+| Test Function Count | Latest `summary.total` |
+| Pass | Latest Execution status |
+| Latest | Latest Seoul timestamp date + Execution document link |
+
+| Recent Executions column | Source |
+|---|---|
+| Execution ID | Execution document link |
+| Result | Execution status |
+| Tests | `summary.total` |
+| Passed | `summary.passed` |
+| Failed | `summary.failed + summary.errors` |

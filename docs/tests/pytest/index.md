@@ -1,4 +1,4 @@
-# pytest Results
+# Pytest Results Index
 
 ## Continuous Tests
 

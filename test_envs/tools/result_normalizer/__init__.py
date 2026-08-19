@@ -264,6 +264,7 @@ def from_junit(path: str | Path, test_id: str = "UNIT-TEST") -> ResultRecord:
         class_name = testcase.attrib.get("classname", "")
         functions.append(
             {
+                "path": testcase.attrib.get("file", class_name or "unknown"),
                 "function": f"{class_name}.{name}" if class_name else name,
                 "pass": status == "PASS",
                 "status": status,
