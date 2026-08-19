@@ -708,7 +708,7 @@ Local LLM
 | MkDocs index | Document links·system summary | `docs/index.md` |
 | Python environment document | OS·Python·venv | `docs/python_environment.md` |
 | Local LLM environment document | Ollama·model·prompt | `docs/local_llm_environment.md` |
-| VS Code environment document | Settings·Launch·Tasks·Testing | `docs/vscode_environment.md` |
+| VS Code environment document | Settings·Testing·Discovery·Launch·Tasks | `docs/vscode_environment.md` |
 | Pytest operation document | TEST ID·Fixture·Local LLM·Report | `docs/pytest_operation.md` |
 | Unittest operation document | Function·Execution ID·Result·Report | `docs/unittest_operation.md` |
 | pytest mode document | HIL·Mock·CLI override·HIL gate | `docs/hil_mock.md` |

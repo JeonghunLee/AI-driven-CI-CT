@@ -29,7 +29,103 @@ pytest adapter
 └── test_envs/tests/unittest
 ```
 
+## Testing
+
+### Adapter
+
+| Item | Value |
+|---|---|
+| VS Code panel | Testing |
+| Adapter | Python pytest |
+| `python.testing.pytestEnabled` | `true` |
+| `python.testing.unittestEnabled` | `false` |
+| Auto discovery | Enabled |
+| Working directory | `${workspaceFolder}` |
+| Cache provider | Disabled |
+
+### Discovery
+
+```json
+{
+  "python.testing.pytestArgs": [
+    "-p",
+    "no:cacheprovider",
+    "test_envs/tests/pytest",
+    "test_envs/tests/unittest"
+  ]
+}
+```
+
+| Test tree | Source |
+|---|---|
+| pytest | `test_envs/tests/pytest/test_cases` |
+| unittest | `test_envs/tests/unittest` |
+
+### Pytest execution
+
+| Item | Rule |
+|---|---|
+| Test identification | TEST ID |
+| Fixture | `fixture_id` |
+| Default mode | Marker `fixture_mode` |
+| CLI override | `--fixture-mode` |
+| Result | `<execution-id>_result.json` |
+| Log | `<execution-id>_test.log` |
+
+### Unittest execution
+
+| Item | Rule |
+|---|---|
+| Test identification | Function name |
+| TEST ID | Not used |
+| Fixture mode | Not used |
+| Result capture | `test_envs/tests/unittest/conftest.py` |
+| Result | `<execution-id>_result.json` |
+| Log | `<execution-id>_result.log` |
+| Local LLM | Not used |
+
+### Testing actions
+
+| Action | Scope |
+|---|---|
+| Run All Tests | pytest + unittest |
+| Run Test | Selected test/function |
+| Debug Test | Selected test/function |
+| Refresh Tests | Test discovery |
+| Show Test Output | pytest terminal output |
+
+### Result flow
+
+```text
+Testing Run
+├── pytest
+│   ├── TEST ID result
+│   └── Test log
+└── unittest
+    ├── Function results
+    └── Result log
+         ↓
+REPORT: Generate Pending Markdown
+         ↓
+docs/tests/{pytest,unittest}
+```
+
+### Related documents
+
+| Scope | Document |
+|---|---|
+| Pytest operation | [pytest_operation.md](pytest_operation.md) |
+| Unittest operation | [unittest_operation.md](unittest_operation.md) |
+| Pytest results | [tests/pytest/index.md](tests/pytest/index.md) |
+| Unittest results | [tests/unittest/index.md](tests/unittest/index.md) |
+
 ## Run and Debug
+
+<br/>
+
+![](./imgs/vscode_runanddebug_00.png)
+
+<br/>
 
 | Configuration | Interpreter | Action |
 |---|---|---|
