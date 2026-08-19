@@ -73,6 +73,7 @@ class LocalLLMTests(unittest.TestCase):
             "warnings": [],
             "failure_analysis": "",
             "source_review": "Not requested",
+            "recommendations": "No action required.",
             "needs_escalation": False,
         }
         responses = iter(
@@ -117,6 +118,7 @@ class LocalLLMTests(unittest.TestCase):
             "warnings": [],
             "failure_analysis": "",
             "source_review": "Not requested",
+            "recommendations": "No action required.",
             "needs_escalation": False,
         }
         captured_prompts: list[str] = []

@@ -197,3 +197,32 @@ python -m test_envs.tools.test_result --pending --docs
 ├── Latest TEST page update
 └── docs/tests/{pytest,unittest}/index.md update
 ```
+
+### Local LLM report
+
+| Warning count | Severity |
+|---:|---|
+| 0–1 | `LOW` |
+| 2–3 | `MEDIUM` |
+| 4–5 | `HIGH` |
+| 6+ | `CRITICAL` |
+
+```text
+Local LLM Analysis
+├── Classification
+├── Confidence
+├── Analyzer
+├── Status
+├── LLM Test Prompt
+├── Test Result
+│   ├── Status
+│   ├── Severity
+│   ├── Warnings
+│   └── Needs Escalation
+└── Test Summary
+    ├── Summary
+    ├── Failure Analysis
+    ├── Source Review
+    ├── Warnings
+    └── Recommendations
+```

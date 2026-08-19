@@ -481,13 +481,23 @@ unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
 │   ├── Measurement
 │   ├── Statistics
 │   └── Logs
-└── Local LLM analysis
+└── Local LLM Analysis
     ├── Classification
     ├── Confidence
     ├── Analyzer
-    ├── working
-    ├── LLM Prompt
-    └── LLM Review
+    ├── Status
+    ├── LLM Test Prompt
+    ├── Test Result
+    │   ├── Status
+    │   ├── Severity
+    │   ├── Warnings
+    │   └── Needs Escalation
+    └── Test Summary
+        ├── Summary
+        ├── Failure Analysis
+        ├── Source Review
+        ├── Warnings
+        └── Recommendations
 ```
 
 | Index field | Source |
@@ -593,11 +603,12 @@ Analysis outputs:
 - Source review
 - Codex escalation flag
 
-Warning severity:
-
-- Critical
-- Important
-- Low
+| Warning count | Severity |
+|---:|---|
+| 0–1 | `LOW` |
+| 2–3 | `MEDIUM` |
+| 4–5 | `HIGH` |
+| 6+ | `CRITICAL` |
 
 ## 11. Codex Escalation
 

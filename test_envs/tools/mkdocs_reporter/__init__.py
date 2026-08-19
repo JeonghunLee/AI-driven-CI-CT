@@ -17,6 +17,16 @@ def _table(values: dict[str, Any]) -> str:
     return f"| Item | Value |\n|---|---|\n{rows or '| - | None |'}"
 
 
+def _warning_severity(warning_count: int) -> str:
+    if warning_count >= 6:
+        return "CRITICAL"
+    if warning_count >= 4:
+        return "HIGH"
+    if warning_count >= 2:
+        return "MEDIUM"
+    return "LOW"
+
+
 class MarkdownReporter:
     """Create the canonical human-readable report and optionally publish it to MkDocs."""
 
@@ -173,10 +183,9 @@ class MarkdownReporter:
 
     def render(self, result: ResultRecord, analysis: Analysis, important_logs: list[str] | None = None) -> str:
         logs = "<br>".join(_safe(line) for line in (important_logs or [])) or "None"
-        warnings = "<br>".join(
-            f"{_safe(item.get('severity', 'Important'))}: {_safe(item.get('message', ''))}"
-            for item in analysis.warnings
-        ) or "None"
+        warnings = "<br>".join(_safe(item.get("message", "")) for item in analysis.warnings) or "None"
+        warning_count = len(analysis.warnings)
+        severity = _warning_severity(warning_count)
         test_summary = _table(
             {
                 "Description": result.description,
@@ -209,16 +218,24 @@ class MarkdownReporter:
                 "Classification": analysis.classification,
                 "Confidence": f"{analysis.confidence:.2f}",
                 "Analyzer": analysis.source,
-                "working": "on" if analysis.source.startswith("ollama/") else "off",
+                "Status": "enabled" if analysis.source.startswith("ollama/") else "disabled",
             }
         )
-        review_table = _table(
+        analysis_result = _table(
+            {
+                "**Status**": result.status,
+                "**Severity**": severity,
+                "**Warnings**": warning_count,
+                "**Needs Escalation**": "ON" if analysis.needs_escalation else "OFF",
+            }
+        )
+        analysis_summary = _table(
             {
                 "Summary": analysis.summary,
-                "Failure analysis": analysis.failure_analysis or "Not applicable",
-                "Source review": analysis.source_review or "Not requested",
+                "Failure Analysis": analysis.failure_analysis or "Not applicable",
+                "Source Review": analysis.source_review or "Not requested",
                 "Warnings": warnings,
-                "Needs escalation": "on" if analysis.needs_escalation else "off",
+                "Recommendations": analysis.recommendations or "No recommendation provided.",
             }
         )
         return f"""# {result.test_id} Test Result
@@ -247,17 +264,21 @@ class MarkdownReporter:
 
 {log_table}
 
-## Local LLM analysis
+## Local LLM Analysis
 
 {analysis_table}
 
-### LLM Prompt
+### LLM Test Prompt
 
 {_safe(analysis.prompt) or "Not configured"}
 
-### LLM Review
+### Test Result
 
-{review_table}
+{analysis_result}
+
+### Test Summary
+
+{analysis_summary}
 """
 
 

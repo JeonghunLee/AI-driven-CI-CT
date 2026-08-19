@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 
 from test_envs.tools.local_llm import Analysis
-from test_envs.tools.mkdocs_reporter import MarkdownReporter
+from test_envs.tools.mkdocs_reporter import MarkdownReporter, _warning_severity
 from test_envs.tools.result_normalizer import ResultRecord, ResultStore
 
 
@@ -21,18 +21,50 @@ class MarkdownReporterTests(unittest.TestCase):
             metrics={"jitter": 0.001},
         )
         ResultStore(root).save(result)
-        path = MarkdownReporter(root).generate(result, Analysis("Stable", "passed", 1.0, "test"))
+        path = MarkdownReporter(root).generate(
+            result,
+            Analysis(
+                "Stable",
+                "information_security",
+                0.85,
+                "ollama/deepseek-r1:7b",
+                warnings=[{"severity": "Important", "message": "Review configuration."}],
+                recommendations="Improve error handling.",
+                prompt="Analyze the test result.",
+            ),
+        )
         text = path.read_text(encoding="utf-8")
-        self.assertIn("## Local LLM analysis", text)
-        self.assertIn("### LLM Prompt", text)
-        self.assertIn("### LLM Review", text)
+        self.assertIn("## Local LLM Analysis", text)
+        self.assertIn("### LLM Test Prompt", text)
+        self.assertIn("### Test Result", text)
+        self.assertIn("### Test Summary", text)
         self.assertIn("### Test Source", text)
         self.assertIn("### Test configs", text)
         self.assertIn("| Commit |", text)
         self.assertIn("| Branch |", text)
         self.assertNotIn("## Test history", text)
         self.assertIn("| Test mode | mock |", text)
-        self.assertIn("| working | off |", text)
+        self.assertIn("| Status | enabled |", text)
+        self.assertIn("| **Status** | PASS |", text)
+        self.assertIn("| **Severity** | LOW |", text)
+        self.assertIn("| **Warnings** | 1 |", text)
+        self.assertIn("| **Needs Escalation** | OFF |", text)
+        self.assertIn("| Recommendations | Improve error handling. |", text)
+
+    def test_warning_count_controls_severity(self) -> None:
+        expected = {
+            0: "LOW",
+            1: "LOW",
+            2: "MEDIUM",
+            3: "MEDIUM",
+            4: "HIGH",
+            5: "HIGH",
+            6: "CRITICAL",
+            20: "CRITICAL",
+        }
+        for warning_count, severity in expected.items():
+            with self.subTest(warning_count=warning_count):
+                self.assertEqual(_warning_severity(warning_count), severity)
 
     def test_mkdocs_publish_preserves_each_execution(self) -> None:
         reports_root = Path("test_envs/tests/.tmp/ct_framework/multi-execution-reports")

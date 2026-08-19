@@ -34,6 +34,7 @@ ANALYSIS_SCHEMA = {
         },
         "failure_analysis": {"type": "string"},
         "source_review": {"type": "string"},
+        "recommendations": {"type": "string"},
         "needs_escalation": {"type": "boolean"},
     },
     "required": [
@@ -43,6 +44,7 @@ ANALYSIS_SCHEMA = {
         "warnings",
         "failure_analysis",
         "source_review",
+        "recommendations",
         "needs_escalation",
     ],
 }
@@ -166,6 +168,7 @@ class Analysis:
     warnings: list[dict[str, str]] = field(default_factory=list)
     failure_analysis: str = ""
     source_review: str = "Not requested"
+    recommendations: str = ""
     needs_escalation: bool = False
     prompt: str = ""
 
@@ -246,6 +249,7 @@ class LocalLLMAnalyzer:
                     warnings=warnings,
                     failure_analysis=str(value["failure_analysis"]),
                     source_review=str(value["source_review"]),
+                    recommendations=str(value["recommendations"]),
                     needs_escalation=bool(value["needs_escalation"]),
                     prompt=effective_prompt,
                 )
@@ -281,6 +285,7 @@ class LocalLLMAnalyzer:
                 confidence=1.0,
                 source="deterministic-fallback",
                 warnings=warnings,
+                recommendations="Review warnings and captured test logs." if warnings else "No action required.",
             )
         detail = logs.errors[0] if logs.errors else "No explicit error was extracted from logs."
         confidence = 0.7 if logs.errors else 0.3
@@ -291,6 +296,7 @@ class LocalLLMAnalyzer:
             source="deterministic-fallback",
             warnings=warnings,
             failure_analysis=detail,
+            recommendations="Review the failure evidence and rerun the test.",
             needs_escalation=confidence < 0.5,
         )
 
@@ -312,7 +318,7 @@ class LocalLLMAnalyzer:
             f"{effective_prompt}. "
             "Analyze test, log, warning, and optional source diff evidence. Return only JSON containing "
             "summary, classification, confidence (0.0 to 1.0), warnings (severity/message), failure_analysis, "
-            "source_review, needs_escalation. Warning severity must be Critical, Important, or Low. "
+            "source_review, recommendations, needs_escalation. Warning severity must be Critical, Important, or Low. "
             "Do not invent evidence.\n" + json.dumps(evidence, ensure_ascii=False)
         )
 
