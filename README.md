@@ -134,8 +134,7 @@ python -m test_envs.tools.environment_setup python --platform config
 ```text
 test_envs/configs/
 ├── config.json
-├── check.json
-└── unittest/                 # Future extension
+└── check.json
 ```
 
 ### `test_envs/configs/config.json`
@@ -151,7 +150,7 @@ test_envs/configs/
   "ollama": {
     "url": "http://127.0.0.1:11434",
     "selected_model": "deepseek-r1:7b",
-    "prompt": "result.json 분석",
+    "default_prompt": "analyze the test result and provide a detailed report with recommendations for improvement.",
     "max_timeout_s": 20,
     "max_retry": 3
   }
@@ -165,9 +164,14 @@ test_envs/configs/
 | `time.utc_offset_hours` | `9` |
 | `ollama.url` | Local LLM endpoint |
 | `ollama.selected_model` | Ollama model name |
-| `ollama.prompt` | Analysis instruction |
+| `ollama.default_prompt` | Default analysis instruction |
 | `ollama.max_timeout_s` | Request timeout |
 | `ollama.max_retry` | Retry count |
+
+| Prompt priority | Rule |
+|---:|---|
+| 1 | `@pytest.mark.ct(test_prompt="...")` non-empty value |
+| 2 | `ollama.default_prompt` |
 
 | Model selection priority | Source |
 |---:|---|

@@ -106,6 +106,46 @@ class LocalLLMTests(unittest.TestCase):
         self.assertIn("[ATTEMPT 1]", text)
         self.assertIn("[ATTEMPT 2]", text)
         self.assertIn("status=success", text)
+        self.assertIn("prompt_source=default_prompt", text)
+        self.assertEqual(analysis.prompt, "analyze")
+
+    def test_non_empty_test_prompt_overrides_default_prompt(self) -> None:
+        valid = {
+            "summary": "ok",
+            "classification": "passed",
+            "confidence": 1.0,
+            "warnings": [],
+            "failure_analysis": "",
+            "source_review": "Not requested",
+            "needs_escalation": False,
+        }
+        captured_prompts: list[str] = []
+
+        def respond(request, **_kwargs):
+            captured_prompts.append(json.loads(request.data)["prompt"])
+            return io.BytesIO(json.dumps({"response": json.dumps(valid)}).encode())
+
+        analyzer = LocalLLMAnalyzer(
+            url="http://local.test",
+            model="model:test",
+            timeout=1,
+            max_retry=0,
+            prompt="default prompt",
+            log_root="test_envs/tests/.tmp/ct_framework/local-llm/test-prompt-logs",
+        )
+        result = ResultRecord(
+            "CT-LLM-002",
+            "PASS",
+            "timing",
+            0.1,
+            configuration={"test_prompt": "case-specific prompt"},
+            execution_id="20260101_000002_000002",
+        )
+        with patch("test_envs.tools.local_llm.urlopen", side_effect=respond):
+            analysis = analyzer.analyze(result, ParsedLog())
+
+        self.assertEqual(analysis.prompt, "case-specific prompt")
+        self.assertTrue(captured_prompts[0].startswith("case-specific prompt."))
 
 
 if __name__ == "__main__":

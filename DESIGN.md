@@ -508,7 +508,9 @@ unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
 | Config selection | `ollama.selected_model` |
 | Installed inventory | Ollama `/api/tags` |
 | Offline fallback | Deterministic analysis |
-| Prompt | `ollama.prompt` |
+| Default prompt | `ollama.default_prompt` |
+| TEST prompt | `@pytest.mark.ct(test_prompt="...")` |
+| Prompt priority | Non-empty `test_prompt` → `default_prompt` |
 | Timeout | `ollama.max_timeout_s` |
 | Retry | `ollama.max_retry` |
 | Diagnostic log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` |
@@ -533,7 +535,7 @@ test_envs/configs/config.json
 └── ollama
     ├── url
     ├── selected_model
-    ├── prompt
+    ├── default_prompt
     ├── max_timeout_s
     └── max_retry
 ```
@@ -692,8 +694,7 @@ Excluded from GitHub Issue:
 ├── test_envs/
 │   ├── configs/
 │   │   ├── config.json
-│   │   ├── check.json
-│   │   └── unittest/                 # Future extension
+│   │   └── check.json
 │   ├── tests/
 │   │   ├── pytest/
 │   │   └── unittest/

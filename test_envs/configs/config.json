@@ -8,7 +8,7 @@
   "ollama": {
     "url": "http://127.0.0.1:11434",
     "selected_model": "deepseek-r1:7b",
-    "prompt": "analyze the test result and provide a detailed report with recommendations for improvement.",
+    "default_prompt": "analyze the test result and provide a detailed report with recommendations for improvement.",
     "max_timeout_s": 20,
     "max_retry": 3
   }

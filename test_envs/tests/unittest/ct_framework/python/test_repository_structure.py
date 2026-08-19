@@ -14,7 +14,7 @@ class RepositoryStructureTests(unittest.TestCase):
         root = Path("test_envs/configs")
         self.assertTrue((root / "config.json").is_file())
         self.assertTrue((root / "check.json").is_file())
-        self.assertTrue((root / "unittest").is_dir())
+        self.assertFalse((root / "unittest").exists())
         self.assertFalse((root / "pytest").exists())
 
     def test_unittest_structure(self) -> None:

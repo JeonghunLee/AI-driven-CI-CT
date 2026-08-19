@@ -51,6 +51,7 @@ CLI mock / hil
     fixture_mode="mock",
     interface="UART",
     equipment="Saleae",
+    test_prompt="",
 )
 ```
 
@@ -60,6 +61,8 @@ CLI mock / hil
 | `fixture_id` | Test filename mapping |
 | `fixture_mode` | Marker 기본 mode |
 | CLI override | Marker보다 우선 |
+| `test_prompt=""` | `ollama.default_prompt` 사용 |
+| `test_prompt="..."` | TEST CASE prompt 사용 |
 
 ## Directory
 

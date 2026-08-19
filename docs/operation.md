@@ -25,8 +25,7 @@
 └── test_envs/
     ├── configs/
     │   ├── config.json
-    │   ├── check.json
-    │   └── unittest/
+    │   └── check.json
     ├── tests/
     │   ├── pytest/
     │   │   ├── test_cases/test_fixture_<NNN>_<test-content>.py

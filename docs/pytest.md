@@ -24,6 +24,8 @@
 |---|---|
 | Source | `@pytest.mark.ct` |
 | Required fields | `test_id`, `category`, `fixture_id`, `fixture_mode` |
+| Optional prompt | `test_prompt` |
+| Prompt fallback | `ollama.default_prompt` |
 | Mode selection | `fixture_mode` |
 | Derived modes | `interface_mode`, `equipment_mode` |
 | Validation | pytest collection hook + filename/fixture ID match |

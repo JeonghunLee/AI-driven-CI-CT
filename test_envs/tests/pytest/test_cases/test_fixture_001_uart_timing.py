@@ -11,6 +11,7 @@ from test_envs.tests.pytest.fixtures.fixture_001_uart_saleae import Fixture001, 
     fixture_mode="mock",
     interface="UART",
     equipment="Saleae",
+    test_prompt="",
 )
 def test_uart_timing(
     fixture_001: Fixture001, ct_result: CTResultRecorder

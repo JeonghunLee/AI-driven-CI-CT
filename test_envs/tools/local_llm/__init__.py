@@ -89,7 +89,10 @@ def _configured_analysis() -> tuple[str, float, int]:
     ollama = load_config().get("ollama", {})
     if not isinstance(ollama, dict):
         raise RuntimeError("Invalid project configuration: ollama must be an object")
-    prompt = ollama.get("prompt", "result.json analysis")
+    default_prompt = ollama.get(
+        "default_prompt",
+        "analyze the test result and provide a detailed report with recommendations for improvement.",
+    )
     timeout = ollama.get("max_timeout_s", 20)
     retry = ollama.get("max_retry", 3)
     try:
@@ -97,11 +100,11 @@ def _configured_analysis() -> tuple[str, float, int]:
         retry_value = int(retry)
     except (TypeError, ValueError) as error:
         raise RuntimeError("Invalid Local LLM timeout or retry configuration") from error
-    if not isinstance(prompt, str) or not prompt.strip():
-        raise RuntimeError("Invalid Local LLM prompt configuration")
+    if not isinstance(default_prompt, str) or not default_prompt.strip():
+        raise RuntimeError("Invalid Local LLM default_prompt configuration")
     if timeout_value <= 0 or retry_value < 0:
         raise RuntimeError("Local LLM timeout must be positive and retry cannot be negative")
-    return prompt.strip(), timeout_value, retry_value
+    return default_prompt.strip(), timeout_value, retry_value
 
 
 @dataclass(frozen=True)
@@ -185,10 +188,13 @@ class LocalLLMAnalyzer:
         self.model = selected_model(model)
         self.timeout = configured_timeout if timeout is None else timeout
         self.max_retry = configured_retry if max_retry is None else max_retry
-        self.prompt = configured_prompt if prompt is None else prompt
+        self.default_prompt = configured_prompt if prompt is None else prompt
         self.log_root = Path(log_root) if log_root else DEFAULT_LOG_ROOT
 
     def analyze(self, result: ResultRecord, logs: ParsedLog, source_diff: str = "") -> Analysis:
+        test_prompt = result.configuration.get("test_prompt", "")
+        use_test_prompt = isinstance(test_prompt, str) and bool(test_prompt.strip())
+        effective_prompt = test_prompt.strip() if use_test_prompt else self.default_prompt
         entries = [
             f"timestamp={configured_now().isoformat()}",
             f"execution_id={result.execution_id}",
@@ -197,6 +203,8 @@ class LocalLLMAnalyzer:
             f"endpoint={self.url}",
             f"timeout_s={self.timeout}",
             f"max_retry={self.max_retry}",
+            f"prompt_source={'test_prompt' if use_test_prompt else 'default_prompt'}",
+            f"prompt={effective_prompt}",
         ]
         for attempt in range(1, self.max_retry + 2):
             raw_response = ""
@@ -205,7 +213,7 @@ class LocalLLMAnalyzer:
                 data=json.dumps(
                     {
                         "model": self.model,
-                        "prompt": self._prompt(result, logs, source_diff),
+                        "prompt": self._prompt(result, logs, source_diff, effective_prompt),
                         "stream": False,
                         "format": ANALYSIS_SCHEMA,
                     },
@@ -239,7 +247,7 @@ class LocalLLMAnalyzer:
                     failure_analysis=str(value["failure_analysis"]),
                     source_review=str(value["source_review"]),
                     needs_escalation=bool(value["needs_escalation"]),
-                    prompt=self.prompt,
+                    prompt=effective_prompt,
                 )
             except (URLError, TimeoutError, ValueError, KeyError, json.JSONDecodeError) as error:
                 entries.extend(
@@ -252,7 +260,7 @@ class LocalLLMAnalyzer:
                 )
                 self._write_log(result.execution_id, entries)
         fallback = self._fallback(result, logs)
-        fallback.prompt = self.prompt
+        fallback.prompt = effective_prompt
         entries.extend(["\n[FALLBACK]", f"source={fallback.source}"])
         self._write_log(result.execution_id, entries)
         return fallback
@@ -286,7 +294,13 @@ class LocalLLMAnalyzer:
             needs_escalation=confidence < 0.5,
         )
 
-    def _prompt(self, result: ResultRecord, logs: ParsedLog, source_diff: str) -> str:
+    def _prompt(
+        self,
+        result: ResultRecord,
+        logs: ParsedLog,
+        source_diff: str,
+        effective_prompt: str,
+    ) -> str:
         evidence = {
             "test_result": result.to_dict(),
             "errors": logs.errors[:20],
@@ -295,7 +309,7 @@ class LocalLLMAnalyzer:
             "source_diff": source_diff[:12000],
         }
         return (
-            f"{self.prompt}. "
+            f"{effective_prompt}. "
             "Analyze test, log, warning, and optional source diff evidence. Return only JSON containing "
             "summary, classification, confidence (0.0 to 1.0), warnings (severity/message), failure_analysis, "
             "source_review, needs_escalation. Warning severity must be Critical, Important, or Low. "

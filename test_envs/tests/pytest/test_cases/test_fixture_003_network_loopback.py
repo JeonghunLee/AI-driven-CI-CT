@@ -11,6 +11,7 @@ from test_envs.tests.pytest.fixtures.fixture_003_network import Fixture003, fixt
     fixture_mode="mock",
     interface="Network",
     equipment="None",
+    test_prompt="",
 )
 def test_network_packet_loopback(fixture_003: Fixture003, ct_result: CTResultRecorder) -> None:
     network = fixture_003.network
