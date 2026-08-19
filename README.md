@@ -316,7 +316,11 @@ test_envs/reports/
 | Source | `@pytest.mark.ct` |
 | Validation | `pytest_collection_modifyitems` |
 | Required fields | `test_id`, `category`, `fixture_id`, `fixture_mode` |
+| Optional field | `test_prompt` |
 | Fixture ID validation | `test_fixture_<NNN>_*.py` = `FIXTURE-<NNN>` |
+| Fixture argument validation | Test case uses `fixture_<NNN>` |
+| Fixture tool metadata | `FIXTURE_META.interfaces`, `FIXTURE_META.equipments` |
+| Fixture mode metadata | `FIXTURE_META.modes.<mode>.enabled` |
 | Duplicate TEST ID | Collection error |
 
 | Tool implementation | Tool IDs |
@@ -331,9 +335,11 @@ test_envs/reports/
 
 | Mode | Field | Source |
 |---|---|---|
-| TEST | `fixture_mode` | `@pytest.mark.ct` |
-| Interface | `interface_mode` | `fixture_mode` |
-| Equipment | `equipment_mode` | `fixture_mode` / `none` |
+| TEST | `fixture_mode` | `@pytest.mark.ct` / CLI override |
+| Interface list | `interfaces` | Fixture `FIXTURE_META` |
+| Equipment list | `equipments` | Fixture `FIXTURE_META` |
+| Interface | `interface_mode` | Effective fixture mode |
+| Equipment | `equipment_mode` | Effective fixture mode / `none` |
 
 | Fixture | Combination |
 |---|---|

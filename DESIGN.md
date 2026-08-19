@@ -254,6 +254,10 @@ Source: `.vscode/tasks.json`
 |---|---|
 | Source | `@pytest.mark.ct` |
 | Required fields | `test_id`, `category`, `fixture_id`, `fixture_mode` |
+| Optional field | `test_prompt` |
+| Interface / Equipment owner | Fixture `FIXTURE_META` |
+| Mode support owner | Fixture `FIXTURE_META.modes` |
+| Mapping validation | Filename + Fixture ID + fixture argument |
 | Collection validation | Required fields + unique TEST ID + filename/fixture ID + fixture mode |
 | Missing field / duplicate ID | pytest collection error |
 

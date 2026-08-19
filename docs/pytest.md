@@ -27,9 +27,26 @@
 | Optional prompt | `test_prompt` |
 | Prompt fallback | `ollama.default_prompt` |
 | Mode selection | `fixture_mode` |
+| Tool selection | `FIXTURE_META.interfaces`, `FIXTURE_META.equipments` |
+| Supported modes | `FIXTURE_META.modes` |
 | Derived modes | `interface_mode`, `equipment_mode` |
-| Validation | pytest collection hook + filename/fixture ID match |
+| Validation | Marker + filename + fixture argument + `FIXTURE_META` |
 | Missing / duplicate / invalid mode | Collection error |
+
+## Fixture metadata
+
+| Field | Type |
+|---|---|
+| `fixture_id` | `str` |
+| `interfaces` | `list[str]` |
+| `equipments` | `list[str]` |
+| `modes.mock.enabled` | `bool` |
+| `modes.hil.enabled` | `bool` |
+
+| Ownership | Fields |
+|---|---|
+| Test case marker | `test_id`, `category`, `fixture_id`, `fixture_mode`, `test_prompt` |
+| Fixture | `interfaces`, `equipments`, `modes` |
 
 | Directory | Tools |
 |---|---|
