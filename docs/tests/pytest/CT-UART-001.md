@@ -9,8 +9,8 @@
 | Environment | local |
 | Result | PASS |
 | Execution time | 0.001 seconds |
-| Execution date | 2026-08-19T11:39:36.253319+09:00 |
-| Execution ID | 20260819_113936_253225 |
+| Execution date | 2026-08-19T11:54:40.248089+09:00 |
+| Execution ID | 20260819_115440_247993 |
 
 ### Test configs
 
@@ -34,7 +34,7 @@
 
 | Item | Value |
 |---|---|
-| Commit | 24d6fa5a4676cb4295318a88045843f0f021cb97 |
+| Commit | 586c4796f0ade0165d217e53f4afb4a6def79c48 |
 | Branch | main |
 
 ### Measurement
@@ -60,14 +60,14 @@
 
 | Item | Value |
 |---|---|
-| Test log | 20260819_113936_253225_test.log |
+| Test log | 20260819_115440_247993_test.log |
 | Important | None |
 
 ## Local LLM Analysis
 
 | Item | Value |
 |---|---|
-| Classification | pass |
+| Classification | Pass |
 | Confidence | 1.00 |
 | Analyzer | ollama/deepseek-r1:7b |
 | Status | enabled |
@@ -89,7 +89,7 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Item | Value |
 |---|---|
-| Summary | All test cases have passed. The UART timing test completed successfully with no errors or warnings. |
+| Summary | The test for CT-UART-001 was executed successfully with no errors. The measured baudrate of 921596.667 is very close to the expected 921600, indicating minimal timing errors. The jitter of 0.000217 is also within acceptable limits, suggesting that the UART interface is functioning reliably under the test conditions. |
 | Failure Analysis | Not applicable |
 | Source Review | Not requested |
 | Warnings | None |
@@ -99,6 +99,8 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-19 | 11:54:40.248089+09:00 | [20260819_115440_247993](CT-UART-001__20260819_115440_247993.md) | 586c479 | main | PASS | 0.001 | local |
+| 2026-08-19 | 11:52:47.062387+09:00 | [20260819_115247_062252](CT-UART-001__20260819_115247_062252.md) | fa75366 | main | PASS | 0.001 | local |
 | 2026-08-19 | 11:39:36.253319+09:00 | [20260819_113936_253225](CT-UART-001__20260819_113936_253225.md) | 24d6fa5 | main | PASS | 0.001 | local |
 | 2026-08-19 | 11:37:40.885705+09:00 | [20260819_113740_885608](CT-UART-001__20260819_113740_885608.md) | 24d6fa5 | main | PASS | 0.003 | local |
 | 2026-08-19 | 11:19:38.925999+09:00 | [20260819_111938_925902](CT-UART-001__20260819_111938_925902.md) | 400bfc1 | main | PASS | 0.001 | local |
