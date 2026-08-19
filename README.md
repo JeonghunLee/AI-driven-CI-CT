@@ -18,7 +18,9 @@
 .
 ├── docs/
 │   ├── index.md
-│   ├── environment.md
+│   ├── python_environment.md
+│   ├── local_llm_environment.md
+│   ├── vscode_environment.md
 │   ├── pytest_operation.md
 │   ├── unittest_operation.md
 │   ├── pytest.md
