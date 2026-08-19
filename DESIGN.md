@@ -524,6 +524,18 @@ unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
 | Category | Matching `result.json` → `test_case.category` |
 | Test ID | pytest TEST ID |
 
+| unittest index column | Source |
+|---|---|
+| Test Function | `ResultRecord.description`; latest document link |
+| Pass | Latest unittest status |
+| Latest | Latest unittest Seoul timestamp date |
+| Test Function Count | Function execution document count |
+
+| unittest excluded field | Rule |
+|---|---|
+| Test ID | pytest only |
+| Mode | pytest only |
+
 ## 10. Local LLM Analysis
 
 | Component | Value |

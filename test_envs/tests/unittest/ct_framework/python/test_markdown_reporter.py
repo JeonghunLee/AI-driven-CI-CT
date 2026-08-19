@@ -105,6 +105,17 @@ class MarkdownReporterTests(unittest.TestCase):
         ResultStore(reports_root).save(second)
         reporter.generate(second, analysis, publish_docs=True)
 
+        unit_result = ResultRecord(
+            "UNIT-INTERNAL-001",
+            "PASS",
+            "unit",
+            0.05,
+            description="test_result_parser",
+            execution_id="20260101-000003",
+        )
+        ResultStore(reports_root).save(unit_result)
+        reporter.generate(unit_result, analysis, publish_docs=True)
+
         base = Path(docs_root) / "tests" / "pytest"
         self.assertTrue((base / "CT-MD-HISTORY__20260101-000001.md").exists())
         self.assertTrue((base / "CT-MD-HISTORY__20260101-000002.md").exists())
@@ -136,6 +147,15 @@ class MarkdownReporterTests(unittest.TestCase):
             pytest_index,
         )
         self.assertIn("# unittest Results", unittest_index)
+        self.assertIn(
+            "| Test Function | Pass | Latest | Test Function Count |",
+            unittest_index,
+        )
+        self.assertIn(
+            "| [test_result_parser](UNIT-INTERNAL-001.md) | PASS |",
+            unittest_index,
+        )
+        self.assertNotIn("| Test ID | Mode |", unittest_index)
         self.assertEqual(root_index.read_text(encoding="utf-8"), "# System Overview")
 
 

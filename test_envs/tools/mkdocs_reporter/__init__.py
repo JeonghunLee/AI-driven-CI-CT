@@ -114,7 +114,13 @@ class MarkdownReporter:
                 )
                 mode = latest_result.test_mode if latest_result else "unknown"
                 if report_type == "unittest":
-                    unit_rows.append(f"| `{_safe(test_id)}` | {_safe(mode)} | [Open]({link}) | {count} |")
+                    test_function = latest_result.description if latest_result else test_id
+                    pass_status = latest_result.status if latest_result else "unknown"
+                    latest_date = latest_result.timestamp.partition("T")[0] if latest_result else "unknown"
+                    unit_rows.append(
+                        f"| [{_safe(test_function)}]({link}) | {_safe(pass_status)} | "
+                        f"{_safe(latest_date)} | {count} |"
+                    )
                 else:
                     category = latest_result.category if latest_result else "unknown"
                     latest_date = latest_result.timestamp.partition("T")[0] if latest_result else "unknown"
@@ -153,7 +159,7 @@ class MarkdownReporter:
 
 ## Unit Tests
 
-| Test ID | Mode | Latest | Executions |
+| Test Function | Pass | Latest | Test Function Count |
 |---|---|---|---:|
 {chr(10).join(unit_rows) or '| - | - | - | 0 |'}
 

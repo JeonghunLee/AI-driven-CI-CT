@@ -2,7 +2,7 @@
 
 ## Unit Tests
 
-| Test ID | Mode | Latest | Executions |
+| Test Function | Pass | Latest | Test Function Count |
 |---|---|---|---:|
 | - | - | - | 0 |
 
