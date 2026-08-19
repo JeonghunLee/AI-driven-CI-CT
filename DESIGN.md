@@ -623,7 +623,10 @@ Local LLM
 | unittest MkDocs execution | Canonical Markdown | `docs/tests/unittest/<execution-id>.md` |
 | Latest page history | Normalized TEST results | Date + Time + linked Execution ID + 7-character commit |
 | Execution page history | None | None |
-| MkDocs system index | System architecture | `docs/index.md` |
+| MkDocs index | Document links·system summary | `docs/index.md` |
+| Environment document | Python·Ollama·VS Code | `docs/environment.md` |
+| Operation document | TEST·Result·Local LLM·Report | `docs/operation.md` |
+| pytest mode document | HIL·Mock·CLI override·HIL gate | `docs/hil_mock.md` |
 | MkDocs pytest result index | Published pytest page scan | `docs/tests/pytest/index.md` |
 | MkDocs unittest result index | Published unittest page scan | `docs/tests/unittest/index.md` |
 | DOCX | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.docx` |
@@ -678,7 +681,10 @@ Excluded from GitHub Issue:
 ├── .venv/                         # Git ignored
 ├── docs/
 │   ├── index.md                     # Manual system overview
+│   ├── environment.md               # Environment configuration
+│   ├── operation.md                 # Operation configuration
 │   ├── pytest.md                    # pytest system description
+│   ├── hil_mock.md                  # pytest HIL / Mock
 │   ├── unittest.md                  # unittest system description
 │   └── tests/
 │       ├── pytest/                  # Markdown only

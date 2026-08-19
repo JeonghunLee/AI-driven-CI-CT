@@ -76,17 +76,11 @@ test_envs/tests/
 | 2 | USB + Digilent | `test_fixture_002_usb_loopback.py` | `CT-USB-001` |
 | 3 | Network | `test_fixture_003_network_loopback.py` | `CT-NETWORK-001` |
 
-## Fixture Mode
+## Mock / HIL
 
-| Source | Priority | Value |
-|---|---:|---|
-| CLI | 1 | `--fixture-mode=mock`, `--fixture-mode=hil` |
-| Marker | 2 | `fixture_mode="mock"`, `fixture_mode="hil"` |
-
-```powershell
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=mock
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=hil
-```
+| Scope | Document |
+|---|---|
+| pytest only | [Open](hil_mock.md) |
 
 ## Execution Model
 

@@ -10,10 +10,14 @@ repo_name: JeonghunLee/AI-driven-CI-CT
 
 nav:
   - Overview: index.md
-  - TEST Architecture:
+  - Getting Started:
+    - Environment: environment.md
+    - Operation: operation.md  
+  - TEST Framework:
     - Pytest: pytest.md
     - Unittest: unittest.md
-  - TEST RESULTS:
+    - HIL & Mock: hil_mock.md    
+  - TEST Reports:
     - Pytest: tests/pytest/index.md
     - Unittest: tests/unittest/index.md
 

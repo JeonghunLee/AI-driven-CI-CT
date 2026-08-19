@@ -17,6 +17,13 @@
 ```text
 .
 ├── docs/
+│   ├── index.md
+│   ├── environment.md
+│   ├── operation.md
+│   ├── pytest.md
+│   ├── hil_mock.md
+│   ├── unittest.md
+│   └── tests/{pytest,unittest}/
 └── test_envs/
     ├── configs/
     │   ├── config.json
