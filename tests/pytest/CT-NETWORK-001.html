@@ -388,26 +388,35 @@
 <a class="md-nav__link" href="#local-llm-analysis">
 <span class="md-ellipsis">
       
-        Local LLM analysis
+        Local LLM Analysis
       
     </span>
 </a>
-<nav aria-label="Local LLM analysis" class="md-nav">
+<nav aria-label="Local LLM Analysis" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#llm-prompt">
+<a class="md-nav__link" href="#llm-test-prompt">
 <span class="md-ellipsis">
       
-        LLM Prompt
+        LLM Test Prompt
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#llm-review">
+<a class="md-nav__link" href="#test-result">
 <span class="md-ellipsis">
       
-        LLM Review
+        Test Result
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-summary_1">
+<span class="md-ellipsis">
+      
+        Test Summary
       
     </span>
 </a>
@@ -459,15 +468,15 @@
 </tr>
 <tr>
 <td>Execution time</td>
-<td>0.000 seconds</td>
+<td>0.001 seconds</td>
 </tr>
 <tr>
 <td>Execution date</td>
-<td>2026-08-19T10:14:28.856481+09:00</td>
+<td>2026-08-19T11:19:42.661873+09:00</td>
 </tr>
 <tr>
 <td>Execution ID</td>
-<td>20260819_101428_856405</td>
+<td>20260819_111942_661774</td>
 </tr>
 </tbody>
 </table>
@@ -525,7 +534,7 @@
 <tbody>
 <tr>
 <td>Commit</td>
-<td>87f0575c0e4b45647d34ed5473640de6e3089cdd</td>
+<td>400bfc1fdbdaf4448fb16026e801d969a3081b55</td>
 </tr>
 <tr>
 <td>Branch</td>
@@ -590,7 +599,7 @@
 <tbody>
 <tr>
 <td>Test log</td>
-<td>20260819_101428_856405_test.log</td>
+<td>20260819_111942_661774_test.log</td>
 </tr>
 <tr>
 <td>Important</td>
@@ -598,7 +607,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="local-llm-analysis">Local LLM analysis</h2>
+<h2 id="local-llm-analysis">Local LLM Analysis</h2>
 <table>
 <thead>
 <tr>
@@ -609,25 +618,52 @@
 <tbody>
 <tr>
 <td>Classification</td>
-<td>information_security</td>
+<td>Pass</td>
 </tr>
 <tr>
 <td>Confidence</td>
-<td>0.85</td>
+<td>0.95</td>
 </tr>
 <tr>
 <td>Analyzer</td>
 <td>ollama/deepseek-r1:7b</td>
 </tr>
 <tr>
-<td>working</td>
-<td>on</td>
+<td>Status</td>
+<td>enabled</td>
 </tr>
 </tbody>
 </table>
-<h3 id="llm-prompt">LLM Prompt</h3>
+<h3 id="llm-test-prompt">LLM Test Prompt</h3>
 <p>analyze the test result and provide a detailed report with recommendations for improvement.</p>
-<h3 id="llm-review">LLM Review</h3>
+<h3 id="test-result">Test Result</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>PASS</td>
+</tr>
+<tr>
+<td><strong>Severity</strong></td>
+<td>LOW</td>
+</tr>
+<tr>
+<td><strong>Warnings</strong></td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>Needs Escalation</strong></td>
+<td>OFF</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-summary_1">Test Summary</h3>
 <table>
 <thead>
 <tr>
@@ -638,23 +674,23 @@
 <tbody>
 <tr>
 <td>Summary</td>
-<td>Test completed successfully with no errors. However, there are some warnings related to the network packet loopback functionality that should be investigated. The loopback functionality is known to cause issues in certain network configurations, and the test results indicate that the loopback is being used improperly in the setup. It is recommended to review the configuration parameters related to loopback and ensure they are within acceptable limits for the intended network setup. Additionally, it is suggested to enhance the error handling and logging mechanisms for loopback misconfigurations to prevent future issues.</td>
+<td>The test for CT-NETWORK-001 (test_network_packet_loopback) has been executed successfully. All metrics indicate normal operation with 33 bytes transferred, 1 packet counted, and negligible latency and integrity issues. The test environment is set to local, using the fixture ID FIXTURE-003 with mock mode, which simulates the communication interface. No errors, warnings, or important logs were encountered during execution. The test source is from commit 400bfc1fdbdaf4448fb16026e801d969a3081b55 of branch main. No issues detected in this test, and no escalations are required.</td>
 </tr>
 <tr>
-<td>Failure analysis</td>
-<td>No failures detected during testing. The test completed successfully, but certain warnings indicate potential issues with the network packet loopback functionality that need to be addressed.</td>
+<td>Failure Analysis</td>
+<td>Not applicable</td>
 </tr>
 <tr>
-<td>Source review</td>
-<td>The test source code shows that the loopback functionality is being used in the setup. However, the loopback is known to be problematic in certain network configurations. The test results suggest that the loopback is being used inappropriately, leading to potential issues.</td>
+<td>Source Review</td>
+<td>Not requested</td>
 </tr>
 <tr>
 <td>Warnings</td>
-<td>Critical: Network packet loopback configuration is not properly configured. This may lead to unexpected network behavior or security vulnerabilities.</td>
+<td>None</td>
 </tr>
 <tr>
-<td>Needs escalation</td>
-<td>off</td>
+<td>Recommendations</td>
+<td>No recommendation provided.</td>
 </tr>
 </tbody>
 </table>
@@ -673,6 +709,96 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>2026-08-19</td>
+<td>11:19:42.661873+09:00</td>
+<td><a href="CT-NETWORK-001__20260819_111942_661774.html">20260819_111942_661774</a></td>
+<td>400bfc1</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.001</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-19</td>
+<td>11:18:15.404194+09:00</td>
+<td><a href="CT-NETWORK-001__20260819_111815_404104.html">20260819_111815_404104</a></td>
+<td>29a88e2</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-19</td>
+<td>11:15:19.185069+09:00</td>
+<td><a href="CT-NETWORK-001__20260819_111519_184986.html">20260819_111519_184986</a></td>
+<td>29a88e2</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-19</td>
+<td>10:54:05.566064+09:00</td>
+<td><a href="CT-NETWORK-001__20260819_105405_565980.html">20260819_105405_565980</a></td>
+<td>f47bfdf</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-19</td>
+<td>10:51:21.419167+09:00</td>
+<td><a href="CT-NETWORK-001__20260819_105121_419085.html">20260819_105121_419085</a></td>
+<td>f47bfdf</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-19</td>
+<td>10:43:17.019034+09:00</td>
+<td><a href="CT-NETWORK-001__20260819_104317_018949.html">20260819_104317_018949</a></td>
+<td>6936260</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-19</td>
+<td>10:29:18.531501+09:00</td>
+<td><a href="CT-NETWORK-001__20260819_102918_531417.html">20260819_102918_531417</a></td>
+<td>7407acd</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-19</td>
+<td>10:28:38.719328+09:00</td>
+<td><a href="CT-NETWORK-001__20260819_102838_719242.html">20260819_102838_719242</a></td>
+<td>7407acd</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
+<tr>
+<td>2026-08-19</td>
+<td>10:25:18.598883+09:00</td>
+<td><a href="CT-NETWORK-001__20260819_102518_598802.html">20260819_102518_598802</a></td>
+<td>7407acd</td>
+<td>main</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000</td>
+<td>local</td>
+</tr>
 <tr>
 <td>2026-08-19</td>
 <td>10:14:28.856481+09:00</td>

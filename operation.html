@@ -329,6 +329,15 @@
     </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#local-llm-report">
+<span class="md-ellipsis">
+      
+        Local LLM report
+      
+    </span>
+</a>
+</li>
 </ul>
 </nav>
 </li>
@@ -573,6 +582,15 @@
 <span class="md-ellipsis">
       
         Report Generation
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#local-llm-report">
+<span class="md-ellipsis">
+      
+        Local LLM report
       
     </span>
 </a>
@@ -965,6 +983,51 @@
 ├── Execution snapshot creation
 ├── Latest TEST page update
 └── docs/tests/{pytest,unittest}/index.md update
+</code></pre></div>
+<h3 id="local-llm-report">Local LLM report</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Warning count</th>
+<th>Severity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0–1</td>
+<td><code>LOW</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">2–3</td>
+<td><code>MEDIUM</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">4–5</td>
+<td><code>HIGH</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">6+</td>
+<td><code>CRITICAL</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>Local LLM Analysis
+├── Classification
+├── Confidence
+├── Analyzer
+├── Status
+├── LLM Test Prompt
+├── Test Result
+│   ├── Status
+│   ├── Severity
+│   ├── Warnings
+│   └── Needs Escalation
+└── Test Summary
+    ├── Summary
+    ├── Failure Analysis
+    ├── Source Review
+    ├── Warnings
+    └── Recommendations
 </code></pre></div>
 </article>
 </div>
