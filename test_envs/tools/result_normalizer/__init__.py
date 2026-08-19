@@ -73,6 +73,7 @@ class ResultRecord:
     metrics: Mapping[str, Any] = field(default_factory=dict)
     statistics: Mapping[str, Any] = field(default_factory=dict)
     logs: Mapping[str, str] = field(default_factory=lambda: {"main": "test.log"})
+    test_functions: tuple[Mapping[str, Any], ...] = ()
 
     def __post_init__(self) -> None:
         self.status = self.status.upper()
@@ -86,12 +87,37 @@ class ResultRecord:
         self.equipments = tuple(self.equipments) or (() if self.equipment == "None" else (self.equipment,))
         self.interface = ", ".join(self.interfaces) or "None"
         self.equipment = ", ".join(self.equipments) or "None"
+        self.test_functions = tuple(dict(item) for item in self.test_functions)
         for name in ("test_mode", "interface_mode", "equipment_mode"):
             value = getattr(self, name)
             if value not in {"mock", "hil", "none"}:
                 raise ValueError(f"{name} must be mock, hil, or none: {value}")
 
     def to_dict(self) -> dict[str, Any]:
+        if self.category.lower() == "unit":
+            functions = [dict(item) for item in self.test_functions]
+            summary = {
+                "total": len(functions),
+                "passed": sum(item.get("status") == "PASS" for item in functions),
+                "failed": sum(item.get("status") == "FAIL" for item in functions),
+                "errors": sum(item.get("status") == "ERROR" for item in functions),
+                "skipped": sum(item.get("status") == "SKIP" for item in functions),
+            }
+            return {
+                "execution": {
+                    "execution_id": self.execution_id,
+                    "timestamp": self.timestamp,
+                    "status": self.status,
+                    "duration": self.duration,
+                    "environment": self.environment,
+                    "runner": self.runner,
+                    "commit": self.commit,
+                    "branch": self.branch,
+                    "logs": dict(self.logs),
+                },
+                "summary": summary,
+                "test_functions": functions,
+            }
         return {
             "test_case": {
                 "test_id": self.test_id,
@@ -126,7 +152,26 @@ class ResultRecord:
 
     @classmethod
     def from_dict(cls, value: Mapping[str, Any]) -> "ResultRecord":
-        if "test_case" in value:
+        if "execution" in value and "test_functions" in value:
+            execution = dict(value["execution"])
+            functions = tuple(value.get("test_functions", ()))
+            value = {
+                "test_id": "unittest",
+                "status": execution.get("status", "ERROR"),
+                "category": "unit",
+                "duration": execution.get("duration", 0.0),
+                "description": "unittest execution",
+                "environment": execution.get("environment", "local"),
+                "runner": execution.get("runner", "local"),
+                "commit": execution.get("commit", "unknown"),
+                "branch": execution.get("branch", "unknown"),
+                "execution_id": execution.get("execution_id", ""),
+                "timestamp": execution.get("timestamp", ""),
+                "logs": execution.get("logs", {}),
+                "test_functions": functions,
+                "metrics": dict(value.get("summary", {})),
+            }
+        elif "test_case" in value:
             test_case = dict(value["test_case"])
             test_configs = dict(value.get("test_configs", {}))
             fixture_configs = dict(
@@ -155,7 +200,8 @@ class ResultStore:
     def save(self, record: ResultRecord) -> Path:
         report_dir = self._report_dir(record)
         report_dir.mkdir(parents=True, exist_ok=True)
-        record.logs = {"main": f"{record.execution_id}_test.log"}
+        log_suffix = "result" if record.category.lower() == "unit" else "test"
+        record.logs = {"main": f"{record.execution_id}_{log_suffix}.log"}
         log_path = report_dir / record.logs["main"]
         if not log_path.exists():
             log_path.write_text("", encoding="utf-8")
@@ -174,19 +220,24 @@ class ResultStore:
 
     def result_paths(self, test_id: str | None = None) -> list[Path]:
         name = test_id or "*"
-        return list((self.root / "results" / "pytest" / "test_cases").glob(f"{name}/*_result.json")) + list(
-            (self.root / "results" / "unittest").glob(f"{name}/*_result.json")
+        pytest_paths = list(
+            (self.root / "results" / "pytest" / "test_cases").glob(f"{name}/*_result.json")
         )
+        unit_root = self.root / "results" / "unittest"
+        unit_paths = list(unit_root.glob("*_result.json")) if test_id in {None, "unittest"} else []
+        legacy_unit_paths = list(unit_root.glob(f"{name}/*_result.json"))
+        return pytest_paths + unit_paths + legacy_unit_paths
 
     def _report_dir(self, record: ResultRecord) -> Path:
         if record.category.lower() == "unit":
-            return self.root / "results" / "unittest" / record.test_id
+            return self.root / "results" / "unittest"
         return self.root / "results" / "pytest" / "test_cases" / record.test_id
 
     def load(self, path: str | Path | None = None) -> ResultRecord:
         source = Path(path) if path else self.latest()
         record = ResultRecord.from_dict(json.loads(source.read_text(encoding="utf-8")))
-        expected = f"{record.execution_id}_test.log"
+        log_suffix = "result" if record.category.lower() == "unit" else "test"
+        expected = f"{record.execution_id}_{log_suffix}.log"
         configured = Path(record.logs.get("main", expected)).name
         record.logs = {"main": configured if (source.parent / configured).exists() else expected}
         return record
@@ -201,8 +252,26 @@ def from_junit(path: str | Path, test_id: str = "UNIT-TEST") -> ResultRecord:
     }
     duration = sum(float(suite.attrib.get("time", 0.0)) for suite in suites)
     status = "FAIL" if totals["failures"] or totals["errors"] else "PASS"
+    functions: list[dict[str, Any]] = []
+    for testcase in root.findall(".//testcase"):
+        failure = testcase.find("failure")
+        error = testcase.find("error")
+        skipped = testcase.find("skipped")
+        status = "ERROR" if error is not None else "FAIL" if failure is not None else "SKIP" if skipped is not None else "PASS"
+        detail_element = error or failure or skipped
+        name = testcase.attrib.get("name", "unknown")
+        class_name = testcase.attrib.get("classname", "")
+        functions.append(
+            {
+                "function": f"{class_name}.{name}" if class_name else name,
+                "pass": status == "PASS",
+                "status": status,
+                "duration": float(testcase.attrib.get("time", 0.0)),
+                "failure": (detail_element.text or "").strip() if detail_element is not None else "",
+            }
+        )
     return ResultRecord(
-        test_id=test_id,
+        test_id="unittest",
         status=status,
         category="unit",
         duration=duration,
@@ -210,6 +279,7 @@ def from_junit(path: str | Path, test_id: str = "UNIT-TEST") -> ResultRecord:
         environment="github_local_runner" if os.getenv("GITHUB_ACTIONS") == "true" else "local",
         runner=os.getenv("RUNNER_NAME", "local"),
         metrics=totals,
+        test_functions=tuple(functions),
     )
 
 
