@@ -8,9 +8,9 @@
 | Category | timing |
 | Environment | local |
 | Result | PASS |
-| Execution time | 0.000 seconds |
-| Execution date | 2026-08-19T10:14:28.767429+09:00 |
-| Execution ID | 20260819_101428_767337 |
+| Execution time | 0.001 seconds |
+| Execution date | 2026-08-19T11:19:38.925999+09:00 |
+| Execution ID | 20260819_111938_925902 |
 
 ### Test configs
 
@@ -29,7 +29,7 @@
 
 | Item | Value |
 |---|---|
-| Commit | 87f0575c0e4b45647d34ed5473640de6e3089cdd |
+| Commit | 400bfc1fdbdaf4448fb16026e801d969a3081b55 |
 | Branch | main |
 
 ### Measurement
@@ -55,36 +55,54 @@
 
 | Item | Value |
 |---|---|
-| Test log | 20260819_101428_767337_test.log |
+| Test log | 20260819_111938_925902_test.log |
 | Important | None |
 
-## Local LLM analysis
+## Local LLM Analysis
 
 | Item | Value |
 |---|---|
-| Classification | No issues detected |
+| Classification | Pass |
 | Confidence | 1.00 |
 | Analyzer | ollama/deepseek-r1:7b |
-| working | on |
+| Status | enabled |
 
-### LLM Prompt
+### LLM Test Prompt
 
 analyze the test result and provide a detailed report with recommendations for improvement.
 
-### LLM Review
+### Test Result
 
 | Item | Value |
 |---|---|
-| Summary | Test passed with high accuracy, no anomalies detected. |
-| Failure analysis | Not applicable |
-| Source review | Not requested |
+| **Status** | PASS |
+| **Severity** | LOW |
+| **Warnings** | 0 |
+| **Needs Escalation** | OFF |
+
+### Test Summary
+
+| Item | Value |
+|---|---|
+| Summary | Pass |
+| Failure Analysis | No failures reported. |
+| Source Review | No source diffs provided. |
 | Warnings | None |
-| Needs escalation | off |
+| Recommendations | No recommendations for improvement. |
 
 ## Test History
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-19 | 11:19:38.925999+09:00 | [20260819_111938_925902](CT-UART-001__20260819_111938_925902.md) | 400bfc1 | main | PASS | 0.001 | local |
+| 2026-08-19 | 11:18:15.308635+09:00 | [20260819_111815_308538](CT-UART-001__20260819_111815_308538.md) | 29a88e2 | main | PASS | 0.001 | local |
+| 2026-08-19 | 11:15:19.090468+09:00 | [20260819_111519_090373](CT-UART-001__20260819_111519_090373.md) | 29a88e2 | main | PASS | 0.001 | local |
+| 2026-08-19 | 10:54:05.478118+09:00 | [20260819_105405_478022](CT-UART-001__20260819_105405_478022.md) | f47bfdf | main | PASS | 0.001 | local |
+| 2026-08-19 | 10:51:21.316157+09:00 | [20260819_105121_316069](CT-UART-001__20260819_105121_316069.md) | f47bfdf | main | PASS | 0.000 | local |
+| 2026-08-19 | 10:43:16.916163+09:00 | [20260819_104316_916071](CT-UART-001__20260819_104316_916071.md) | 6936260 | main | PASS | 0.000 | local |
+| 2026-08-19 | 10:29:18.438759+09:00 | [20260819_102918_438673](CT-UART-001__20260819_102918_438673.md) | 7407acd | main | PASS | 0.001 | local |
+| 2026-08-19 | 10:28:38.614497+09:00 | [20260819_102838_614398](CT-UART-001__20260819_102838_614398.md) | 7407acd | main | PASS | 0.000 | local |
+| 2026-08-19 | 10:25:18.505589+09:00 | [20260819_102518_505456](CT-UART-001__20260819_102518_505456.md) | 7407acd | main | PASS | 0.000 | local |
 | 2026-08-19 | 10:14:28.767429+09:00 | [20260819_101428_767337](CT-UART-001__20260819_101428_767337.md) | 87f0575 | main | PASS | 0.000 | local |
 | 2026-08-19 | 10:14:14.697074+09:00 | [20260819_101414_696980](CT-UART-001__20260819_101414_696980.md) | 87f0575 | main | PASS | 0.000 | local |
 | 2026-08-19 | 10:07:50.148596+09:00 | [20260819_100750_148492](CT-UART-001__20260819_100750_148492.md) | 8907224 | main | PASS | 0.001 | local |
