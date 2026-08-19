@@ -9,27 +9,32 @@
 | Environment | local |
 | Result | PASS |
 | Execution time | 0.001 seconds |
-| Execution date | 2026-08-19T11:19:42.661873+09:00 |
-| Execution ID | 20260819_111942_661774 |
+| Execution date | 2026-08-19T11:39:38.607711+09:00 |
+| Execution ID | 20260819_113938_607608 |
 
 ### Test configs
 
-| Item | Value |
+| Test Item | Value |
 |---|---|
+| Test ID | CT-NETWORK-001 |
 | Category | communication |
 | Fixture ID | FIXTURE-003 |
 | Fixture mode | mock |
-| Test mode | mock |
+
+<br/>
+
+| FIXTURE-003 | Value |
+|---|---|
+| Interface | Network |
 | Equipment | None |
 | Equipment mode | none |
-| Interface | Network |
 | Interface mode | mock |
 
 ### Test Source
 
 | Item | Value |
 |---|---|
-| Commit | 400bfc1fdbdaf4448fb16026e801d969a3081b55 |
+| Commit | 24d6fa5a4676cb4295318a88045843f0f021cb97 |
 | Branch | main |
 
 ### Measurement
@@ -52,15 +57,15 @@
 
 | Item | Value |
 |---|---|
-| Test log | 20260819_111942_661774_test.log |
+| Test log | 20260819_113938_607608_test.log |
 | Important | None |
 
 ## Local LLM Analysis
 
 | Item | Value |
 |---|---|
-| Classification | Pass |
-| Confidence | 0.95 |
+| Classification | pass |
+| Confidence | 1.00 |
 | Analyzer | ollama/deepseek-r1:7b |
 | Status | enabled |
 
@@ -81,7 +86,7 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Item | Value |
 |---|---|
-| Summary | The test for CT-NETWORK-001 (test_network_packet_loopback) has been executed successfully. All metrics indicate normal operation with 33 bytes transferred, 1 packet counted, and negligible latency and integrity issues. The test environment is set to local, using the fixture ID FIXTURE-003 with mock mode, which simulates the communication interface. No errors, warnings, or important logs were encountered during execution. The test source is from commit 400bfc1fdbdaf4448fb16026e801d969a3081b55 of branch main. No issues detected in this test, and no escalations are required. |
+| Summary | Test completed successfully with all expected results achieved. |
 | Failure Analysis | Not applicable |
 | Source Review | Not requested |
 | Warnings | None |
@@ -91,6 +96,8 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-19 | 11:39:38.607711+09:00 | [20260819_113938_607608](CT-NETWORK-001__20260819_113938_607608.md) | 24d6fa5 | main | PASS | 0.001 | local |
+| 2026-08-19 | 11:37:40.983296+09:00 | [20260819_113740_983208](CT-NETWORK-001__20260819_113740_983208.md) | 24d6fa5 | main | PASS | 0.000 | local |
 | 2026-08-19 | 11:19:42.661873+09:00 | [20260819_111942_661774](CT-NETWORK-001__20260819_111942_661774.md) | 400bfc1 | main | PASS | 0.001 | local |
 | 2026-08-19 | 11:18:15.404194+09:00 | [20260819_111815_404104](CT-NETWORK-001__20260819_111815_404104.md) | 29a88e2 | main | PASS | 0.000 | local |
 | 2026-08-19 | 11:15:19.185069+09:00 | [20260819_111519_184986](CT-NETWORK-001__20260819_111519_184986.md) | 29a88e2 | main | PASS | 0.000 | local |

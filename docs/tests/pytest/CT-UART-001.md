@@ -9,27 +9,32 @@
 | Environment | local |
 | Result | PASS |
 | Execution time | 0.001 seconds |
-| Execution date | 2026-08-19T11:19:38.925999+09:00 |
-| Execution ID | 20260819_111938_925902 |
+| Execution date | 2026-08-19T11:39:36.253319+09:00 |
+| Execution ID | 20260819_113936_253225 |
 
 ### Test configs
 
-| Item | Value |
+| Test Item | Value |
 |---|---|
+| Test ID | CT-UART-001 |
 | Category | timing |
 | Fixture ID | FIXTURE-001 |
 | Fixture mode | mock |
-| Test mode | mock |
+
+<br/>
+
+| FIXTURE-001 | Value |
+|---|---|
+| Interface | UART |
 | Equipment | Saleae |
 | Equipment mode | mock |
-| Interface | UART |
 | Interface mode | mock |
 
 ### Test Source
 
 | Item | Value |
 |---|---|
-| Commit | 400bfc1fdbdaf4448fb16026e801d969a3081b55 |
+| Commit | 24d6fa5a4676cb4295318a88045843f0f021cb97 |
 | Branch | main |
 
 ### Measurement
@@ -55,14 +60,14 @@
 
 | Item | Value |
 |---|---|
-| Test log | 20260819_111938_925902_test.log |
+| Test log | 20260819_113936_253225_test.log |
 | Important | None |
 
 ## Local LLM Analysis
 
 | Item | Value |
 |---|---|
-| Classification | Pass |
+| Classification | pass |
 | Confidence | 1.00 |
 | Analyzer | ollama/deepseek-r1:7b |
 | Status | enabled |
@@ -84,16 +89,18 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Item | Value |
 |---|---|
-| Summary | Pass |
-| Failure Analysis | No failures reported. |
-| Source Review | No source diffs provided. |
+| Summary | All test cases have passed. The UART timing test completed successfully with no errors or warnings. |
+| Failure Analysis | Not applicable |
+| Source Review | Not requested |
 | Warnings | None |
-| Recommendations | No recommendations for improvement. |
+| Recommendations | No recommendation provided. |
 
 ## Test History
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-19 | 11:39:36.253319+09:00 | [20260819_113936_253225](CT-UART-001__20260819_113936_253225.md) | 24d6fa5 | main | PASS | 0.001 | local |
+| 2026-08-19 | 11:37:40.885705+09:00 | [20260819_113740_885608](CT-UART-001__20260819_113740_885608.md) | 24d6fa5 | main | PASS | 0.003 | local |
 | 2026-08-19 | 11:19:38.925999+09:00 | [20260819_111938_925902](CT-UART-001__20260819_111938_925902.md) | 400bfc1 | main | PASS | 0.001 | local |
 | 2026-08-19 | 11:18:15.308635+09:00 | [20260819_111815_308538](CT-UART-001__20260819_111815_308538.md) | 29a88e2 | main | PASS | 0.001 | local |
 | 2026-08-19 | 11:15:19.090468+09:00 | [20260819_111519_090373](CT-UART-001__20260819_111519_090373.md) | 29a88e2 | main | PASS | 0.001 | local |

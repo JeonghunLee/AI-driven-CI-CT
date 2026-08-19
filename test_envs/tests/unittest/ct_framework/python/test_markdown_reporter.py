@@ -16,8 +16,16 @@ class MarkdownReporterTests(unittest.TestCase):
             0.2,
             description="UART timing",
             environment="test",
+            configuration={
+                "category": "timing",
+                "fixture_id": "FIXTURE-001",
+                "fixture_mode": "mock",
+            },
+            fixture_id="FIXTURE-001",
             equipment="Saleae",
+            equipment_mode="mock",
             interface="UART",
+            interface_mode="mock",
             metrics={"jitter": 0.001},
         )
         ResultStore(root).save(result)
@@ -43,7 +51,15 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertIn("| Commit |", text)
         self.assertIn("| Branch |", text)
         self.assertNotIn("## Test history", text)
-        self.assertIn("| Test mode | mock |", text)
+        self.assertIn("| Test Item | Value |", text)
+        self.assertIn("| Test ID | CT-MD-001 |", text)
+        self.assertIn("| Fixture ID | FIXTURE-001 |", text)
+        self.assertIn("<br/>", text)
+        self.assertIn("| FIXTURE-001 | Value |", text)
+        self.assertIn("| Interface | UART |", text)
+        self.assertIn("| Equipment | Saleae |", text)
+        self.assertIn("| Equipment mode | mock |", text)
+        self.assertIn("| Interface mode | mock |", text)
         self.assertIn("| Status | enabled |", text)
         self.assertIn("| **Status** | PASS |", text)
         self.assertIn("| **Severity** | LOW |", text)

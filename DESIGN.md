@@ -477,6 +477,16 @@ unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
 # <Test ID> Test Result
 ├── Test summary
 │   ├── Test configs
+│   │   ├── Test Item table
+│   │   │   ├── Test ID
+│   │   │   ├── Category
+│   │   │   ├── Fixture ID
+│   │   │   └── Fixture mode
+│   │   └── Fixture table
+│   │       ├── Interface
+│   │       ├── Equipment
+│   │       ├── Equipment mode
+│   │       └── Interface mode
 │   ├── Test Source
 │   ├── Measurement
 │   ├── Statistics

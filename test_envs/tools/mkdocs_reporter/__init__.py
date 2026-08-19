@@ -17,6 +17,11 @@ def _table(values: dict[str, Any]) -> str:
     return f"| Item | Value |\n|---|---|\n{rows or '| - | None |'}"
 
 
+def _named_table(name: Any, values: dict[str, Any]) -> str:
+    rows = "\n".join(f"| {_safe(key)} | {_safe(value)} |" for key, value in values.items())
+    return f"| {_safe(name)} | Value |\n|---|---|\n{rows or '| - | None |'}"
+
+
 def _warning_severity(warning_count: int) -> str:
     if warning_count >= 6:
         return "CRITICAL"
@@ -197,17 +202,24 @@ class MarkdownReporter:
                 "Execution ID": result.execution_id,
             }
         )
-        test_configs = _table(
+        fixture_id = result.configuration.get("fixture_id", result.fixture_id or "None")
+        test_configs = _named_table(
+            "Test Item",
             {
+                "Test ID": result.test_id,
                 "Category": result.configuration.get("category", result.category),
-                "Fixture ID": result.configuration.get("fixture_id", "None"),
+                "Fixture ID": fixture_id,
                 "Fixture mode": result.configuration.get("fixture_mode", result.test_mode),
-                "Test mode": result.test_mode,
+            },
+        )
+        fixture_configs = _named_table(
+            fixture_id,
+            {
+                "Interface": result.interface,
                 "Equipment": result.equipment,
                 "Equipment mode": result.equipment_mode,
-                "Interface": result.interface,
                 "Interface mode": result.interface_mode,
-            }
+            },
         )
         test_source = _table({"Commit": result.commit, "Branch": result.branch})
         measurements = _table(dict(result.metrics))
@@ -247,6 +259,10 @@ class MarkdownReporter:
 ### Test configs
 
 {test_configs}
+
+<br/>
+
+{fixture_configs}
 
 ### Test Source
 
