@@ -347,6 +347,50 @@ execute()
 
 ## 7. Test Execution Data
 
+### 7.1 Identifier Definitions
+
+| Identifier | Scope | Definition | Purpose | Format | Example |
+|---|---|---|---|---|---|
+| TEST ID | pytest only | `test_envs/tests/pytest/test_cases` definition | Test case identification | `CT-<TARGET>-<NNN>` | `CT-NETWORK-001` |
+| Execution ID | pytest, unittest | Execution result generation | Result delimiter | `YYYYMMDD_HHMMSS_ffffff` | `20260819_094832_960333` |
+
+| Runner | Primary key | TEST ID |
+|---|---|---|
+| pytest | `TEST ID + Execution ID` | Required |
+| unittest | `Execution ID` | Prohibited |
+
+| Artifact | Identifier rule | Search rule |
+|---|---|---|
+| Result JSON | Execution ID creation source | Execution ID |
+| Test log | Source Execution ID reuse | Execution ID |
+| Local LLM log | Source Execution ID reuse | Execution ID |
+| Markdown | Source Execution ID reuse | Execution ID |
+| Pandoc | Source Execution ID reuse | Execution ID |
+
+```text
+Execution ID
+├── Result JSON
+├── Test log
+├── Local LLM log
+├── Markdown
+└── Pandoc
+```
+
+```text
+Execution ID
+├── YYYYMMDD       # Asia/Seoul date
+├── HHMMSS         # Asia/Seoul time
+└── ffffff         # Microseconds
+```
+
+| Time field | Config source | Rule |
+|---|---|---|
+| Timezone name | `test_envs/configs/config.json` → `time.timezone` | `Asia/Seoul` |
+| UTC offset | `test_envs/configs/config.json` → `time.utc_offset_hours` | SeoulTime correction |
+| Date·Time | `configured_now()` | Config value required |
+
+### 7.2 Execution Artifacts
+
 ```text
 Test Execution
 ├── <execution-id>_result.json
@@ -371,18 +415,16 @@ Entry point: `python -m test_envs.tools.test_result`
 Input rule:
 
 ```text
-test_envs/reports/results/{pytest/test_cases,unittest}/*/*_result.json
-                                      │
-                                      ▼
-                              Maximum timestamp
+pytest   : test_envs/reports/results/pytest/test_cases/<test-id>/<execution-id>_result.json
+unittest : test_envs/reports/results/unittest/<execution-id>_result.json
 ```
 
 Execution rule:
 
 - Test re-execution: prohibited
-- Input: newest `<timestamp>_result.json`
+- Input: newest `<execution-id>_result.json`
 - Pending input: Execution ID without Markdown or MkDocs document
-- Logs: same TEST ID directory
+- Logs: same Execution ID location
 - Analysis: Local LLM or deterministic fallback
 - Canonical output: execution-specific Markdown
 - Duplicate latest output: none
@@ -404,12 +446,15 @@ Latest execution logs
 Local LLM Analysis
       │
       ▼
-test_envs/reports/markdown/<test-id>/<timestamp>_result.md
+pytest   : test_envs/reports/markdown/<test-id>/<execution-id>_result.md
+unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
       │
-      ├── test_envs/reports/pandoc/<test-id>/<timestamp>_result.<format>
-      └── docs/tests/{pytest,unittest}/  [--docs]
-          ├── <test-id>.md                    # Latest
-          └── <test-id>__<execution-id>.md    # Per execution
+      ├── test_envs/reports/pandoc/<test-id>/<execution-id>_result.<format>
+      ├── docs/tests/pytest/  [--docs]
+      │   ├── <test-id>.md
+      │   └── <test-id>__<execution-id>.md
+      └── docs/tests/unittest/  [--docs]
+          └── <execution-id>.md
       │
       ├── docs/tests/pytest/index.md           # Auto-generated pytest index
       └── docs/tests/unittest/index.md         # Auto-generated unittest index
@@ -438,7 +483,7 @@ test_envs/reports/markdown/<test-id>/<timestamp>_result.md
 |---|---|
 | Category | Latest `result.json` → `test_case.category` |
 | Mode | Latest `result.json` → `fixture_configs.test_mode` |
-| Executions | `docs/tests/<type>/<test-id>__<execution-id>.md` count |
+| Executions | `docs/tests/pytest/<test-id>__<execution-id>.md` count |
 
 ## 10. Local LLM Analysis
 
@@ -564,18 +609,19 @@ Local LLM
 
 | Output | Source | Destination |
 |---|---|---|
-| Canonical Markdown | Latest test execution | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` |
+| Canonical Markdown | Latest test execution | `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` |
 | Duplicate latest Markdown | None | None |
 | MkDocs latest page | Canonical Markdown | `docs/tests/{pytest,unittest}/<test-id>.md` |
-| MkDocs execution page | Canonical Markdown | `docs/tests/{pytest,unittest}/<test-id>__<execution-id>.md` |
+| pytest MkDocs execution | Canonical Markdown | `docs/tests/pytest/<test-id>__<execution-id>.md` |
+| unittest MkDocs execution | Canonical Markdown | `docs/tests/unittest/<execution-id>.md` |
 | Latest page history | Normalized TEST results | Date + Time + linked Execution ID + 7-character commit |
 | Execution page history | None | None |
 | MkDocs system index | System architecture | `docs/index.md` |
 | MkDocs pytest result index | Published pytest page scan | `docs/tests/pytest/index.md` |
 | MkDocs unittest result index | Published unittest page scan | `docs/tests/unittest/index.md` |
-| DOCX | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.docx` |
-| PDF | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.pdf` |
-| HTML | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.html` |
+| DOCX | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.docx` |
+| PDF | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.pdf` |
+| HTML | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.html` |
 
 ## 13. GitHub Automation
 
@@ -645,7 +691,7 @@ Excluded from GitHub Issue:
 │   │       └── common/
 │   ├── reports/
 │   │   ├── results/pytest/test_cases/<test-id>/
-│   │   ├── results/unittest/<test-id>/
+│   │   ├── results/unittest/<execution-id>_result.json
 │   │   ├── pandoc/<test-id>/
 │   │   └── markdown/<test-id>/
 │   └── tools/

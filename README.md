@@ -192,32 +192,74 @@ test_envs/configs/
 
 ## 결과 구조
 
+### ID 정의
+
+| Identifier | 적용 대상 | 정의 위치·시점 | 용도 | 형식 |
+|---|---|---|---|---|
+| TEST ID | pytest only | `test_envs/tests/pytest/test_cases` | Test case 식별 | `CT-<TARGET>-<NNN>` |
+| Execution ID | pytest, unittest | Execution result 생성 시점 | Result 구분자 | `YYYYMMDD_HHMMSS_ffffff` |
+
+| Runner | Primary key | TEST ID |
+|---|---|---|
+| pytest | `TEST ID + Execution ID` | Required |
+| unittest | `Execution ID` | Prohibited |
+
+```text
+20260819_094832_960333
+├── 20260819   # Asia/Seoul date
+├── 094832     # Asia/Seoul time
+└── 960333     # Microseconds
+```
+
+| Time field | 설정 | 처리 |
+|---|---|---|
+| Timezone | `config.json` → `time.timezone` | SeoulTime 이름 |
+| UTC offset | `config.json` → `time.utc_offset_hours` | SeoulTime 보정값 |
+| Date·Time | `configured_now()` | Config 값 적용 |
+| Microseconds | `%f` | 6자리 |
+
+| Artifact | ID 처리 | 검색 Key |
+|---|---|---|
+| Result JSON | Execution ID 생성 | Execution ID |
+| Test log | Execution ID 재사용 | Execution ID |
+| Local LLM log | Execution ID 재사용 | Execution ID |
+| Markdown | Execution ID 재사용 | Execution ID |
+| Pandoc | Execution ID 재사용 | Execution ID |
+
+```text
+Execution ID 검색
+├── Result JSON
+├── Test log
+├── Local LLM log
+├── Markdown
+└── Pandoc
+```
+
 ```text
 test_envs/reports/
 ├── results/
 │   ├── pytest/test_cases/<test-id>/
-│   │   ├── <timestamp>_result.json
-│   │   └── <timestamp>_test.log
-│   └── unittest/<test-id>/
-│       ├── <timestamp>_result.json
-│       └── <timestamp>_test.log
+│   │   ├── <execution-id>_result.json
+│   │   └── <execution-id>_test.log
+│   └── unittest/
+│       ├── <execution-id>_result.json
+│       └── <execution-id>_test.log
 ├── local_llm/
 │   └── <execution-id>_local_llm.log
 ├── pandoc/<test-id>/
-│   └── <timestamp>_result.{html,pdf,docx}
+│   └── <execution-id>_result.{html,pdf,docx}
 └── markdown/<test-id>/
-    └── <timestamp>_result.md
+    └── <execution-id>_result.md
 ```
 
 | Artifact | 역할 |
 |---|---|
-| `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` | Canonical human-readable result |
-| `<timestamp>_result.json` | Result, measurement, analysis, escalation |
-| `<timestamp>_test.log` | Test, stdout, stderr, equipment, interface log |
+| `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` | Canonical human-readable result |
+| `<execution-id>_result.json` | Result, measurement, analysis, escalation |
+| `<execution-id>_test.log` | Test, stdout, stderr, equipment, interface log |
 | `docs/tests/pytest/<test-id>.md` | Latest pytest page |
 | `docs/tests/pytest/<test-id>__<execution-id>.md` | pytest execution page |
-| `docs/tests/unittest/<test-id>.md` | Latest unittest page |
-| `docs/tests/unittest/<test-id>__<execution-id>.md` | unittest execution page |
+| `docs/tests/unittest/<execution-id>.md` | unittest execution page |
 
 ## Pandoc 변환
 

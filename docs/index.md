@@ -262,6 +262,49 @@ execute()
 
 ## 5. TEST Result Report 구조도
 
+### ID 정의
+
+| Identifier | Scope | Definition | Purpose | Format |
+|---|---|---|---|---|
+| TEST ID | pytest only | `test_envs/tests/pytest/test_cases` | Test case identification | `CT-<TARGET>-<NNN>` |
+| Execution ID | pytest, unittest | Execution result generation | Result delimiter | `YYYYMMDD_HHMMSS_ffffff` |
+
+| Runner | TEST ID | Execution ID |
+|---|---|---|
+| pytest | Required | Required |
+| unittest | Prohibited | Required |
+
+```text
+Execution ID: 20260819_094832_960333
+├── Date         20260819  [Asia/Seoul]
+├── Time         094832    [Asia/Seoul]
+└── Microseconds 960333
+```
+
+| Time field | Config source | Rule |
+|---|---|---|
+| Timezone | `test_envs/configs/config.json` → `time.timezone` | SeoulTime name |
+| UTC offset | `test_envs/configs/config.json` → `time.utc_offset_hours` | SeoulTime correction |
+| Date·Time | `configured_now()` | Config value application |
+| Microseconds | `%f` | 6 digits |
+
+| Output | Rule | Search key |
+|---|---|---|
+| Result JSON | Execution ID 생성 | Execution ID |
+| Test log | 동일 Execution ID | Execution ID |
+| Local LLM log | 동일 Execution ID | Execution ID |
+| Markdown | 동일 Execution ID | Execution ID |
+| Pandoc | 동일 Execution ID | Execution ID |
+
+```text
+Execution ID
+├── Result JSON
+├── Test log
+├── Local LLM log
+├── Markdown
+└── Pandoc
+```
+
 ### Data Flow
 
 ```mermaid
@@ -285,17 +328,17 @@ flowchart TD
 test_envs/reports/
 ├── results/
 │   ├── pytest/test_cases/<test-id>/
-│   │   ├── <timestamp>_result.json
-│   │   └── <timestamp>_test.log
-│   └── unittest/<test-id>/
-│       ├── <timestamp>_result.json
-│       └── <timestamp>_test.log
+│   │   ├── <execution-id>_result.json
+│   │   └── <execution-id>_test.log
+│   └── unittest/
+│       ├── <execution-id>_result.json
+│       └── <execution-id>_test.log
 ├── local_llm/
 │   └── <execution-id>_local_llm.log
 ├── pandoc/<test-id>/
-│   └── <timestamp>_result.{html,pdf,docx}
+│   └── <execution-id>_result.{html,pdf,docx}
 └── markdown/<test-id>/
-    └── <timestamp>_result.md
+    └── <execution-id>_result.md
 ```
 
 ### MkDocs Data
