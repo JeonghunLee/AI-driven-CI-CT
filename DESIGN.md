@@ -516,6 +516,12 @@ unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
 | Mode | Latest `result.json` → `fixture_configs.test_mode` |
 | Executions | `docs/tests/pytest/<test-id>__<execution-id>.md` count |
 
+| Recent Executions column | Source |
+|---|---|
+| Execution ID | Execution document link |
+| Category | Matching `result.json` → `test_case.category` |
+| Test ID | pytest TEST ID |
+
 ## 10. Local LLM Analysis
 
 | Component | Value |

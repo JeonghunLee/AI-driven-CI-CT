@@ -129,6 +129,11 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertIn("(CT-MD-HISTORY.md)", pytest_index)
         self.assertIn("20260101-000001", pytest_index)
         self.assertIn("20260101-000002", pytest_index)
+        self.assertIn("| Execution ID | Category | Test ID |", pytest_index)
+        self.assertIn(
+            "| [`20260101-000002`](CT-MD-HISTORY__20260101-000002.md) | timing | `CT-MD-HISTORY` |",
+            pytest_index,
+        )
         self.assertIn("# unittest Results", unittest_index)
         self.assertEqual(root_index.read_text(encoding="utf-8"), "# System Overview")
 

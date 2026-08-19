@@ -79,8 +79,15 @@ class MarkdownReporter:
         test_root = self.docs_root / "tests"
         ct_rows: list[str] = []
         unit_rows: list[str] = []
-        ct_execution_rows: list[tuple[str, str]] = []
+        ct_execution_rows: list[tuple[str, str, str, str]] = []
         unit_execution_rows: list[tuple[str, str]] = []
+        execution_categories: dict[tuple[str, str], str] = {}
+        for result_path in self.store.result_paths():
+            try:
+                stored_result = self.store.load(result_path)
+            except (ValueError, TypeError):
+                continue
+            execution_categories[(stored_result.test_id, stored_result.execution_id)] = stored_result.category
 
         for report_type in ("pytest", "unittest"):
             report_dir = test_root / report_type
@@ -90,9 +97,12 @@ class MarkdownReporter:
                     continue
                 link = path.name
                 if "__" in path.stem:
-                    execution_id = path.stem.split("__", 1)[1]
-                    target = unit_execution_rows if report_type == "unittest" else ct_execution_rows
-                    target.append((execution_id, link))
+                    test_id, execution_id = path.stem.split("__", 1)
+                    if report_type == "unittest":
+                        unit_execution_rows.append((execution_id, link))
+                    else:
+                        category = execution_categories.get((test_id, execution_id), "unknown")
+                        ct_execution_rows.append((execution_id, category, test_id, link))
                     continue
                 test_id = path.stem
                 count = len(list(report_dir.glob(f"{test_id}__*.md")))
@@ -112,9 +122,11 @@ class MarkdownReporter:
                     )
 
         ct_recent = "\n".join(
-            f"- [`{execution_id}`]({link})"
-            for execution_id, link in sorted(ct_execution_rows, key=lambda item: item[0], reverse=True)[:20]
-        ) or "- None"
+            f"| [`{_safe(execution_id)}`]({link}) | {_safe(category)} | `{_safe(test_id)}` |"
+            for execution_id, category, test_id, link in sorted(
+                ct_execution_rows, key=lambda item: item[0], reverse=True
+            )[:20]
+        ) or "| - | - | - |"
         unit_recent = "\n".join(
             f"- [`{execution_id}`]({link})"
             for execution_id, link in sorted(unit_execution_rows, key=lambda item: item[0], reverse=True)[:20]
@@ -129,6 +141,8 @@ class MarkdownReporter:
 
 ## Recent Executions
 
+| Execution ID | Category | Test ID |
+|---|---|---|
 {ct_recent}
 """
         unittest_index = f"""# unittest Results
