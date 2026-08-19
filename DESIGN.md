@@ -87,6 +87,13 @@ Source: `.vscode/launch.json`
 | 4 | `CHECK 1: Refresh Environment Check File` | Task delegation | `preLaunchTask` | Environment check |
 | 5 | `Run 3: Extension Module` | `.venv` Python | `test_envs.tools.extension_runner` | Future module execution |
 | 6 | `Test Result: Generate Pending Markdown` | `.venv` Python | `test_envs.tools.test_result --pending --docs` | Missing Execution ID analysis, Markdown generation |
+
+| Pending progress | Format |
+|---|---|
+| Running | `[current/total] RUNNING <seconds>s <TEST-ID> / <Execution-ID>` |
+| Complete | `[current/total] COMPLETE <seconds>s <TEST-ID> / <Execution-ID>` |
+| Error | `[current/total] ERROR <seconds>s <TEST-ID> / <Execution-ID>` |
+| Interval | `1 second` |
 | 7 | `Debug: Current Python File` | `.venv` Python | Current file | Application/tool debugging |
 | 8 | `Debug: Current pytest File` | `.venv` Python | pytest current file | Test debugging |
 

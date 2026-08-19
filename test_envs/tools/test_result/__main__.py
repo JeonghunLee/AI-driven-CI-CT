@@ -13,8 +13,15 @@ def main() -> None:
     parser.add_argument("--source-review", action="store_true")
     parser.add_argument("--model", help="Override test_envs/configs/config.json for this report")
     args = parser.parse_args()
-    generator = generate_pending_markdown if args.pending else generate_latest_markdown
-    output = generator(args.docs, args.source_review, args.model)
+    if args.pending:
+        output = generate_pending_markdown(
+            args.docs,
+            args.source_review,
+            args.model,
+            show_progress=True,
+        )
+    else:
+        output = generate_latest_markdown(args.docs, args.source_review, args.model)
     print(json.dumps(output, indent=2, ensure_ascii=False))
 
 

@@ -1,8 +1,10 @@
+import io
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 
 from test_envs.tools.result_normalizer import ResultRecord, ResultStore
-from test_envs.tools.test_result import pending_result_paths, publish_latest
+from test_envs.tools.test_result import _run_with_progress, pending_result_paths, publish_latest
 
 
 class LatestResultTests(unittest.TestCase):
@@ -34,6 +36,20 @@ class LatestResultTests(unittest.TestCase):
             pending_result_paths(publish_docs=True, store=store, docs_root=docs),
             [complete_path, missing_path],
         )
+
+    def test_pending_progress_prints_numeric_state(self) -> None:
+        output = io.StringIO()
+        with redirect_stdout(output):
+            result = _run_with_progress(
+                lambda: {"status": "ok"},
+                index=2,
+                total=3,
+                test_id="CT-PROGRESS-001",
+                execution_id="20260819_100000_000001",
+            )
+        self.assertEqual(result, {"status": "ok"})
+        self.assertIn("[2/3] RUNNING 000s", output.getvalue())
+        self.assertIn("[2/3] COMPLETE 000s", output.getvalue())
 
 
 if __name__ == "__main__":

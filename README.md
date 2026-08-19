@@ -115,6 +115,13 @@ python -m test_envs.tools.environment_setup python --platform config
 | MkDocs publish | `python -m test_envs.tools.test_result --pending --docs` |
 | Source review | `python -m test_envs.tools.test_result --pending --docs --source-review` |
 
+| Pending status | Output |
+|---|---|
+| Running | `[1/5] RUNNING 003s <TEST-ID> / <Execution-ID>` |
+| Complete | `[1/5] COMPLETE 008s <TEST-ID> / <Execution-ID>` |
+| Error | `[1/5] ERROR 008s <TEST-ID> / <Execution-ID>` |
+| Interval | `1 second` |
+
 ## Configuration
 
 ```text
