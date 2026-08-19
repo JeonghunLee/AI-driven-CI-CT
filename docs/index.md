@@ -1,35 +1,36 @@
 # AI-driven Continuous Testing
 
-## 문서 구성
+## Documents
 
-| 구분 | 문서 | 구성 |
+| Scope | Document | Components |
 |---|---|---|
-| 환경 구성 | [Open](environment.md) | Python, Ollama, VS Code, OS, Config |
-| 동작 구성 | [Open](operation.md) | TEST, Fixture, Result, Local LLM, Report |
-| pytest | [Open](pytest.md) | pytest 실행·Fixture mode |
-| pytest HIL / Mock | [Open](hil_mock.md) | pytest 전용 mode·CLI override·HIL gate |
-| unittest | [Open](unittest.md) | unittest 실행 |
-| pytest Results | [Open](tests/pytest/index.md) | TEST ID·Execution history |
-| unittest Results | [Open](tests/unittest/index.md) | Execution history |
+| Environment | [environment.md](environment.md) | Python, Ollama, VS Code, OS, Config |
+| Pytest Operation | [pytest_operation.md](pytest_operation.md) | TEST ID, Fixture, Mock/HIL, Local LLM |
+| Unittest Operation | [unittest_operation.md](unittest_operation.md) | Function, Execution ID, Result, Markdown |
+| Pytest | [pytest.md](pytest.md) | Test cases, Fixture mapping |
+| Pytest HIL / Mock | [hil_mock.md](hil_mock.md) | Mode, CLI override, HIL gate |
+| Unittest | [unittest.md](unittest.md) | Function result contract |
+| Pytest Results | [tests/pytest/index.md](tests/pytest/index.md) | TEST ID, Execution history |
+| Unittest Results | [tests/unittest/index.md](tests/unittest/index.md) | Function count, Execution history |
 
-## 시스템 구성
+## Flow
 
 ```mermaid
 flowchart LR
-    A[Environment] --> B[Operation]
-    B --> C[pytest]
-    B --> D[unittest]
-    C --> E[Result]
-    D --> E
-    E --> F[Local LLM]
-    F --> G[Markdown]
-    G --> H[MkDocs]
-    G --> I[Pandoc]
+    A[Environment] --> B[Pytest Operation]
+    A --> C[Unittest Operation]
+    B --> D[Pytest Result]
+    C --> E[Unittest Result]
+    D --> F[Local LLM]
+    F --> G[Pytest Markdown]
+    E --> H[Unittest Markdown]
+    G --> I[MkDocs]
+    H --> I
 ```
 
-## 핵심 경로
+## Paths
 
-| 구분 | 경로 |
+| Scope | Path |
 |---|---|
 | Project config | `test_envs/configs/config.json` |
 | Environment check | `test_envs/configs/check.json` |
@@ -42,7 +43,14 @@ flowchart LR
 
 ## Identifier
 
-| Identifier | Scope | Definition | Format |
-|---|---|---|---|
-| TEST ID | pytest only | `test_envs/tests/pytest/test_cases` | `CT-<TARGET>-<NNN>` |
-| Execution ID | pytest, unittest | Result delimiter·search key | `YYYYMMDD_HHMMSS_ffffff` |
+| Identifier | pytest | unittest | Format |
+|---|---:|---:|---|
+| TEST ID | O | X | `CT-<TARGET>-<NNN>` |
+| Execution ID | O | O | `YYYYMMDD_HHMMSS_ffffff` |
+
+## Local LLM
+
+| Runner | Usage |
+|---|---:|
+| pytest | O |
+| unittest | X |

@@ -12,7 +12,9 @@ nav:
   - Overview: index.md
   - Getting Started:
     - Environment: environment.md
-    - Operation: operation.md  
+  - TEST Operation:       
+    - Pytest: pytest_operation.md 
+    - Unittest: unittest_operation.md
   - TEST Framework:
     - Pytest: pytest.md
     - Unittest: unittest.md

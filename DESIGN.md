@@ -707,7 +707,8 @@ Local LLM
 | Execution page history | None | None |
 | MkDocs index | Document links·system summary | `docs/index.md` |
 | Environment document | Python·Ollama·VS Code | `docs/environment.md` |
-| Operation document | TEST·Result·Local LLM·Report | `docs/operation.md` |
+| Pytest operation document | TEST ID·Fixture·Local LLM·Report | `docs/pytest_operation.md` |
+| Unittest operation document | Function·Execution ID·Result·Report | `docs/unittest_operation.md` |
 | pytest mode document | HIL·Mock·CLI override·HIL gate | `docs/hil_mock.md` |
 | MkDocs pytest result index | Published pytest page scan | `docs/tests/pytest/index.md` |
 | MkDocs unittest result index | Published unittest page scan | `docs/tests/unittest/index.md` |
@@ -764,7 +765,8 @@ Excluded from GitHub Issue:
 ├── docs/
 │   ├── index.md                     # Manual system overview
 │   ├── environment.md               # Environment configuration
-│   ├── operation.md                 # Operation configuration
+│   ├── pytest_operation.md          # Pytest operation
+│   ├── unittest_operation.md        # Unittest operation
 │   ├── pytest.md                    # pytest system description
 │   ├── hil_mock.md                  # pytest HIL / Mock
 │   ├── unittest.md                  # unittest system description
