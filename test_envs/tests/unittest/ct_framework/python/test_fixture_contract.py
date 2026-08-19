@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
-from test_envs.tests.pytest.conftest import effective_fixture_mode
+from test_envs.tests.pytest.conftest import effective_fixture_mode, fixture_registry
 
 
 TEST_MODULES = (
@@ -15,7 +15,7 @@ TEST_MODULES = (
 
 class FixtureContractTests(unittest.TestCase):
     def test_cli_fixture_mode_overrides_marker(self) -> None:
-        marker = SimpleNamespace(kwargs={"fixture_mode": "mock"})
+        marker = SimpleNamespace(kwargs={"fixture_id": "FIXTURE-001", "fixture_mode": "mock"})
         request = SimpleNamespace(
             config=SimpleNamespace(getoption=lambda name: "hil"),
             node=SimpleNamespace(get_closest_marker=lambda name: marker),
@@ -23,7 +23,7 @@ class FixtureContractTests(unittest.TestCase):
         self.assertEqual(effective_fixture_mode(request), "hil")
 
     def test_marker_fixture_mode_is_default(self) -> None:
-        marker = SimpleNamespace(kwargs={"fixture_mode": "mock"})
+        marker = SimpleNamespace(kwargs={"fixture_id": "FIXTURE-001", "fixture_mode": "mock"})
         request = SimpleNamespace(
             config=SimpleNamespace(getoption=lambda name: "marker"),
             node=SimpleNamespace(get_closest_marker=lambda name: marker),
@@ -45,11 +45,26 @@ class FixtureContractTests(unittest.TestCase):
             marker = next(item for item in markers if item.name == "ct")
             self.assertEqual(marker.kwargs["fixture_mode"], "mock")
             self.assertIn(marker.kwargs["category"], {"communication", "timing"})
+            self.assertNotIn("interface", marker.kwargs)
+            self.assertNotIn("equipment", marker.kwargs)
+            self.assertIn("test_prompt", marker.kwargs)
             test_ids.add(marker.kwargs["test_id"])
             fixture_ids.add(marker.kwargs["fixture_id"])
 
         self.assertEqual(test_ids, {"CT-UART-001", "CT-USB-001", "CT-NETWORK-001"})
         self.assertEqual(fixture_ids, {"FIXTURE-001", "FIXTURE-002", "FIXTURE-003"})
+
+    def test_fixture_meta_defines_tools_and_modes(self) -> None:
+        registry = fixture_registry()
+        self.assertEqual(registry["FIXTURE-001"]["interfaces"], ["UART"])
+        self.assertEqual(registry["FIXTURE-001"]["equipments"], ["Saleae"])
+        self.assertEqual(registry["FIXTURE-002"]["interfaces"], ["USB"])
+        self.assertEqual(registry["FIXTURE-002"]["equipments"], ["Digilent"])
+        self.assertEqual(registry["FIXTURE-003"]["interfaces"], ["Network"])
+        self.assertEqual(registry["FIXTURE-003"]["equipments"], [])
+        for meta in registry.values():
+            self.assertIsInstance(meta["modes"]["mock"]["enabled"], bool)
+            self.assertIsInstance(meta["modes"]["hil"]["enabled"], bool)
 
     def test_test_cases_import_pytest_fixtures(self) -> None:
         expected = {

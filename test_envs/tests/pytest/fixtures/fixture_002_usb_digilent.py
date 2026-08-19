@@ -7,6 +7,16 @@ from test_envs.tests.pytest.conftest import effective_fixture_mode
 from test_envs.tests.pytest.test_equipments.digilent.mock import MockDigilentController
 from test_envs.tests.pytest.test_interfaces.usb.mock import MockUSBInterface
 
+FIXTURE_META = {
+    "fixture_id": "FIXTURE-002",
+    "interfaces": ["USB"],
+    "equipments": ["Digilent"],
+    "modes": {
+        "mock": {"enabled": True},
+        "hil": {"enabled": True},
+    },
+}
+
 
 @dataclass(frozen=True)
 class Fixture002:

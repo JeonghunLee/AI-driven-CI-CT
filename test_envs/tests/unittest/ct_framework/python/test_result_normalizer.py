@@ -45,16 +45,22 @@ class ResultNormalizerTests(unittest.TestCase):
             "PASS",
             "functional",
             0.1,
+            fixture_id="FIXTURE-004",
             test_mode="hil",
-            interface="JTAG",
+            interfaces=("JTAG",),
             interface_mode="hil",
-            equipment="FPGA",
+            equipments=("FPGA",),
             equipment_mode="hil",
+            modes={"mock": {"enabled": True}, "hil": {"enabled": True}},
         )
         fixture_configs = result.to_dict()["fixture_configs"]
         self.assertEqual(fixture_configs["test_mode"], "hil")
         self.assertEqual(fixture_configs["interface_mode"], "hil")
         self.assertEqual(fixture_configs["equipment_mode"], "hil")
+        self.assertEqual(fixture_configs["fixture_id"], "FIXTURE-004")
+        self.assertEqual(fixture_configs["interfaces"], ["JTAG"])
+        self.assertEqual(fixture_configs["equipments"], ["FPGA"])
+        self.assertTrue(fixture_configs["modes"]["hil"]["enabled"])
 
     def test_junit_normalization(self) -> None:
         record = from_junit("test_envs/tests/fixtures/junit.xml", "UNIT-SAMPLE")

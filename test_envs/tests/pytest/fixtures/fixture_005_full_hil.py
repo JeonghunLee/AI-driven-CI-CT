@@ -3,6 +3,16 @@ from dataclasses import dataclass
 
 import pytest
 
+FIXTURE_META = {
+    "fixture_id": "FIXTURE-005",
+    "interfaces": [],
+    "equipments": [],
+    "modes": {
+        "mock": {"enabled": False},
+        "hil": {"enabled": True},
+    },
+}
+
 
 @dataclass(frozen=True)
 class FullHILContext:

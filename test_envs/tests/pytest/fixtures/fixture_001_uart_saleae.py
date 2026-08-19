@@ -7,6 +7,16 @@ from test_envs.tests.pytest.conftest import effective_fixture_mode
 from test_envs.tests.pytest.test_equipments.saleae.mock import MockSaleaeController
 from test_envs.tests.pytest.test_interfaces.uart.mock import MockUARTInterface
 
+FIXTURE_META = {
+    "fixture_id": "FIXTURE-001",
+    "interfaces": ["UART"],
+    "equipments": ["Saleae"],
+    "modes": {
+        "mock": {"enabled": True},
+        "hil": {"enabled": True},
+    },
+}
+
 
 @dataclass(frozen=True)
 class Fixture001:

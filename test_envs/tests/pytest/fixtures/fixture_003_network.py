@@ -6,6 +6,16 @@ import pytest
 from test_envs.tests.pytest.conftest import effective_fixture_mode
 from test_envs.tests.pytest.test_interfaces.network.mock import MockNetworkInterface
 
+FIXTURE_META = {
+    "fixture_id": "FIXTURE-003",
+    "interfaces": ["Network"],
+    "equipments": [],
+    "modes": {
+        "mock": {"enabled": True},
+        "hil": {"enabled": True},
+    },
+}
+
 
 @dataclass(frozen=True)
 class Fixture003:

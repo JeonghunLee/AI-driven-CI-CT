@@ -1,13 +1,58 @@
 from __future__ import annotations
 
 import os
+import importlib
+import pkgutil
 from dataclasses import dataclass, field
+from functools import lru_cache
+from pathlib import Path
 from time import perf_counter
-from typing import Any
+from typing import Any, Mapping
 
 import pytest
 
 from test_envs.tools.result_normalizer import ResultRecord, ResultStore
+
+
+@lru_cache(maxsize=1)
+def fixture_registry() -> dict[str, Mapping[str, Any]]:
+    package_name = "test_envs.tests.pytest.fixtures"
+    fixtures_path = Path(__file__).parent / "fixtures"
+    registry: dict[str, Mapping[str, Any]] = {}
+    for module_info in pkgutil.iter_modules([str(fixtures_path)]):
+        if not module_info.name.startswith("fixture_"):
+            continue
+        module = importlib.import_module(f"{package_name}.{module_info.name}")
+        meta = getattr(module, "FIXTURE_META", None)
+        if not isinstance(meta, dict):
+            raise ValueError(f"{module_info.name}: FIXTURE_META is required")
+        fixture_id = meta.get("fixture_id")
+        interfaces = meta.get("interfaces")
+        equipments = meta.get("equipments")
+        modes = meta.get("modes")
+        if not isinstance(fixture_id, str) or not fixture_id:
+            raise ValueError(f"{module_info.name}: invalid fixture_id")
+        if fixture_id in registry:
+            raise ValueError(f"duplicate fixture_id: {fixture_id}")
+        if not isinstance(interfaces, list) or not all(isinstance(value, str) for value in interfaces):
+            raise ValueError(f"{fixture_id}: interfaces must be list[str]")
+        if not isinstance(equipments, list) or not all(isinstance(value, str) for value in equipments):
+            raise ValueError(f"{fixture_id}: equipments must be list[str]")
+        if not isinstance(modes, dict):
+            raise ValueError(f"{fixture_id}: modes must be a mapping")
+        for mode in ("mock", "hil"):
+            settings = modes.get(mode)
+            if not isinstance(settings, dict) or not isinstance(settings.get("enabled"), bool):
+                raise ValueError(f"{fixture_id}: modes.{mode}.enabled must be bool")
+        registry[fixture_id] = meta
+    return registry
+
+
+def fixture_meta(fixture_id: str) -> Mapping[str, Any]:
+    try:
+        return fixture_registry()[fixture_id]
+    except KeyError as error:
+        raise ValueError(f"unknown fixture_id: {fixture_id}") from error
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
@@ -23,12 +68,18 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 
 def effective_fixture_mode(request: pytest.FixtureRequest) -> str:
     override = request.config.getoption("--fixture-mode")
-    if override in {"mock", "hil"}:
-        return override
     marker = request.node.get_closest_marker("ct")
     if marker is None:
         raise RuntimeError("Fixture mode requires @pytest.mark.ct")
-    return str(marker.kwargs["fixture_mode"])
+    mode = str(override if override in {"mock", "hil"} else marker.kwargs["fixture_mode"])
+    fixture_id = str(marker.kwargs["fixture_id"])
+    try:
+        enabled = fixture_meta(fixture_id)["modes"][mode]["enabled"]
+    except (KeyError, TypeError, ValueError) as error:
+        raise RuntimeError(f"Invalid fixture metadata for {fixture_id}: {error}") from error
+    if not enabled:
+        raise RuntimeError(f"{fixture_id} does not enable {mode} mode")
+    return mode
 
 
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
@@ -52,13 +103,27 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
             if len(name_parts) == 4 and name_parts[:2] == ["test", "fixture"]
             else None
         )
-        if marker.kwargs["fixture_id"] != expected_fixture_id:
+        fixture_id = marker.kwargs["fixture_id"]
+        if fixture_id != expected_fixture_id:
             raise pytest.UsageError(
                 f"Fixture ID mismatch for {item.nodeid}: "
                 f"{marker.kwargs['fixture_id']} != {expected_fixture_id}"
             )
+        expected_fixture_name = f"fixture_{name_parts[2]}" if expected_fixture_id else None
+        if expected_fixture_name not in item.fixturenames:
+            raise pytest.UsageError(
+                f"Fixture import mismatch for {item.nodeid}: {expected_fixture_name} is required"
+            )
         if marker.kwargs["fixture_mode"] not in {"mock", "hil"}:
             raise pytest.UsageError(f"Invalid fixture_mode for {test_id}: {marker.kwargs['fixture_mode']}")
+        try:
+            meta = fixture_meta(str(fixture_id))
+        except ValueError as error:
+            raise pytest.UsageError(str(error)) from error
+        if not meta["modes"][marker.kwargs["fixture_mode"]]["enabled"]:
+            raise pytest.UsageError(
+                f"{fixture_id} does not enable {marker.kwargs['fixture_mode']} mode"
+            )
         ct_items[test_id] = item
 
     selected_test_id = config.getoption("--test-id", default=None)
@@ -98,7 +163,9 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
         status = "SKIP"
     values = marker.kwargs
     test_mode = effective_fixture_mode(request)
-    equipment = values.get("equipment", "None")
+    meta = fixture_meta(str(values["fixture_id"]))
+    interfaces = tuple(meta["interfaces"])
+    equipments = tuple(meta["equipments"])
     result = ResultRecord(
         test_id=test_id,
         status=status,
@@ -107,11 +174,13 @@ def ct_result(request: pytest.FixtureRequest) -> CTResultRecorder:
         description=values.get("description", request.node.name),
         environment="github_local_runner" if os.getenv("GITHUB_ACTIONS") == "true" else "local",
         configuration={key: value for key, value in values.items() if key not in {"test_id", "description"}},
+        fixture_id=str(meta["fixture_id"]),
         test_mode=test_mode,
-        interface=values.get("interface", "None"),
+        interfaces=interfaces,
         interface_mode=test_mode,
-        equipment=equipment,
-        equipment_mode=test_mode if equipment != "None" else "none",
+        equipments=equipments,
+        equipment_mode=test_mode if equipments else "none",
+        modes=meta["modes"],
         runner=os.getenv("RUNNER_NAME", "local"),
         metrics=recorder.metrics,
         statistics=recorder.statistics,

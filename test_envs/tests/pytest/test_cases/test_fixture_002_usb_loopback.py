@@ -9,8 +9,6 @@ from test_envs.tests.pytest.fixtures.fixture_002_usb_digilent import Fixture002,
     category="communication",
     fixture_id="FIXTURE-002",
     fixture_mode="mock",
-    interface="USB",
-    equipment="Digilent",
     test_prompt="",
 )
 def test_usb_bulk_loopback(

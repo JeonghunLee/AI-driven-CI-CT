@@ -9,8 +9,6 @@ from test_envs.tests.pytest.fixtures.fixture_001_uart_saleae import Fixture001, 
     category="timing",
     fixture_id="FIXTURE-001",
     fixture_mode="mock",
-    interface="UART",
-    equipment="Saleae",
     test_prompt="",
 )
 def test_uart_timing(

@@ -56,11 +56,15 @@ class ResultRecord:
     description: str = "Automated test execution"
     environment: str = "local"
     configuration: Mapping[str, Any] = field(default_factory=dict)
+    fixture_id: str = ""
     test_mode: str = "mock"
     interface: str = "None"
+    interfaces: tuple[str, ...] = ()
     interface_mode: str = "none"
     equipment: str = "None"
+    equipments: tuple[str, ...] = ()
     equipment_mode: str = "none"
+    modes: Mapping[str, Any] = field(default_factory=dict)
     commit: str = field(default_factory=_commit)
     branch: str = field(default_factory=_branch)
     runner: str = "local"
@@ -78,6 +82,10 @@ class ResultRecord:
             raise ValueError("test_id must be a non-empty identifier without spaces")
         if self.duration < 0:
             raise ValueError("duration cannot be negative")
+        self.interfaces = tuple(self.interfaces) or (() if self.interface == "None" else (self.interface,))
+        self.equipments = tuple(self.equipments) or (() if self.equipment == "None" else (self.equipment,))
+        self.interface = ", ".join(self.interfaces) or "None"
+        self.equipment = ", ".join(self.equipments) or "None"
         for name in ("test_mode", "interface_mode", "equipment_mode"):
             value = getattr(self, name)
             if value not in {"mock", "hil", "none"}:
@@ -95,11 +103,13 @@ class ResultRecord:
             },
             "test_configs": dict(self.configuration),
             "fixture_configs": {
+                "fixture_id": self.fixture_id,
                 "test_mode": self.test_mode,
                 "interface_mode": self.interface_mode,
                 "equipment_mode": self.equipment_mode,
-                "interface": self.interface,
-                "equipment": self.equipment,
+                "interfaces": list(self.interfaces),
+                "equipments": list(self.equipments),
+                "modes": dict(self.modes),
             },
             "test_src": {
                 "commit": self.commit,
