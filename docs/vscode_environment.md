@@ -31,6 +31,13 @@ pytest adapter
 
 ## Testing
 
+<br/>
+
+![](./imgs/vscode_testing_00.png)  
+
+<br/>
+
+
 ### Adapter
 
 | Item | Value |
