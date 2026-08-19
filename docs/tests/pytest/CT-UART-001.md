@@ -9,8 +9,8 @@
 | Environment | local |
 | Result | PASS |
 | Execution time | 0.001 seconds |
-| Execution date | 2026-08-19T11:54:40.248089+09:00 |
-| Execution ID | 20260819_115440_247993 |
+| Execution date | 2026-08-19T13:13:27.079598+09:00 |
+| Execution ID | 20260819_131327_079505 |
 
 ### Test configs
 
@@ -34,7 +34,7 @@
 
 | Item | Value |
 |---|---|
-| Commit | 586c4796f0ade0165d217e53f4afb4a6def79c48 |
+| Commit | cc8ada2548e4434a028b7c069421a6332aa55e18 |
 | Branch | main |
 
 ### Measurement
@@ -60,7 +60,7 @@
 
 | Item | Value |
 |---|---|
-| Test log | 20260819_115440_247993_test.log |
+| Test log | 20260819_131327_079505_test.log |
 | Important | None |
 
 ## Local LLM Analysis
@@ -89,7 +89,7 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Item | Value |
 |---|---|
-| Summary | The test for CT-UART-001 was executed successfully with no errors. The measured baudrate of 921596.667 is very close to the expected 921600, indicating minimal timing errors. The jitter of 0.000217 is also within acceptable limits, suggesting that the UART interface is functioning reliably under the test conditions. |
+| Summary | All tests passed with no errors or warnings, indicating the UART interface is functioning as expected. |
 | Failure Analysis | Not applicable |
 | Source Review | Not requested |
 | Warnings | None |
@@ -99,6 +99,13 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-19 | 13:13:27.079598+09:00 | [20260819_131327_079505](CT-UART-001__20260819_131327_079505.md) | cc8ada2 | main | PASS | 0.001 | local |
+| 2026-08-19 | 13:10:20.777006+09:00 | [20260819_131020_776904](CT-UART-001__20260819_131020_776904.md) | 1c7e296 | main | PASS | 0.001 | local |
+| 2026-08-19 | 13:09:34.683434+09:00 | [20260819_130934_683338](CT-UART-001__20260819_130934_683338.md) | 1c7e296 | main | PASS | 0.000 | local |
+| 2026-08-19 | 13:09:23.008104+09:00 | [20260819_130923_007816](CT-UART-001__20260819_130923_007816.md) | 1c7e296 | main | PASS | 0.001 | local |
+| 2026-08-19 | 13:08:25.278821+09:00 | [20260819_130825_278704](CT-UART-001__20260819_130825_278704.md) | 1c7e296 | main | PASS | 0.001 | local |
+| 2026-08-19 | 12:55:45.452197+09:00 | [20260819_125545_452110](CT-UART-001__20260819_125545_452110.md) | e96a91c | main | PASS | 0.000 | local |
+| 2026-08-19 | 12:01:02.551686+09:00 | [20260819_120102_551598](CT-UART-001__20260819_120102_551598.md) | 88ab0c8 | main | PASS | 0.000 | local |
 | 2026-08-19 | 11:54:40.248089+09:00 | [20260819_115440_247993](CT-UART-001__20260819_115440_247993.md) | 586c479 | main | PASS | 0.001 | local |
 | 2026-08-19 | 11:52:47.062387+09:00 | [20260819_115247_062252](CT-UART-001__20260819_115247_062252.md) | fa75366 | main | PASS | 0.001 | local |
 | 2026-08-19 | 11:39:36.253319+09:00 | [20260819_113936_253225](CT-UART-001__20260819_113936_253225.md) | 24d6fa5 | main | PASS | 0.001 | local |

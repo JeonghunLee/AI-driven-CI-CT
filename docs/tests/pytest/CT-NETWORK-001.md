@@ -9,8 +9,8 @@
 | Environment | local |
 | Result | PASS |
 | Execution time | 0.000 seconds |
-| Execution date | 2026-08-19T11:54:42.169502+09:00 |
-| Execution ID | 20260819_115442_169378 |
+| Execution date | 2026-08-19T13:13:27.175544+09:00 |
+| Execution ID | 20260819_131327_175412 |
 
 ### Test configs
 
@@ -34,7 +34,7 @@
 
 | Item | Value |
 |---|---|
-| Commit | 586c4796f0ade0165d217e53f4afb4a6def79c48 |
+| Commit | cc8ada2548e4434a028b7c069421a6332aa55e18 |
 | Branch | main |
 
 ### Measurement
@@ -57,7 +57,7 @@
 
 | Item | Value |
 |---|---|
-| Test log | 20260819_115442_169378_test.log |
+| Test log | 20260819_131327_175412_test.log |
 | Important | None |
 
 ## Local LLM Analysis
@@ -65,7 +65,7 @@
 | Item | Value |
 |---|---|
 | Classification | info |
-| Confidence | 1.00 |
+| Confidence | 0.95 |
 | Analyzer | ollama/deepseek-r1:7b |
 | Status | enabled |
 
@@ -86,7 +86,7 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Item | Value |
 |---|---|
-| Summary | Test passed successfully without any issues. |
+| Summary | All tests completed successfully with no errors or warnings. |
 | Failure Analysis | Not applicable |
 | Source Review | Not requested |
 | Warnings | None |
@@ -96,6 +96,13 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-08-19 | 13:13:27.175544+09:00 | [20260819_131327_175412](CT-NETWORK-001__20260819_131327_175412.md) | cc8ada2 | main | PASS | 0.000 | local |
+| 2026-08-19 | 13:10:20.878323+09:00 | [20260819_131020_878225](CT-NETWORK-001__20260819_131020_878225.md) | 1c7e296 | main | PASS | 0.000 | local |
+| 2026-08-19 | 13:09:34.783969+09:00 | [20260819_130934_783882](CT-NETWORK-001__20260819_130934_783882.md) | 1c7e296 | main | PASS | 0.000 | local |
+| 2026-08-19 | 13:09:23.114686+09:00 | [20260819_130923_114601](CT-NETWORK-001__20260819_130923_114601.md) | 1c7e296 | main | PASS | 0.000 | local |
+| 2026-08-19 | 13:08:25.369744+09:00 | [20260819_130825_369657](CT-NETWORK-001__20260819_130825_369657.md) | 1c7e296 | main | PASS | 0.000 | local |
+| 2026-08-19 | 12:55:45.542606+09:00 | [20260819_125545_542521](CT-NETWORK-001__20260819_125545_542521.md) | e96a91c | main | PASS | 0.000 | local |
+| 2026-08-19 | 12:01:02.636413+09:00 | [20260819_120102_636338](CT-NETWORK-001__20260819_120102_636338.md) | 88ab0c8 | main | PASS | 0.000 | local |
 | 2026-08-19 | 11:54:42.169502+09:00 | [20260819_115442_169378](CT-NETWORK-001__20260819_115442_169378.md) | 586c479 | main | PASS | 0.000 | local |
 | 2026-08-19 | 11:52:47.166482+09:00 | [20260819_115247_166387](CT-NETWORK-001__20260819_115247_166387.md) | fa75366 | main | PASS | 0.000 | local |
 | 2026-08-19 | 11:39:38.607711+09:00 | [20260819_113938_607608](CT-NETWORK-001__20260819_113938_607608.md) | 24d6fa5 | main | PASS | 0.001 | local |
