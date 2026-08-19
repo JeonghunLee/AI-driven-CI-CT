@@ -2,11 +2,13 @@
 
 ## Continuous Tests
 
-| Category | Test ID | Mode | Latest | Executions |
+<br/>
+
+| Category | Test ID | Mode | Latest | Execution Count |
 |---|---|---|---|---:|
-| communication | `CT-NETWORK-001` | mock | [Open](CT-NETWORK-001.md) | 44 |
-| timing | `CT-UART-001` | mock | [Open](CT-UART-001.md) | 50 |
-| communication | `CT-USB-001` | mock | [Open](CT-USB-001.md) | 44 |
+| communication | [`CT-NETWORK-001`](CT-NETWORK-001.md) | mock | 2026-08-19 | 44 |
+| timing | [`CT-UART-001`](CT-UART-001.md) | mock | 2026-08-19 | 50 |
+| communication | [`CT-USB-001`](CT-USB-001.md) | mock | 2026-08-19 | 44 |
 
 ## Recent Executions
 

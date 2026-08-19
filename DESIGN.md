@@ -514,7 +514,9 @@ unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
 |---|---|
 | Category | Latest `result.json` → `test_case.category` |
 | Mode | Latest `result.json` → `fixture_configs.test_mode` |
-| Executions | `docs/tests/pytest/<test-id>__<execution-id>.md` count |
+| Test ID | Latest TEST document link |
+| Latest | Latest `result.json` → Seoul timestamp date |
+| Execution Count | `docs/tests/pytest/<test-id>__<execution-id>.md` count |
 
 | Recent Executions column | Source |
 |---|---|

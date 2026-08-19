@@ -117,8 +117,10 @@ class MarkdownReporter:
                     unit_rows.append(f"| `{_safe(test_id)}` | {_safe(mode)} | [Open]({link}) | {count} |")
                 else:
                     category = latest_result.category if latest_result else "unknown"
+                    latest_date = latest_result.timestamp.partition("T")[0] if latest_result else "unknown"
                     ct_rows.append(
-                        f"| {_safe(category)} | `{_safe(test_id)}` | {_safe(mode)} | [Open]({link}) | {count} |"
+                        f"| {_safe(category)} | [`{_safe(test_id)}`]({link}) | {_safe(mode)} | "
+                        f"{_safe(latest_date)} | {count} |"
                     )
 
         ct_recent = "\n".join(
@@ -135,7 +137,9 @@ class MarkdownReporter:
 
 ## Continuous Tests
 
-| Category | Test ID | Mode | Latest | Executions |
+<br/>
+
+| Category | Test ID | Mode | Latest | Execution Count |
 |---|---|---|---|---:|
 {chr(10).join(ct_rows) or '| - | - | - | - | 0 |'}
 
