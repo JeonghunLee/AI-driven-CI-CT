@@ -8,7 +8,7 @@
 <meta content="Test results and execution history" name="description"/>
 <link href="../../imgs/logo.jpg" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
-<title>CT-UART-001 Test Result - AI-driven CI/CT</title>
+<title>CT-USB-001 Test Result - AI-driven CI/CT</title>
 <link href="../../assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/iframe-worker/shim"></script>
@@ -26,7 +26,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#ct-uart-001-test-result">
+<a class="md-skip" href="#ct-usb-001-test-result">
           콘텐츠로 이동
         </a>
 </div>
@@ -50,7 +50,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              CT-UART-001 Test Result
+              CT-USB-001 Test Result
             
           </span>
 </div>
@@ -353,15 +353,6 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#test-history">
-<span class="md-ellipsis">
-      
-        Test History
-      
-    </span>
-</a>
-</li>
 </ul>
 </nav>
 </div>
@@ -369,7 +360,7 @@
 </div>
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
-<h1 id="ct-uart-001-test-result">CT-UART-001 Test Result</h1>
+<h1 id="ct-usb-001-test-result">CT-USB-001 Test Result</h1>
 <h2 id="test-summary">Test summary</h2>
 <table>
 <thead>
@@ -381,11 +372,11 @@
 <tbody>
 <tr>
 <td>Description</td>
-<td>test_uart_timing</td>
+<td>test_usb_bulk_loopback</td>
 </tr>
 <tr>
 <td>Category</td>
-<td>timing</td>
+<td>communication</td>
 </tr>
 <tr>
 <td>Environment</td>
@@ -397,15 +388,15 @@
 </tr>
 <tr>
 <td>Execution time</td>
-<td>0.000 seconds</td>
+<td>0.001 seconds</td>
 </tr>
 <tr>
 <td>Execution date</td>
-<td>2026-08-19T10:14:28.767429+09:00</td>
+<td>2026-08-19T10:07:51.520958+09:00</td>
 </tr>
 <tr>
 <td>Execution ID</td>
-<td>20260819_101428_767337</td>
+<td>20260819_100751_520867</td>
 </tr>
 </tbody>
 </table>
@@ -420,11 +411,11 @@
 <tbody>
 <tr>
 <td>Category</td>
-<td>timing</td>
+<td>communication</td>
 </tr>
 <tr>
 <td>Fixture ID</td>
-<td>FIXTURE-001</td>
+<td>FIXTURE-002</td>
 </tr>
 <tr>
 <td>Fixture mode</td>
@@ -436,7 +427,7 @@
 </tr>
 <tr>
 <td>Equipment</td>
-<td>Saleae</td>
+<td>Digilent</td>
 </tr>
 <tr>
 <td>Equipment mode</td>
@@ -444,7 +435,7 @@
 </tr>
 <tr>
 <td>Interface</td>
-<td>UART</td>
+<td>USB</td>
 </tr>
 <tr>
 <td>Interface mode</td>
@@ -463,7 +454,7 @@
 <tbody>
 <tr>
 <td>Commit</td>
-<td>87f0575c0e4b45647d34ed5473640de6e3089cdd</td>
+<td>8907224ecc0f33d82263afb499400755e17d8a92</td>
 </tr>
 <tr>
 <td>Branch</td>
@@ -481,20 +472,24 @@
 </thead>
 <tbody>
 <tr>
-<td>expected_baudrate</td>
-<td>921600</td>
+<td>bytes_transferred</td>
+<td>256</td>
 </tr>
 <tr>
-<td>measured_baudrate</td>
-<td>921596.667</td>
+<td>packet_count</td>
+<td>4</td>
 </tr>
 <tr>
-<td>error</td>
-<td>3.6168981481902543e-06</td>
+<td>max_packet_size</td>
+<td>64</td>
 </tr>
 <tr>
-<td>jitter</td>
-<td>0.00021701388888888888</td>
+<td>bus_voltage</td>
+<td>5.0</td>
+</tr>
+<tr>
+<td>integrity_error</td>
+<td>0.0</td>
 </tr>
 </tbody>
 </table>
@@ -508,24 +503,12 @@
 </thead>
 <tbody>
 <tr>
-<td>mean</td>
-<td>921596.6666666666</td>
+<td>endpoint</td>
+<td>1</td>
 </tr>
 <tr>
-<td>median</td>
-<td>921602.5</td>
-</tr>
-<tr>
-<td>min</td>
-<td>921490.0</td>
-</tr>
-<tr>
-<td>max</td>
-<td>921690.0</td>
-</tr>
-<tr>
-<td>stddev</td>
-<td>67.55656066503748</td>
+<td>transfer_count</td>
+<td>1</td>
 </tr>
 </tbody>
 </table>
@@ -540,7 +523,7 @@
 <tbody>
 <tr>
 <td>Test log</td>
-<td>20260819_101428_767337_test.log</td>
+<td>20260819_100751_520867_test.log</td>
 </tr>
 <tr>
 <td>Important</td>
@@ -559,7 +542,7 @@
 <tbody>
 <tr>
 <td>Classification</td>
-<td>No issues detected</td>
+<td>Pass</td>
 </tr>
 <tr>
 <td>Confidence</td>
@@ -588,15 +571,15 @@
 <tbody>
 <tr>
 <td>Summary</td>
-<td>Test passed with high accuracy, no anomalies detected.</td>
+<td>The test USB bulk loopback is passing successfully with no errors or warnings. The test metrics show normal operation, with 4 packets transferred, each of size 64 bytes, under the expected bus voltage of 5V.</td>
 </tr>
 <tr>
 <td>Failure analysis</td>
-<td>Not applicable</td>
+<td>No failures detected in the test.</td>
 </tr>
 <tr>
 <td>Source review</td>
-<td>Not requested</td>
+<td>No issues found in the source code during the test.</td>
 </tr>
 <tr>
 <td>Warnings</td>
@@ -605,393 +588,6 @@
 <tr>
 <td>Needs escalation</td>
 <td>off</td>
-</tr>
-</tbody>
-</table>
-<h2 id="test-history">Test History</h2>
-<table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Time</th>
-<th>Execution ID</th>
-<th>Commit</th>
-<th>Branch</th>
-<th>Result</th>
-<th style="text-align: right;">Duration (s)</th>
-<th>Environment</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2026-08-19</td>
-<td>10:14:28.767429+09:00</td>
-<td><a href="CT-UART-001__20260819_101428_767337.html">20260819_101428_767337</a></td>
-<td>87f0575</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-19</td>
-<td>10:14:14.697074+09:00</td>
-<td><a href="CT-UART-001__20260819_101414_696980.html">20260819_101414_696980</a></td>
-<td>87f0575</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-19</td>
-<td>10:07:50.148596+09:00</td>
-<td><a href="CT-UART-001__20260819_100750_148492.html">20260819_100750_148492</a></td>
-<td>8907224</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-19</td>
-<td>10:04:32.972328+09:00</td>
-<td><a href="CT-UART-001__20260819_100432_972235.html">20260819_100432_972235</a></td>
-<td>2da8a43</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-19</td>
-<td>10:02:24.261190+09:00</td>
-<td><a href="CT-UART-001__20260819_100224_261092_315657.html">20260819_100224_261092_315657</a></td>
-<td>2da8a43</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-19</td>
-<td>09:48:32.867680+09:00</td>
-<td><a href="CT-UART-001__20260819_094832_867582.html">20260819_094832_867582</a></td>
-<td>186b0b4</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>16:15:16.696767+09:00</td>
-<td><a href="CT-UART-001__20260818_161516_696675.html">20260818_161516_696675</a></td>
-<td>1655a58</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:50:42.950067+09:00</td>
-<td><a href="CT-UART-001__20260818_155042_949951.html">20260818_155042_949951</a></td>
-<td>62efb90</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:49:23.481639+09:00</td>
-<td><a href="CT-UART-001__20260818_154923_481548.html">20260818_154923_481548</a></td>
-<td>f8b4f74</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:44:39.528631+09:00</td>
-<td><a href="CT-UART-001__20260818_154439_528504.html">20260818_154439_528504</a></td>
-<td>f8b4f74</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:42:39.380143+09:00</td>
-<td><a href="CT-UART-001__20260818_154239_380041.html">20260818_154239_380041</a></td>
-<td>f8b4f74</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:38:43.343459+09:00</td>
-<td><a href="CT-UART-001__20260818_153843_343352.html">20260818_153843_343352</a></td>
-<td>31a3aa2</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:36:58.921402+09:00</td>
-<td><a href="CT-UART-001__20260818_153658_921304.html">20260818_153658_921304</a></td>
-<td>0501967</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:36:45.023008+09:00</td>
-<td><a href="CT-UART-001__20260818_153645_022911.html">20260818_153645_022911</a></td>
-<td>0501967</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:36:21.075599+09:00</td>
-<td><a href="CT-UART-001__20260818_153621_075466.html">20260818_153621_075466</a></td>
-<td>0501967</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:18:45.688737+09:00</td>
-<td><a href="CT-UART-001__20260818_151845_688646.html">20260818_151845_688646</a></td>
-<td>a51f1d4</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:18:00.193731+09:00</td>
-<td><a href="CT-UART-001__20260818_151800_193627.html">20260818_151800_193627</a></td>
-<td>a51f1d4</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:16:56.950743+09:00</td>
-<td><a href="CT-UART-001__20260818_151656_950645.html">20260818_151656_950645</a></td>
-<td>a51f1d4</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>15:16:36.220726+09:00</td>
-<td><a href="CT-UART-001__20260818_151636_220637.html">20260818_151636_220637</a></td>
-<td>a51f1d4</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>14:52:39.800141+09:00</td>
-<td><a href="CT-UART-001__20260818_145239_800032.html">20260818_145239_800032</a></td>
-<td>9ebc289</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>14:39:17.419249+09:00</td>
-<td><a href="CT-UART-001__20260818_143917_419150.html">20260818_143917_419150</a></td>
-<td>54ffa7d</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>14:36:34.925452+09:00</td>
-<td><a href="CT-UART-001__20260818_143634_925356.html">20260818_143634_925356</a></td>
-<td>ee3794c</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>14:30:00.730977+09:00</td>
-<td><a href="CT-UART-001__20260818_143000_730890.html">20260818_143000_730890</a></td>
-<td>19c3b95</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>04:49:04.884511+00:00</td>
-<td><a href="CT-UART-001__20260818_044904_884486.html">20260818_044904_884486</a></td>
-<td>9d6d0e0</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>04:04:01.493533+00:00</td>
-<td><a href="CT-UART-001__20260818_040401_493506.html">20260818_040401_493506</a></td>
-<td>ddeca59</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-18</td>
-<td>03:01:37.727119+00:00</td>
-<td><a href="CT-UART-001__20260818_030137_727071.html">20260818_030137_727071</a></td>
-<td>33bd0ee</td>
-<td>main</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>07:47:38.432406+00:00</td>
-<td><a href="CT-UART-001__20260813-074738-432387.html">20260813-074738-432387</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>06:54:50.655858+00:00</td>
-<td><a href="CT-UART-001__20260813-065450-655846.html">20260813-065450-655846</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>06:48:38.485012+00:00</td>
-<td><a href="CT-UART-001__20260813-064838-484993.html">20260813-064838-484993</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>06:02:42.833947+00:00</td>
-<td><a href="CT-UART-001__20260813-060242-833931.html">20260813-060242-833931</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>02:40:05.771857+00:00</td>
-<td><a href="CT-UART-001__20260813-024005-771843.html">20260813-024005-771843</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>02:32:02.059339+00:00</td>
-<td><a href="CT-UART-001__20260813-023202-059324.html">20260813-023202-059324</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>01:50:49.885000+00:00</td>
-<td><a href="CT-UART-001__20260813-015049-884986.html">20260813-015049-884986</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>01:49:19.691962+00:00</td>
-<td><a href="CT-UART-001__20260813-014919-691948.html">20260813-014919-691948</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>00:43:23.383204+00:00</td>
-<td><a href="CT-UART-001__20260813-004323-383189.html">20260813-004323-383189</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>00:10:38.341685+00:00</td>
-<td><a href="CT-UART-001__20260813-001038-341669.html">20260813-001038-341669</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13</td>
-<td>00:07:35.891993+00:00</td>
-<td><a href="CT-UART-001__20260813-000735-891978.html">20260813-000735-891978</a></td>
-<td>local</td>
-<td>unknown</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
 </tr>
 </tbody>
 </table>

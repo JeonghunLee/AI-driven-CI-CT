@@ -393,6 +393,15 @@
 <nav aria-label="5. TEST Result Report 구조도" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#id">
+<span class="md-ellipsis">
+      
+        ID 정의
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#data-flow">
 <span class="md-ellipsis">
       
@@ -782,6 +791,15 @@
 <nav aria-label="5. TEST Result Report 구조도" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#id">
+<span class="md-ellipsis">
+      
+        ID 정의
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#data-flow">
 <span class="md-ellipsis">
       
@@ -1098,6 +1116,32 @@
 <td><code>Test Result: Generate Pending Markdown</code></td>
 <td>Missing Execution ID Markdown 생성</td>
 </tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Progress</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Running</td>
+<td><code>[current/total] RUNNING &lt;seconds&gt;s &lt;TEST-ID&gt; / &lt;Execution-ID&gt;</code></td>
+</tr>
+<tr>
+<td>Complete</td>
+<td><code>[current/total] COMPLETE &lt;seconds&gt;s &lt;TEST-ID&gt; / &lt;Execution-ID&gt;</code></td>
+</tr>
+<tr>
+<td>Error</td>
+<td><code>[current/total] ERROR &lt;seconds&gt;s &lt;TEST-ID&gt; / &lt;Execution-ID&gt;</code></td>
+</tr>
+<tr>
+<td>Interval</td>
+<td><code>1 second</code></td>
+</tr>
 <tr>
 <td><code>Debug: Current Python File</code></td>
 <td>현재 Python 파일 디버그</td>
@@ -1365,6 +1409,134 @@
 <span class="n">execute</span><span class="p">()</span>
 </code></pre></div>
 <h2 id="5-test-result-report">5. TEST Result Report 구조도</h2>
+<h3 id="id">ID 정의</h3>
+<table>
+<thead>
+<tr>
+<th>Identifier</th>
+<th>Scope</th>
+<th>Definition</th>
+<th>Purpose</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TEST ID</td>
+<td>pytest only</td>
+<td><code>test_envs/tests/pytest/test_cases</code></td>
+<td>Test case identification</td>
+<td><code>CT-&lt;TARGET&gt;-&lt;NNN&gt;</code></td>
+</tr>
+<tr>
+<td>Execution ID</td>
+<td>pytest, unittest</td>
+<td>Execution result generation</td>
+<td>Result delimiter</td>
+<td><code>YYYYMMDD_HHMMSS_ffffff</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Runner</th>
+<th>TEST ID</th>
+<th>Execution ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pytest</td>
+<td>Required</td>
+<td>Required</td>
+</tr>
+<tr>
+<td>unittest</td>
+<td>Prohibited</td>
+<td>Required</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>Execution ID: 20260819_094832_960333
+├── Date         20260819  [Asia/Seoul]
+├── Time         094832    [Asia/Seoul]
+└── Microseconds 960333
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Time field</th>
+<th>Config source</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Timezone</td>
+<td><code>test_envs/configs/config.json</code> → <code>time.timezone</code></td>
+<td>SeoulTime name</td>
+</tr>
+<tr>
+<td>UTC offset</td>
+<td><code>test_envs/configs/config.json</code> → <code>time.utc_offset_hours</code></td>
+<td>SeoulTime correction</td>
+</tr>
+<tr>
+<td>Date·Time</td>
+<td><code>configured_now()</code></td>
+<td>Config value application</td>
+</tr>
+<tr>
+<td>Microseconds</td>
+<td><code>%f</code></td>
+<td>6 digits</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Output</th>
+<th>Rule</th>
+<th>Search key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Result JSON</td>
+<td>Execution ID 생성</td>
+<td>Execution ID</td>
+</tr>
+<tr>
+<td>Test log</td>
+<td>동일 Execution ID</td>
+<td>Execution ID</td>
+</tr>
+<tr>
+<td>Local LLM log</td>
+<td>동일 Execution ID</td>
+<td>Execution ID</td>
+</tr>
+<tr>
+<td>Markdown</td>
+<td>동일 Execution ID</td>
+<td>Execution ID</td>
+</tr>
+<tr>
+<td>Pandoc</td>
+<td>동일 Execution ID</td>
+<td>Execution ID</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code>Execution ID
+├── Result JSON
+├── Test log
+├── Local LLM log
+├── Markdown
+└── Pandoc
+</code></pre></div>
 <h3 id="data-flow">Data Flow</h3>
 <pre class="mermaid"><code>flowchart TD
     A[unittest / pytest] --&gt; B[Result]
@@ -1380,18 +1552,19 @@
     L -- Yes --&gt; M[Codex]</code></pre>
 <h3 id="runtime-data">Runtime Data</h3>
 <div class="highlight"><pre><span></span><code>test_envs/reports/
-├── pytest/test_cases/&lt;test-id&gt;/
-│   ├── &lt;timestamp&gt;_result.json
-│   └── &lt;timestamp&gt;_test.log
-├── unittest/&lt;test-id&gt;/
-│   ├── &lt;timestamp&gt;_result.json
-│   └── &lt;timestamp&gt;_test.log
+├── results/
+│   ├── pytest/test_cases/&lt;test-id&gt;/
+│   │   ├── &lt;execution-id&gt;_result.json
+│   │   └── &lt;execution-id&gt;_test.log
+│   └── unittest/
+│       ├── &lt;execution-id&gt;_result.json
+│       └── &lt;execution-id&gt;_test.log
 ├── local_llm/
 │   └── &lt;execution-id&gt;_local_llm.log
 ├── pandoc/&lt;test-id&gt;/
-│   └── &lt;timestamp&gt;_result.{html,pdf,docx}
+│   └── &lt;execution-id&gt;_result.{html,pdf,docx}
 └── markdown/&lt;test-id&gt;/
-    └── &lt;timestamp&gt;_result.md
+    └── &lt;execution-id&gt;_result.md
 </code></pre></div>
 <h3 id="mkdocs-data">MkDocs Data</h3>
 <div class="highlight"><pre><span></span><code>docs/
