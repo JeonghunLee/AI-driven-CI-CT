@@ -6,11 +6,9 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Test results and execution history" name="description"/>
-<link href="../../hil_mock.html" rel="prev"/>
-<link href="../unittest/index.html" rel="next"/>
 <link href="../../imgs/logo.jpg" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
-<title>Pytest - AI-driven CI/CT</title>
+<title>unittest Result - AI-driven CI/CT</title>
 <link href="../../assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/iframe-worker/shim"></script>
@@ -28,7 +26,7 @@
 <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
 <label class="md-overlay" for="__drawer"></label>
 <div data-md-component="skip">
-<a class="md-skip" href="#pytest-results-index">
+<a class="md-skip" href="#unittest-result">
           콘텐츠로 이동
         </a>
 </div>
@@ -52,7 +50,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Pytest
+              unittest Result
             
           </span>
 </div>
@@ -264,8 +262,8 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
 <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
 <span class="md-ellipsis">
     
@@ -277,7 +275,7 @@
   </span>
 <span class="md-nav__icon md-icon"></span>
 </label>
-<nav aria-expanded="true" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_4">
 <span class="md-nav__icon md-icon"></span>
             
@@ -287,20 +285,8 @@
 
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
-<label class="md-nav__link md-nav__link--active" for="__toc">
-<span class="md-ellipsis">
-    
-  
-    Pytest
-  
-
-    
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<a class="md-nav__link md-nav__link--active" href="index.html">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../pytest/index.html">
 <span class="md-ellipsis">
     
   
@@ -310,35 +296,9 @@
     
   </span>
 </a>
-<nav aria-label="목차" class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">
-<span class="md-nav__icon md-icon"></span>
-      목차
-    </label>
-<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#continuous-tests">
-<span class="md-ellipsis">
-      
-        Continuous Tests
-      
-    </span>
-</a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#recent-executions">
-<span class="md-ellipsis">
-      
-        Recent Executions
-      
-    </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../unittest/index.html">
+<a class="md-nav__link" href="index.html">
 <span class="md-ellipsis">
     
   
@@ -367,22 +327,53 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#continuous-tests">
+<a class="md-nav__link" href="#test-summary">
 <span class="md-ellipsis">
       
-        Continuous Tests
+        Test Summary
+      
+    </span>
+</a>
+<nav aria-label="Test Summary" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-functions">
+<span class="md-ellipsis">
+      
+        Test Functions
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#recent-executions">
+<a class="md-nav__link" href="#failed-functions">
 <span class="md-ellipsis">
       
-        Recent Executions
+        Failed Functions
       
     </span>
 </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-source">
+<span class="md-ellipsis">
+      
+        Test Source
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#logs">
+<span class="md-ellipsis">
+      
+        Logs
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -390,171 +381,558 @@
 </div>
 </div>
 <div class="md-content" data-md-component="content">
-<nav aria-label="네비게이션" class="md-path">
-<ol class="md-path__list">
-<li class="md-path__item">
-<a class="md-path__link" href="../../index.html">
-<span class="md-ellipsis">
-    Overview
-  </span>
-</a>
-</li>
-<li class="md-path__item">
-<a class="md-path__link" href="index.html">
-<span class="md-ellipsis">
-    TEST Reports
-  </span>
-</a>
-</li>
-</ol>
-</nav>
 <article class="md-content__inner md-typeset">
-<h1 id="pytest-results-index">Pytest Results Index</h1>
-<h2 id="continuous-tests">Continuous Tests</h2>
-<p><br/></p>
+<h1 id="unittest-result">unittest Result</h1>
+<h2 id="test-summary">Test Summary</h2>
 <table>
 <thead>
 <tr>
-<th>Category</th>
-<th>Test ID</th>
-<th>Mode</th>
-<th>Latest</th>
-<th style="text-align: right;">Execution Count</th>
+<th>Item</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>communication</td>
-<td><a href="CT-NETWORK-001.html"><code>CT-NETWORK-001</code></a></td>
-<td>mock</td>
-<td>2026-08-19</td>
-<td style="text-align: right;">55</td>
+<td>Execution ID</td>
+<td>20260819_140338_296091</td>
 </tr>
 <tr>
-<td>timing</td>
-<td><a href="CT-UART-001.html"><code>CT-UART-001</code></a></td>
-<td>mock</td>
-<td>2026-08-19</td>
-<td style="text-align: right;">61</td>
+<td>Pass</td>
+<td>PASS</td>
 </tr>
 <tr>
-<td>communication</td>
-<td><a href="CT-USB-001.html"><code>CT-USB-001</code></a></td>
-<td>mock</td>
-<td>2026-08-19</td>
-<td style="text-align: right;">55</td>
+<td>Latest</td>
+<td>2026-08-19T14:03:38.296176+09:00</td>
+</tr>
+<tr>
+<td>Duration</td>
+<td>0.846633 seconds</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>72</td>
+</tr>
+<tr>
+<td>Passed</td>
+<td>72</td>
+</tr>
+<tr>
+<td>Failed</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Errors</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Skipped</td>
+<td>0</td>
 </tr>
 </tbody>
 </table>
-<h2 id="recent-executions">Recent Executions</h2>
+<h3 id="test-functions">Test Functions</h3>
+<ul>
+<li>Unit TEST<ul>
+<li>PATH0: <code>test_envs/tests/unittest/ct_framework/python</code></li>
+</ul>
+</li>
+</ul>
 <table>
 <thead>
 <tr>
-<th>Execution ID</th>
-<th>Category</th>
-<th>Test ID</th>
+<th style="text-align: right;">PATH</th>
+<th>Test Function</th>
+<th>Pass</th>
+<th style="text-align: right;">Duration (s)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><a href="CT-NETWORK-001__20260819_135654_665886.html"><code>20260819_135654_665886</code></a></td>
-<td>communication</td>
-<td><code>CT-NETWORK-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_auto_os_uses_windows_venv_interpreter</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000385</td>
 </tr>
 <tr>
-<td><a href="CT-USB-001__20260819_135654_612851.html"><code>20260819_135654_612851</code></a></td>
-<td>communication</td>
-<td><code>CT-USB-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_check_contains_required_environment_state</td>
+<td>PASS</td>
+<td style="text-align: right;">0.052269</td>
 </tr>
 <tr>
-<td><a href="CT-UART-001__20260819_135654_564984.html"><code>20260819_135654_564984</code></a></td>
-<td>timing</td>
-<td><code>CT-UART-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_configured_time_uses_project_utc_offset</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000278</td>
 </tr>
 <tr>
-<td><a href="CT-NETWORK-001__20260819_135500_562991.html"><code>20260819_135500_562991</code></a></td>
-<td>communication</td>
-<td><code>CT-NETWORK-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_os_selection_keeps_system_python</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000276</td>
 </tr>
 <tr>
-<td><a href="CT-USB-001__20260819_135500_514198.html"><code>20260819_135500_514198</code></a></td>
-<td>communication</td>
-<td><code>CT-USB-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_os_selection_restarts_with_system_python</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000343</td>
 </tr>
 <tr>
-<td><a href="CT-UART-001__20260819_135500_466014.html"><code>20260819_135500_466014</code></a></td>
-<td>timing</td>
-<td><code>CT-UART-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_project_config_contains_os_and_selected_model</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000262</td>
 </tr>
 <tr>
-<td><a href="CT-NETWORK-001__20260819_134842_368005.html"><code>20260819_134842_368005</code></a></td>
-<td>communication</td>
-<td><code>CT-NETWORK-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_set_configured_os_preserves_ollama_config</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000483</td>
 </tr>
 <tr>
-<td><a href="CT-USB-001__20260819_134842_317352.html"><code>20260819_134842_317352</code></a></td>
-<td>communication</td>
-<td><code>CT-USB-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_unix_hosts_use_bin_python</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000069</td>
 </tr>
 <tr>
-<td><a href="CT-UART-001__20260819_134842_268991.html"><code>20260819_134842_268991</code></a></td>
-<td>timing</td>
-<td><code>CT-UART-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_auto_platform_detects_linux</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000135</td>
 </tr>
 <tr>
-<td><a href="CT-NETWORK-001__20260819_133222_140037.html"><code>20260819_133222_140037</code></a></td>
-<td>communication</td>
-<td><code>CT-NETWORK-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_auto_platform_detects_macos</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000119</td>
 </tr>
 <tr>
-<td><a href="CT-USB-001__20260819_133222_087918.html"><code>20260819_133222_087918</code></a></td>
-<td>communication</td>
-<td><code>CT-USB-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_auto_platform_detects_windows</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000109</td>
 </tr>
 <tr>
-<td><a href="CT-UART-001__20260819_133222_037766.html"><code>20260819_133222_037766</code></a></td>
-<td>timing</td>
-<td><code>CT-UART-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_config_platform_uses_project_config</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000214</td>
 </tr>
 <tr>
-<td><a href="CT-NETWORK-001__20260819_131327_175412.html"><code>20260819_131327_175412</code></a></td>
-<td>communication</td>
-<td><code>CT-NETWORK-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_cross_platform_selection_is_rejected</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000174</td>
 </tr>
 <tr>
-<td><a href="CT-USB-001__20260819_131327_126125.html"><code>20260819_131327_126125</code></a></td>
-<td>communication</td>
-<td><code>CT-USB-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_serve_returns_success_when_server_is_already_running</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000766</td>
 </tr>
 <tr>
-<td><a href="CT-UART-001__20260819_131327_079505.html"><code>20260819_131327_079505</code></a></td>
-<td>timing</td>
-<td><code>CT-UART-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_setup_does_not_start_background_server</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000716</td>
 </tr>
 <tr>
-<td><a href="CT-NETWORK-001__20260819_131020_878225.html"><code>20260819_131020_878225</code></a></td>
-<td>communication</td>
-<td><code>CT-NETWORK-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_example_extension</td>
+<td>PASS</td>
+<td style="text-align: right;">0.001109</td>
 </tr>
 <tr>
-<td><a href="CT-USB-001__20260819_131020_832725.html"><code>20260819_131020_832725</code></a></td>
-<td>communication</td>
-<td><code>CT-USB-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_catalog_files_are_not_used</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000092</td>
 </tr>
 <tr>
-<td><a href="CT-UART-001__20260819_131020_776904.html"><code>20260819_131020_776904</code></a></td>
-<td>timing</td>
-<td><code>CT-UART-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_cli_fixture_mode_overrides_marker</td>
+<td>PASS</td>
+<td style="text-align: right;">0.014065</td>
 </tr>
 <tr>
-<td><a href="CT-NETWORK-001__20260819_130934_783882.html"><code>20260819_130934_783882</code></a></td>
-<td>communication</td>
-<td><code>CT-NETWORK-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_ct_markers_define_fixture_selection</td>
+<td>PASS</td>
+<td style="text-align: right;">0.002107</td>
 </tr>
 <tr>
-<td><a href="CT-USB-001__20260819_130934_728293.html"><code>20260819_130934_728293</code></a></td>
-<td>communication</td>
-<td><code>CT-USB-001</code></td>
+<td style="text-align: right;">0</td>
+<td>test_marker_fixture_mode_is_default</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000110</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_mock_implementations_remain_available</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000083</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_test_cases_import_pytest_fixtures</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000078</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_parse_issue_form_markdown</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000145</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_pending_results_use_test_id_and_execution_id</td>
+<td>PASS</td>
+<td style="text-align: right;">0.115346</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_publish_latest_copies_markdown</td>
+<td>PASS</td>
+<td style="text-align: right;">0.002701</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_analysis_retries_invalid_json_and_writes_diagnostic_log</td>
+<td>PASS</td>
+<td style="text-align: right;">0.058455</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_environment_model_is_configurable</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000842</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_explicit_model_has_highest_priority</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000570</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_installed_model_accepts_ollama_inventory_fields</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000079</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_internal_json_model_is_used_when_environment_is_missing</td>
+<td>PASS</td>
+<td style="text-align: right;">0.001672</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_internal_json_url_is_used_when_environment_is_missing</td>
+<td>PASS</td>
+<td style="text-align: right;">0.001503</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_missing_configured_model_is_rejected</td>
+<td>PASS</td>
+<td style="text-align: right;">0.002469</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_object_preset_supports_extensible_model_metadata</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000079</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_project_config_selected_model</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000070</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_numeric_error_metric_is_not_failure_log</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000100</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_markdown_first_report_contains_required_sections</td>
+<td>PASS</td>
+<td style="text-align: right;">0.074327</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_mkdocs_publish_preserves_each_execution</td>
+<td>PASS</td>
+<td style="text-align: right;">0.202858</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_digilent_measures_usb_transfer</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000110</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_digilent_requires_connection</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000134</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_network_packet_loopback</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000089</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_network_validates_port</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000101</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_uart_loopback_and_lifecycle</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000089</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_uart_requires_connection</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000075</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_usb_packetized_loopback</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000081</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_usb_requires_connection</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000073</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_pandoc_rejects_unknown_format</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000106</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_issue_comment_contains_summary_and_evidence</td>
+<td>PASS</td>
+<td style="text-align: right;">0.047850</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_configuration_structure</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000178</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_docs_test_structure</td>
+<td>PASS</td>
+<td style="text-align: right;">0.002828</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_pytest_case_structure</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000358</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_pytest_fixture_structure</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000231</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_report_structure</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000266</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_top_level_structure</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000169</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_unittest_structure</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000136</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_junit_normalization</td>
+<td>PASS</td>
+<td style="text-align: right;">0.049659</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_result_preserves_mock_hil_modes</td>
+<td>PASS</td>
+<td style="text-align: right;">0.049214</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_result_rejects_unknown_status</td>
+<td>PASS</td>
+<td style="text-align: right;">0.048796</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_result_rejects_unknown_test_mode</td>
+<td>PASS</td>
+<td style="text-align: right;">0.047704</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_result_store_creates_canonical_result_and_logs</td>
+<td>PASS</td>
+<td style="text-align: right;">0.058239</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_fixture_mode_picker_supports_override</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000433</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_launch_setup_delegates_to_foreground_tasks</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000330</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_ollama_server_task_is_foreground_process</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000324</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_python_setup_uses_platform_picker</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000322</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_python_tasks_run_as_managed_processes</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000485</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_report_tasks_include_html_and_docx</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000362</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_selected_preset_has_model_name</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000432</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_setup_1_uses_system_python</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000372</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_task_setup_uses_internal_model_config</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000325</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_test_case_id_picker_matches_ct_markers</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000326</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_test_case_tasks_support_all_and_test_id</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000342</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_vscode_json_contains_no_os_metadata</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000329</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td>test_vscode_testing_uses_project_venv_and_pytest</td>
+<td>PASS</td>
+<td style="text-align: right;">0.000307</td>
+</tr>
+</tbody>
+</table>
+<h3 id="failed-functions">Failed Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Test Function</th>
+<th>Status</th>
+<th>Failure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-</td>
+<td>-</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-source">Test Source</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Commit</td>
+<td>410538c8c31e3186160451ed64c107256962ef1f</td>
+</tr>
+<tr>
+<td>Branch</td>
+<td>main</td>
+</tr>
+</tbody>
+</table>
+<h3 id="logs">Logs</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Result log</td>
+<td>20260819_140338_296091_result.log</td>
+</tr>
+<tr>
+<td>Result json</td>
+<td>20260819_140338_296091_result.json</td>
 </tr>
 </tbody>
 </table>
@@ -569,34 +947,6 @@
 </button>
 </main>
 <footer class="md-footer">
-<nav aria-label="하단/푸터" class="md-footer__inner md-grid">
-<a aria-label="이전: HIL &amp; Mock" class="md-footer__link md-footer__link--prev" href="../../hil_mock.html">
-<div class="md-footer__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
-</div>
-<div class="md-footer__title">
-<span class="md-footer__direction">
-                이전
-              </span>
-<div class="md-ellipsis">
-                HIL &amp; Mock
-              </div>
-</div>
-</a>
-<a aria-label="다음: Unittest" class="md-footer__link md-footer__link--next" href="../unittest/index.html">
-<div class="md-footer__title">
-<span class="md-footer__direction">
-                다음
-              </span>
-<div class="md-ellipsis">
-                Unittest
-              </div>
-</div>
-<div class="md-footer__button md-icon">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
-</div>
-</a>
-</nav>
 <div class="md-footer-meta md-typeset">
 <div class="md-footer-meta__inner md-grid">
 <div class="md-copyright">
