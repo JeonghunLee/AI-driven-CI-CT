@@ -7,8 +7,8 @@ htmlcov/
 .venv/
 site/
 test_envs/tests/.tmp/
-test_envs/reports/pytest/*
-test_envs/reports/unittest/*
+test_envs/reports/results/pytest/*
+test_envs/reports/results/unittest/*
 test_envs/reports/pandoc/*
 test_envs/reports/markdown/*
 test_envs/reports/local_llm/*

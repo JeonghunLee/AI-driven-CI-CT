@@ -371,7 +371,7 @@ Entry point: `python -m test_envs.tools.test_result`
 Input rule:
 
 ```text
-test_envs/reports/{pytest/test_cases,unittest}/*/*_result.json
+test_envs/reports/results/{pytest/test_cases,unittest}/*/*_result.json
                                       │
                                       ▼
                               Maximum timestamp
@@ -644,8 +644,8 @@ Excluded from GitHub Issue:
 │   │       ├── firmware/
 │   │       └── common/
 │   ├── reports/
-│   │   ├── pytest/test_cases/<test-id>/
-│   │   ├── unittest/<test-id>/
+│   │   ├── results/pytest/test_cases/<test-id>/
+│   │   ├── results/unittest/<test-id>/
 │   │   ├── pandoc/<test-id>/
 │   │   └── markdown/<test-id>/
 │   └── tools/

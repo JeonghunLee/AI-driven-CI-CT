@@ -283,12 +283,13 @@ flowchart TD
 
 ```text
 test_envs/reports/
-├── pytest/test_cases/<test-id>/
-│   ├── <timestamp>_result.json
-│   └── <timestamp>_test.log
-├── unittest/<test-id>/
-│   ├── <timestamp>_result.json
-│   └── <timestamp>_test.log
+├── results/
+│   ├── pytest/test_cases/<test-id>/
+│   │   ├── <timestamp>_result.json
+│   │   └── <timestamp>_test.log
+│   └── unittest/<test-id>/
+│       ├── <timestamp>_result.json
+│       └── <timestamp>_test.log
 ├── local_llm/
 │   └── <execution-id>_local_llm.log
 ├── pandoc/<test-id>/

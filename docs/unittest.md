@@ -44,8 +44,8 @@ flowchart TD
 
 | Type | Path |
 |---|---|
-| Result | `test_envs/reports/unittest/<test-id>/<timestamp>_result.json` |
-| Log | `test_envs/reports/unittest/<test-id>/<timestamp>_test.log` |
+| Result | `test_envs/reports/results/unittest/<test-id>/<timestamp>_result.json` |
+| Log | `test_envs/reports/results/unittest/<test-id>/<timestamp>_test.log` |
 | Markdown | `test_envs/reports/markdown/<test-id>/<timestamp>_result.md` |
 | Pandoc | `test_envs/reports/pandoc/<test-id>/<timestamp>_result.<format>` |
 

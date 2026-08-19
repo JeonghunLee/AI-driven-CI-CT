@@ -164,14 +164,14 @@ class ResultStore:
 
     def result_paths(self, test_id: str | None = None) -> list[Path]:
         name = test_id or "*"
-        return list((self.root / "pytest" / "test_cases").glob(f"{name}/*_result.json")) + list(
-            (self.root / "unittest").glob(f"{name}/*_result.json")
+        return list((self.root / "results" / "pytest" / "test_cases").glob(f"{name}/*_result.json")) + list(
+            (self.root / "results" / "unittest").glob(f"{name}/*_result.json")
         )
 
     def _report_dir(self, record: ResultRecord) -> Path:
         if record.category.lower() == "unit":
-            return self.root / "unittest" / record.test_id
-        return self.root / "pytest" / "test_cases" / record.test_id
+            return self.root / "results" / "unittest" / record.test_id
+        return self.root / "results" / "pytest" / "test_cases" / record.test_id
 
     def load(self, path: str | Path | None = None) -> ResultRecord:
         source = Path(path) if path else self.latest()
