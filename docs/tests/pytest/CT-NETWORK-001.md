@@ -2,6 +2,8 @@
 
 ## Test summary
 
+<br/>
+
 | Item | Value |
 |---|---|
 | Description | test_network_packet_loopback |
@@ -9,10 +11,14 @@
 | Environment | local |
 | Result | PASS |
 | Execution time | 0.001 seconds |
-| Execution date | 2026-09-02T11:17:33.935996+09:00 |
-| Execution ID | 20260902_111733_935900 |
+| Execution date | 2026-09-02T11:54:01.862832+09:00 |
+| Execution ID | 20260902_115401_862736 |
+
+<br/>
 
 ### Test configs
+
+<br/>
 
 | Test Item | Value |
 |---|---|
@@ -32,12 +38,18 @@
 
 ### Test Source
 
+<br/>
+
 | Item | Value |
 |---|---|
-| Commit | add5035979a10be3c6474aaec9c150b83d94f2c0 |
+| Commit | 09c8e03ae2d72f60e58d265a1a579bf9dad5b589 |
 | Branch | main |
 
+<br/>
+
 ### Measurement
+
+<br/>
 
 | Item | Value |
 |---|---|
@@ -46,34 +58,61 @@
 | latency_ms | 1.25 |
 | integrity_error | 0.0 |
 
+<br/>
+
 ### Statistics
+
+<br/>
 
 | Item | Value |
 |---|---|
 | host | 127.0.0.1 |
 | port | 9000 |
 
+<br/>
+
 ### Logs
+
+<br/>
+
+* Path:
+  test_envs/reports/results/pytest/test_cases/CT-NETWORK-001
+
+<br/>
 
 | Item | Value |
 |---|---|
-| Test log | 20260902_111733_935900_test.log |
+| Test log | 20260902_115401_862736_test.log |
 | Important | None |
+
+<br/>
 
 ## Local LLM Analysis
 
+<br/>
+
 | Item | Value |
 |---|---|
-| Classification | All tests passed successfully. |
+| Classification | Pass |
 | Confidence | 1.00 |
 | Analyzer | ollama/deepseek-r1:7b |
 | Status | enabled |
 
+<br/>
+
 ### LLM Test Prompt
 
+<br/>
+
+```
 analyze the test result and provide a detailed report with recommendations for improvement.
+```
+
+<br/>
 
 ### Test Result
+
+<br/>
 
 | Item | Value |
 |---|---|
@@ -82,11 +121,15 @@ analyze the test result and provide a detailed report with recommendations for i
 | **Warnings** | 0 |
 | **Needs Escalation** | OFF |
 
+<br/>
+
 ### Test Summary
+
+<br/>
 
 | Item | Value |
 |---|---|
-| Summary | All tests passed successfully with no errors or warnings reported. |
+| Summary | All tests have passed successfully. |
 | Failure Analysis | Not applicable |
 | Source Review | Not requested |
 | Warnings | None |
@@ -94,8 +137,11 @@ analyze the test result and provide a detailed report with recommendations for i
 
 ## Test History
 
+<br/>
+
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-09-02 | 11:54:01.862832+09:00 | [20260902_115401_862736](CT-NETWORK-001__20260902_115401_862736.md) | 09c8e03 | main | PASS | 0.001 | local |
 | 2026-09-02 | 11:17:33.935996+09:00 | [20260902_111733_935900](CT-NETWORK-001__20260902_111733_935900.md) | add5035 | main | PASS | 0.001 | local |
 | 2026-09-02 | 10:52:35.665490+09:00 | [20260902_105235_665407](CT-NETWORK-001__20260902_105235_665407.md) | 4e2ad99 | main | PASS | 0.000 | local |
 | 2026-09-02 | 10:46:53.274849+09:00 | [20260902_104653_274766](CT-NETWORK-001__20260902_104653_274766.md) | 2fe9b6d | main | PASS | 0.000 | local |

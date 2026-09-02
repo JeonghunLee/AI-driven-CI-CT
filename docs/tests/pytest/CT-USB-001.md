@@ -2,6 +2,8 @@
 
 ## Test summary
 
+<br/>
+
 | Item | Value |
 |---|---|
 | Description | test_usb_bulk_loopback |
@@ -9,10 +11,14 @@
 | Environment | local |
 | Result | PASS |
 | Execution time | 0.000 seconds |
-| Execution date | 2026-09-02T11:17:31.210117+09:00 |
-| Execution ID | 20260902_111731_210028 |
+| Execution date | 2026-09-02T11:54:00.651824+09:00 |
+| Execution ID | 20260902_115400_651736 |
+
+<br/>
 
 ### Test configs
+
+<br/>
 
 | Test Item | Value |
 |---|---|
@@ -32,12 +38,18 @@
 
 ### Test Source
 
+<br/>
+
 | Item | Value |
 |---|---|
-| Commit | add5035979a10be3c6474aaec9c150b83d94f2c0 |
+| Commit | 09c8e03ae2d72f60e58d265a1a579bf9dad5b589 |
 | Branch | main |
 
+<br/>
+
 ### Measurement
+
+<br/>
 
 | Item | Value |
 |---|---|
@@ -47,34 +59,61 @@
 | bus_voltage | 5.0 |
 | integrity_error | 0.0 |
 
+<br/>
+
 ### Statistics
+
+<br/>
 
 | Item | Value |
 |---|---|
 | endpoint | 1 |
 | transfer_count | 1 |
 
+<br/>
+
 ### Logs
+
+<br/>
+
+* Path:
+  test_envs/reports/results/pytest/test_cases/CT-USB-001
+
+<br/>
 
 | Item | Value |
 |---|---|
-| Test log | 20260902_111731_210028_test.log |
+| Test log | 20260902_115400_651736_test.log |
 | Important | None |
+
+<br/>
 
 ## Local LLM Analysis
 
+<br/>
+
 | Item | Value |
 |---|---|
-| Classification | Test passed |
-| Confidence | 0.95 |
+| Classification | All clear |
+| Confidence | 1.00 |
 | Analyzer | ollama/deepseek-r1:7b |
 | Status | enabled |
 
+<br/>
+
 ### LLM Test Prompt
 
+<br/>
+
+```
 analyze the test result and provide a detailed report with recommendations for improvement.
+```
+
+<br/>
 
 ### Test Result
+
+<br/>
 
 | Item | Value |
 |---|---|
@@ -83,20 +122,27 @@ analyze the test result and provide a detailed report with recommendations for i
 | **Warnings** | 0 |
 | **Needs Escalation** | OFF |
 
+<br/>
+
 ### Test Summary
+
+<br/>
 
 | Item | Value |
 |---|---|
-| Summary | The test USB bulk loopback was executed successfully with no errors. The test case passed, indicating that the communication interface is functioning correctly in the local environment. |
-| Failure Analysis | No failures reported during the test execution. |
-| Source Review | The test source code changes from commit 'add5035979a10be3c6474aaec9c150b83d94f2c0' in branch 'main' were reviewed and appear to be relevant to the test results. No discrepancies were found between the test code and the source code. |
+| Summary | All tests completed successfully with no errors or warnings. The communication test passed without any issues. |
+| Failure Analysis | Not applicable |
+| Source Review | Not requested |
 | Warnings | None |
-| Recommendations | 1. Consider implementing additional error handling in the bulk transfer functionality to improve system resilience. 2. Evaluate the necessity of the additional logging and ensure it does not impact performance. 3. Review the test setup to confirm all necessary interfaces and equipments are correctly configured. 4. Consider adding more test cases to cover edge cases and further validate the communication channel. |
+| Recommendations | No recommendation provided. |
 
 ## Test History
 
+<br/>
+
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-09-02 | 11:54:00.651824+09:00 | [20260902_115400_651736](CT-USB-001__20260902_115400_651736.md) | 09c8e03 | main | PASS | 0.000 | local |
 | 2026-09-02 | 11:17:31.210117+09:00 | [20260902_111731_210028](CT-USB-001__20260902_111731_210028.md) | add5035 | main | PASS | 0.000 | local |
 | 2026-09-02 | 10:52:35.605401+09:00 | [20260902_105235_605312](CT-USB-001__20260902_105235_605312.md) | 4e2ad99 | main | PASS | 0.000 | local |
 | 2026-09-02 | 10:46:53.228384+09:00 | [20260902_104653_228300](CT-USB-001__20260902_104653_228300.md) | 2fe9b6d | main | PASS | 0.000 | local |

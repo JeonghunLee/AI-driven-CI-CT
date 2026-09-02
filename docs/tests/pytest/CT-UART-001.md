@@ -2,6 +2,8 @@
 
 ## Test summary
 
+<br/>
+
 | Item | Value |
 |---|---|
 | Description | test_uart_timing |
@@ -9,10 +11,14 @@
 | Environment | local |
 | Result | PASS |
 | Execution time | 0.001 seconds |
-| Execution date | 2026-09-02T11:17:29.217108+09:00 |
-| Execution ID | 20260902_111729_217015 |
+| Execution date | 2026-09-02T11:53:59.143356+09:00 |
+| Execution ID | 20260902_115359_143257 |
+
+<br/>
 
 ### Test configs
+
+<br/>
 
 | Test Item | Value |
 |---|---|
@@ -32,12 +38,18 @@
 
 ### Test Source
 
+<br/>
+
 | Item | Value |
 |---|---|
-| Commit | add5035979a10be3c6474aaec9c150b83d94f2c0 |
+| Commit | 09c8e03ae2d72f60e58d265a1a579bf9dad5b589 |
 | Branch | main |
 
+<br/>
+
 ### Measurement
+
+<br/>
 
 | Item | Value |
 |---|---|
@@ -46,7 +58,11 @@
 | error | 3.6168981481902543e-06 |
 | jitter | 0.00021701388888888888 |
 
+<br/>
+
 ### Statistics
+
+<br/>
 
 | Item | Value |
 |---|---|
@@ -56,27 +72,50 @@
 | max | 921690.0 |
 | stddev | 67.55656066503748 |
 
+<br/>
+
 ### Logs
+
+<br/>
+
+* Path:
+  test_envs/reports/results/pytest/test_cases/CT-UART-001
+
+<br/>
 
 | Item | Value |
 |---|---|
-| Test log | 20260902_111729_217015_test.log |
+| Test log | 20260902_115359_143257_test.log |
 | Important | None |
+
+<br/>
 
 ## Local LLM Analysis
 
+<br/>
+
 | Item | Value |
 |---|---|
-| Classification | High Priority |
-| Confidence | 0.85 |
+| Classification | pass |
+| Confidence | 0.95 |
 | Analyzer | ollama/deepseek-r1:7b |
 | Status | enabled |
 
+<br/>
+
 ### LLM Test Prompt
 
+<br/>
+
+```
 analyze the test result and provide a detailed report with recommendations for improvement.
+```
+
+<br/>
 
 ### Test Result
+
+<br/>
 
 | Item | Value |
 |---|---|
@@ -85,20 +124,27 @@ analyze the test result and provide a detailed report with recommendations for i
 | **Warnings** | 0 |
 | **Needs Escalation** | OFF |
 
+<br/>
+
 ### Test Summary
+
+<br/>
 
 | Item | Value |
 |---|---|
-| Summary | Test passed with minor timing deviation. |
-| Failure Analysis | No failures reported in the test logs. |
-| Source Review | No issues found in the source code diffs. |
+| Summary | The UART test completed without errors. The measured baudrate is very close to the expected value, indicating that the timing configuration is functioning as intended. |
+| Failure Analysis | Not applicable |
+| Source Review | Not requested |
 | Warnings | None |
-| Recommendations | 1. Verify the hardware setup (e.g., clock rate) to ensure consistency with the expected baudrate. 2. Consider implementing Jitter compensation in the UART module if the tolerance is too tight. 3. Monitor the system for any external factors affecting the UART timing. 4. Conduct additional testing under varying conditions to assess the stability of the UART timing. 5. If issues persist, investigate if theSaleae module is the root cause and consider alternative solutions. |
+| Recommendations | No recommendation provided. |
 
 ## Test History
 
+<br/>
+
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-09-02 | 11:53:59.143356+09:00 | [20260902_115359_143257](CT-UART-001__20260902_115359_143257.md) | 09c8e03 | main | PASS | 0.001 | local |
 | 2026-09-02 | 11:17:29.217108+09:00 | [20260902_111729_217015](CT-UART-001__20260902_111729_217015.md) | add5035 | main | PASS | 0.001 | local |
 | 2026-09-02 | 10:52:35.557653+09:00 | [20260902_105235_557551](CT-UART-001__20260902_105235_557551.md) | 4e2ad99 | main | PASS | 0.001 | local |
 | 2026-09-02 | 10:46:53.180229+09:00 | [20260902_104653_180128](CT-UART-001__20260902_104653_180128.md) | 2fe9b6d | main | PASS | 0.001 | local |
