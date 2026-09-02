@@ -31,7 +31,11 @@ def _warning_severity(warning_count: int) -> str:
         return "MEDIUM"
     return "LOW"
 
-
+#
+# Update Mdocs Markdown 
+#       A. docs/tests/pytest/index.md , CT-USB-001.md,                               
+#       B. docs/tests/unittest/index.md
+#
 class MarkdownReporter:
     """Create the canonical human-readable report and optionally publish it to MkDocs."""
 
@@ -72,10 +76,15 @@ class MarkdownReporter:
                 canonical.read_text(encoding="utf-8"), encoding="utf-8"
             )
 
+        #
+        # target_dir
+        # docs/test/pytest
+        #       - CT-USB-001.md /CT-UART-001.md            
+        #
         latest_content = source.read_text(encoding="utf-8")
         history = self.render_history(result.test_id, target_dir)
         latest_target.write_text(
-            f"{latest_content}\n{history}\n",
+            f"{history}\n",
             encoding="utf-8",
         )
         self.update_indexes()
@@ -147,22 +156,36 @@ class MarkdownReporter:
             )
         else:
             unit_summary = "| 0 | - | - |"
-
+#
+# Recent Executions Section for Pytest
+# Max: 100
         ct_recent = "\n".join(
             f"| [`{_safe(execution_id)}`]({link}) | {_safe(category)} | `{_safe(test_id)}` |"
             for execution_id, category, test_id, link in sorted(
                 ct_execution_rows, key=lambda item: item[0], reverse=True
-            )[:20]
+            )[:100]
         ) or "| - | - | - |"
+#
+# Recent Executions Section for Unit Tests
+# Max: 100
         unit_recent = "\n".join(
             f"| [`{execution_id}`]({link}) | {_safe(status)} | {total} | {passed} | {failed} |"
             for execution_id, status, total, passed, failed, link, _timestamp in sorted(
                 unit_execution_rows, key=lambda item: item[0], reverse=True
-            )[:20]
+            )[:100]
         ) or "| - | - | 0 | 0 | 0 |"
         pytest_index = f"""# Pytest Results Index
 
+* **VSCode-Task**
+     * REPORT-Mkdocs: Generate Markdown to Pytest/Unittest 
+
+<br/>
+
 ## Continuous Tests
+
+<br/>
+
+Find **Test ID** History for the test results below .
 
 <br/>
 
@@ -172,19 +195,45 @@ class MarkdownReporter:
 
 ## Recent Executions
 
+<br/>
+
+* **Pytest Test History**   
+Find **Execution ID** History for test results below (Max: 100).
+
+<br/>
+
 | Execution ID | Category | Test ID |
 |---|---|---|
 {ct_recent}
 """
         unittest_index = f"""# Unittest Results Index
 
+* **VSCode-Task**
+     * REPORT-Mkdocs: Generate Markdown to Pytest/Unittest 
+
+<br/>
+
 ## Unit Tests
 
-| Test Function Count | Pass | Latest |
+<br/>
+
+* Latest **Execution ID** Summary   
+Unittest Function Count : Tests 
+
+<br/>
+
+| Unittest Function Count | Pass | Latest |
 |---:|---|---|
 {unit_summary}
 
 ## Recent Executions
+
+<br/>
+
+* **Unittest Test History**       
+Find **Execution ID** History for test results below (Max: 100).
+
+<br/>
 
 | Execution ID | Result | Tests | Passed | Failed |
 |---|---|---:|---:|---:|
@@ -196,6 +245,10 @@ class MarkdownReporter:
         unittest_destination.write_text(unittest_index, encoding="utf-8")
         return pytest_destination, unittest_destination
 
+#
+# docs/test/pytest
+#       - CT-USB-001.md /CT-UART-001.md            
+#
     def render_history(self, test_id: str, target_dir: Path) -> str:
         records: list[ResultRecord] = []
         for path in self.store.result_paths(test_id):
@@ -216,18 +269,32 @@ class MarkdownReporter:
                 f"{_safe(item.commit[:7])} | {_safe(item.branch)} | {item.status} | "
                 f"{item.duration:.3f} | {_safe(item.environment)} |"
             )
-        latest_target = target_dir / f"{test_id}.md"
-        if latest_target.is_file():
-            history = latest_target.read_text(encoding="utf-8").partition("## Test History")[2]
-            for row in history.splitlines():
-                match = re.search(r"\[([^]]+)\]\([^)]*\)", row)
-                if match:
-                    rows.setdefault(match.group(1), row)
+        #
+        # target_dir
+        # docs/test/pytest
+        #       - CT-USB-001.md /CT-UART-001.md            
+        #
+
+        #latest_target = target_dir / f"{test_id}.md"
+        #if latest_target.is_file():
+        #    history = latest_target.read_text(encoding="utf-8").partition("## Test History")[2]
+        #    for row in history.splitlines():
+        #        match = re.search(r"\[([^]]+)\]\([^)]*\)", row)
+        #        if match:
+       #             rows.setdefault(match.group(1), row)
         rendered_rows = (
             "\n".join(rows[key] for key in sorted(rows, reverse=True))
             or "| - | - | - | - | - | - | - | - |"
         )
         return f"""## Test History
+
+<br/>
+    
+only Pytest `{test_id}` Test History , find the latest execution records below.    
+
+Go Back to the [Pytest TEST All Index](./index.md)   
+
+<br/>
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
@@ -273,7 +340,7 @@ class MarkdownReporter:
         test_source = _table({"Commit": result.commit, "Branch": result.branch})
         measurements = _table(dict(result.metrics))
         statistics = _table(dict(result.statistics))
-        log_table = _table({"Test log": result.logs.get("main", "None"), "Important": logs})
+        log_table = _table({"Test log": result.logs.get("main", "None"), "Test Result": result.execution_id + "_result.json"})
         analysis_table = _table(
             {
                 "Classification": analysis.classification,
@@ -299,13 +366,26 @@ class MarkdownReporter:
                 "Recommendations": analysis.recommendations or "No recommendation provided.",
             }
         )
+        #
+        # Each Pytest Test Result
+        #
         return f"""# {result.test_id} Test Result
+
+Go Back to the [Pytest TEST All Index](./index.md)   
+
+<br/> 
 
 ## Test summary
 
+<br/>
+
 {test_summary}
 
+<br/>
+
 ### Test configs
+
+<br/>
 
 {test_configs}
 
@@ -315,33 +395,70 @@ class MarkdownReporter:
 
 ### Test Source
 
+<br/>
+
 {test_source}
+
+<br/>
 
 ### Measurement
 
+<br/>
+
 {measurements}
+
+<br/>
 
 ### Statistics
 
+<br/>
+
 {statistics}
+
+<br/>
 
 ### Logs
 
+<br/>
+
+* Path:    
+  test_envs/reports/results/pytest/test_cases/{result.test_id}
+
+<br/>
+
 {log_table}
+
+<br/>
 
 ## Local LLM Analysis
 
+<br/>
+
 {analysis_table}
+
+<br/>
 
 ### LLM Test Prompt
 
+<br/>
+
+```
 {_safe(analysis.prompt) or "Not configured"}
+```
+
+<br/>
 
 ### Test Result
 
+<br/>
+
 {analysis_result}
 
+<br/>
+
 ### Test Summary
+
+<br/>
 
 {analysis_summary}
 """
