@@ -129,7 +129,7 @@
         // This section contains tasks for generating and converting test reports.
         // Each task is labeled with a "REPORT" prefix for easy identification.
         {
-            "label": "REPORT-Mkdocs: Generate Pending Markdown",
+            "label": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
