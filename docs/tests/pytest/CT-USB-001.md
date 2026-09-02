@@ -1,151 +1,16 @@
-# CT-USB-001 Test Result
-
-## Test summary
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Description | test_usb_bulk_loopback |
-| Category | communication |
-| Environment | local |
-| Result | PASS |
-| Execution time | 0.001 seconds |
-| Execution date | 2026-08-19T10:07:51.520958+09:00 |
-| Execution ID | 20260819_100751_520867 |
-
-<br/>
-
-### Test configs
-
-<br/>
-
-| Test Item | Value |
-|---|---|
-| Test ID | CT-USB-001 |
-| Category | communication |
-| Fixture ID | FIXTURE-002 |
-| Fixture mode | mock |
-
-<br/>
-
-| FIXTURE-002 | Value |
-|---|---|
-| Interface | USB |
-| Equipment | Digilent |
-| Equipment mode | mock |
-| Interface mode | mock |
-
-### Test Source
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Commit | 8907224ecc0f33d82263afb499400755e17d8a92 |
-| Branch | main |
-
-<br/>
-
-### Measurement
-
-<br/>
-
-| Item | Value |
-|---|---|
-| bytes_transferred | 256 |
-| packet_count | 4 |
-| max_packet_size | 64 |
-| bus_voltage | 5.0 |
-| integrity_error | 0.0 |
-
-<br/>
-
-### Statistics
-
-<br/>
-
-| Item | Value |
-|---|---|
-| endpoint | 1 |
-| transfer_count | 1 |
-
-<br/>
-
-### Logs
-
-<br/>
-
-* Path:
-  test_envs/reports/results/pytest/test_cases/CT-USB-001
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Test log | 20260819_100751_520867_test.log |
-| Important | None |
-
-<br/>
-
-## Local LLM Analysis
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Classification | HIGH |
-| Confidence | 0.95 |
-| Analyzer | ollama/deepseek-r1:7b |
-| Status | enabled |
-
-<br/>
-
-### LLM Test Prompt
-
-<br/>
-
-```
-analyze the test result and provide a detailed report with recommendations for improvement.
-```
-
-<br/>
-
-### Test Result
-
-<br/>
-
-| Item | Value |
-|---|---|
-| **Status** | PASS |
-| **Severity** | LOW |
-| **Warnings** | 0 |
-| **Needs Escalation** | OFF |
-
-<br/>
-
-### Test Summary
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Summary | SUCCESS |
-| Failure Analysis | Not applicable |
-| Source Review | Not requested |
-| Warnings | None |
-| Recommendations | No recommendation provided. |
-
 ## Test History
 
 <br/>
     
-only Pytest `CT-USB-001` Test History , find the latest execution records below.
+only Pytest `CT-USB-001` Test History , find the latest execution records below.    
+
+Go Back to the [Pytest TEST All Index](./index.md)   
 
 <br/>
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-09-02 | 13:40:16.296473+09:00 | [20260902_134016_296379](CT-USB-001__20260902_134016_296379.md) | 6799149 | main | PASS | 0.001 | local |
 | 2026-09-02 | 11:54:00.651824+09:00 | [20260902_115400_651736](CT-USB-001__20260902_115400_651736.md) | 09c8e03 | main | PASS | 0.000 | local |
 | 2026-09-02 | 11:17:31.210117+09:00 | [20260902_111731_210028](CT-USB-001__20260902_111731_210028.md) | add5035 | main | PASS | 0.000 | local |
 | 2026-09-02 | 10:52:35.605401+09:00 | [20260902_105235_605312](CT-USB-001__20260902_105235_605312.md) | 4e2ad99 | main | PASS | 0.000 | local |

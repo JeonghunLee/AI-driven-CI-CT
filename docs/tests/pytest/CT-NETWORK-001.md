@@ -1,146 +1,16 @@
-# CT-NETWORK-001 Test Result
-
-## Test summary
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Description | test_network_packet_loopback |
-| Category | communication |
-| Environment | local |
-| Result | PASS |
-| Execution time | 0.001 seconds |
-| Execution date | 2026-09-02T11:54:01.862832+09:00 |
-| Execution ID | 20260902_115401_862736 |
-
-<br/>
-
-### Test configs
-
-<br/>
-
-| Test Item | Value |
-|---|---|
-| Test ID | CT-NETWORK-001 |
-| Category | communication |
-| Fixture ID | FIXTURE-003 |
-| Fixture mode | mock |
-
-<br/>
-
-| FIXTURE-003 | Value |
-|---|---|
-| Interface | Network |
-| Equipment | None |
-| Equipment mode | none |
-| Interface mode | mock |
-
-### Test Source
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Commit | 09c8e03ae2d72f60e58d265a1a579bf9dad5b589 |
-| Branch | main |
-
-<br/>
-
-### Measurement
-
-<br/>
-
-| Item | Value |
-|---|---|
-| bytes_transferred | 33 |
-| packet_count | 1 |
-| latency_ms | 1.25 |
-| integrity_error | 0.0 |
-
-<br/>
-
-### Statistics
-
-<br/>
-
-| Item | Value |
-|---|---|
-| host | 127.0.0.1 |
-| port | 9000 |
-
-<br/>
-
-### Logs
-
-<br/>
-
-* Path:
-  test_envs/reports/results/pytest/test_cases/CT-NETWORK-001
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Test log | 20260902_115401_862736_test.log |
-| Important | None |
-
-<br/>
-
-## Local LLM Analysis
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Classification | Pass |
-| Confidence | 1.00 |
-| Analyzer | ollama/deepseek-r1:7b |
-| Status | enabled |
-
-<br/>
-
-### LLM Test Prompt
-
-<br/>
-
-```
-analyze the test result and provide a detailed report with recommendations for improvement.
-```
-
-<br/>
-
-### Test Result
-
-<br/>
-
-| Item | Value |
-|---|---|
-| **Status** | PASS |
-| **Severity** | LOW |
-| **Warnings** | 0 |
-| **Needs Escalation** | OFF |
-
-<br/>
-
-### Test Summary
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Summary | All tests have passed successfully. |
-| Failure Analysis | Not applicable |
-| Source Review | Not requested |
-| Warnings | None |
-| Recommendations | No recommendation provided. |
-
 ## Test History
+
+<br/>
+    
+only Pytest `CT-NETWORK-001` Test History , find the latest execution records below.    
+
+Go Back to the [Pytest TEST All Index](./index.md)   
 
 <br/>
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-09-02 | 13:40:17.475509+09:00 | [20260902_134017_475420](CT-NETWORK-001__20260902_134017_475420.md) | 6799149 | main | PASS | 0.000 | local |
 | 2026-09-02 | 11:54:01.862832+09:00 | [20260902_115401_862736](CT-NETWORK-001__20260902_115401_862736.md) | 09c8e03 | main | PASS | 0.001 | local |
 | 2026-09-02 | 11:17:33.935996+09:00 | [20260902_111733_935900](CT-NETWORK-001__20260902_111733_935900.md) | add5035 | main | PASS | 0.001 | local |
 | 2026-09-02 | 10:52:35.665490+09:00 | [20260902_105235_665407](CT-NETWORK-001__20260902_105235_665407.md) | 4e2ad99 | main | PASS | 0.000 | local |
@@ -175,26 +45,3 @@ analyze the test result and provide a detailed report with recommendations for i
 | 2026-08-19 | 10:14:28.856481+09:00 | [20260819_101428_856405](CT-NETWORK-001__20260819_101428_856405.md) | 87f0575 | main | PASS | 0.000 | local |
 | 2026-08-19 | 10:14:14.787351+09:00 | [20260819_101414_787266](CT-NETWORK-001__20260819_101414_787266.md) | 87f0575 | main | PASS | 0.000 | local |
 | 2026-08-19 | 10:07:57.933814+09:00 | [20260819_100757_933690](CT-NETWORK-001__20260819_100757_933690.md) | 8907224 | main | PASS | 0.001 | local |
-| 2026-08-19 | 10:04:33.059810+09:00 | [20260819_100433_059726](CT-NETWORK-001__20260819_100433_059726.md) | 2da8a43 | main | PASS | 0.000 | local |
-| 2026-08-19 | 10:02:24.350564+09:00 | [20260819_100224_350481_428408](CT-NETWORK-001__20260819_100224_350481_428408.md) | 2da8a43 | main | PASS | 0.000 | local |
-| 2026-08-19 | 09:48:32.960446+09:00 | [20260819_094832_960333](CT-NETWORK-001__20260819_094832_960333.md) | 186b0b4 | main | PASS | 0.000 | local |
-| 2026-08-18 | 16:15:19.474702+09:00 | [20260818_161519_474610](CT-NETWORK-001__20260818_161519_474610.md) | 1655a58 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:50:45.458022+09:00 | [20260818_155045_457924](CT-NETWORK-001__20260818_155045_457924.md) | 62efb90 | main | PASS | 0.001 | local |
-| 2026-08-18 | 15:49:23.578363+09:00 | [20260818_154923_578279](CT-NETWORK-001__20260818_154923_578279.md) | f8b4f74 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:44:39.629373+09:00 | [20260818_154439_629283](CT-NETWORK-001__20260818_154439_629283.md) | f8b4f74 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:42:41.671114+09:00 | [20260818_154241_671022](CT-NETWORK-001__20260818_154241_671022.md) | f8b4f74 | main | PASS | 0.001 | local |
-| 2026-08-18 | 15:38:45.760733+09:00 | [20260818_153845_760638](CT-NETWORK-001__20260818_153845_760638.md) | 31a3aa2 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:36:59.009240+09:00 | [20260818_153659_009158](CT-NETWORK-001__20260818_153659_009158.md) | 0501967 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:36:45.114648+09:00 | [20260818_153645_114564](CT-NETWORK-001__20260818_153645_114564.md) | 0501967 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:36:21.171395+09:00 | [20260818_153621_171305](CT-NETWORK-001__20260818_153621_171305.md) | 0501967 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:18:48.781220+09:00 | [20260818_151848_781098](CT-NETWORK-001__20260818_151848_781098.md) | a51f1d4 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:18:00.276838+09:00 | [20260818_151800_276748](CT-NETWORK-001__20260818_151800_276748.md) | a51f1d4 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:16:57.034196+09:00 | [20260818_151657_034116](CT-NETWORK-001__20260818_151657_034116.md) | a51f1d4 | main | PASS | 0.000 | local |
-| 2026-08-18 | 15:16:36.302386+09:00 | [20260818_151636_302296](CT-NETWORK-001__20260818_151636_302296.md) | a51f1d4 | main | PASS | 0.000 | local |
-| 2026-08-18 | 14:52:42.758069+09:00 | [20260818_145242_757972](CT-NETWORK-001__20260818_145242_757972.md) | 9ebc289 | main | PASS | 0.001 | local |
-| 2026-08-18 | 14:39:19.350468+09:00 | [20260818_143919_350374](CT-NETWORK-001__20260818_143919_350374.md) | 54ffa7d | main | PASS | 0.000 | local |
-| 2026-08-18 | 14:36:35.021060+09:00 | [20260818_143635_020976](CT-NETWORK-001__20260818_143635_020976.md) | ee3794c | main | PASS | 0.000 | local |
-| 2026-08-18 | 14:30:02.788020+09:00 | [20260818_143002_787927](CT-NETWORK-001__20260818_143002_787927.md) | 19c3b95 | main | PASS | 0.000 | local |
-| 2026-08-18 | 05:08:27.805875+00:00 | [20260818_050827_805849](CT-NETWORK-001__20260818_050827_805849.md) | 09ecec6 | main | PASS | 0.001 | local |
-| 2026-08-18 | 05:06:51.011128+00:00 | [20260818_050651_011104](CT-NETWORK-001__20260818_050651_011104.md) | 09ecec6 | main | PASS | 0.000 | local |
-| 2026-08-18 | 04:25:33.151192+00:00 | [20260818_042533_151165](CT-NETWORK-001__20260818_042533_151165.md) | 3827d4d | main | PASS | 0.000 | local |

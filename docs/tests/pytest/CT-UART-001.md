@@ -2,12 +2,15 @@
 
 <br/>
     
-only Pytest `CT-UART-001` Test History , find the latest execution records below.
+only Pytest `CT-UART-001` Test History , find the latest execution records below.    
+
+Go Back to the [Pytest TEST All Index](./index.md)   
 
 <br/>
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-09-02 | 13:40:15.241995+09:00 | [20260902_134015_241900](CT-UART-001__20260902_134015_241900.md) | 6799149 | main | PASS | 0.001 | local |
 | 2026-09-02 | 13:33:56.784787+09:00 | [20260902_133356_784688](CT-UART-001__20260902_133356_784688.md) | c2ba839 | main | PASS | 0.001 | local |
 | 2026-09-02 | 11:58:58.569668+09:00 | [20260902_115858_569577](CT-UART-001__20260902_115858_569577.md) | c2ba839 | main | PASS | 0.001 | local |
 | 2026-09-02 | 11:53:59.143356+09:00 | [20260902_115359_143257](CT-UART-001__20260902_115359_143257.md) | 09c8e03 | main | PASS | 0.001 | local |
