@@ -4,18 +4,22 @@
 
 ```text
 .vscode/
-├── settings.json
-├── launch.json
-└── tasks.json
+├── settings.json    # Python interpreter, analysis, and Testing
+├── launch.json      # Run and Debug configurations
+└── tasks.json       # Setup, check, test, report, and MkDocs tasks
 ```
 
-| File | Function |
+| File | Responsibility |
 |---|---|
-| `settings.json` | Interpreter, Testing adapter, discovery scope, analysis path |
-| `launch.json` | [Run and Debug](#run-and-debug) configurations |
-| `tasks.json` | [Tasks](#tasks) configurations |
+| `settings.json` | Define Project [Settings](#settings) configurations  |
+| `launch.json` | Define [Run and Debug](#run-and-debug) configurations |
+| `tasks.json` | Define [Tasks](#tasks) configurations  |
 
-### settings.json
+There is currently no `.vscode/extensions.json`; extension recommendations are not managed by the repository.
+
+### Settings
+
+Source: `.vscode/settings.json`
 
 ```json
 {
@@ -37,233 +41,227 @@
 }
 ```
 
-| Setting | Value | Function | Effect |
-|---|---|---|---|
-| `python.defaultInterpreterPath` | Project `.venv` | Python runtime selection | Testing, Debug, Terminal use project packages |
-| `python.terminal.activateEnvironment` | `true` | Terminal venv activation | New Python terminal activates `.venv` |
-| `python.testing.pytestEnabled` | `true` | pytest adapter enablement | Testing panel uses pytest |
-| `python.testing.unittestEnabled` | `false` | Native unittest adapter disablement | Duplicate unittest nodes prevented |
-| `python.testing.pytestArgs` | Options + paths | Discovery and execution scope | pytest and unittest share one test tree |
-| `python.testing.cwd` | Workspace root | pytest working directory | `test_envs.*` imports resolve from root |
-| `python.testing.autoTestDiscoverOnSaveEnabled` | `true` | Automatic rediscovery | Saved test files update the tree |
-| `python.analysis.extraPaths` | Workspace root | Pylance import path | Editor resolves `test_envs.*` imports |
+| Setting | Current value | Effect |
+|---|---|---|
+| `python.defaultInterpreterPath` | `${workspaceFolder}/.venv/Scripts/python.exe` | Testing, debugging, and most Tasks use the project virtual environment |
+| `python.terminal.activateEnvironment` | `true` | New Python terminals activate the selected environment |
+| `python.testing.pytestEnabled` | `true` | VS Code Testing uses the pytest adapter |
+| `python.testing.unittestEnabled` | `false` | Prevents duplicate native-unittest discovery |
+| `python.testing.pytestArgs` | Cache option plus two test roots | Discovers pytest CT and `unittest.TestCase` through pytest |
+| `python.testing.cwd` | `${workspaceFolder}` | Resolves `test_envs.*` imports from the repository root |
+| `python.testing.autoTestDiscoverOnSaveEnabled` | `true` | Recollects tests after test-file saves |
+| `python.analysis.extraPaths` | `${workspaceFolder}` | Lets Pylance resolve repository packages |
 
-| `pytestArgs` entry | Function |
+`-p no:cacheprovider` disables pytest's cache provider, so VS Code discovery and execution do not create or update `.pytest_cache`.
+
+## Run and Debug
+
+Source: `.vscode/launch.json`
+
+![VS Code Run and Debug panel](imgs/vscode_runanddebug_00.png)
+
+
+### Configurations
+
+| Configuration | Python | Entry point | Console | `justMyCode` | Function |
+|---|---|---|---|---:|---|
+| `SETUP 1: Select Operating System` | `python` | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Setup Task, then displays configuration |
+| `SETUP 2: Install Python Virtual Environment` | `python` | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Setup Task, then displays configuration |
+| `SETUP 3: Install Ollama and Local LLM` | Project Python | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Setup Task, then displays configuration |
+| `CHECK 1: Refresh Environment Check File` | Project Python | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Check Task, then displays configuration |
+| `Run 1: Extension Module` | Project Python | `test_envs.tools.extension_runner` | Integrated terminal | `true` | Runs `test_envs.tools.extensions.example` |
+| `Test Result: Generate Pending Markdown` | Project Python | `test_envs.tools.test_result` | Integrated terminal | `true` | Runs `--pending --docs` |
+| `Debug: Current Python File` | Project Python | `${file}` | Integrated terminal | `true` | Debugs the open Python file |
+| `Debug: Current pytest File` | Project Python | `pytest` | Integrated terminal | `false` | Debugs the open test with the selected fixture mode |
+
+“Project Python” means `${config:python.defaultInterpreterPath}`.
+
+### Setup and Check delegation
+
+The first four configurations use `preLaunchTask`. The Task performs the state-changing work; after it succeeds, the launch configuration runs `test_envs.tools.configuration config` and exits.
+
+| Launch configuration | `preLaunchTask` |
 |---|---|
-| `-p` | pytest plugin option |
-| `no:cacheprovider` | Disable `.pytest_cache` provider |
-| `test_envs/tests/pytest` | Discover Continuous Test cases |
-| `test_envs/tests/unittest` | Discover `unittest.TestCase` through pytest |
+| `SETUP 1: Select Operating System` | Same label |
+| `SETUP 2: Install Python Virtual Environment` | Same label |
+| `SETUP 3: Install Ollama and Local LLM` | Same label |
+| `CHECK 1: Refresh Environment Check File` | Same label |
 
+All launch configurations use `${workspaceFolder}` as `cwd`. Setup 1 and Setup 2 deliberately use system `python`; every later configuration uses the interpreter selected by `python.defaultInterpreterPath`.
+
+### Current pytest debugging
+
+`Debug: Current pytest File` runs:
+
+```text
+python -m pytest ${file} -s -vv --fixture-mode <selection>
+```
+
+The launch input `fixtureMode` offers `marker`, `mock`, and `hil`, with `marker` as the default. `marker` is a selection instruction; the CT itself resolves to `mock` or `hil`.
 
 ## Tasks
 
-<br/>
+Source: `.vscode/tasks.json`
 
-![](./imgs/vscode_task_00.png)
+![VS Code Tasks](imgs/vscode_task_00.png)
 
-<br/>
 
-| Group | Label | Function |
+Every Task has `type: process`, runs in the foreground, and has no `isBackground` flag. Setup 1 and Setup 2 use system `python`; all later Tasks use `${config:python.defaultInterpreterPath}`.
+
+### Setup and Check Tasks
+
+| Task label | Module | Arguments | Function |
+|---|---|---|---|
+| `SETUP 1: Select Operating System` | `test_envs.tools.configuration` | `select-os` | Stores the selected OS in project configuration |
+| `SETUP 2: Install Python Virtual Environment` | `test_envs.tools.environment_setup` | `python` | Creates `.venv` and installs dependencies |
+| `SETUP 3: Install Ollama and Local LLM` | `test_envs.tools.environment_setup` | `ollama` | Installs/checks Ollama and pulls the configured model |
+| `CHECK 1: Refresh Environment Check File` | `test_envs.tools.configuration` | `check` | Regenerates `check.json` |
+| `CHECK 2: Show Environment Configuration` | `test_envs.tools.configuration` | `config` | Prints the current project configuration |
+| `CHECK 3: Run Ollama Server (Foreground)` | `test_envs.tools.environment_setup` | `serve` | Runs an Ollama server owned by the terminal Task |
+
+The dedicated-terminal presentation is configured for Setup 1 and Check 3. Closing or stopping Check 3 ends the foreground server process owned by that Task.
+
+### TEST CASE Tasks
+
+| Task label | Scope | Arguments | Test group |
+|---|---|---|---|
+| `TEST CASE: ALL` | All CT files in `test_cases` | `--fixture-mode ${input:fixtureMode}` | Default test Task |
+| `TEST CASE: TEST ID` | One selected TEST ID | `--test-id ${input:testCaseId} --fixture-mode ${input:fixtureMode}` | Non-default test Task |
+
+Both Tasks disable the pytest cache provider and execute `test_envs/tests/pytest/test_cases`.
+
+### Report Tasks
+
+| Task label | Entry point | Function |
 |---|---|---|
-| SETUP | `SETUP 1: Select Operating System` | Store selected OS |
-| SETUP | `SETUP 2: Install Python Virtual Environment` | Create project `.venv` |
-| SETUP | `SETUP 3: Install Ollama and Local LLM` | Install runtime and model |
-| CHECK | `CHECK 1: Refresh Environment Check File` | Regenerate environment inventory |
-| CHECK | `CHECK 2: Show Environment Configuration` | Print project configuration |
-| CHECK | `CHECK 3: Run Ollama Server (Foreground)` | Own Ollama foreground lifecycle |
-| TEST CASE | `TEST CASE: ALL` | Execute all pytest CT cases |
-| TEST CASE | `TEST CASE: TEST ID` | Execute selected TEST ID |
-| REPORT | `REPORT: Generate Pending Markdown` | Process missing Execution documents |
-| REPORT | `REPORT: Convert Latest Markdown to HTML` | Convert latest Markdown to HTML |
-| REPORT | `REPORT: Convert Latest Markdown to DOCX` | Convert latest Markdown to DOCX |
-| MkDocs | `MkDocs: Serve Locally` | Local documentation server |
-| MkDocs | `MkDocs: Serve on Network` | Network documentation server |
-| MkDocs | `MkDocs: Build` | Static site build |
-| MkDocs | `MkDocs: Build Strict` | Warning-as-error static build |
+| `REPORT-Mkdocs: Generate Markdown to Pytest/Unittest` | `test_envs.tools.test_result --pending --docs` | Generates missing Markdown and publishes MkDocs pages |
+| `REPORT-Pandoc: Convert Latest Markdown to HTML` | `test_envs.tools.pandoc_reporter --latest --format html` | Converts the latest Markdown to HTML |
+| `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown to Word |
 
-### Process lifecycle
+### MkDocs Tasks
 
-| Rule | Value | Function |
+| Task label | Arguments | Address / result |
 |---|---|---|
-| Task type | `process` | Direct child-process ownership |
-| Background flag | None | Prevent orphan background tasks |
-| Ollama server | Foreground | Terminal owns server lifetime |
-| Setup/Check launch | `preLaunchTask` | Delegate mutation to Task |
-| OS metadata in Task/Launch | Prohibited | Centralize OS selection in config |
+| `MkDocs: Serve Local 8000` | `mkdocs serve` | MkDocs default local address and port 8000 |
+| `MkDocs: Serve Local 8080` | `mkdocs serve -a 0.0.0.0:8080` | All interfaces, port 8080 |
+| `MkDocs: Serve Remote ` | `mkdocs serve -a 0.0.0.0:8000` | All interfaces, port 8000 |
+| `MkDocs: Build` | `mkdocs build` | Generates the static site |
+| `MkDocs: Build Strict` | `mkdocs build --strict` | Treats build warnings as errors |
 
-### Inputs
+The `MkDocs: Serve Remote ` source label currently contains a trailing space.
 
-| ID | Options | Function |
-|---|---|---|
-| `testCaseId` | UART, USB, Network TEST IDs | Select one CT test case |
-| `fixtureMode` | `marker`, `mock`, `hil` | Select effective Fixture mode |
+### Task inputs
 
-### Reports
+| Input ID | Type | Options | Default | Used by |
+|---|---|---|---|---|
+| `testCaseId` | `pickString` | `CT-UART-001`, `CT-USB-001`, `CT-NETWORK-001` | `CT-UART-001` | `TEST CASE: TEST ID` |
+| `fixtureMode` | `pickString` | `marker`, `mock`, `hil` | `marker` | Both TEST CASE Tasks |
 
-| Item | Value | Function |
-|---|---|---|
-| Pending command | `python -m test_envs.tools.test_result --pending --docs` | Generate missing Execution documents |
-| Progress interval | 1 second | Display active report-processing duration |
-| HTML | Pandoc | Convert latest Markdown to HTML |
-| DOCX | Pandoc | Convert latest Markdown to Word |
+OS selection is not a Task or launch input. It is managed by `test_envs/configs/config.json` through the Setup 1 command.
 
 
 ## Testing
 
-<br/>
-
-
 ![VS Code Testing panel](imgs/vscode_testing_00.png)
 
-<br/>
-
-| Image | Function |
-|---|---|
-| `vscode_testing_00.png` | Testing tree, Run/Debug controls, test status |
-
-### Adapter
-
-| Component | Role | Input | Output |
-|---|---|---|---|
-| VS Code Testing panel | Test tree and controls | Adapter discovery result | Run/Debug status |
-| Microsoft Python extension | VS Code–pytest integration | `settings.json` | pytest process |
-| pytest adapter | Single project adapter | `python.testing.pytestArgs` | pytest + unittest nodes |
-| pytest collector | Python test discovery | `test_*.py` | Modules, classes, functions |
-| pytest CT hook | CT result normalization | `@pytest.mark.ct` | TEST ID Result JSON + Test log |
-| unittest hook | Function result normalization | pytest reports under `tests/unittest` | Execution Result JSON + Result log |
-
-| Adapter rule | Function |
-|---|---|
-| pytest adapter enabled | Unified pytest and unittest execution |
-| Native unittest adapter disabled | Duplicate discovery and execution prevention |
-| Project `.venv` interpreter | Same dependencies for discover, run, debug |
-| Workspace `cwd` | Repository package import resolution |
-
-### Discovery
+### Discovery model
 
 ```text
-settings.json load
-      ↓
-Project interpreter selection
-      ↓
-Workspace cwd selection
-      ↓
-pytest discovery with pytestArgs
-├── test_envs/tests/pytest
-└── test_envs/tests/unittest
-      ↓
-Testing tree update
+VS Code Testing
+└── Microsoft Python extension
+    └── pytest adapter
+        ├── test_envs/tests/pytest
+        │   └── CT test cases: mock or hil
+        └── test_envs/tests/unittest
+            └── unittest.TestCase collected by pytest
 ```
 
-| Discovery function | Trigger | Action | Result |
-|---|---|---|---|
-| Initial discovery | Workspace open | Load settings and collect tests | Full Testing tree |
-| Automatic discovery | Test file save | Recollect affected files | Updated nodes |
-| Manual discovery | Refresh Tests | Full pytest collection | Rebuilt tree |
-| Configuration discovery | Testing setting change | Restart adapter | New discovery scope |
+| Component | Current rule |
+|---|---|
+| Adapter | pytest only |
+| Interpreter | Project `.venv` |
+| Working directory | Workspace root |
+| CT root | `test_envs/tests/pytest` |
+| unittest root | `test_envs/tests/unittest` |
+| File pattern | `test_*.py` from `pytest.ini` |
+| Automatic discovery | Enabled on save |
+| Cache provider | Disabled |
 
-| Test tree node | Source | Function |
-|---|---|---|
-| Folder | Test directory | Group modules |
-| Module | `test_*.py` | Group classes/functions |
-| Class | `unittest.TestCase` or pytest class | Group test methods |
-| Function | `test_*` function/method | Executable test node |
-
-| Discovery failure | Check | Recovery |
-|---|---|---|
-| No tests found | `python.testing.pytestArgs` | Correct test paths |
-| Import error | Interpreter + `extraPaths` | Select `.venv`, verify workspace root |
-| `.venv` missing | `python.defaultInterpreterPath` | Run Setup 2 |
-| Duplicate unittest nodes | `unittestEnabled` | Set `false` |
-| Cache path warning | pytest cache provider | Use `-p no:cacheprovider` |
-
-### Pytest execution
-
-| Item | Rule | Function |
-|---|---|---|
-| Identification | TEST ID | Identify CT test case |
-| Fixture | `fixture_id` | Select composite Fixture |
-| Default mode | Marker `fixture_mode` | Select default Mock/HIL mode |
-| CLI override | `--fixture-mode` | Override marker mode |
-| Result | `<execution-id>_result.json` | Structured test result |
-| Log | `<execution-id>_test.log` | Combined test/interface/equipment log |
-
-### Unittest execution
-
-| Item | Rule | Function |
-|---|---|---|
-| Identification | Function name | Identify unit-test function |
-| TEST ID | Not used | pytest-only identifier excluded |
-| Fixture mode | Not used | pytest CT mode excluded |
-| Result capture | unittest `conftest.py` | Collect function reports |
-| Result | `<execution-id>_result.json` | Function status list and summary |
-| Log | `<execution-id>_result.log` | Function status and failure detail |
-| Local LLM | Not used | Direct Markdown conversion |
-
-### Testing actions
-
-| Action | Scope | Function | Result |
-|---|---|---|---|
-| Run All Tests | pytest + unittest | Execute every discovered node | Framework Result files |
-| Run Tests in Folder | Selected folder | Execute directory subtree | Scoped execution result |
-| Run Test | Selected node | Execute module/class/function | Single scoped execution |
-| Debug Test | Selected node | Execute with debugger | Breakpoints, variables, call stack |
-| Refresh Tests | Workspace | Rerun discovery | Updated Testing tree |
-| Show Test Output | Latest run | Open Python Test Log | Collection/execution diagnostics |
-| Cancel Test Run | Active run | Stop pytest process | Interrupted execution |
-
-### Result flow
+### Discovery lifecycle
 
 ```text
-Testing Run
-├── pytest
-│   ├── TEST ID Result JSON
-│   └── Test log
-└── unittest
-    ├── Function Result JSON
-    └── Result log
-         ↓
-REPORT: Generate Pending Markdown
-         ↓
-docs/tests/{pytest,unittest}
+Open workspace
+      ↓
+Load settings.json
+      ↓
+Select .venv/Scripts/python.exe
+      ↓
+Run pytest collection from workspace root
+      ↓
+Build the unified Testing tree
 ```
 
-### Related documents
-
-| Scope | Document |
+| Trigger | Result |
 |---|---|
-| Pytest operation | [pytest_operation.md](pytest_operation.md) |
-| Unittest operation | [unittest_operation.md](unittest_operation.md) |
-| Pytest results | [tests/pytest/index.md](tests/pytest/index.md) |
-| Unittest results | [tests/unittest/index.md](tests/unittest/index.md) |
+| Workspace open | Initial collection of both configured roots |
+| Save a test file | Automatic rediscovery |
+| Refresh Tests | Full manual recollection |
+| Change Testing settings | Adapter restarts with the new scope |
 
-## Run and Debug
+### Execution contracts
 
-<br/>
-
-![VS Code Run and Debug panel](imgs/vscode_runanddebug_00.png)
-
-<br/>
-
-| Image | Function |
-|---|---|
-| `vscode_runanddebug_00.png` | Launch configuration selection and debugger start |
-
-| Configuration | Interpreter | Function | Output |
+| Area | Identifier | Mode | Result |
 |---|---|---|---|
-| `SETUP 1: Select Operating System` | System Python | Select config OS before venv | Updated `config.json` |
-| `SETUP 2: Install Python Virtual Environment` | System Python | Create `.venv` and dependencies | Project Python runtime |
-| `SETUP 3: Install Ollama and Local LLM` | Project Python | Install Ollama and pull selected model | Local LLM runtime |
-| `CHECK 1: Refresh Environment Check File` | Project Python | Inspect OS, Python, Ollama, models | Updated `check.json` |
-| `Run 1: Extension Module` | Project Python | Execute extension entry point | Extension output |
-| `Test Result: Generate Pending Markdown` | Project Python | Convert pending Results | Markdown + MkDocs documents |
-| `Debug: Current Python File` | Project Python | Debug open Python file | Terminal + debugger |
-| `Debug: Current pytest File` | Project Python | Debug open pytest file | Fixture-mode debugging |
+| pytest CT | TEST ID | Final mode is `mock` or `hil` | `<execution-id>_result.json` + `<execution-id>_test.log` |
+| unittest | Test function | Fixture mode is not used | `<execution-id>_result.json` + `<execution-id>_result.log` |
+
+The Testing panel supports running or debugging the full tree, a folder, a module, a class, or one test function. CT normalization is handled by `test_envs/tests/pytest/conftest.py`; unittest normalization is handled by `test_envs/tests/unittest/conftest.py`.
+
+### Discovery troubleshooting
+
+| Symptom | Check |
+|---|---|
+| No tests found | Verify both paths in `python.testing.pytestArgs` |
+| Import error | Verify the `.venv` interpreter, workspace `cwd`, and `extraPaths` |
+| `.venv` missing | Run `SETUP 2: Install Python Virtual Environment` |
+| Duplicate unittest nodes | Keep `python.testing.unittestEnabled` set to `false` |
+| Cache path warning | Keep `-p no:cacheprovider` in `pytestArgs` |
 
 
 ## Python
 
-<br/>
+![VS Code Python interpreter](imgs/vscode_python_00.png)
 
-![](./imgs/vscode_python_00.png)
+| Stage | Interpreter |
+|---|---|
+| Setup 1: OS selection | System `python` |
+| Setup 2: `.venv` creation | System `python` |
+| Setup 3 and later | `${workspaceFolder}/.venv/Scripts/python.exe` |
+| VS Code Testing | `${workspaceFolder}/.venv/Scripts/python.exe` |
+| Python terminal | Selected environment, automatically activated |
+
+## Result Flow
+
+```text
+VS Code Testing or TEST CASE Task
+├── pytest CT
+│   ├── TEST ID result JSON
+│   └── test log
+└── unittest
+    ├── execution result JSON
+    └── result log
+         ↓
+REPORT-Mkdocs: Generate Markdown to Pytest/Unittest
+         ↓
+docs/tests/{pytest,unittest}
+```
+
+## Related Documents
+
+| Scope | Document |
+|---|---|
+| Pytest framework | [pytest.md](pytest.md) |
+| Pytest operation | [pytest_operation.md](pytest_operation.md) |
+| Unittest operation | [unittest_operation.md](unittest_operation.md) |
+| Pytest results | [tests/pytest/index.md](tests/pytest/index.md) |
+| Unittest results | [tests/unittest/index.md](tests/unittest/index.md) |
