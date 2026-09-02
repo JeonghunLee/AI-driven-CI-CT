@@ -4,6 +4,8 @@
 
 ## Documents
 
+<br/>
+
 | Scope | Document | Components |
 |---|---|---|
 | Python Environment | [python_environment.md](python_environment.md) | OS, Python, venv, dependencies |
@@ -17,22 +19,46 @@
 | Pytest Results | [tests/pytest/index.md](tests/pytest/index.md) | TEST ID, Execution history |
 | Unittest Results | [tests/unittest/index.md](tests/unittest/index.md) | Function count, Execution history |
 
-## Flow
+## TEST Flow
 
 ```mermaid
-flowchart LR
-    A[Environment] --> B[Pytest Operation]
-    A --> C[Unittest Operation]
-    B --> D[Pytest Result]
+flowchart TD
+    TEST_VSCODE[VSCODE Testing] 
+    TEST_MAIN[TEST System Environment] 
+    TEST_PYTEST[Pytest Operation]
+    TEST_MAIN --> C[Unittest Operation]
+    TEST_PYTEST --> D[Pytest Result]
     C --> E[Unittest Result]
     D --> F[Local LLM]
     F --> G[Pytest Markdown]
     E --> H[Unittest Markdown]
     G --> I[MkDocs]
+    
+    TEST_VSCODE
+    TEST_MAIN --> TEST_PYTEST
+    TEST_MAIN --> TEST_PYTEST
+
     H --> I
 ```
 
-## Paths
+## Test System Paths
+
+<br/>
+
+```
+.
+├── docs/
+├── site/
+└── test_envs/
+    ├── configs/
+    │   ├── config.json
+    │   ├── check.json
+    │   ├── pytest/
+    │   └── unittest/
+    ├── tests/
+    ├── reports/
+    └── tools/
+```
 
 | Scope | Path |
 |---|---|

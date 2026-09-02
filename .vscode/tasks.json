@@ -156,7 +156,7 @@
             "problemMatcher": []
         },
         {
-            "label": "MkDocs: Serve Locally",
+            "label": "MkDocs: Serve Local 8000",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -167,7 +167,20 @@
             "problemMatcher": []
         },
         {
-            "label": "MkDocs: Serve on Network",
+            "label": "MkDocs: Serve Local 8080",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "serve",
+                "-a",
+                "0.0.0.0:8080"
+            ],
+            "problemMatcher": []
+        },        
+        {
+            "label": "MkDocs: Serve Remote ",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
