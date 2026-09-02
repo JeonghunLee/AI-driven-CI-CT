@@ -1,6 +1,9 @@
 {
     "version": "2.0.0",
     "tasks": [
+        //Setup Task Section
+        // This section contains tasks for setting up the development environment, including selecting the OS, installing Python virtual environment, and installing Ollama and local LLM.
+        // Each task is labeled with a "SETUP" prefix for easy identification.
         {
             "label": "SETUP 1: Select Operating System",
             "type": "process",
@@ -39,6 +42,9 @@
             ],
             "problemMatcher": []
         },
+        // Check Task Section
+        // This section contains tasks for checking the environment and running the Ollama server.
+        // Each task is labeled with a "CHECK" prefix for easy identification.
         {
             "label": "CHECK 1: Refresh Environment Check File",
             "type": "process",
@@ -77,6 +83,8 @@
             },
             "problemMatcher": []
         },
+        // Test Case Task Section
+        // "TEST CASE" prefix for easy identification and Input Section for test case ID and fixture mode        
         {
             "label": "TEST CASE: ALL",
             "type": "process",
@@ -117,8 +125,11 @@
             },
             "problemMatcher": []
         },
+        // Report Task Section
+        // This section contains tasks for generating and converting test reports.
+        // Each task is labeled with a "REPORT" prefix for easy identification.
         {
-            "label": "REPORT: Generate Pending Markdown",
+            "label": "REPORT-Mkdocs: Generate Pending Markdown",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -130,7 +141,7 @@
             "problemMatcher": []
         },
         {
-            "label": "REPORT: Convert Latest Markdown to HTML",
+            "label": "REPORT-Pandoc: Convert Latest Markdown to HTML",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -143,7 +154,7 @@
             "problemMatcher": []
         },
         {
-            "label": "REPORT: Convert Latest Markdown to DOCX",
+            "label": "REPORT-Pandoc: Convert Latest Markdown to DOCX",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -155,6 +166,9 @@
             ],
             "problemMatcher": []
         },
+        // MkDocs Task Section
+        // This section contains tasks for serving and building MkDocs documentation.
+        // Each task is labeled with a "MkDocs" prefix for easy identification.
         {
             "label": "MkDocs: Serve Local 8000",
             "type": "process",
@@ -189,7 +203,8 @@
                 "serve",
                 "-a",
                 "0.0.0.0:8000"
-            ]
+            ],
+            "problemMatcher": []
         },
         {
             "label": "MkDocs: Build",
@@ -213,6 +228,11 @@
             ]
         }
     ],
+    // End of tasks array
+    // End of tasks section
+    
+    // Inputs section (Test case and fixture mode inputs)
+    // "TEST CASE: TEST ID", and "TEST CASE: ALL" 
     "inputs": [
         {
             "id": "testCaseId",
