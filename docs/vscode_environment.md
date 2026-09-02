@@ -114,7 +114,7 @@
 <br/>
 
 
-![VS Code Testing panel](imgs/vscode_testing_01.png)
+![VS Code Testing panel](imgs/vscode_testing_00.png)
 
 <br/>
 
