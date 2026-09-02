@@ -1,6 +1,6 @@
 # VS Code Environment
 
-## Files
+## VS Code Files
 
 ```text
 .vscode/
@@ -12,10 +12,10 @@
 | File | Function |
 |---|---|
 | `settings.json` | Interpreter, Testing adapter, discovery scope, analysis path |
-| `launch.json` | Run and Debug configurations |
-| `tasks.json` | Setup, Check, Test, Report, MkDocs processes |
+| `launch.json` | [Run and Debug](#run-and-debug) configurations |
+| `tasks.json` | [Tasks](#tasks) configurations |
 
-## settings.json
+### settings.json
 
 ```json
 {
@@ -55,11 +55,66 @@
 | `test_envs/tests/pytest` | Discover Continuous Test cases |
 | `test_envs/tests/unittest` | Discover `unittest.TestCase` through pytest |
 
+
+## Tasks
+
+<br/>
+
+![](./imgs/vscode_task_00.png)
+
+<br/>
+
+| Group | Label | Function |
+|---|---|---|
+| SETUP | `SETUP 1: Select Operating System` | Store selected OS |
+| SETUP | `SETUP 2: Install Python Virtual Environment` | Create project `.venv` |
+| SETUP | `SETUP 3: Install Ollama and Local LLM` | Install runtime and model |
+| CHECK | `CHECK 1: Refresh Environment Check File` | Regenerate environment inventory |
+| CHECK | `CHECK 2: Show Environment Configuration` | Print project configuration |
+| CHECK | `CHECK 3: Run Ollama Server (Foreground)` | Own Ollama foreground lifecycle |
+| TEST CASE | `TEST CASE: ALL` | Execute all pytest CT cases |
+| TEST CASE | `TEST CASE: TEST ID` | Execute selected TEST ID |
+| REPORT | `REPORT: Generate Pending Markdown` | Process missing Execution documents |
+| REPORT | `REPORT: Convert Latest Markdown to HTML` | Convert latest Markdown to HTML |
+| REPORT | `REPORT: Convert Latest Markdown to DOCX` | Convert latest Markdown to DOCX |
+| MkDocs | `MkDocs: Serve Locally` | Local documentation server |
+| MkDocs | `MkDocs: Serve on Network` | Network documentation server |
+| MkDocs | `MkDocs: Build` | Static site build |
+| MkDocs | `MkDocs: Build Strict` | Warning-as-error static build |
+
+### Process lifecycle
+
+| Rule | Value | Function |
+|---|---|---|
+| Task type | `process` | Direct child-process ownership |
+| Background flag | None | Prevent orphan background tasks |
+| Ollama server | Foreground | Terminal owns server lifetime |
+| Setup/Check launch | `preLaunchTask` | Delegate mutation to Task |
+| OS metadata in Task/Launch | Prohibited | Centralize OS selection in config |
+
+### Inputs
+
+| ID | Options | Function |
+|---|---|---|
+| `testCaseId` | UART, USB, Network TEST IDs | Select one CT test case |
+| `fixtureMode` | `marker`, `mock`, `hil` | Select effective Fixture mode |
+
+### Reports
+
+| Item | Value | Function |
+|---|---|---|
+| Pending command | `python -m test_envs.tools.test_result --pending --docs` | Generate missing Execution documents |
+| Progress interval | 1 second | Display active report-processing duration |
+| HTML | Pandoc | Convert latest Markdown to HTML |
+| DOCX | Pandoc | Convert latest Markdown to Word |
+
+
 ## Testing
 
 <br/>
 
-![VS Code Testing panel](imgs/vscode_testing_00.png)
+
+![VS Code Testing panel](imgs/vscode_testing_01.png)
 
 <br/>
 
@@ -206,54 +261,9 @@ docs/tests/{pytest,unittest}
 | `Debug: Current Python File` | Project Python | Debug open Python file | Terminal + debugger |
 | `Debug: Current pytest File` | Project Python | Debug open pytest file | Fixture-mode debugging |
 
-## Tasks
+
+## Python
 
 <br/>
 
-![](./imgs/vscode_task_00.png)
-
-<br/>
-
-| Group | Label | Function |
-|---|---|---|
-| SETUP | `SETUP 1: Select Operating System` | Store selected OS |
-| SETUP | `SETUP 2: Install Python Virtual Environment` | Create project `.venv` |
-| SETUP | `SETUP 3: Install Ollama and Local LLM` | Install runtime and model |
-| CHECK | `CHECK 1: Refresh Environment Check File` | Regenerate environment inventory |
-| CHECK | `CHECK 2: Show Environment Configuration` | Print project configuration |
-| CHECK | `CHECK 3: Run Ollama Server (Foreground)` | Own Ollama foreground lifecycle |
-| TEST CASE | `TEST CASE: ALL` | Execute all pytest CT cases |
-| TEST CASE | `TEST CASE: TEST ID` | Execute selected TEST ID |
-| REPORT | `REPORT: Generate Pending Markdown` | Process missing Execution documents |
-| REPORT | `REPORT: Convert Latest Markdown to HTML` | Convert latest Markdown to HTML |
-| REPORT | `REPORT: Convert Latest Markdown to DOCX` | Convert latest Markdown to DOCX |
-| MkDocs | `MkDocs: Serve Locally` | Local documentation server |
-| MkDocs | `MkDocs: Serve on Network` | Network documentation server |
-| MkDocs | `MkDocs: Build` | Static site build |
-| MkDocs | `MkDocs: Build Strict` | Warning-as-error static build |
-
-## Process lifecycle
-
-| Rule | Value | Function |
-|---|---|---|
-| Task type | `process` | Direct child-process ownership |
-| Background flag | None | Prevent orphan background tasks |
-| Ollama server | Foreground | Terminal owns server lifetime |
-| Setup/Check launch | `preLaunchTask` | Delegate mutation to Task |
-| OS metadata in Task/Launch | Prohibited | Centralize OS selection in config |
-
-## Inputs
-
-| ID | Options | Function |
-|---|---|---|
-| `testCaseId` | UART, USB, Network TEST IDs | Select one CT test case |
-| `fixtureMode` | `marker`, `mock`, `hil` | Select effective Fixture mode |
-
-## Reports
-
-| Item | Value | Function |
-|---|---|---|
-| Pending command | `python -m test_envs.tools.test_result --pending --docs` | Generate missing Execution documents |
-| Progress interval | 1 second | Display active report-processing duration |
-| HTML | Pandoc | Convert latest Markdown to HTML |
-| DOCX | Pandoc | Convert latest Markdown to Word |
+![](./imgs/vscode_python_00.png)
