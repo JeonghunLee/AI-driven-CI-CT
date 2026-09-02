@@ -6,14 +6,17 @@
 
 | Category | Test ID | Mode | Latest | Execution Count |
 |---|---|---|---|---:|
-| communication | [`CT-NETWORK-001`](CT-NETWORK-001.md) | mock | 2026-09-02 | 59 |
-| timing | [`CT-UART-001`](CT-UART-001.md) | mock | 2026-09-02 | 65 |
-| communication | [`CT-USB-001`](CT-USB-001.md) | mock | 2026-09-02 | 59 |
+| communication | [`CT-NETWORK-001`](CT-NETWORK-001.md) | mock | 2026-09-02 | 60 |
+| timing | [`CT-UART-001`](CT-UART-001.md) | mock | 2026-09-02 | 66 |
+| communication | [`CT-USB-001`](CT-USB-001.md) | mock | 2026-09-02 | 60 |
 
 ## Recent Executions
 
 | Execution ID | Category | Test ID |
 |---|---|---|
+| [`20260902_105235_665407`](CT-NETWORK-001__20260902_105235_665407.md) | communication | `CT-NETWORK-001` |
+| [`20260902_105235_605312`](CT-USB-001__20260902_105235_605312.md) | communication | `CT-USB-001` |
+| [`20260902_105235_557551`](CT-UART-001__20260902_105235_557551.md) | timing | `CT-UART-001` |
 | [`20260902_104653_274766`](CT-NETWORK-001__20260902_104653_274766.md) | communication | `CT-NETWORK-001` |
 | [`20260902_104653_228300`](CT-USB-001__20260902_104653_228300.md) | communication | `CT-USB-001` |
 | [`20260902_104653_180128`](CT-UART-001__20260902_104653_180128.md) | timing | `CT-UART-001` |
@@ -31,6 +34,3 @@
 | [`20260819_135654_564984`](CT-UART-001__20260819_135654_564984.md) | timing | `CT-UART-001` |
 | [`20260819_135500_562991`](CT-NETWORK-001__20260819_135500_562991.md) | communication | `CT-NETWORK-001` |
 | [`20260819_135500_514198`](CT-USB-001__20260819_135500_514198.md) | communication | `CT-USB-001` |
-| [`20260819_135500_466014`](CT-UART-001__20260819_135500_466014.md) | timing | `CT-UART-001` |
-| [`20260819_134842_368005`](CT-NETWORK-001__20260819_134842_368005.md) | communication | `CT-NETWORK-001` |
-| [`20260819_134842_317352`](CT-USB-001__20260819_134842_317352.md) | communication | `CT-USB-001` |
