@@ -218,7 +218,7 @@
 <span class="md-ellipsis">
     
   
-    TEST Operation
+    TEST Framework
   
 
     
@@ -227,6 +227,56 @@
 </label>
 <nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST Framework
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../pytest.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest (HIL or Mock)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../unittest.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST Operation
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
 <span class="md-nav__icon md-icon"></span>
             
   
@@ -263,74 +313,12 @@
 </nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
-<span class="md-ellipsis">
-    
-  
-    TEST Framework
-  
-
-    
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_4">
-<span class="md-nav__icon md-icon"></span>
-            
-  
-    TEST Framework
-  
-
-          </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../pytest.html">
-<span class="md-ellipsis">
-    
-  
-    Pytest
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../unittest.html">
-<span class="md-ellipsis">
-    
-  
-    Unittest
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../hil_mock.html">
-<span class="md-ellipsis">
-    
-  
-    HIL &amp; Mock
-  
-
-    
-  </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
 <input class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
 <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
 <span class="md-ellipsis">
     
   
-    TEST Reports
+    TEST Results
   
 
     
@@ -342,7 +330,7 @@
 <span class="md-nav__icon md-icon"></span>
             
   
-    TEST Reports
+    TEST Results
   
 
           </label>
@@ -396,6 +384,25 @@
       
     </span>
 </a>
+<nav aria-label="Test summary" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-configs">
+<span class="md-ellipsis">
+      
+        Test configs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-source">
+<span class="md-ellipsis">
+      
+        Test Source
+      
+    </span>
+</a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#measurement">
@@ -416,47 +423,10 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#important-logs">
+<a class="md-nav__link" href="#logs">
 <span class="md-ellipsis">
       
-        Important logs
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#warnings">
-<span class="md-ellipsis">
-      
-        Warnings
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#local-llm-analysis">
-<span class="md-ellipsis">
-      
-        Local LLM analysis
-      
-    </span>
-</a>
-<nav aria-label="Local LLM analysis" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#failure-analysis">
-<span class="md-ellipsis">
-      
-        Failure analysis
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#source-review">
-<span class="md-ellipsis">
-      
-        Source review
+        Logs
       
     </span>
 </a>
@@ -465,13 +435,44 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#test-history">
+<a class="md-nav__link" href="#local-llm-analysis">
 <span class="md-ellipsis">
       
-        Test history
+        Local LLM Analysis
       
     </span>
 </a>
+<nav aria-label="Local LLM Analysis" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llm-test-prompt">
+<span class="md-ellipsis">
+      
+        LLM Test Prompt
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-result">
+<span class="md-ellipsis">
+      
+        Test Result
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-summary_1">
+<span class="md-ellipsis">
+      
+        Test Summary
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -481,338 +482,297 @@
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
 <h1 id="ct-usb-001-test-result">CT-USB-001 Test Result</h1>
+<p>Go Back to the <a href="index.html">Pytest TEST All Index</a> </p>
+<p><br/> </p>
 <h2 id="test-summary">Test summary</h2>
-<ul>
-<li><strong>Description:</strong> test_usb_bulk_loopback</li>
-<li><strong>Environment:</strong> local</li>
-<li><strong>Configuration:</strong> {'category': 'communication', 'interface': 'USB', 'equipment': 'Digilent'}</li>
-<li><strong>Test mode:</strong> mock</li>
-<li><strong>Equipment:</strong> Digilent</li>
-<li><strong>Equipment mode:</strong> mock</li>
-<li><strong>Interface:</strong> USB</li>
-<li><strong>Interface mode:</strong> mock</li>
-<li><strong>Result:</strong> <strong>PASS</strong></li>
-<li><strong>Execution time:</strong> 0.000 seconds</li>
-<li><strong>Execution date:</strong> 2026-08-14T00:44:11.750632+00:00</li>
-<li><strong>Commit / revision:</strong> <code>local</code></li>
-<li><strong>Execution ID:</strong> <code>20260814_004411_750615</code></li>
-</ul>
-<h2 id="measurement">Measurement</h2>
-<ul>
-<li><strong>bytes_transferred:</strong> 256</li>
-<li><strong>packet_count:</strong> 4</li>
-<li><strong>max_packet_size:</strong> 64</li>
-<li><strong>bus_voltage:</strong> 5.0</li>
-<li><strong>integrity_error:</strong> 0.0</li>
-</ul>
-<h2 id="statistics">Statistics</h2>
-<ul>
-<li><strong>endpoint:</strong> 1</li>
-<li><strong>transfer_count:</strong> 1</li>
-</ul>
-<h2 id="important-logs">Important logs</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="warnings">Warnings</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="local-llm-analysis">Local LLM analysis</h2>
-<p>CT-USB-001 passed in 0.000s.</p>
-<ul>
-<li><strong>Classification:</strong> <code>passed</code></li>
-<li><strong>Confidence:</strong> 1.00</li>
-<li><strong>Analyzer:</strong> <code>deterministic-fallback</code></li>
-</ul>
-<h3 id="failure-analysis">Failure analysis</h3>
-<p>Not applicable</p>
-<h3 id="source-review">Source review</h3>
-<p>Not requested</p>
-<h2 id="test-history">Test history</h2>
+<p><br/></p>
 <table>
 <thead>
 <tr>
-<th>Date</th>
-<th>Execution ID</th>
-<th>Commit</th>
-<th>Result</th>
-<th style="text-align: right;">Duration (s)</th>
-<th>Environment</th>
+<th>Item</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>2026-08-14T00:44:11.750632+00:00</td>
-<td>20260814_004411_750615</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
+<td>Description</td>
+<td>test_usb_bulk_loopback</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>communication</td>
+</tr>
+<tr>
+<td>Environment</td>
 <td>local</td>
 </tr>
 <tr>
-<td>2026-08-14T00:36:29.418621+00:00</td>
-<td>20260814_003629_418606</td>
-<td>local</td>
+<td>Result</td>
 <td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
 </tr>
 <tr>
-<td>2026-08-14T00:36:16.268681+00:00</td>
-<td>20260814_003616_268669</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Execution time</td>
+<td>0.001 seconds</td>
 </tr>
 <tr>
-<td>2026-08-14T00:18:43.772854+00:00</td>
-<td>20260814-001843-772841</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Execution date</td>
+<td>2026-09-02T13:40:16.296473+09:00</td>
 </tr>
 <tr>
-<td>2026-08-14T00:18:36.732841+00:00</td>
-<td>20260814-001836-732828</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Execution ID</td>
+<td>20260902_134016_296379</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="test-configs">Test configs</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Test Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test ID</td>
+<td>CT-USB-001</td>
 </tr>
 <tr>
-<td>2026-08-14T00:04:41.638457+00:00</td>
-<td>20260814-000441-638442</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
+<td>Category</td>
+<td>communication</td>
 </tr>
 <tr>
-<td>2026-08-14T00:03:35.832514+00:00</td>
-<td>20260814-000335-832496</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
+<td>Fixture ID</td>
+<td>FIXTURE-002</td>
 </tr>
 <tr>
-<td>2026-08-14T00:03:26.158087+00:00</td>
-<td>20260814-000326-158078</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Fixture mode</td>
+<td>mock</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>FIXTURE-002</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interface</td>
+<td>USB</td>
 </tr>
 <tr>
-<td>2026-08-13T23:58:58.943346+00:00</td>
-<td>20260813-235858-943336</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Equipment</td>
+<td>Digilent</td>
 </tr>
 <tr>
-<td>2026-08-13T08:18:47.838464+00:00</td>
-<td>20260813-081847-838453</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Equipment mode</td>
+<td>mock</td>
 </tr>
 <tr>
-<td>2026-08-13T07:47:36.071777+00:00</td>
-<td>20260813-074736-071761</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Interface mode</td>
+<td>mock</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-source">Test Source</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Commit</td>
+<td>679914919e2e22122bf737288f1bc98164a75dce</td>
 </tr>
 <tr>
-<td>2026-08-13T07:44:56.335510+00:00</td>
-<td>20260813-074456-335500</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Branch</td>
+<td>main</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="measurement">Measurement</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bytes_transferred</td>
+<td>256</td>
 </tr>
 <tr>
-<td>2026-08-13T07:43:29.493420+00:00</td>
-<td>20260813-074329-493399</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>packet_count</td>
+<td>4</td>
 </tr>
 <tr>
-<td>2026-08-13T07:42:41.205672+00:00</td>
-<td>20260813-074241-205655</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>max_packet_size</td>
+<td>64</td>
 </tr>
 <tr>
-<td>2026-08-13T07:35:24.303188+00:00</td>
-<td>20260813-073524-303177</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>bus_voltage</td>
+<td>5.0</td>
 </tr>
 <tr>
-<td>2026-08-13T07:01:40.498396+00:00</td>
-<td>20260813-070140-498380</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>integrity_error</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="statistics">Statistics</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>endpoint</td>
+<td>1</td>
 </tr>
 <tr>
-<td>2026-08-13T06:59:56.598164+00:00</td>
-<td>20260813-065956-598142</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
-<td>local</td>
+<td>transfer_count</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="logs">Logs</h3>
+<p><br/></p>
+<ul>
+<li>Path:
+  test_envs/reports/results/pytest/test_cases/CT-USB-001</li>
+</ul>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test log</td>
+<td>20260902_134016_296379_test.log</td>
 </tr>
 <tr>
-<td>2026-08-13T06:54:50.652661+00:00</td>
-<td>20260813-065450-652648</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Important</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h2 id="local-llm-analysis">Local LLM Analysis</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classification</td>
+<td>green</td>
 </tr>
 <tr>
-<td>2026-08-13T06:54:40.481631+00:00</td>
-<td>20260813-065440-481615</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Confidence</td>
+<td>0.95</td>
 </tr>
 <tr>
-<td>2026-08-13T06:50:04.896339+00:00</td>
-<td>20260813-065004-896318</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Analyzer</td>
+<td>ollama/deepseek-r1:7b</td>
 </tr>
 <tr>
-<td>2026-08-13T06:49:03.857714+00:00</td>
-<td>20260813-064903-857699</td>
-<td>local</td>
+<td>Status</td>
+<td>enabled</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="llm-test-prompt">LLM Test Prompt</h3>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>analyze the test result and provide a detailed report with recommendations for improvement.
+</code></pre></div>
+<p><br/></p>
+<h3 id="test-result">Test Result</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
 <td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
 </tr>
 <tr>
-<td>2026-08-13T06:48:25.017440+00:00</td>
-<td>20260813-064825-017429</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td><strong>Severity</strong></td>
+<td>LOW</td>
 </tr>
 <tr>
-<td>2026-08-13T06:46:37.880532+00:00</td>
-<td>20260813-064637-880517</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td><strong>Warnings</strong></td>
+<td>0</td>
 </tr>
 <tr>
-<td>2026-08-13T06:46:29.719191+00:00</td>
-<td>20260813-064629-719181</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td><strong>Needs Escalation</strong></td>
+<td>OFF</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="test-summary_1">Test Summary</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Summary</td>
+<td>SUCCESS: Test completed with no errors or warnings.</td>
 </tr>
 <tr>
-<td>2026-08-13T06:45:33.356959+00:00</td>
-<td>20260813-064533-356949</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Failure Analysis</td>
+<td>Not applicable</td>
 </tr>
 <tr>
-<td>2026-08-13T06:21:47.268283+00:00</td>
-<td>20260813-062147-268266</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Source Review</td>
+<td>Not requested</td>
 </tr>
 <tr>
-<td>2026-08-13T06:17:38.783803+00:00</td>
-<td>20260813-061738-783789</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Warnings</td>
+<td>None</td>
 </tr>
 <tr>
-<td>2026-08-13T06:17:27.225274+00:00</td>
-<td>20260813-061727-225261</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13T06:11:46.905580+00:00</td>
-<td>20260813-061146-905565</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13T06:09:04.580389+00:00</td>
-<td>20260813-060904-580379</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13T06:08:48.213285+00:00</td>
-<td>20260813-060848-213270</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13T06:08:16.461462+00:00</td>
-<td>20260813-060816-461445</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13T06:07:40.252969+00:00</td>
-<td>20260813-060740-252957</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
-</tr>
-<tr>
-<td>2026-08-13T06:07:39.861356+00:00</td>
-<td>20260813-060739-861346</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Recommendations</td>
+<td>No recommendation provided.</td>
 </tr>
 </tbody>
 </table>

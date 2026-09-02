@@ -218,7 +218,7 @@
 <span class="md-ellipsis">
     
   
-    TEST Operation
+    TEST Framework
   
 
     
@@ -227,6 +227,56 @@
 </label>
 <nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST Framework
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../pytest.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest (HIL or Mock)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../unittest.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST Operation
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
 <span class="md-nav__icon md-icon"></span>
             
   
@@ -263,74 +313,12 @@
 </nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
-<span class="md-ellipsis">
-    
-  
-    TEST Framework
-  
-
-    
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_4">
-<span class="md-nav__icon md-icon"></span>
-            
-  
-    TEST Framework
-  
-
-          </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../pytest.html">
-<span class="md-ellipsis">
-    
-  
-    Pytest
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../unittest.html">
-<span class="md-ellipsis">
-    
-  
-    Unittest
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../hil_mock.html">
-<span class="md-ellipsis">
-    
-  
-    HIL &amp; Mock
-  
-
-    
-  </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
 <input class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
 <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
 <span class="md-ellipsis">
     
   
-    TEST Reports
+    TEST Results
   
 
     
@@ -342,7 +330,7 @@
 <span class="md-nav__icon md-icon"></span>
             
   
-    TEST Reports
+    TEST Results
   
 
           </label>
@@ -396,6 +384,16 @@
       
     </span>
 </a>
+<nav aria-label="Test summary" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-configs">
+<span class="md-ellipsis">
+      
+        Test configs
+      
+    </span>
+</a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#test-source">
@@ -425,47 +423,50 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#important-logs">
+<a class="md-nav__link" href="#logs">
 <span class="md-ellipsis">
       
-        Important logs
+        Logs
       
     </span>
 </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#warnings">
-<span class="md-ellipsis">
-      
-        Warnings
-      
-    </span>
-</a>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#local-llm-analysis">
 <span class="md-ellipsis">
       
-        Local LLM analysis
+        Local LLM Analysis
       
     </span>
 </a>
-<nav aria-label="Local LLM analysis" class="md-nav">
+<nav aria-label="Local LLM Analysis" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#failure-analysis">
+<a class="md-nav__link" href="#llm-test-prompt">
 <span class="md-ellipsis">
       
-        Failure analysis
+        LLM Test Prompt
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#source-review">
+<a class="md-nav__link" href="#test-result">
 <span class="md-ellipsis">
       
-        Source review
+        Test Result
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-summary_1">
+<span class="md-ellipsis">
+      
+        Test Summary
       
     </span>
 </a>
@@ -482,22 +483,103 @@
 <article class="md-content__inner md-typeset">
 <h1 id="ct-usb-001-test-result">CT-USB-001 Test Result</h1>
 <h2 id="test-summary">Test summary</h2>
-<ul>
-<li><strong>Description:</strong> test_usb_bulk_loopback</li>
-<li><strong>Category:</strong> communication</li>
-<li><strong>Environment:</strong> local</li>
-<li><strong>Configuration:</strong> {'category': 'communication', 'fixture_id': 'FIXTURE-002', 'fixture_mode': 'mock', 'interface': 'USB', 'equipment': 'Digilent'}</li>
-<li><strong>Test mode:</strong> mock</li>
-<li><strong>Equipment:</strong> Digilent</li>
-<li><strong>Equipment mode:</strong> mock</li>
-<li><strong>Interface:</strong> USB</li>
-<li><strong>Interface mode:</strong> mock</li>
-<li><strong>Result:</strong> <strong>PASS</strong></li>
-<li><strong>Execution time:</strong> 0.000 seconds</li>
-<li><strong>Execution date:</strong> 2026-08-18T15:18:00.235255+09:00</li>
-<li><strong>Execution ID:</strong> <code>20260818_151800_235171</code></li>
-</ul>
-<h2 id="test-source">Test Source</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Description</td>
+<td>test_usb_bulk_loopback</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>communication</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>local</td>
+</tr>
+<tr>
+<td>Result</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>Execution time</td>
+<td>0.000 seconds</td>
+</tr>
+<tr>
+<td>Execution date</td>
+<td>2026-08-18T15:18:00.235255+09:00</td>
+</tr>
+<tr>
+<td>Execution ID</td>
+<td>20260818_151800_235171</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="test-configs">Test configs</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Test Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test ID</td>
+<td>CT-USB-001</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>communication</td>
+</tr>
+<tr>
+<td>Fixture ID</td>
+<td>FIXTURE-002</td>
+</tr>
+<tr>
+<td>Fixture mode</td>
+<td>mock</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>FIXTURE-002</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interface</td>
+<td>USB</td>
+</tr>
+<tr>
+<td>Equipment</td>
+<td>Digilent</td>
+</tr>
+<tr>
+<td>Equipment mode</td>
+<td>mock</td>
+</tr>
+<tr>
+<td>Interface mode</td>
+<td>mock</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-source">Test Source</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -508,45 +590,190 @@
 <tbody>
 <tr>
 <td>Commit</td>
-<td><code>a51f1d40f8bf5857567efae02683d2875598fded</code></td>
+<td>a51f1d40f8bf5857567efae02683d2875598fded</td>
 </tr>
 <tr>
 <td>Branch</td>
-<td><code>main</code></td>
+<td>main</td>
 </tr>
 </tbody>
 </table>
-<h2 id="measurement">Measurement</h2>
+<p><br/></p>
+<h3 id="measurement">Measurement</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bytes_transferred</td>
+<td>256</td>
+</tr>
+<tr>
+<td>packet_count</td>
+<td>4</td>
+</tr>
+<tr>
+<td>max_packet_size</td>
+<td>64</td>
+</tr>
+<tr>
+<td>bus_voltage</td>
+<td>5.0</td>
+</tr>
+<tr>
+<td>integrity_error</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="statistics">Statistics</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>endpoint</td>
+<td>1</td>
+</tr>
+<tr>
+<td>transfer_count</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="logs">Logs</h3>
+<p><br/></p>
 <ul>
-<li><strong>bytes_transferred:</strong> 256</li>
-<li><strong>packet_count:</strong> 4</li>
-<li><strong>max_packet_size:</strong> 64</li>
-<li><strong>bus_voltage:</strong> 5.0</li>
-<li><strong>integrity_error:</strong> 0.0</li>
+<li>Path:
+  test_envs/reports/results/pytest/test_cases/CT-USB-001</li>
 </ul>
-<h2 id="statistics">Statistics</h2>
-<ul>
-<li><strong>endpoint:</strong> 1</li>
-<li><strong>transfer_count:</strong> 1</li>
-</ul>
-<h2 id="important-logs">Important logs</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="warnings">Warnings</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="local-llm-analysis">Local LLM analysis</h2>
-<p>The test USB bulk transfer loopback passed successfully.</p>
-<ul>
-<li><strong>Classification:</strong> <code>communication</code></li>
-<li><strong>Confidence:</strong> 1.00</li>
-<li><strong>Analyzer:</strong> <code>ollama/deepseek-r1:7b</code></li>
-</ul>
-<h3 id="failure-analysis">Failure analysis</h3>
-<p>Not applicable</p>
-<h3 id="source-review">Source review</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test log</td>
+<td>20260818_151800_235171_test.log</td>
+</tr>
+<tr>
+<td>Important</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h2 id="local-llm-analysis">Local LLM Analysis</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classification</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>Analyzer</td>
+<td>ollama/deepseek-r1:7b</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>enabled</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="llm-test-prompt">LLM Test Prompt</h3>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>analyze the test result and provide a detailed report with recommendations for improvement.
+</code></pre></div>
+<p><br/></p>
+<h3 id="test-result">Test Result</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>PASS</td>
+</tr>
+<tr>
+<td><strong>Severity</strong></td>
+<td>LOW</td>
+</tr>
+<tr>
+<td><strong>Warnings</strong></td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>Needs Escalation</strong></td>
+<td>OFF</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="test-summary_1">Test Summary</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Summary</td>
+<td>Everything seems to be working as expected. The test_usb_bulk_loopback completed without any issues. The data transferred is 256 bytes, which is the expected size. The bus voltage is stable at 5.0V, indicating that the equipment is functioning properly. No errors or warnings were reported during the test execution. The interface is functioning correctly with the correct packet count and maximum packet size. There are no issues with the communication setup or data transfer, and the overall test result is positive.</td>
+</tr>
+<tr>
+<td>Failure Analysis</td>
+<td>Not applicable</td>
+</tr>
+<tr>
+<td>Source Review</td>
+<td>Review completed. No issues found in the source code or configuration.</td>
+</tr>
+<tr>
+<td>Warnings</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Recommendations</td>
+<td>No recommendation provided.</td>
+</tr>
+</tbody>
+</table>
 </article>
 </div>
 <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>

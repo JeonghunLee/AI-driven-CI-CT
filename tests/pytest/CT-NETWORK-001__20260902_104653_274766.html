@@ -218,7 +218,7 @@
 <span class="md-ellipsis">
     
   
-    TEST Operation
+    TEST Framework
   
 
     
@@ -227,6 +227,56 @@
 </label>
 <nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST Framework
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../pytest.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest (HIL or Mock)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../unittest.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST Operation
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
 <span class="md-nav__icon md-icon"></span>
             
   
@@ -263,74 +313,12 @@
 </nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
-<span class="md-ellipsis">
-    
-  
-    TEST Framework
-  
-
-    
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_4">
-<span class="md-nav__icon md-icon"></span>
-            
-  
-    TEST Framework
-  
-
-          </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../pytest.html">
-<span class="md-ellipsis">
-    
-  
-    Pytest
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../unittest.html">
-<span class="md-ellipsis">
-    
-  
-    Unittest
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../hil_mock.html">
-<span class="md-ellipsis">
-    
-  
-    HIL &amp; Mock
-  
-
-    
-  </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
 <input class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
 <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
 <span class="md-ellipsis">
     
   
-    TEST Reports
+    TEST Results
   
 
     
@@ -342,7 +330,7 @@
 <span class="md-nav__icon md-icon"></span>
             
   
-    TEST Reports
+    TEST Results
   
 
           </label>
@@ -396,6 +384,25 @@
       
     </span>
 </a>
+<nav aria-label="Test summary" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-configs">
+<span class="md-ellipsis">
+      
+        Test configs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-source">
+<span class="md-ellipsis">
+      
+        Test Source
+      
+    </span>
+</a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#measurement">
@@ -416,47 +423,10 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#important-logs">
+<a class="md-nav__link" href="#logs">
 <span class="md-ellipsis">
       
-        Important logs
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#warnings">
-<span class="md-ellipsis">
-      
-        Warnings
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#local-llm-analysis">
-<span class="md-ellipsis">
-      
-        Local LLM analysis
-      
-    </span>
-</a>
-<nav aria-label="Local LLM analysis" class="md-nav">
-<ul class="md-nav__list">
-<li class="md-nav__item">
-<a class="md-nav__link" href="#failure-analysis">
-<span class="md-ellipsis">
-      
-        Failure analysis
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#source-review">
-<span class="md-ellipsis">
-      
-        Source review
+        Logs
       
     </span>
 </a>
@@ -465,13 +435,44 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#test-history">
+<a class="md-nav__link" href="#local-llm-analysis">
 <span class="md-ellipsis">
       
-        Test history
+        Local LLM Analysis
       
     </span>
 </a>
+<nav aria-label="Local LLM Analysis" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#llm-test-prompt">
+<span class="md-ellipsis">
+      
+        LLM Test Prompt
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-result">
+<span class="md-ellipsis">
+      
+        Test Result
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-summary_1">
+<span class="md-ellipsis">
+      
+        Test Summary
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -482,93 +483,266 @@
 <article class="md-content__inner md-typeset">
 <h1 id="ct-network-001-test-result">CT-NETWORK-001 Test Result</h1>
 <h2 id="test-summary">Test summary</h2>
-<ul>
-<li><strong>Description:</strong> test_network_packet_loopback</li>
-<li><strong>Environment:</strong> local</li>
-<li><strong>Configuration:</strong> {'category': 'communication', 'interface': 'Network', 'equipment': 'MockHost'}</li>
-<li><strong>Equipment:</strong> MockHost</li>
-<li><strong>Interface:</strong> Network</li>
-<li><strong>Result:</strong> <strong>PASS</strong></li>
-<li><strong>Execution time:</strong> 0.001 seconds</li>
-<li><strong>Execution date:</strong> 2026-08-13T06:08:27.628966+00:00</li>
-<li><strong>Commit / revision:</strong> <code>local</code></li>
-<li><strong>Execution ID:</strong> <code>20260813-060827-628936</code></li>
-</ul>
-<h2 id="measurement">Measurement</h2>
-<ul>
-<li><strong>bytes_transferred:</strong> 33</li>
-<li><strong>packet_count:</strong> 1</li>
-<li><strong>latency_ms:</strong> 1.25</li>
-<li><strong>integrity_error:</strong> 0.0</li>
-</ul>
-<h2 id="statistics">Statistics</h2>
-<ul>
-<li><strong>host:</strong> 127.0.0.1</li>
-<li><strong>port:</strong> 9000</li>
-</ul>
-<h2 id="important-logs">Important logs</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="warnings">Warnings</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="local-llm-analysis">Local LLM analysis</h2>
-<p>CT-NETWORK-001 passed in 0.001s.</p>
-<ul>
-<li><strong>Classification:</strong> <code>passed</code></li>
-<li><strong>Confidence:</strong> 1.00</li>
-<li><strong>Analyzer:</strong> <code>deterministic-fallback</code></li>
-</ul>
-<h3 id="failure-analysis">Failure analysis</h3>
-<p>Not applicable</p>
-<h3 id="source-review">Source review</h3>
-<p>Not requested</p>
-<h2 id="test-history">Test history</h2>
 <table>
 <thead>
 <tr>
-<th>Date</th>
-<th>Execution ID</th>
-<th>Commit</th>
-<th>Result</th>
-<th style="text-align: right;">Duration (s)</th>
-<th>Environment</th>
+<th>Item</th>
+<th>Value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>2026-08-13T06:08:27.628966+00:00</td>
-<td>20260813-060827-628936</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.001</td>
+<td>Description</td>
+<td>test_network_packet_loopback</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>communication</td>
+</tr>
+<tr>
+<td>Environment</td>
 <td>local</td>
 </tr>
 <tr>
-<td>2026-08-13T06:08:16.457825+00:00</td>
-<td>20260813-060816-457810</td>
-<td>local</td>
+<td>Result</td>
 <td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
 </tr>
 <tr>
-<td>2026-08-13T06:07:40.250282+00:00</td>
-<td>20260813-060740-250265</td>
-<td>local</td>
-<td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+<td>Execution time</td>
+<td>0.000 seconds</td>
 </tr>
 <tr>
-<td>2026-08-13T06:07:39.858882+00:00</td>
-<td>20260813-060739-858867</td>
-<td>local</td>
+<td>Execution date</td>
+<td>2026-09-02T10:46:53.274849+09:00</td>
+</tr>
+<tr>
+<td>Execution ID</td>
+<td>20260902_104653_274766</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-configs">Test configs</h3>
+<table>
+<thead>
+<tr>
+<th>Test Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test ID</td>
+<td>CT-NETWORK-001</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>communication</td>
+</tr>
+<tr>
+<td>Fixture ID</td>
+<td>FIXTURE-003</td>
+</tr>
+<tr>
+<td>Fixture mode</td>
+<td>mock</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>FIXTURE-003</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interface</td>
+<td>Network</td>
+</tr>
+<tr>
+<td>Equipment</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Equipment mode</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Interface mode</td>
+<td>mock</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-source">Test Source</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Commit</td>
+<td>2fe9b6dc5e4c48e72c174fb96f389aec9ae12f69</td>
+</tr>
+<tr>
+<td>Branch</td>
+<td>main</td>
+</tr>
+</tbody>
+</table>
+<h3 id="measurement">Measurement</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bytes_transferred</td>
+<td>33</td>
+</tr>
+<tr>
+<td>packet_count</td>
+<td>1</td>
+</tr>
+<tr>
+<td>latency_ms</td>
+<td>1.25</td>
+</tr>
+<tr>
+<td>integrity_error</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="statistics">Statistics</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>host</td>
+<td>127.0.0.1</td>
+</tr>
+<tr>
+<td>port</td>
+<td>9000</td>
+</tr>
+</tbody>
+</table>
+<h3 id="logs">Logs</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test log</td>
+<td>20260902_104653_274766_test.log</td>
+</tr>
+<tr>
+<td>Important</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h2 id="local-llm-analysis">Local LLM Analysis</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classification</td>
+<td>communication</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>Analyzer</td>
+<td>ollama/deepseek-r1:7b</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>enabled</td>
+</tr>
+</tbody>
+</table>
+<h3 id="llm-test-prompt">LLM Test Prompt</h3>
+<p>analyze the test result and provide a detailed report with recommendations for improvement.</p>
+<h3 id="test-result">Test Result</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
 <td>PASS</td>
-<td style="text-align: right;">0.000</td>
-<td>local</td>
+</tr>
+<tr>
+<td><strong>Severity</strong></td>
+<td>LOW</td>
+</tr>
+<tr>
+<td><strong>Warnings</strong></td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>Needs Escalation</strong></td>
+<td>OFF</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-summary_1">Test Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Summary</td>
+<td>Test passed successfully without any errors.</td>
+</tr>
+<tr>
+<td>Failure Analysis</td>
+<td>No failures reported in the test results.</td>
+</tr>
+<tr>
+<td>Source Review</td>
+<td>No source code changes or diffs provided for review.</td>
+</tr>
+<tr>
+<td>Warnings</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Recommendations</td>
+<td>No specific recommendations for improvement as the test completed successfully.</td>
 </tr>
 </tbody>
 </table>

@@ -218,7 +218,7 @@
 <span class="md-ellipsis">
     
   
-    TEST Operation
+    TEST Framework
   
 
     
@@ -227,6 +227,56 @@
 </label>
 <nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
 <label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            
+  
+    TEST Framework
+  
+
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../pytest.html">
+<span class="md-ellipsis">
+    
+  
+    Pytest (HIL or Mock)
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../unittest.html">
+<span class="md-ellipsis">
+    
+  
+    Unittest
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    
+  
+    TEST Operation
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
 <span class="md-nav__icon md-icon"></span>
             
   
@@ -263,74 +313,12 @@
 </nav>
 </li>
 <li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
-<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
-<span class="md-ellipsis">
-    
-  
-    TEST Framework
-  
-
-    
-  </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_4">
-<span class="md-nav__icon md-icon"></span>
-            
-  
-    TEST Framework
-  
-
-          </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../pytest.html">
-<span class="md-ellipsis">
-    
-  
-    Pytest
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../unittest.html">
-<span class="md-ellipsis">
-    
-  
-    Unittest
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../hil_mock.html">
-<span class="md-ellipsis">
-    
-  
-    HIL &amp; Mock
-  
-
-    
-  </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item md-nav__item--nested">
 <input class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
 <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
 <span class="md-ellipsis">
     
   
-    TEST Reports
+    TEST Results
   
 
     
@@ -342,7 +330,7 @@
 <span class="md-nav__icon md-icon"></span>
             
   
-    TEST Reports
+    TEST Results
   
 
           </label>
@@ -396,6 +384,16 @@
       
     </span>
 </a>
+<nav aria-label="Test summary" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-configs">
+<span class="md-ellipsis">
+      
+        Test configs
+      
+    </span>
+</a>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#test-source">
@@ -425,47 +423,50 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#important-logs">
+<a class="md-nav__link" href="#logs">
 <span class="md-ellipsis">
       
-        Important logs
+        Logs
       
     </span>
 </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#warnings">
-<span class="md-ellipsis">
-      
-        Warnings
-      
-    </span>
-</a>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="#local-llm-analysis">
 <span class="md-ellipsis">
       
-        Local LLM analysis
+        Local LLM Analysis
       
     </span>
 </a>
-<nav aria-label="Local LLM analysis" class="md-nav">
+<nav aria-label="Local LLM Analysis" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#failure-analysis">
+<a class="md-nav__link" href="#llm-test-prompt">
 <span class="md-ellipsis">
       
-        Failure analysis
+        LLM Test Prompt
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#source-review">
+<a class="md-nav__link" href="#test-result">
 <span class="md-ellipsis">
       
-        Source review
+        Test Result
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-summary_1">
+<span class="md-ellipsis">
+      
+        Test Summary
       
     </span>
 </a>
@@ -482,22 +483,103 @@
 <article class="md-content__inner md-typeset">
 <h1 id="ct-uart-001-test-result">CT-UART-001 Test Result</h1>
 <h2 id="test-summary">Test summary</h2>
-<ul>
-<li><strong>Description:</strong> test_uart_timing</li>
-<li><strong>Category:</strong> timing</li>
-<li><strong>Environment:</strong> local</li>
-<li><strong>Configuration:</strong> {'category': 'timing', 'fixture_id': 'FIXTURE-001', 'fixture_mode': 'mock', 'interface': 'UART', 'equipment': 'Saleae'}</li>
-<li><strong>Test mode:</strong> mock</li>
-<li><strong>Equipment:</strong> Saleae</li>
-<li><strong>Equipment mode:</strong> mock</li>
-<li><strong>Interface:</strong> UART</li>
-<li><strong>Interface mode:</strong> mock</li>
-<li><strong>Result:</strong> <strong>PASS</strong></li>
-<li><strong>Execution time:</strong> 0.001 seconds</li>
-<li><strong>Execution date:</strong> 2026-08-18T14:30:00.730977+09:00</li>
-<li><strong>Execution ID:</strong> <code>20260818_143000_730890</code></li>
-</ul>
-<h2 id="test-source">Test Source</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Description</td>
+<td>test_uart_timing</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>timing</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>local</td>
+</tr>
+<tr>
+<td>Result</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>Execution time</td>
+<td>0.001 seconds</td>
+</tr>
+<tr>
+<td>Execution date</td>
+<td>2026-08-18T14:30:00.730977+09:00</td>
+</tr>
+<tr>
+<td>Execution ID</td>
+<td>20260818_143000_730890</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="test-configs">Test configs</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Test Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test ID</td>
+<td>CT-UART-001</td>
+</tr>
+<tr>
+<td>Category</td>
+<td>timing</td>
+</tr>
+<tr>
+<td>Fixture ID</td>
+<td>FIXTURE-001</td>
+</tr>
+<tr>
+<td>Fixture mode</td>
+<td>mock</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>FIXTURE-001</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interface</td>
+<td>UART</td>
+</tr>
+<tr>
+<td>Equipment</td>
+<td>Saleae</td>
+</tr>
+<tr>
+<td>Equipment mode</td>
+<td>mock</td>
+</tr>
+<tr>
+<td>Interface mode</td>
+<td>mock</td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-source">Test Source</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -508,48 +590,198 @@
 <tbody>
 <tr>
 <td>Commit</td>
-<td><code>19c3b951c1a959a10e635a091af85734f7c7e03a</code></td>
+<td>19c3b951c1a959a10e635a091af85734f7c7e03a</td>
 </tr>
 <tr>
 <td>Branch</td>
-<td><code>main</code></td>
+<td>main</td>
 </tr>
 </tbody>
 </table>
-<h2 id="measurement">Measurement</h2>
+<p><br/></p>
+<h3 id="measurement">Measurement</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>expected_baudrate</td>
+<td>921600</td>
+</tr>
+<tr>
+<td>measured_baudrate</td>
+<td>921596.667</td>
+</tr>
+<tr>
+<td>error</td>
+<td>3.6168981481902543e-06</td>
+</tr>
+<tr>
+<td>jitter</td>
+<td>0.00021701388888888888</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="statistics">Statistics</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mean</td>
+<td>921596.6666666666</td>
+</tr>
+<tr>
+<td>median</td>
+<td>921602.5</td>
+</tr>
+<tr>
+<td>min</td>
+<td>921490.0</td>
+</tr>
+<tr>
+<td>max</td>
+<td>921690.0</td>
+</tr>
+<tr>
+<td>stddev</td>
+<td>67.55656066503748</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="logs">Logs</h3>
+<p><br/></p>
 <ul>
-<li><strong>expected_baudrate:</strong> 921600</li>
-<li><strong>measured_baudrate:</strong> 921596.667</li>
-<li><strong>error:</strong> 3.6168981481902543e-06</li>
-<li><strong>jitter:</strong> 0.00021701388888888888</li>
+<li>Path:
+  test_envs/reports/results/pytest/test_cases/CT-UART-001</li>
 </ul>
-<h2 id="statistics">Statistics</h2>
-<ul>
-<li><strong>mean:</strong> 921596.6666666666</li>
-<li><strong>median:</strong> 921602.5</li>
-<li><strong>min:</strong> 921490.0</li>
-<li><strong>max:</strong> 921690.0</li>
-<li><strong>stddev:</strong> 67.55656066503748</li>
-</ul>
-<h2 id="important-logs">Important logs</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="warnings">Warnings</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="local-llm-analysis">Local LLM analysis</h2>
-<p>CT-UART-001 passed in 0.001s.</p>
-<ul>
-<li><strong>Classification:</strong> <code>passed</code></li>
-<li><strong>Confidence:</strong> 1.00</li>
-<li><strong>Analyzer:</strong> <code>deterministic-fallback</code></li>
-</ul>
-<h3 id="failure-analysis">Failure analysis</h3>
-<p>Not applicable</p>
-<h3 id="source-review">Source review</h3>
-<p>Not requested</p>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Test log</td>
+<td>20260818_143000_730890_test.log</td>
+</tr>
+<tr>
+<td>Important</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h2 id="local-llm-analysis">Local LLM Analysis</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classification</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Confidence</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>Analyzer</td>
+<td>ollama/deepseek-r1:7b</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>enabled</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="llm-test-prompt">LLM Test Prompt</h3>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>analyze the test result and provide a detailed report with recommendations for improvement.
+</code></pre></div>
+<p><br/></p>
+<h3 id="test-result">Test Result</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>PASS</td>
+</tr>
+<tr>
+<td><strong>Severity</strong></td>
+<td>LOW</td>
+</tr>
+<tr>
+<td><strong>Warnings</strong></td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>Needs Escalation</strong></td>
+<td>OFF</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="test-summary_1">Test Summary</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Summary</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>Failure Analysis</td>
+<td>Not applicable</td>
+</tr>
+<tr>
+<td>Source Review</td>
+<td>Not requested</td>
+</tr>
+<tr>
+<td>Warnings</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Recommendations</td>
+<td>No recommendation provided.</td>
+</tr>
+</tbody>
+</table>
 </article>
 </div>
 <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
