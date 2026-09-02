@@ -10,9 +10,9 @@
 | Category | communication |
 | Environment | local |
 | Result | PASS |
-| Execution time | 0.000 seconds |
-| Execution date | 2026-09-02T11:54:00.651824+09:00 |
-| Execution ID | 20260902_115400_651736 |
+| Execution time | 0.001 seconds |
+| Execution date | 2026-08-19T10:07:51.520958+09:00 |
+| Execution ID | 20260819_100751_520867 |
 
 <br/>
 
@@ -42,7 +42,7 @@
 
 | Item | Value |
 |---|---|
-| Commit | 09c8e03ae2d72f60e58d265a1a579bf9dad5b589 |
+| Commit | 8907224ecc0f33d82263afb499400755e17d8a92 |
 | Branch | main |
 
 <br/>
@@ -83,7 +83,7 @@
 
 | Item | Value |
 |---|---|
-| Test log | 20260902_115400_651736_test.log |
+| Test log | 20260819_100751_520867_test.log |
 | Important | None |
 
 <br/>
@@ -94,8 +94,8 @@
 
 | Item | Value |
 |---|---|
-| Classification | All clear |
-| Confidence | 1.00 |
+| Classification | HIGH |
+| Confidence | 0.95 |
 | Analyzer | ollama/deepseek-r1:7b |
 | Status | enabled |
 
@@ -130,13 +130,17 @@ analyze the test result and provide a detailed report with recommendations for i
 
 | Item | Value |
 |---|---|
-| Summary | All tests completed successfully with no errors or warnings. The communication test passed without any issues. |
+| Summary | SUCCESS |
 | Failure Analysis | Not applicable |
 | Source Review | Not requested |
 | Warnings | None |
 | Recommendations | No recommendation provided. |
 
 ## Test History
+
+<br/>
+    
+only Pytest `CT-USB-001` Test History , find the latest execution records below.
 
 <br/>
 

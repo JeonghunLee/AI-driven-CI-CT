@@ -1,149 +1,15 @@
-# CT-UART-001 Test Result
-
-## Test summary
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Description | test_uart_timing |
-| Category | timing |
-| Environment | local |
-| Result | PASS |
-| Execution time | 0.001 seconds |
-| Execution date | 2026-09-02T11:53:59.143356+09:00 |
-| Execution ID | 20260902_115359_143257 |
-
-<br/>
-
-### Test configs
-
-<br/>
-
-| Test Item | Value |
-|---|---|
-| Test ID | CT-UART-001 |
-| Category | timing |
-| Fixture ID | FIXTURE-001 |
-| Fixture mode | mock |
-
-<br/>
-
-| FIXTURE-001 | Value |
-|---|---|
-| Interface | UART |
-| Equipment | Saleae |
-| Equipment mode | mock |
-| Interface mode | mock |
-
-### Test Source
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Commit | 09c8e03ae2d72f60e58d265a1a579bf9dad5b589 |
-| Branch | main |
-
-<br/>
-
-### Measurement
-
-<br/>
-
-| Item | Value |
-|---|---|
-| expected_baudrate | 921600 |
-| measured_baudrate | 921596.667 |
-| error | 3.6168981481902543e-06 |
-| jitter | 0.00021701388888888888 |
-
-<br/>
-
-### Statistics
-
-<br/>
-
-| Item | Value |
-|---|---|
-| mean | 921596.6666666666 |
-| median | 921602.5 |
-| min | 921490.0 |
-| max | 921690.0 |
-| stddev | 67.55656066503748 |
-
-<br/>
-
-### Logs
-
-<br/>
-
-* Path:
-  test_envs/reports/results/pytest/test_cases/CT-UART-001
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Test log | 20260902_115359_143257_test.log |
-| Important | None |
-
-<br/>
-
-## Local LLM Analysis
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Classification | pass |
-| Confidence | 0.95 |
-| Analyzer | ollama/deepseek-r1:7b |
-| Status | enabled |
-
-<br/>
-
-### LLM Test Prompt
-
-<br/>
-
-```
-analyze the test result and provide a detailed report with recommendations for improvement.
-```
-
-<br/>
-
-### Test Result
-
-<br/>
-
-| Item | Value |
-|---|---|
-| **Status** | PASS |
-| **Severity** | LOW |
-| **Warnings** | 0 |
-| **Needs Escalation** | OFF |
-
-<br/>
-
-### Test Summary
-
-<br/>
-
-| Item | Value |
-|---|---|
-| Summary | The UART test completed without errors. The measured baudrate is very close to the expected value, indicating that the timing configuration is functioning as intended. |
-| Failure Analysis | Not applicable |
-| Source Review | Not requested |
-| Warnings | None |
-| Recommendations | No recommendation provided. |
-
 ## Test History
+
+<br/>
+    
+only Pytest `CT-UART-001` Test History , find the latest execution records below.
 
 <br/>
 
 | Date | Time | Execution ID | Commit | Branch | Result | Duration (s) | Environment |
 |---|---|---|---|---|---|---:|---|
+| 2026-09-02 | 13:33:56.784787+09:00 | [20260902_133356_784688](CT-UART-001__20260902_133356_784688.md) | c2ba839 | main | PASS | 0.001 | local |
+| 2026-09-02 | 11:58:58.569668+09:00 | [20260902_115858_569577](CT-UART-001__20260902_115858_569577.md) | c2ba839 | main | PASS | 0.001 | local |
 | 2026-09-02 | 11:53:59.143356+09:00 | [20260902_115359_143257](CT-UART-001__20260902_115359_143257.md) | 09c8e03 | main | PASS | 0.001 | local |
 | 2026-09-02 | 11:17:29.217108+09:00 | [20260902_111729_217015](CT-UART-001__20260902_111729_217015.md) | add5035 | main | PASS | 0.001 | local |
 | 2026-09-02 | 10:52:35.557653+09:00 | [20260902_105235_557551](CT-UART-001__20260902_105235_557551.md) | 4e2ad99 | main | PASS | 0.001 | local |
@@ -198,17 +64,3 @@ analyze the test result and provide a detailed report with recommendations for i
 | 2026-08-18 | 14:39:17.419249+09:00 | [20260818_143917_419150](CT-UART-001__20260818_143917_419150.md) | 54ffa7d | main | PASS | 0.001 | local |
 | 2026-08-18 | 14:36:34.925452+09:00 | [20260818_143634_925356](CT-UART-001__20260818_143634_925356.md) | ee3794c | main | PASS | 0.000 | local |
 | 2026-08-18 | 14:30:00.730977+09:00 | [20260818_143000_730890](CT-UART-001__20260818_143000_730890.md) | 19c3b95 | main | PASS | 0.001 | local |
-| 2026-08-18 | 04:49:04.884511+00:00 | [20260818_044904_884486](CT-UART-001__20260818_044904_884486.md) | 9d6d0e0 | main | PASS | 0.000 | local |
-| 2026-08-18 | 04:04:01.493533+00:00 | [20260818_040401_493506](CT-UART-001__20260818_040401_493506.md) | ddeca59 | main | PASS | 0.001 | local |
-| 2026-08-18 | 03:01:37.727119+00:00 | [20260818_030137_727071](CT-UART-001__20260818_030137_727071.md) | 33bd0ee | main | PASS | 0.001 | local |
-| 2026-08-13 | 07:47:38.432406+00:00 | [20260813-074738-432387](CT-UART-001__20260813-074738-432387.md) | local | unknown | PASS | 0.001 | local |
-| 2026-08-13 | 06:54:50.655858+00:00 | [20260813-065450-655846](CT-UART-001__20260813-065450-655846.md) | local | unknown | PASS | 0.000 | local |
-| 2026-08-13 | 06:48:38.485012+00:00 | [20260813-064838-484993](CT-UART-001__20260813-064838-484993.md) | local | unknown | PASS | 0.001 | local |
-| 2026-08-13 | 06:02:42.833947+00:00 | [20260813-060242-833931](CT-UART-001__20260813-060242-833931.md) | local | unknown | PASS | 0.000 | local |
-| 2026-08-13 | 02:40:05.771857+00:00 | [20260813-024005-771843](CT-UART-001__20260813-024005-771843.md) | local | unknown | PASS | 0.000 | local |
-| 2026-08-13 | 02:32:02.059339+00:00 | [20260813-023202-059324](CT-UART-001__20260813-023202-059324.md) | local | unknown | PASS | 0.000 | local |
-| 2026-08-13 | 01:50:49.885000+00:00 | [20260813-015049-884986](CT-UART-001__20260813-015049-884986.md) | local | unknown | PASS | 0.001 | local |
-| 2026-08-13 | 01:49:19.691962+00:00 | [20260813-014919-691948](CT-UART-001__20260813-014919-691948.md) | local | unknown | PASS | 0.000 | local |
-| 2026-08-13 | 00:43:23.383204+00:00 | [20260813-004323-383189](CT-UART-001__20260813-004323-383189.md) | local | unknown | PASS | 0.001 | local |
-| 2026-08-13 | 00:10:38.341685+00:00 | [20260813-001038-341669](CT-UART-001__20260813-001038-341669.md) | local | unknown | PASS | 0.001 | local |
-| 2026-08-13 | 00:07:35.891993+00:00 | [20260813-000735-891978](CT-UART-001__20260813-000735-891978.md) | local | unknown | PASS | 0.000 | local |
