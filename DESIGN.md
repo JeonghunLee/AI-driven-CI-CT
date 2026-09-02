@@ -711,7 +711,7 @@ Local LLM
 | VS Code environment document | Settings·Testing·Discovery·Launch·Tasks | `docs/vscode_environment.md` |
 | Pytest operation document | TEST ID·Fixture·Local LLM·Report | `docs/pytest_operation.md` |
 | Unittest operation document | Function·Execution ID·Result·Report | `docs/unittest_operation.md` |
-| pytest mode document | HIL·Mock·CLI override·HIL gate | `docs/hil_mock.md` |
+| pytest framework document | Test cases·fixtures·HIL·Mock·CLI override·HIL gate | `docs/pytest.md` |
 | MkDocs pytest result index | Published pytest page scan | `docs/tests/pytest/index.md` |
 | MkDocs unittest result index | Published unittest page scan | `docs/tests/unittest/index.md` |
 | DOCX | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.docx` |
@@ -771,8 +771,7 @@ Excluded from GitHub Issue:
 │   ├── vscode_environment.md        # VS Code environment
 │   ├── pytest_operation.md          # Pytest operation
 │   ├── unittest_operation.md        # Unittest operation
-│   ├── pytest.md                    # pytest system description
-│   ├── hil_mock.md                  # pytest HIL / Mock
+│   ├── pytest.md                    # pytest system, HIL, and Mock
 │   ├── unittest.md                  # unittest system description
 │   └── tests/
 │       ├── pytest/                  # Markdown only

@@ -114,6 +114,5 @@ docs/tests/pytest/<test-id>.md
 
 | Scope | Document |
 |---|---|
-| pytest | [pytest.md](pytest.md) |
-| HIL / Mock | [hil_mock.md](hil_mock.md) |
+| pytest (HIL or Mock) | [pytest.md](pytest.md) |
 | Results | [tests/pytest/index.md](tests/pytest/index.md) |

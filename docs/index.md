@@ -13,8 +13,7 @@
 | VS Code Environment | [vscode_environment.md](vscode_environment.md) | Settings, Launch, Tasks, Testing |
 | Pytest Operation | [pytest_operation.md](pytest_operation.md) | TEST ID, Fixture, Mock/HIL, Local LLM |
 | Unittest Operation | [unittest_operation.md](unittest_operation.md) | Function, Execution ID, Result, Markdown |
-| Pytest | [pytest.md](pytest.md) | Test cases, Fixture mapping |
-| Pytest HIL / Mock | [hil_mock.md](hil_mock.md) | Mode, CLI override, HIL gate |
+| Pytest / HIL / Mock | [pytest.md](pytest.md) | Test cases, fixture mapping, mode selection, HIL gate |
 | Unittest | [unittest.md](unittest.md) | Function result contract |
 | Pytest Results | [tests/pytest/index.md](tests/pytest/index.md) | TEST ID, Execution history |
 | Unittest Results | [tests/unittest/index.md](tests/unittest/index.md) | Function count, Execution history |

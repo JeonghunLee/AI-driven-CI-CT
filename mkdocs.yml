@@ -14,13 +14,12 @@ nav:
     - Envs Python: python_environment.md
     - Envs LLM: local_llm_environment.md
     - Envs VSCode: vscode_environment.md    
+  - TEST Framework:
+    - Pytest (HIL or Mock): pytest.md
+    - Unittest: unittest.md
   - TEST Operation:       
     - Pytest: pytest_operation.md 
     - Unittest: unittest_operation.md
-  - TEST Framework:
-    - Pytest: pytest.md
-    - Unittest: unittest.md
-    - HIL & Mock: hil_mock.md    
   - TEST Results:
     - Pytest: tests/pytest/index.md
     - Unittest: tests/unittest/index.md

@@ -24,7 +24,6 @@
 │   ├── pytest_operation.md
 │   ├── unittest_operation.md
 │   ├── pytest.md
-│   ├── hil_mock.md
 │   ├── unittest.md
 │   └── tests/{pytest,unittest}/
 └── test_envs/
