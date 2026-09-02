@@ -21,7 +21,7 @@ nav:
     - Pytest: pytest.md
     - Unittest: unittest.md
     - HIL & Mock: hil_mock.md    
-  - TEST Reports:
+  - TEST Results:
     - Pytest: tests/pytest/index.md
     - Unittest: tests/unittest/index.md
 
