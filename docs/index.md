@@ -18,6 +18,12 @@
 
 Go to [VSCode Testing](https://jeonghunlee.github.io/vscode_doc/#vscode-testing)  
 
+!!! success "AI Agent workflow based on MCP"   
+    Connect Claude, Codex, Ollama, and GitHub operations through MCP  
+    Support Local MCP execution, GitHub Issue based TEST automation, and documentation-first project flow    
+    https://jeonghunlee.github.io/local-ai-agent-mcp/index.html
+
+
 <br/>
 
 ## Documents

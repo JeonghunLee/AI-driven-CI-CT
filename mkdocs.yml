@@ -23,7 +23,7 @@ nav:
   - TEST Results:
     - Pytest: tests/pytest/index.md
     - Unittest: tests/unittest/index.md
-
+  - Go To My Profile Page: https://jeonghunlee.github.io/project_ai.html#ai-driven-embedded-continuous-testing
 
 plugins:
   - search
