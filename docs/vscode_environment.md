@@ -29,9 +29,9 @@ https://code.visualstudio.com/docs/python/testing
 
 | File | Responsibility |
 |---|---|
-| `settings.json` | Define Project [Settings](#settings) configurations  |
+| `settings.json` | Define project settings for [Testing](#testing) and the [Python Extension](#python-extension) |
 | `launch.json` | Define [Run and Debug](#run-and-debug) configurations |
-| `tasks.json` | Define [Tasks](#tasks) configurations  |
+| `tasks.json` | Define [Tasks](#tasks) configurations |
 
 <br/>
 
@@ -46,8 +46,10 @@ There is currently no `.vscode/extensions.json`; extension recommendations are n
 * **VS Code Testing for Python**     
 https://code.visualstudio.com/docs/python/testing  
 
-Source: `.vscode/settings.json`
+<br/>
 
+* Source: `.vscode/settings.json`
+Connected VS Code features: [Testing](#testing) and [Python Extension](#python-extension)
 ```json
 {
   //.venv
@@ -82,7 +84,7 @@ Source: `.vscode/settings.json`
 | Setting | Current value | Effect |
 |---|---|---|
 | `python.defaultInterpreterPath` | `${workspaceFolder}/.venv/Scripts/python.exe` | Testing, debugging, and most Tasks use the project virtual environment |
-| `python.terminal.activateEnvironment` | `true` | New Python terminals activate the selected environment |
+| `python.terminal.activateEnvironment` | `false` | New terminals do not automatically activate the selected environment |
 | `python.testing.pytestEnabled` | `true` | VS Code Testing uses the pytest adapter |
 | `python.testing.unittestEnabled` | `false` | Prevents duplicate native-unittest discovery |
 | `python.testing.pytestArgs` | Cache option plus two test roots | Discovers pytest CT and `unittest.TestCase` through pytest |
@@ -98,6 +100,276 @@ Source: `.vscode/settings.json`
 
 <br/>
 
+* **Tasks**
+https://code.visualstudio.com/docs/debugtest/tasks
+
+<br/>
+
+* Source: `.vscode/tasks.json`
+Connected VS Code feature: [Run Tasks](#run-tasks)
+```
+{
+    "version": "2.0.0",
+    "tasks": [
+        //Setup Task Section
+        // This section contains tasks for setting up the development environment, including selecting the OS, installing Python virtual environment, and installing Ollama and local LLM.
+        // Each task is labeled with a "SETUP" prefix for easy identification.
+        {
+            "label": "SETUP 1: Select Operating System",
+            "type": "process",
+            "command": "python",
+            "args": [
+                "-m",
+                "test_envs.tools.configuration",
+                "select-os"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "SETUP 2: Install Python Virtual Environment",
+            "type": "process",
+            "command": "python",
+            "args": [
+                "-m",
+                "test_envs.tools.environment_setup",
+                "python"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "SETUP 3: Install Ollama and Local LLM",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.environment_setup",
+                "ollama"
+            ],
+            "problemMatcher": []
+        },
+        // Check Task Section
+        // This section contains tasks for checking the environment and running the Ollama server.
+        // Each task is labeled with a "CHECK" prefix for easy identification.
+        {
+            "label": "CHECK 1: Refresh Environment Check File",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.configuration",
+                "check"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "CHECK 2: Show Environment Configuration",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.configuration",
+                "config"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "CHECK 3: Run Ollama Server (Foreground)",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.environment_setup",
+                "serve"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        // Test Case Task Section
+        // "TEST CASE" prefix for easy identification and Input Section for test case ID and fixture mode
+        {
+            "label": "TEST CASE: ALL",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "pytest",
+                "-p",
+                "no:cacheprovider",
+                "test_envs/tests/pytest/test_cases",
+                "--fixture-mode",
+                "${input:fixtureMode}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TEST CASE: TEST ID",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "pytest",
+                "-p",
+                "no:cacheprovider",
+                "test_envs/tests/pytest/test_cases",
+                "--test-id",
+                "${input:testCaseId}",
+                "--fixture-mode",
+                "${input:fixtureMode}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        // Report Task Section
+        // This section contains tasks for generating and converting test reports.
+        // Each task is labeled with a "REPORT" prefix for easy identification.
+        {
+            "label": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.test_result",
+                "--pending",
+                "--docs"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "REPORT-Pandoc: Convert Latest Markdown to HTML",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.pandoc_reporter",
+                "--latest",
+                "--format",
+                "html"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "REPORT-Pandoc: Convert Latest Markdown to DOCX",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.pandoc_reporter",
+                "--latest",
+                "--format",
+                "docx"
+            ],
+            "problemMatcher": []
+        },
+        // MkDocs Task Section
+        // This section contains tasks for serving and building MkDocs documentation.
+        // Each task is labeled with a "MkDocs" prefix for easy identification.
+        {
+            "label": "MkDocs: Serve Local 8000",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "serve"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "MkDocs: Serve Local 8080",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "serve",
+                "-a",
+                "0.0.0.0:8080"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "MkDocs: Serve Remote ",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "serve",
+                "-a",
+                "0.0.0.0:8000"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "MkDocs: Build",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "build"
+            ]
+        },
+        {
+            "label": "MkDocs: Build Strict",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "build",
+                "--strict"
+            ]
+        }
+    ],
+    // End of tasks array
+    // End of tasks section
+
+    // Inputs section (Test case and fixture mode inputs)
+    // "TEST CASE: TEST ID", and "TEST CASE: ALL"
+    "inputs": [
+        {
+            "id": "testCaseId",
+            "type": "pickString",
+            "description": "TEST ID",
+            "options": [
+                "CT-UART-001",
+                "CT-USB-001",
+                "CT-NETWORK-001"
+            ],
+            "default": "CT-UART-001"
+        },
+        {
+            "id": "fixtureMode",
+            "type": "pickString",
+            "description": "Fixture mode",
+            "options": [
+                "marker",
+                "mock",
+                "hil"
+            ],
+            "default": "marker"
+        }
+    ]
+}
+
+```
 
 <br/>
 
@@ -105,6 +377,148 @@ Source: `.vscode/settings.json`
 
 <br/>
 
+* **Run and Debug**
+https://code.visualstudio.com/docs/debugtest/debugging
+https://code.visualstudio.com/docs/debugtest/debugging-configuration
+
+<br/>
+
+* Source: `.vscode/launch.json`
+Connected VS Code feature: [Run and Debug](#run-and-debug)
+```
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "SETUP 1: Select Operating System",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "python",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "SETUP 1: Select Operating System",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "SETUP 2: Install Python Virtual Environment",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "python",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "SETUP 2: Install Python Virtual Environment",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "SETUP 3: Install Ollama and Local LLM",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "SETUP 3: Install Ollama and Local LLM",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "CHECK 1: Refresh Environment Check File",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "CHECK 1: Refresh Environment Check File",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Run 1: Extension Module",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.extension_runner",
+      "args": ["--module", "test_envs.tools.extensions.example"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.test_result",
+      "args": ["--pending", "--docs"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "REPORT-Pandoc: Convert Latest Markdown to HTML",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.pandoc_reporter",
+      "args": ["--latest", "--format", "html"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "REPORT-Pandoc: Convert Latest Markdown to DOCX",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.pandoc_reporter",
+      "args": ["--latest", "--format", "docx"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Debug: Current Python File",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Debug: Current pytest File",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "pytest",
+      "args": ["${file}", "-s", "-vv", "--fixture-mode", "${input:fixtureMode}"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+    }
+  ],
+  "inputs": [
+    {
+      "id": "fixtureMode",
+      "type": "pickString",
+      "description": "Fixture mode",
+      "options": ["marker", "mock", "hil"],
+      "default": "marker"
+    }
+  ]
+}
+
+```
 
 <br/>
 
@@ -130,7 +544,9 @@ Source: `.vscode/launch.json`
 | `SETUP 3: Install Ollama and Local LLM` | Project Python | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Setup Task, then displays configuration |
 | `CHECK 1: Refresh Environment Check File` | Project Python | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Check Task, then displays configuration |
 | `Run 1: Extension Module` | Project Python | `test_envs.tools.extension_runner` | Integrated terminal | `true` | Runs `test_envs.tools.extensions.example` |
-| `Test Result: Generate Pending Markdown` | Project Python | `test_envs.tools.test_result` | Integrated terminal | `true` | Runs `--pending --docs` |
+| `REPORT-Mkdocs: Generate Markdown to Pytest/Unittest` | Project Python | `test_envs.tools.test_result` | Integrated terminal | `true` | Runs `--pending --docs` |
+| `REPORT-Pandoc: Convert Latest Markdown to HTML` | Project Python | `test_envs.tools.pandoc_reporter` | Integrated terminal | `true` | Converts the latest Markdown report to HTML |
+| `REPORT-Pandoc: Convert Latest Markdown to DOCX` | Project Python | `test_envs.tools.pandoc_reporter` | Integrated terminal | `true` | Converts the latest Markdown report to DOCX |
 | `Debug: Current Python File` | Project Python | `${file}` | Integrated terminal | `true` | Debugs the open Python file |
 | `Debug: Current pytest File` | Project Python | `pytest` | Integrated terminal | `false` | Debugs the open test with the selected fixture mode |
 
@@ -177,7 +593,7 @@ The launch input `fixtureMode` offers `marker`, `mock`, and `hil`, with `marker`
 
 <br/>
 
-## Tasks
+## Run Tasks
 
 <br/>
 
@@ -347,7 +763,7 @@ The Testing panel supports running or debugging the full tree, a folder, a modul
 
 <br/>
 
-## Python
+## Python Extension
 
 <br/>
 
@@ -361,40 +777,6 @@ The Testing panel supports running or debugging the full tree, a folder, a modul
 | Setup 2: `.venv` creation | System `python` |
 | Setup 3 and later | `${workspaceFolder}/.venv/Scripts/python.exe` |
 | VS Code Testing | `${workspaceFolder}/.venv/Scripts/python.exe` |
-| Python terminal | Selected environment, automatically activated |
-
-<br/>
-
-## Result Flow
-
-<br/>
-
-```text
-VS Code Testing or TEST CASE Task
-├── pytest CT
-│   ├── TEST ID result JSON
-│   └── test log
-└── unittest
-    ├── execution result JSON
-    └── result log
-         ↓
-REPORT-Mkdocs: Generate Markdown to Pytest/Unittest
-         ↓
-docs/tests/{pytest,unittest}
-```
-
-<br/>
-
-## Related Documents
-
-<br/>
-
-| Scope | Document |
-|---|---|
-| Pytest framework | [pytest_framework.md](pytest_framework.md) |
-| Pytest operation | [pytest_operation.md](pytest_operation.md) |
-| Unittest operation | [unittest_operation.md](unittest_operation.md) |
-| Pytest results | [tests/pytest/index.md](tests/pytest/index.md) |
-| Unittest results | [tests/unittest/index.md](tests/unittest/index.md) |
+| Python terminal | Automatic environment activation is disabled; activate `.venv` manually when needed |
 
 <br/>

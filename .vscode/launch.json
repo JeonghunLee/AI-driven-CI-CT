@@ -1,6 +1,8 @@
 {
   "version": "0.2.0",
   "configurations": [
+    //
+    // Setup Section : OS and Python/LLM Envs
     {
       "name": "SETUP 1: Select Operating System",
       "type": "debugpy",
@@ -53,6 +55,7 @@
       "cwd": "${workspaceFolder}",
       "justMyCode": true
     },
+    // Run and Debug Section
     {
       "name": "Run 1: Extension Module",
       "type": "debugpy",
@@ -60,17 +63,6 @@
       "python": "${config:python.defaultInterpreterPath}",
       "module": "test_envs.tools.extension_runner",
       "args": ["--module", "test_envs.tools.extensions.example"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": true
-    },
-    {
-      "name": "Test Result: Generate Pending Markdown",
-      "type": "debugpy",
-      "request": "launch",
-      "python": "${config:python.defaultInterpreterPath}",
-      "module": "test_envs.tools.test_result",
-      "args": ["--pending", "--docs"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
@@ -95,8 +87,45 @@
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": false
+    },
+    // Reporting Section
+    {
+      "name": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.test_result",
+      "args": ["--pending", "--docs"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "REPORT-Pandoc: Convert Latest Markdown to HTML",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.pandoc_reporter",
+      "args": ["--latest", "--format", "html"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "REPORT-Pandoc: Convert Latest Markdown to DOCX",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.pandoc_reporter",
+      "args": ["--latest", "--format", "docx"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
     }
   ],
+  // End of Configurations Section
+
+  // Inputs Section for fixture mode selection
   "inputs": [
     {
       "id": "fixtureMode",
