@@ -6,7 +6,6 @@ import platform
 import shutil
 import subprocess
 import sys
-import ctypes
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -141,6 +140,8 @@ def _ollama_inventory(url: str) -> tuple[bool, list[dict[str, Any]], str | None]
 
 def _physical_memory_bytes() -> int | None:
     if os.name == "nt":
+        import ctypes
+
         class MEMORYSTATUSEX(ctypes.Structure):
             _fields_ = [
                 ("dwLength", ctypes.c_ulong),
@@ -174,7 +175,7 @@ def _hardware_check() -> dict[str, Any]:
         disk = shutil.disk_usage(WORKSPACE_ROOT)
     except OSError:
         disk = None
-    processor = platform.processor() or platform.machine() or "unknown"
+    processor = platform.processor() or platform.uname().processor or "unknown"
     return {
         "machine": platform.machine() or "unknown",
         "processor": processor,

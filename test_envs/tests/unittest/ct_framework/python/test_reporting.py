@@ -58,6 +58,13 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("Version: `3.12.0`", comment)
         self.assertIn("API available: `False`", comment)
 
+    def test_environment_comment_uses_unknown_for_missing_hardware_capacity(self) -> None:
+        check = {"os": {}, "hardware": {"logical_cores": None}, "python": {}, "ollama": {}}
+        with patch.dict("os.environ", {}, clear=False):
+            comment = render_environment_comment(check)
+        self.assertIn("Logical CPU cores: `unknown`", comment)
+        self.assertIn("Workspace disk: `unknown`", comment)
+
 
 if __name__ == "__main__":
     unittest.main()

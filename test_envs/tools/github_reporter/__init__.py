@@ -16,6 +16,14 @@ def _format_bytes(value: Any) -> str:
     return f"{gib:.2f} GiB"
 
 
+def _format_disk(total: Any, free: Any) -> str:
+    total_text = _format_bytes(total)
+    free_text = _format_bytes(free)
+    if total_text == "unknown" or free_text == "unknown":
+        return "unknown"
+    return f"{total_text} total / {free_text} free"
+
+
 def render_environment_comment(check: dict[str, Any]) -> str:
     requested_runner = os.getenv("REQUESTED_RUNNER", "unknown")
     if requested_runner.startswith("Self-hosted"):
@@ -50,9 +58,9 @@ def render_environment_comment(check: dict[str, Any]) -> str:
 ### Hardware
 - Machine: `{hardware_check.get('machine', 'unknown')}`
 - Processor: `{hardware_check.get('processor', 'unknown')}`
-- Logical CPU cores: `{hardware_check.get('logical_cores', 'unknown')}`
+- Logical CPU cores: `{hardware_check.get('logical_cores') or 'unknown'}`
 - Physical memory: `{_format_bytes(hardware_check.get('memory_bytes'))}`
-- Workspace disk: `{_format_bytes(hardware_check.get('workspace_disk_total_bytes'))} total / {_format_bytes(hardware_check.get('workspace_disk_free_bytes'))} free`
+- Workspace disk: `{_format_disk(hardware_check.get('workspace_disk_total_bytes'), hardware_check.get('workspace_disk_free_bytes'))}`
 
 ### Python
 - Installed: `{python_check.get('installed', False)}`

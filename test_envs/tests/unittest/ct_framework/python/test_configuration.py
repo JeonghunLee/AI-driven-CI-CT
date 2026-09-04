@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import unittest
-from collections import namedtuple
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -88,7 +87,7 @@ class ConfigurationTests(unittest.TestCase):
     )
     @patch(
         "test_envs.tools.configuration.shutil.disk_usage",
-        return_value=namedtuple("usage", "total used free")(100, 40, 60),
+        return_value=Mock(total=100, free=60),
     )
     @patch("test_envs.tools.configuration._physical_memory_bytes", return_value=80)
     @patch("test_envs.tools.configuration.os.cpu_count", return_value=4)
