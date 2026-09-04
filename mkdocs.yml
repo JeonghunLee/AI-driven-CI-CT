@@ -15,8 +15,8 @@ nav:
     - Setup LLM: local_llm_environment.md
     - Setup VSCode: vscode_environment.md    
   - TEST Framework:
-    - Pytest (HIL or Mock): pytest.md
-    - Unittest: unittest.md
+    - Pytest (HIL or Mock): pytest_framework.md
+    - Unittest: unittest_framework.md
   - TEST Operation:       
     - Pytest: pytest_operation.md 
     - Unittest: unittest_operation.md

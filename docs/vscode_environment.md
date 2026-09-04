@@ -350,7 +350,7 @@ docs/tests/{pytest,unittest}
 
 | Scope | Document |
 |---|---|
-| Pytest framework | [pytest.md](pytest.md) |
+| Pytest framework | [pytest_framework.md](pytest_framework.md) |
 | Pytest operation | [pytest_operation.md](pytest_operation.md) |
 | Unittest operation | [unittest_operation.md](unittest_operation.md) |
 | Pytest results | [tests/pytest/index.md](tests/pytest/index.md) |

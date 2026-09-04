@@ -31,8 +31,8 @@ Go to [VSCode Testing](https://jeonghunlee.github.io/vscode_doc/#vscode-testing)
 | VS Code Environment | [vscode_environment.md](vscode_environment.md) | Settings, Launch, Tasks, Testing |
 | Pytest Operation | [pytest_operation.md](pytest_operation.md) | TEST ID, Fixture, Mock/HIL, Local LLM |
 | Unittest Operation | [unittest_operation.md](unittest_operation.md) | Function, Execution ID, Result, Markdown |
-| Pytest / HIL / Mock | [pytest.md](pytest.md) | Test cases, fixture mapping, mode selection, HIL gate |
-| Unittest | [unittest.md](unittest.md) | Function result contract |
+| Pytest / HIL / Mock | [pytest_framework.md](pytest_framework.md) | Test cases, fixture mapping, mode selection, HIL gate |
+| Unittest | [unittest_framework.md](unittest_framework.md) | Function result contract |
 | Pytest Results | [tests/pytest/index.md](tests/pytest/index.md) | TEST ID, Execution history |
 | Unittest Results | [tests/unittest/index.md](tests/unittest/index.md) | Function count, Execution history |
 

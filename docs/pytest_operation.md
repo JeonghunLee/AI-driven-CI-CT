@@ -153,7 +153,7 @@ docs/tests/pytest/<test-id>.md
 
 | Scope | Document |
 |---|---|
-| pytest (HIL or Mock) | [pytest.md](pytest.md) |
+| pytest (HIL or Mock) | [pytest_framework.md](pytest_framework.md) |
 | Results | [tests/pytest/index.md](tests/pytest/index.md) |
 
 <br/>
