@@ -6,11 +6,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Test results and execution history" name="description"/>
-<link href="local_llm_environment.html" rel="prev"/>
-<link href="pytest.html" rel="next"/>
+<link href="index.html" rel="prev"/>
+<link href="python_environment.html" rel="next"/>
 <link href="imgs/logo.jpg" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
-<title>Envs VSCode - AI-driven CI/CT</title>
+<title>Setup VSCode - AI-driven CI/CT</title>
 <link href="assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
 <link href="assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/iframe-worker/shim"></script>
@@ -52,7 +52,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Envs VSCode
+              Setup VSCode
             
           </span>
 </div>
@@ -175,37 +175,13 @@
 
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="python_environment.html">
-<span class="md-ellipsis">
-    
-  
-    Envs Python
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="local_llm_environment.html">
-<span class="md-ellipsis">
-    
-  
-    Envs LLM
-  
-
-    
-  </span>
-</a>
-</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
 <span class="md-ellipsis">
     
   
-    Envs VSCode
+    Setup VSCode
   
 
     
@@ -216,7 +192,7 @@
 <span class="md-ellipsis">
     
   
-    Envs VSCode
+    Setup VSCode
   
 
     
@@ -242,7 +218,25 @@
 <a class="md-nav__link" href="#settings">
 <span class="md-ellipsis">
       
-        Settings
+        settings
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tasks">
+<span class="md-ellipsis">
+      
+        tasks
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#launch">
+<span class="md-ellipsis">
+      
+        launch
       
     </span>
 </a>
@@ -261,28 +255,37 @@
 <nav aria-label="Run and Debug" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#configurations">
+<a class="md-nav__link" href="#run-and-debug-setup-and-check">
 <span class="md-ellipsis">
       
-        Configurations
+        Run and Debug-Setup and Check
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#setup-and-check-delegation">
+<a class="md-nav__link" href="#run-and-debug-extension-module">
 <span class="md-ellipsis">
       
-        Setup and Check delegation
+        Run and Debug-Extension Module
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#current-pytest-debugging">
+<a class="md-nav__link" href="#run-and-debug-report">
 <span class="md-ellipsis">
       
-        Current pytest debugging
+        Run and Debug-Report
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#run-and-debug-inputs">
+<span class="md-ellipsis">
+      
+        Run and Debug-Inputs
       
     </span>
 </a>
@@ -291,56 +294,56 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#tasks">
+<a class="md-nav__link" href="#run-tasks">
 <span class="md-ellipsis">
       
-        Tasks
+        Run Tasks
       
     </span>
 </a>
-<nav aria-label="Tasks" class="md-nav">
+<nav aria-label="Run Tasks" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#setup-and-check-tasks">
+<a class="md-nav__link" href="#tasks-setup-and-check">
 <span class="md-ellipsis">
       
-        Setup and Check Tasks
+        Tasks-Setup and Check
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#test-case-tasks">
+<a class="md-nav__link" href="#tasks-test-case">
 <span class="md-ellipsis">
       
-        TEST CASE Tasks
+        Tasks-TEST CASE
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#report-tasks">
+<a class="md-nav__link" href="#tasks-report">
 <span class="md-ellipsis">
       
-        Report Tasks
+        Tasks-Report
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#mkdocs-tasks">
+<a class="md-nav__link" href="#tasks-mkdocs">
 <span class="md-ellipsis">
       
-        MkDocs Tasks
+        Tasks-MkDocs
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#task-inputs">
+<a class="md-nav__link" href="#tasks-inputs">
 <span class="md-ellipsis">
       
-        Task inputs
+        Tasks-Inputs
       
     </span>
 </a>
@@ -398,34 +401,40 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#python">
+<a class="md-nav__link" href="#python-extension">
 <span class="md-ellipsis">
       
-        Python
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#result-flow">
-<span class="md-ellipsis">
-      
-        Result Flow
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#related-documents">
-<span class="md-ellipsis">
-      
-        Related Documents
+        Python Extension
       
     </span>
 </a>
 </li>
 </ul>
 </nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="python_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Setup Python
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="local_llm_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Setup LLM
+  
+
+    
+  </span>
+</a>
 </li>
 </ul>
 </nav>
@@ -454,7 +463,7 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="pytest.html">
+<a class="md-nav__link" href="pytest_framework.html">
 <span class="md-ellipsis">
     
   
@@ -466,7 +475,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="unittest.html">
+<a class="md-nav__link" href="unittest_framework.html">
 <span class="md-ellipsis">
     
   
@@ -608,7 +617,25 @@
 <a class="md-nav__link" href="#settings">
 <span class="md-ellipsis">
       
-        Settings
+        settings
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tasks">
+<span class="md-ellipsis">
+      
+        tasks
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#launch">
+<span class="md-ellipsis">
+      
+        launch
       
     </span>
 </a>
@@ -627,28 +654,37 @@
 <nav aria-label="Run and Debug" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#configurations">
+<a class="md-nav__link" href="#run-and-debug-setup-and-check">
 <span class="md-ellipsis">
       
-        Configurations
+        Run and Debug-Setup and Check
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#setup-and-check-delegation">
+<a class="md-nav__link" href="#run-and-debug-extension-module">
 <span class="md-ellipsis">
       
-        Setup and Check delegation
+        Run and Debug-Extension Module
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#current-pytest-debugging">
+<a class="md-nav__link" href="#run-and-debug-report">
 <span class="md-ellipsis">
       
-        Current pytest debugging
+        Run and Debug-Report
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#run-and-debug-inputs">
+<span class="md-ellipsis">
+      
+        Run and Debug-Inputs
       
     </span>
 </a>
@@ -657,56 +693,56 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#tasks">
+<a class="md-nav__link" href="#run-tasks">
 <span class="md-ellipsis">
       
-        Tasks
+        Run Tasks
       
     </span>
 </a>
-<nav aria-label="Tasks" class="md-nav">
+<nav aria-label="Run Tasks" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#setup-and-check-tasks">
+<a class="md-nav__link" href="#tasks-setup-and-check">
 <span class="md-ellipsis">
       
-        Setup and Check Tasks
+        Tasks-Setup and Check
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#test-case-tasks">
+<a class="md-nav__link" href="#tasks-test-case">
 <span class="md-ellipsis">
       
-        TEST CASE Tasks
+        Tasks-TEST CASE
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#report-tasks">
+<a class="md-nav__link" href="#tasks-report">
 <span class="md-ellipsis">
       
-        Report Tasks
+        Tasks-Report
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#mkdocs-tasks">
+<a class="md-nav__link" href="#tasks-mkdocs">
 <span class="md-ellipsis">
       
-        MkDocs Tasks
+        Tasks-MkDocs
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#task-inputs">
+<a class="md-nav__link" href="#tasks-inputs">
 <span class="md-ellipsis">
       
-        Task inputs
+        Tasks-Inputs
       
     </span>
 </a>
@@ -764,28 +800,10 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#python">
+<a class="md-nav__link" href="#python-extension">
 <span class="md-ellipsis">
       
-        Python
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#result-flow">
-<span class="md-ellipsis">
-      
-        Result Flow
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#related-documents">
-<span class="md-ellipsis">
-      
-        Related Documents
+        Python Extension
       
     </span>
 </a>
@@ -806,7 +824,7 @@
 </a>
 </li>
 <li class="md-path__item">
-<a class="md-path__link" href="python_environment.html">
+<a class="md-path__link" href="vscode_environment.html">
 <span class="md-ellipsis">
     Getting Started
   </span>
@@ -816,12 +834,26 @@
 </nav>
 <article class="md-content__inner md-typeset">
 <h1 id="vs-code-environment">VS Code Environment</h1>
+<p><br/></p>
 <h2 id="vs-code-files">VS Code Files</h2>
+<p><br/></p>
+<p>Go To <a href="https://jeonghunlee.github.io/vscode_doc/#vscode-testing">VS Code Testing</a> </p>
+<ul>
+<li><strong>VS Code Testing</strong> <br/>
+<a href="https://code.visualstudio.com/docs/debugtest/testing">https://code.visualstudio.com/docs/debugtest/testing</a></li>
+</ul>
+<p><br/></p>
+<ul>
+<li><strong>VS Code Testing for Python</strong> <br/>
+<a href="https://code.visualstudio.com/docs/python/testing">https://code.visualstudio.com/docs/python/testing</a> </li>
+</ul>
+<p><br/></p>
 <div class="highlight"><pre><span></span><code>.vscode/
 ├── settings.json    # Python interpreter, analysis, and Testing
 ├── launch.json      # Run and Debug configurations
 └── tasks.json       # Setup, check, test, report, and MkDocs tasks
 </code></pre></div>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -832,7 +864,7 @@
 <tbody>
 <tr>
 <td><code>settings.json</code></td>
-<td>Define Project <a href="#settings">Settings</a> configurations</td>
+<td>Define project settings for <a href="#testing">Testing</a> and the <a href="#python-extension">Python Extension</a></td>
 </tr>
 <tr>
 <td><code>launch.json</code></td>
@@ -840,16 +872,34 @@
 </tr>
 <tr>
 <td><code>tasks.json</code></td>
-<td>Define <a href="#tasks">Tasks</a> configurations</td>
+<td>Define <a href="#run-tasks">Run Tasks</a> configurations</td>
 </tr>
 </tbody>
 </table>
+<p><br/></p>
 <p>There is currently no <code>.vscode/extensions.json</code>; extension recommendations are not managed by the repository.</p>
-<h3 id="settings">Settings</h3>
-<p>Source: <code>.vscode/settings.json</code></p>
+<p><br/></p>
+<h3 id="settings">settings</h3>
+<p><br/></p>
+<ul>
+<li><strong>VS Code Testing for Python</strong> <br/>
+<a href="https://code.visualstudio.com/docs/python/testing">https://code.visualstudio.com/docs/python/testing</a> </li>
+</ul>
+<p><br/></p>
+<ul>
+<li>Source: <code>.vscode/settings.json</code>
+Connected VS Code features: <a href="#testing">Testing</a> and <a href="#python-extension">Python Extension</a>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="c1">//.venv</span>
+<span class="w">  </span><span class="c1">//Python Automatic Environment Activation </span>
+<span class="w">  </span><span class="c1">//    true: automatically activate venv  (.\.venv\Scripts\Activate.ps1)</span>
+<span class="w">  </span><span class="c1">//    false: do not automatically activate venv  </span>
+<span class="w">  </span><span class="nt">"python.terminal.activateEnvironment"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">//venv path for Python</span>
 <span class="w">  </span><span class="nt">"python.defaultInterpreterPath"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${workspaceFolder}/.venv/Scripts/python.exe"</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">"python.terminal.activateEnvironment"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">//Python Testing Configuration</span>
 <span class="w">  </span><span class="nt">"python.testing.pytestEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"python.testing.unittestEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"python.testing.pytestArgs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -864,7 +914,9 @@
 <span class="w">    </span><span class="s2">"${workspaceFolder}"</span>
 <span class="w">  </span><span class="p">]</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre></div></li>
+</ul>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -881,8 +933,8 @@
 </tr>
 <tr>
 <td><code>python.terminal.activateEnvironment</code></td>
-<td><code>true</code></td>
-<td>New Python terminals activate the selected environment</td>
+<td><code>false</code></td>
+<td>New terminals do not automatically activate the selected environment</td>
 </tr>
 <tr>
 <td><code>python.testing.pytestEnabled</code></td>
@@ -917,128 +969,552 @@
 </tbody>
 </table>
 <p><code>-p no:cacheprovider</code> disables pytest's cache provider, so VS Code discovery and execution do not create or update <code>.pytest_cache</code>.</p>
+<p><br/></p>
+<h3 id="tasks">tasks</h3>
+<p><br/></p>
+<ul>
+<li><strong>Tasks</strong> <br/>
+<a href="https://code.visualstudio.com/docs/debugtest/tasks">https://code.visualstudio.com/docs/debugtest/tasks</a></li>
+</ul>
+<p><br/></p>
+<ul>
+<li>Source: <code>.vscode/tasks.json</code> <br/>
+Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
+<div class="highlight"><pre><span></span><code>{
+    "version": "2.0.0",
+    "tasks": [
+        //Setup Task Section
+        // This section contains tasks for setting up the development environment, including selecting the OS, installing Python virtual environment, and installing Ollama and local LLM.
+        // Each task is labeled with a "SETUP" prefix for easy identification.
+        {
+            "label": "SETUP 1: Select Operating System",
+            "type": "process",
+            "command": "python",
+            "args": [
+                "-m",
+                "test_envs.tools.configuration",
+                "select-os"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "SETUP 2: Install Python Virtual Environment",
+            "type": "process",
+            "command": "python",
+            "args": [
+                "-m",
+                "test_envs.tools.environment_setup",
+                "python"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "SETUP 3: Install Ollama and Local LLM",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.environment_setup",
+                "ollama"
+            ],
+            "problemMatcher": []
+        },
+        // Check Task Section
+        // This section contains tasks for checking the environment and running the Ollama server.
+        // Each task is labeled with a "CHECK" prefix for easy identification.
+        {
+            "label": "CHECK 1: Refresh Environment Check File",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.configuration",
+                "check"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "CHECK 2: Show Environment Configuration",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.configuration",
+                "config"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "CHECK 3: Run Ollama Server (Foreground)",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.environment_setup",
+                "serve"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        // Test Case Task Section
+        // "TEST CASE" prefix for easy identification and Input Section for test case ID and fixture mode
+        {
+            "label": "TEST CASE: ALL",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "pytest",
+                "-p",
+                "no:cacheprovider",
+                "test_envs/tests/pytest/test_cases",
+                "--fixture-mode",
+                "${input:fixtureMode}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TEST CASE: TEST ID",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "pytest",
+                "-p",
+                "no:cacheprovider",
+                "test_envs/tests/pytest/test_cases",
+                "--test-id",
+                "${input:testCaseId}",
+                "--fixture-mode",
+                "${input:fixtureMode}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        // Report Task Section
+        // This section contains tasks for generating and converting test reports.
+        // Each task is labeled with a "REPORT" prefix for easy identification.
+        {
+            "label": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.test_result",
+                "--pending",
+                "--docs"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "REPORT-Pandoc: Convert Latest Markdown to HTML",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.pandoc_reporter",
+                "--latest",
+                "--format",
+                "html"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "REPORT-Pandoc: Convert Latest Markdown to DOCX",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.pandoc_reporter",
+                "--latest",
+                "--format",
+                "docx"
+            ],
+            "problemMatcher": []
+        },
+        // MkDocs Task Section
+        // This section contains tasks for serving and building MkDocs documentation.
+        // Each task is labeled with a "MkDocs" prefix for easy identification.
+        {
+            "label": "MkDocs: Serve Local 8000",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "serve"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "MkDocs: Serve Local 8080",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "serve",
+                "-a",
+                "0.0.0.0:8080"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "MkDocs: Serve Remote ",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "serve",
+                "-a",
+                "0.0.0.0:8000"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "MkDocs: Build",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "build"
+            ]
+        },
+        {
+            "label": "MkDocs: Build Strict",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "mkdocs",
+                "build",
+                "--strict"
+            ]
+        }
+    ],
+    // End of tasks array
+    // End of tasks section
+
+    // Inputs section (Test case and fixture mode inputs)
+    // "TEST CASE: TEST ID", and "TEST CASE: ALL"
+    "inputs": [
+        {
+            "id": "testCaseId",
+            "type": "pickString",
+            "description": "TEST ID",
+            "options": [
+                "CT-UART-001",
+                "CT-USB-001",
+                "CT-NETWORK-001"
+            ],
+            "default": "CT-UART-001"
+        },
+        {
+            "id": "fixtureMode",
+            "type": "pickString",
+            "description": "Fixture mode",
+            "options": [
+                "marker",
+                "mock",
+                "hil"
+            ],
+            "default": "marker"
+        }
+    ]
+}
+</code></pre></div></li>
+</ul>
+<p><br/></p>
+<h3 id="launch">launch</h3>
+<p><br/></p>
+<ul>
+<li><strong>Run and Debug</strong>
+<a href="https://code.visualstudio.com/docs/debugtest/debugging">https://code.visualstudio.com/docs/debugtest/debugging</a>
+<a href="https://code.visualstudio.com/docs/debugtest/debugging-configuration">https://code.visualstudio.com/docs/debugtest/debugging-configuration</a></li>
+</ul>
+<p><br/></p>
+<ul>
+<li>Source: <code>.vscode/launch.json</code>
+Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
+<div class="highlight"><pre><span></span><code>{
+  "version": "0.2.0",
+  "configurations": [
+    //
+    // Setup Section : OS and Python/LLM Envs
+    {
+      "name": "SETUP 1: Select Operating System",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "python",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "SETUP 1: Select Operating System",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "SETUP 2: Install Python Virtual Environment",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "python",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "SETUP 2: Install Python Virtual Environment",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "SETUP 3: Install Ollama and Local LLM",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "SETUP 3: Install Ollama and Local LLM",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "CHECK 1: Refresh Environment Check File",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "CHECK 1: Refresh Environment Check File",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    // Run and Debug Section
+    {
+      "name": "Run : Extension Module (Not Support Now)",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.extension_runner",
+      "args": ["--module", "test_envs.tools.extensions.example"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    // Reporting Section (Mkdocs Markdown and Pandoc(HTML/DOCX))
+    {
+      "name": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.test_result",
+      "args": ["--pending", "--docs"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "REPORT-Pandoc: Convert Latest Markdown to HTML",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.pandoc_reporter",
+      "args": ["--latest", "--format", "html"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "REPORT-Pandoc: Convert Latest Markdown to DOCX",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.pandoc_reporter",
+      "args": ["--latest", "--format", "docx"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    }
+  ],
+  // End of Configurations Section
+
+  // Inputs Section for fixture mode selection (Not use currently, reserved for future use)
+  "inputs": [
+    {
+      "id": "fixtureMode",
+      "type": "pickString",
+      "description": "Fixture mode",
+      "options": ["marker", "mock", "hil"],
+      "default": "marker"
+    }
+  ]
+}
+</code></pre></div></li>
+</ul>
+<p><br/></p>
 <h2 id="run-and-debug">Run and Debug</h2>
+<p><br/></p>
 <p>Source: <code>.vscode/launch.json</code></p>
 <p><img alt="VS Code Run and Debug panel" src="imgs/vscode_runanddebug_00.png"/></p>
-<h3 id="configurations">Configurations</h3>
-<table>
-<thead>
-<tr>
-<th>Configuration</th>
-<th>Python</th>
-<th>Entry point</th>
-<th>Console</th>
-<th style="text-align: right;"><code>justMyCode</code></th>
-<th>Function</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>SETUP 1: Select Operating System</code></td>
-<td><code>python</code></td>
-<td><code>test_envs.tools.configuration config</code></td>
-<td>Internal</td>
-<td style="text-align: right;"><code>true</code></td>
-<td>Runs the matching Setup Task, then displays configuration</td>
-</tr>
-<tr>
-<td><code>SETUP 2: Install Python Virtual Environment</code></td>
-<td><code>python</code></td>
-<td><code>test_envs.tools.configuration config</code></td>
-<td>Internal</td>
-<td style="text-align: right;"><code>true</code></td>
-<td>Runs the matching Setup Task, then displays configuration</td>
-</tr>
-<tr>
-<td><code>SETUP 3: Install Ollama and Local LLM</code></td>
-<td>Project Python</td>
-<td><code>test_envs.tools.configuration config</code></td>
-<td>Internal</td>
-<td style="text-align: right;"><code>true</code></td>
-<td>Runs the matching Setup Task, then displays configuration</td>
-</tr>
-<tr>
-<td><code>CHECK 1: Refresh Environment Check File</code></td>
-<td>Project Python</td>
-<td><code>test_envs.tools.configuration config</code></td>
-<td>Internal</td>
-<td style="text-align: right;"><code>true</code></td>
-<td>Runs the matching Check Task, then displays configuration</td>
-</tr>
-<tr>
-<td><code>Run 1: Extension Module</code></td>
-<td>Project Python</td>
-<td><code>test_envs.tools.extension_runner</code></td>
-<td>Integrated terminal</td>
-<td style="text-align: right;"><code>true</code></td>
-<td>Runs <code>test_envs.tools.extensions.example</code></td>
-</tr>
-<tr>
-<td><code>Test Result: Generate Pending Markdown</code></td>
-<td>Project Python</td>
-<td><code>test_envs.tools.test_result</code></td>
-<td>Integrated terminal</td>
-<td style="text-align: right;"><code>true</code></td>
-<td>Runs <code>--pending --docs</code></td>
-</tr>
-<tr>
-<td><code>Debug: Current Python File</code></td>
-<td>Project Python</td>
-<td><code>${file}</code></td>
-<td>Integrated terminal</td>
-<td style="text-align: right;"><code>true</code></td>
-<td>Debugs the open Python file</td>
-</tr>
-<tr>
-<td><code>Debug: Current pytest File</code></td>
-<td>Project Python</td>
-<td><code>pytest</code></td>
-<td>Integrated terminal</td>
-<td style="text-align: right;"><code>false</code></td>
-<td>Debugs the open test with the selected fixture mode</td>
-</tr>
-</tbody>
-</table>
-<p>“Project Python” means <code>${config:python.defaultInterpreterPath}</code>.</p>
-<h3 id="setup-and-check-delegation">Setup and Check delegation</h3>
-<p>The first four configurations use <code>preLaunchTask</code>. The Task performs the state-changing work; after it succeeds, the launch configuration runs <code>test_envs.tools.configuration config</code> and exits.</p>
+<p><br/></p>
+<h3 id="run-and-debug-setup-and-check">Run and Debug-Setup and Check</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
 <th>Launch configuration</th>
+<th>Python</th>
 <th><code>preLaunchTask</code></th>
+<th>Purpose</th>
+<th>Related Task</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>SETUP 1: Select Operating System</code></td>
+<td>System <code>python</code></td>
 <td>Same label</td>
+<td>Selects the project operating system, then displays the resulting configuration</td>
+<td><a href="#tasks-setup-and-check">Tasks-Setup and Check</a></td>
 </tr>
 <tr>
 <td><code>SETUP 2: Install Python Virtual Environment</code></td>
+<td>System <code>python</code></td>
 <td>Same label</td>
+<td>Creates <code>.venv</code>, then displays the resulting configuration</td>
+<td><a href="#tasks-setup-and-check">Tasks-Setup and Check</a></td>
 </tr>
 <tr>
 <td><code>SETUP 3: Install Ollama and Local LLM</code></td>
+<td>Project Python</td>
 <td>Same label</td>
+<td>Installs or checks Ollama and the configured model, then displays the resulting configuration</td>
+<td><a href="#tasks-setup-and-check">Tasks-Setup and Check</a></td>
 </tr>
 <tr>
 <td><code>CHECK 1: Refresh Environment Check File</code></td>
+<td>Project Python</td>
 <td>Same label</td>
+<td>Refreshes <code>check.json</code>, then displays the resulting configuration</td>
+<td><a href="#tasks-setup-and-check">Tasks-Setup and Check</a></td>
 </tr>
 </tbody>
 </table>
-<p>All launch configurations use <code>${workspaceFolder}</code> as <code>cwd</code>. Setup 1 and Setup 2 deliberately use system <code>python</code>; every later configuration uses the interpreter selected by <code>python.defaultInterpreterPath</code>.</p>
-<h3 id="current-pytest-debugging">Current pytest debugging</h3>
-<p><code>Debug: Current pytest File</code> runs:</p>
-<div class="highlight"><pre><span></span><code>python -m pytest ${file} -s -vv --fixture-mode &lt;selection&gt;
-</code></pre></div>
-<p>The launch input <code>fixtureMode</code> offers <code>marker</code>, <code>mock</code>, and <code>hil</code>, with <code>marker</code> as the default. <code>marker</code> is a selection instruction; the CT itself resolves to <code>mock</code> or <code>hil</code>.</p>
-<h2 id="tasks">Tasks</h2>
+<p><br/></p>
+<p>“Project Python” means <code>${config:python.defaultInterpreterPath}</code>.</p>
+<p><br/></p>
+<p>These four configurations intentionally overlap with <a href="#run-tasks">Run Tasks</a>. The matching Task performs the setup or check operation through <code>preLaunchTask</code>; after it succeeds, Run and Debug executes <code>test_envs.tools.configuration config</code> to show the current configuration.</p>
+<p><br/></p>
+<p>Setup 1 and Setup 2 use system <code>python</code>. Setup 3 and later configurations use the interpreter selected by <code>python.defaultInterpreterPath</code>.</p>
+<p><br/></p>
+<h3 id="run-and-debug-extension-module">Run and Debug-Extension Module</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Launch configuration</th>
+<th>Entry point</th>
+<th>Current status</th>
+<th>Future purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Run : Extension Module (Not Support Now)</code></td>
+<td><code>test_envs.tools.extension_runner</code></td>
+<td><strong>Not supported now</strong></td>
+<td>Extension execution with future GDB-based debugging</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>This configuration is a placeholder and is not part of the currently supported test workflow. It has no matching Task. A future implementation will connect extension modules to GDB or another target debugger.</p>
+<p><br/></p>
+<h3 id="run-and-debug-report">Run and Debug-Report</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Launch configuration</th>
+<th>Entry point and arguments</th>
+<th>Purpose</th>
+<th>Related Task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>REPORT-Mkdocs: Generate Markdown to Pytest/Unittest</code></td>
+<td><code>test_envs.tools.test_result --pending --docs</code></td>
+<td>Generates pending Pytest and Unittest Markdown and publishes MkDocs result pages</td>
+<td><a href="#tasks-report">Tasks-Report</a></td>
+</tr>
+<tr>
+<td><code>REPORT-Pandoc: Convert Latest Markdown to HTML</code></td>
+<td><code>test_envs.tools.pandoc_reporter --latest --format html</code></td>
+<td>Converts the latest Markdown report to HTML</td>
+<td><a href="#tasks-report">Tasks-Report</a></td>
+</tr>
+<tr>
+<td><code>REPORT-Pandoc: Convert Latest Markdown to DOCX</code></td>
+<td><code>test_envs.tools.pandoc_reporter --latest --format docx</code></td>
+<td>Converts the latest Markdown report to DOCX</td>
+<td><a href="#tasks-report">Tasks-Report</a></td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>These configurations overlap with <a href="#tasks-report">Tasks-Report</a>, but they do not use <code>preLaunchTask</code>. Run and Debug starts the same Python modules through <code>debugpy</code>, while Run Tasks executes them directly as foreground processes. Use Run Tasks for normal report generation and Run and Debug when breakpoints or debugger inspection are required.</p>
+<p><br/></p>
+<h3 id="run-and-debug-inputs">Run and Debug-Inputs</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Input ID</th>
+<th>Options</th>
+<th>Current use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fixtureMode</code></td>
+<td><code>marker</code>, <code>mock</code>, <code>hil</code></td>
+<td>Declared in <code>launch.json</code>, but no current launch configuration references it</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h2 id="run-tasks">Run Tasks</h2>
+<p><br/></p>
 <p>Source: <code>.vscode/tasks.json</code></p>
 <p><img alt="VS Code Tasks" src="imgs/vscode_task_00.png"/></p>
+<p><br/></p>
 <p>Every Task has <code>type: process</code>, runs in the foreground, and has no <code>isBackground</code> flag. Setup 1 and Setup 2 use system <code>python</code>; all later Tasks use <code>${config:python.defaultInterpreterPath}</code>.</p>
-<h3 id="setup-and-check-tasks">Setup and Check Tasks</h3>
+<p><br/></p>
+<h3 id="tasks-setup-and-check">Tasks-Setup and Check</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -1087,8 +1563,13 @@
 </tr>
 </tbody>
 </table>
+<p><br/></p>
 <p>The dedicated-terminal presentation is configured for Setup 1 and Check 3. Closing or stopping Check 3 ends the foreground server process owned by that Task.</p>
-<h3 id="test-case-tasks">TEST CASE Tasks</h3>
+<p><br/></p>
+<p>Setup 1 through Setup 3 and Check 1 are also exposed through <a href="#run-and-debug-setup-and-check">Run and Debug-Setup and Check</a>. In Run and Debug, each matching Task runs first through <code>preLaunchTask</code>.</p>
+<p><br/></p>
+<h3 id="tasks-test-case">Tasks-TEST CASE</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -1113,8 +1594,11 @@
 </tr>
 </tbody>
 </table>
+<p><br/></p>
 <p>Both Tasks disable the pytest cache provider and execute <code>test_envs/tests/pytest/test_cases</code>.</p>
-<h3 id="report-tasks">Report Tasks</h3>
+<p><br/></p>
+<h3 id="tasks-report">Tasks-Report</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -1141,7 +1625,11 @@
 </tr>
 </tbody>
 </table>
-<h3 id="mkdocs-tasks">MkDocs Tasks</h3>
+<p><br/></p>
+<p>The same report operations are available through <a href="#run-and-debug-report">Run and Debug-Report</a>. Run Tasks is the normal execution path; Run and Debug uses <code>debugpy</code> when debugger inspection is needed.</p>
+<p><br/></p>
+<h3 id="tasks-mkdocs">Tasks-MkDocs</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -1179,7 +1667,9 @@
 </tbody>
 </table>
 <p>The <code>MkDocs: Serve Remote</code> source label currently contains a trailing space.</p>
-<h3 id="task-inputs">Task inputs</h3>
+<p><br/></p>
+<h3 id="tasks-inputs">Tasks-Inputs</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -1208,9 +1698,22 @@
 </tbody>
 </table>
 <p>OS selection is not a Task or launch input. It is managed by <code>test_envs/configs/config.json</code> through the Setup 1 command.</p>
+<p><br/></p>
 <h2 id="testing">Testing</h2>
-<p><img alt="VS Code Testing panel" src="imgs/vscode_testing_00.png"/></p>
+<p><br/></p>
+<ul>
+<li>
+<p><strong>Pytest and Unittest</strong> <br/>
+<img alt="" src="imgs/vscode_testing_00.png"/></p>
+</li>
+<li>
+<p><strong>Testing Coverage</strong> <br/>
+<img alt="" src="imgs/vscode_testing_01.png"/></p>
+</li>
+</ul>
+<p><br/></p>
 <h3 id="discovery-model">Discovery model</h3>
+<p><br/></p>
 <div class="highlight"><pre><span></span><code>VS Code Testing
 └── Microsoft Python extension
     └── pytest adapter
@@ -1219,6 +1722,7 @@
         └── test_envs/tests/unittest
             └── unittest.TestCase collected by pytest
 </code></pre></div>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -1261,8 +1765,10 @@
 </tr>
 </tbody>
 </table>
+<p><br/></p>
 <h3 id="discovery-lifecycle">Discovery lifecycle</h3>
-<div class="highlight"><pre><span></span><code>Open workspace
+<p><br/></p>
+<p><div class="highlight"><pre><span></span><code>Open workspace
       ↓
 Load settings.json
       ↓
@@ -1272,6 +1778,7 @@ Run pytest collection from workspace root
       ↓
 Build the unified Testing tree
 </code></pre></div>
+<br/></p>
 <table>
 <thead>
 <tr>
@@ -1298,7 +1805,9 @@ Build the unified Testing tree
 </tr>
 </tbody>
 </table>
+<p><br/></p>
 <h3 id="execution-contracts">Execution contracts</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -1324,7 +1833,9 @@ Build the unified Testing tree
 </tbody>
 </table>
 <p>The Testing panel supports running or debugging the full tree, a folder, a module, a class, or one test function. CT normalization is handled by <code>test_envs/tests/pytest/conftest.py</code>; unittest normalization is handled by <code>test_envs/tests/unittest/conftest.py</code>.</p>
+<p><br/></p>
 <h3 id="discovery-troubleshooting">Discovery troubleshooting</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -1355,8 +1866,11 @@ Build the unified Testing tree
 </tr>
 </tbody>
 </table>
-<h2 id="python">Python</h2>
+<p><br/></p>
+<h2 id="python-extension">Python Extension</h2>
+<p><br/></p>
 <p><img alt="VS Code Python interpreter" src="imgs/vscode_python_00.png"/></p>
+<p><br/></p>
 <table>
 <thead>
 <tr>
@@ -1383,54 +1897,11 @@ Build the unified Testing tree
 </tr>
 <tr>
 <td>Python terminal</td>
-<td>Selected environment, automatically activated</td>
+<td>Automatic environment activation is disabled; activate <code>.venv</code> manually when needed</td>
 </tr>
 </tbody>
 </table>
-<h2 id="result-flow">Result Flow</h2>
-<div class="highlight"><pre><span></span><code>VS Code Testing or TEST CASE Task
-├── pytest CT
-│   ├── TEST ID result JSON
-│   └── test log
-└── unittest
-    ├── execution result JSON
-    └── result log
-         ↓
-REPORT-Mkdocs: Generate Markdown to Pytest/Unittest
-         ↓
-docs/tests/{pytest,unittest}
-</code></pre></div>
-<h2 id="related-documents">Related Documents</h2>
-<table>
-<thead>
-<tr>
-<th>Scope</th>
-<th>Document</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Pytest framework</td>
-<td><a href="pytest.html">pytest.md</a></td>
-</tr>
-<tr>
-<td>Pytest operation</td>
-<td><a href="pytest_operation.html">pytest_operation.md</a></td>
-</tr>
-<tr>
-<td>Unittest operation</td>
-<td><a href="unittest_operation.html">unittest_operation.md</a></td>
-</tr>
-<tr>
-<td>Pytest results</td>
-<td><a href="tests/pytest/index.html">tests/pytest/index.md</a></td>
-</tr>
-<tr>
-<td>Unittest results</td>
-<td><a href="tests/unittest/index.html">tests/unittest/index.md</a></td>
-</tr>
-</tbody>
-</table>
+<p><br/></p>
 </article>
 </div>
 <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
@@ -1443,7 +1914,7 @@ docs/tests/{pytest,unittest}
 </main>
 <footer class="md-footer">
 <nav aria-label="하단/푸터" class="md-footer__inner md-grid">
-<a aria-label="이전: Envs LLM" class="md-footer__link md-footer__link--prev" href="local_llm_environment.html">
+<a aria-label="이전: Overview" class="md-footer__link md-footer__link--prev" href="index.html">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
 </div>
@@ -1452,17 +1923,17 @@ docs/tests/{pytest,unittest}
                 이전
               </span>
 <div class="md-ellipsis">
-                Envs LLM
+                Overview
               </div>
 </div>
 </a>
-<a aria-label="다음: Pytest (HIL or Mock)" class="md-footer__link md-footer__link--next" href="pytest.html">
+<a aria-label="다음: Setup Python" class="md-footer__link md-footer__link--next" href="python_environment.html">
 <div class="md-footer__title">
 <span class="md-footer__direction">
                 다음
               </span>
 <div class="md-ellipsis">
-                Pytest (HIL or Mock)
+                Setup Python
               </div>
 </div>
 <div class="md-footer__button md-icon">

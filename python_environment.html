@@ -6,11 +6,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Test results and execution history" name="description"/>
-<link href="index.html" rel="prev"/>
+<link href="vscode_environment.html" rel="prev"/>
 <link href="local_llm_environment.html" rel="next"/>
 <link href="imgs/logo.jpg" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
-<title>Envs Python - AI-driven CI/CT</title>
+<title>Setup Python - AI-driven CI/CT</title>
 <link href="assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
 <link href="assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/iframe-worker/shim"></script>
@@ -52,7 +52,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Envs Python
+              Setup Python
             
           </span>
 </div>
@@ -175,13 +175,25 @@
 
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="vscode_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Setup VSCode
+  
+
+    
+  </span>
+</a>
+</li>
 <li class="md-nav__item md-nav__item--active">
 <input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
 <label class="md-nav__link md-nav__link--active" for="__toc">
 <span class="md-ellipsis">
     
   
-    Envs Python
+    Setup Python
   
 
     
@@ -192,7 +204,7 @@
 <span class="md-ellipsis">
     
   
-    Envs Python
+    Setup Python
   
 
     
@@ -205,64 +217,135 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#components">
+<a class="md-nav__link" href="#python-usage">
 <span class="md-ellipsis">
       
-        Components
+        Python Usage
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#setup-order">
+<a class="md-nav__link" href="#vs-code-usage">
 <span class="md-ellipsis">
       
-        Setup order
+        VS Code Usage
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#os">
+<a class="md-nav__link" href="#configuration-and-status">
 <span class="md-ellipsis">
       
-        OS
+        Configuration and Status
+      
+    </span>
+</a>
+<nav aria-label="Configuration and Status" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configjson">
+<span class="md-ellipsis">
+      
+        config.json
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#vs-code">
+<a class="md-nav__link" href="#checkjson">
 <span class="md-ellipsis">
       
-        VS Code
+        check.json
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#usage-rules">
+<span class="md-ellipsis">
+      
+        Usage Rules
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#commands">
+<a class="md-nav__link" href="#troubleshooting">
 <span class="md-ellipsis">
       
-        Commands
+        Troubleshooting
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#check-file">
+<a class="md-nav__link" href="#environment-installation">
 <span class="md-ellipsis">
       
-        Check file
+        Environment Installation
+      
+    </span>
+</a>
+<nav aria-label="Environment Installation" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#requirements">
+<span class="md-ellipsis">
+      
+        Requirements
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#constraints">
+<a class="md-nav__link" href="#windows-powershell">
 <span class="md-ellipsis">
       
-        Constraints
+        Windows PowerShell
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#linux-and-macos">
+<span class="md-ellipsis">
+      
+        Linux and macOS
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation-flow">
+<span class="md-ellipsis">
+      
+        Installation Flow
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installed-packages">
+<span class="md-ellipsis">
+      
+        Installed Packages
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#full-test_envs-structure">
+<span class="md-ellipsis">
+      
+        Full test_envs Structure
       
     </span>
 </a>
@@ -275,19 +358,7 @@
 <span class="md-ellipsis">
     
   
-    Envs LLM
-  
-
-    
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="vscode_environment.html">
-<span class="md-ellipsis">
-    
-  
-    Envs VSCode
+    Setup LLM
   
 
     
@@ -321,7 +392,7 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="pytest.html">
+<a class="md-nav__link" href="pytest_framework.html">
 <span class="md-ellipsis">
     
   
@@ -333,7 +404,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="unittest.html">
+<a class="md-nav__link" href="unittest_framework.html">
 <span class="md-ellipsis">
     
   
@@ -462,64 +533,135 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#components">
+<a class="md-nav__link" href="#python-usage">
 <span class="md-ellipsis">
       
-        Components
+        Python Usage
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#setup-order">
+<a class="md-nav__link" href="#vs-code-usage">
 <span class="md-ellipsis">
       
-        Setup order
+        VS Code Usage
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#os">
+<a class="md-nav__link" href="#configuration-and-status">
 <span class="md-ellipsis">
       
-        OS
+        Configuration and Status
+      
+    </span>
+</a>
+<nav aria-label="Configuration and Status" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configjson">
+<span class="md-ellipsis">
+      
+        config.json
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#vs-code">
+<a class="md-nav__link" href="#checkjson">
 <span class="md-ellipsis">
       
-        VS Code
+        check.json
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#usage-rules">
+<span class="md-ellipsis">
+      
+        Usage Rules
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#commands">
+<a class="md-nav__link" href="#troubleshooting">
 <span class="md-ellipsis">
       
-        Commands
+        Troubleshooting
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#check-file">
+<a class="md-nav__link" href="#environment-installation">
 <span class="md-ellipsis">
       
-        Check file
+        Environment Installation
+      
+    </span>
+</a>
+<nav aria-label="Environment Installation" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#requirements">
+<span class="md-ellipsis">
+      
+        Requirements
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#constraints">
+<a class="md-nav__link" href="#windows-powershell">
 <span class="md-ellipsis">
       
-        Constraints
+        Windows PowerShell
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#linux-and-macos">
+<span class="md-ellipsis">
+      
+        Linux and macOS
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation-flow">
+<span class="md-ellipsis">
+      
+        Installation Flow
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installed-packages">
+<span class="md-ellipsis">
+      
+        Installed Packages
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#full-test_envs-structure">
+<span class="md-ellipsis">
+      
+        Full test_envs Structure
       
     </span>
 </a>
@@ -540,7 +682,7 @@
 </a>
 </li>
 <li class="md-path__item">
-<a class="md-path__link" href="python_environment.html">
+<a class="md-path__link" href="vscode_environment.html">
 <span class="md-ellipsis">
     Getting Started
   </span>
@@ -550,110 +692,53 @@
 </nav>
 <article class="md-content__inner md-typeset">
 <h1 id="python-environment">Python Environment</h1>
-<h2 id="components">Components</h2>
+<p><br/></p>
+<p>The project uses system Python for initial setup and the project-local <code>.venv</code> for normal test and report execution.</p>
+<p><br/></p>
+<h2 id="python-usage">Python Usage</h2>
+<p><br/></p>
 <table>
 <thead>
 <tr>
-<th>Item</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>System Python</td>
-<td>OS installation</td>
-</tr>
-<tr>
-<td>Project Python</td>
-<td><code>.venv</code></td>
-</tr>
-<tr>
-<td>Dependencies</td>
-<td><code>requirements.txt</code></td>
-</tr>
-<tr>
-<td>Environment setup</td>
-<td><code>test_envs.tools.environment_setup python</code></td>
-</tr>
-<tr>
-<td>OS config</td>
-<td><code>test_envs/configs/config.json → os</code></td>
-</tr>
-<tr>
-<td>Environment check</td>
-<td><code>test_envs/configs/check.json → python</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="setup-order">Setup order</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: right;">Order</th>
-<th>Action</th>
+<th>Stage</th>
 <th>Python</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: right;">1</td>
-<td>Select Operating System</td>
+<td>OS selection</td>
 <td>System Python</td>
+<td>Selects the host OS before <code>.venv</code> is required</td>
 </tr>
 <tr>
-<td style="text-align: right;">2</td>
-<td>Create <code>.venv</code></td>
+<td>Virtual environment creation</td>
 <td>System Python</td>
+<td>Creates <code>.venv</code> and installs project dependencies</td>
 </tr>
 <tr>
-<td style="text-align: right;">3</td>
-<td>Install dependencies</td>
-<td><code>.venv</code> Python</td>
+<td>Pytest and Unittest</td>
+<td>Project Python</td>
+<td>Runs tests in an isolated environment</td>
+</tr>
+<tr>
+<td>Environment and report tools</td>
+<td>Project Python</td>
+<td>Runs <code>test_envs.tools.*</code> modules</td>
+</tr>
+<tr>
+<td>VS Code Testing</td>
+<td>Project Python</td>
+<td>Discovers and executes tests through pytest</td>
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code>System Python
-      ↓
-Select OS
-      ↓
-python -m venv .venv
-      ↓
-.venv Python
-      ↓
-pip install -r requirements.txt
-</code></pre></div>
-<h2 id="os">OS</h2>
-<table>
-<thead>
-<tr>
-<th>Config value</th>
-<th>Runtime</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>auto</code></td>
-<td>Host OS detection</td>
-</tr>
-<tr>
-<td><code>windows</code></td>
-<td>Windows</td>
-</tr>
-<tr>
-<td><code>linux</code></td>
-<td>Linux</td>
-</tr>
-<tr>
-<td><code>macos</code></td>
-<td>macOS</td>
-</tr>
-</tbody>
-</table>
+<p><br/></p>
 <table>
 <thead>
 <tr>
 <th>OS</th>
-<th>Virtual environment Python</th>
+<th>Project Python</th>
 </tr>
 </thead>
 <tbody>
@@ -671,78 +756,401 @@ pip install -r requirements.txt
 </tr>
 </tbody>
 </table>
-<h2 id="vs-code">VS Code</h2>
+<p><br/></p>
+<h2 id="vs-code-usage">VS Code Usage</h2>
+<p><br/></p>
 <table>
 <thead>
 <tr>
-<th>Item</th>
-<th>Value</th>
+<th>VS Code entry</th>
+<th>Interpreter</th>
+<th>Operation</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Launch</td>
 <td><code>SETUP 1: Select Operating System</code></td>
+<td>System Python</td>
+<td>Selects the OS through the matching Task</td>
 </tr>
 <tr>
-<td>Launch</td>
 <td><code>SETUP 2: Install Python Virtual Environment</code></td>
+<td>System Python</td>
+<td>Creates <code>.venv</code> through the matching Task</td>
 </tr>
 <tr>
-<td>Task</td>
-<td><code>SETUP 1: Select Operating System</code></td>
+<td><code>SETUP 3: Install Ollama and Local LLM</code></td>
+<td>Project Python</td>
+<td>Installs the Local LLM environment after <code>.venv</code> exists</td>
 </tr>
 <tr>
-<td>Task</td>
-<td><code>SETUP 2: Install Python Virtual Environment</code></td>
+<td>VS Code Testing</td>
+<td>Project Python</td>
+<td>Discovers pytest and unittest tests through pytest</td>
 </tr>
 <tr>
-<td>Setup 1 interpreter</td>
-<td><code>python</code></td>
-</tr>
-<tr>
-<td>Setup 2 interpreter</td>
-<td><code>python</code></td>
+<td>Report Tasks</td>
+<td>Project Python</td>
+<td>Generates Markdown, MkDocs, HTML, and DOCX reports</td>
 </tr>
 </tbody>
 </table>
-<h2 id="commands">Commands</h2>
-<div class="highlight"><pre><span></span><code><span class="n">python</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">configuration</span> <span class="nb">select-os</span>
-<span class="n">python</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">environment_setup</span> <span class="n">python</span>
-</code></pre></div>
-<h2 id="check-file">Check file</h2>
-<div class="highlight"><pre><span></span><code>python
-├── installed
-├── executable
-└── version
-</code></pre></div>
-<h2 id="constraints">Constraints</h2>
+<p><br/></p>
+<p>VS Code uses <code>python.defaultInterpreterPath</code> from <code>.vscode/settings.json</code>.</p>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>VS Code interpreter setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td><code>${workspaceFolder}/.venv/Scripts/python.exe</code></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td><code>${workspaceFolder}/.venv/bin/python</code></td>
+</tr>
+<tr>
+<td>macOS</td>
+<td><code>${workspaceFolder}/.venv/bin/python</code></td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>Automatic terminal activation is disabled with <code>python.terminal.activateEnvironment: false</code>. Use the explicit project Python path or activate <code>.venv</code> manually when needed.</p>
+<p><br/></p>
+<p>See <a href="vscode_environment.html">VS Code Environment</a> for Settings, Run and Debug, Run Tasks, and Testing configuration.</p>
+<p><br/></p>
+<h2 id="configuration-and-status">Configuration and Status</h2>
+<p><br/></p>
+<h3 id="configjson">config.json</h3>
+<p><br/></p>
+<p><code>test_envs/configs/config.json</code> stores user-selected project configuration.</p>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>version</code></td>
+<td>Configuration schema version</td>
+</tr>
+<tr>
+<td><code>os</code></td>
+<td>Platform used by environment setup</td>
+</tr>
+<tr>
+<td><code>time</code></td>
+<td>Report timezone and UTC offset</td>
+</tr>
+<tr>
+<td><code>ollama</code></td>
+<td>Local LLM endpoint, model, prompt, timeout, and retry settings</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h3 id="checkjson">check.json</h3>
+<p><br/></p>
+<p><code>test_envs/configs/check.json</code> records detected runtime status.</p>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Recorded status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>generated_at</code></td>
+<td>Time of the latest environment check</td>
+</tr>
+<tr>
+<td><code>os</code></td>
+<td>Configured OS, detected OS, and host platform name</td>
+</tr>
+<tr>
+<td><code>python</code></td>
+<td>Installation status, executable path, and version</td>
+</tr>
+<tr>
+<td><code>ollama</code></td>
+<td>Executable, endpoint, selected model, and installed models</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p><code>check.json</code> is generated data. Change <code>config.json</code> and rerun the check command instead of manually editing <code>check.json</code>.</p>
+<p><br/></p>
+<h2 id="usage-rules">Usage Rules</h2>
+<p><br/></p>
 <table>
 <thead>
 <tr>
 <th>Rule</th>
-<th>Value</th>
+<th>Reason</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>OS selection inside <code>.venv</code></td>
-<td>Prohibited</td>
+<td>Run commands from the repository root</td>
+<td><code>test_envs</code> imports and repository-relative paths depend on it</td>
 </tr>
 <tr>
-<td>Setup 1 <code>.venv</code> dependency</td>
-<td>Prohibited</td>
+<td>Use system Python for Setup 1 and Setup 2</td>
+<td>The project environment may not exist yet</td>
 </tr>
 <tr>
-<td>Setup 2 <code>.venv</code> dependency</td>
-<td>Prohibited</td>
+<td>Use <code>.venv</code> Python after setup</td>
+<td>Keeps project dependencies isolated from global packages</td>
 </tr>
 <tr>
-<td>Runtime dependency</td>
-<td>Project <code>.venv</code></td>
+<td>Keep <code>.venv</code> out of Git</td>
+<td>It is reproducible from <code>requirements.txt</code></td>
+</tr>
+<tr>
+<td>Do not manually edit <code>check.json</code></td>
+<td>It is regenerated from detected runtime state</td>
 </tr>
 </tbody>
 </table>
+<p><br/></p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>No module named test_envs</code></td>
+<td>Run the command from the repository root</td>
+</tr>
+<tr>
+<td>Configured platform does not match host</td>
+<td>Set <code>os</code> to <code>auto</code> or the current host OS</td>
+</tr>
+<tr>
+<td><code>.venv</code> Python is missing</td>
+<td>Run Setup 2 with system Python</td>
+</tr>
+<tr>
+<td>pip installation fails</td>
+<td>Verify network access and <code>requirements.txt</code></td>
+</tr>
+<tr>
+<td><code>Invalid VS Code settings</code> during OS selection</td>
+<td>The configuration tool currently reads <code>.vscode/settings.json</code> with a strict JSON parser; JSONC comments are not accepted</td>
+</tr>
+<tr>
+<td>Test discovery imports fail</td>
+<td>Verify the project interpreter and workspace root</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h2 id="environment-installation">Environment Installation</h2>
+<p><br/></p>
+<h3 id="requirements">Requirements</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>System Python</td>
+<td>Provides <code>venv</code> and <code>ensurepip</code></td>
+</tr>
+<tr>
+<td>Repository root</td>
+<td>Contains <code>requirements.txt</code> and <code>test_envs/</code></td>
+</tr>
+<tr>
+<td>Network access</td>
+<td>Downloads missing Python packages</td>
+</tr>
+<tr>
+<td>Windows PowerShell</td>
+<td>Runs the Windows examples below</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>Python setup does not install Ollama or a Local LLM. See <a href="local_llm_environment.html">Local LLM Environment</a> for that installation.</p>
+<p><br/></p>
+<h3 id="windows-powershell">Windows PowerShell</h3>
+<p><br/></p>
+<p>Run each command from the repository root.</p>
+<p><br/></p>
+<p>Select the operating system:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="n">python</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">configuration</span> <span class="nb">select-os</span>
+</code></pre></div>
+<p><br/></p>
+<p>Create or update <code>.venv</code>:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="n">python</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">environment_setup</span> <span class="n">python</span> <span class="p">-</span><span class="n">-platform</span> <span class="n">config</span>
+</code></pre></div>
+<p><br/></p>
+<p>Verify project Python:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="p">-</span><span class="n">-version</span>
+</code></pre></div>
+<p><br/></p>
+<p>Refresh environment status:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">configuration</span> <span class="n">check</span>
+</code></pre></div>
+<p><br/></p>
+<p>Verify test discovery:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="p">-</span><span class="n">-collect-only</span>
+</code></pre></div>
+<p><br/></p>
+<p>For non-interactive Windows OS selection:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="n">python</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">configuration</span> <span class="nb">set-os</span> <span class="p">-</span><span class="n">-os</span> <span class="n">windows</span>
+</code></pre></div>
+<p><br/></p>
+<h3 id="linux-and-macos">Linux and macOS</h3>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>test_envs.tools.configuration<span class="w"> </span>select-os
+</code></pre></div>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>test_envs.tools.environment_setup<span class="w"> </span>python<span class="w"> </span>--platform<span class="w"> </span>config
+</code></pre></div>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>./.venv/bin/python<span class="w"> </span>-m<span class="w"> </span>test_envs.tools.configuration<span class="w"> </span>check
+</code></pre></div>
+<p><br/></p>
+<h3 id="installation-flow">Installation Flow</h3>
+<p><br/></p>
+<p><code>test_envs.tools.environment_setup python</code> performs these operations:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>Resolve configured platform
+        ↓
+Verify configured OS matches the host OS
+        ↓
+Create .venv when missing
+        ↓
+Run ensurepip --upgrade
+        ↓
+Upgrade pip
+        ↓
+Install requirements.txt
+        ↓
+Refresh test_envs/configs/check.json
+</code></pre></div>
+<p><br/></p>
+<p>An existing <code>.venv</code> is reused. The command still installs <code>requirements.txt</code> again, so it can be rerun after dependency changes.</p>
+<p><br/></p>
+<h3 id="installed-packages">Installed Packages</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pytest</code></td>
+<td>Runs CT and unit tests</td>
+</tr>
+<tr>
+<td><code>pytest-cov</code></td>
+<td>Produces Python coverage data</td>
+</tr>
+<tr>
+<td><code>mkdocs</code></td>
+<td>Builds and serves documentation</td>
+</tr>
+<tr>
+<td><code>mkdocs-material</code></td>
+<td>Provides the documentation theme</td>
+</tr>
+<tr>
+<td><code>mkdocs-mermaid2-plugin</code></td>
+<td>Renders Mermaid diagrams</td>
+</tr>
+<tr>
+<td><code>pyserial</code></td>
+<td>Supports UART interfaces</td>
+</tr>
+<tr>
+<td><code>pyusb</code></td>
+<td>Supports USB interfaces</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>The authoritative package versions are defined in <code>requirements.txt</code>.</p>
+<p><br/></p>
+<h2 id="full-test_envs-structure">Full test_envs Structure</h2>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>test_envs/
+├── configs/
+│   ├── config.json                 # Selected OS, timezone, and Ollama settings
+│   └── check.json                  # Detected environment status
+├── tests/
+│   ├── fixtures/
+│   │   └── junit.xml               # Shared result fixture
+│   ├── pytest/
+│   │   ├── conftest.py             # TEST ID and mock/hil normalization
+│   │   ├── fixtures/               # Equipment/interface combinations
+│   │   ├── test_cases/             # CT-UART, CT-USB, and CT-NETWORK
+│   │   ├── test_equipments/
+│   │   │   ├── fpga/{mock,hil}/
+│   │   │   ├── saleae/{mock,hil}/
+│   │   │   └── digilent/{mock,hil}/
+│   │   └── test_interfaces/
+│   │       ├── usb/{mock,hil}/
+│   │       ├── uart/{mock,hil}/
+│   │       ├── jtag/{mock,hil}/
+│   │       └── network/{mock,hil}/
+│   └── unittest/
+│       ├── conftest.py             # Unittest result normalization
+│       └── ct_framework/python/    # Current Python framework tests
+├── tools/
+│   ├── configuration/              # config, check, set-os, and select-os
+│   ├── environment_setup.py        # Python and Ollama setup
+│   ├── extension_runner.py         # Future extension execution
+│   ├── extensions/                 # Extension modules
+│   ├── local_llm/                  # Local LLM client and status
+│   ├── test_result/                # Pending-result processing
+│   ├── mkdocs_reporter/            # MkDocs Markdown publishing
+│   ├── pandoc_reporter/            # HTML, DOCX, and PDF conversion
+│   ├── github_reporter/            # GitHub reporting
+│   ├── result_normalizer/          # Common result model
+│   ├── issue_parser.py
+│   ├── log_parser/
+│   └── pipeline.py
+└── reports/
+    ├── results/{pytest,unittest}/   # Result JSON and execution logs
+    ├── markdown/                    # Generated Markdown reports
+    ├── pandoc/                      # Generated HTML, DOCX, or PDF
+    └── local_llm/                   # Local LLM analysis artifacts
+</code></pre></div>
+<p><br/></p>
+<p>The <code>{mock,hil}</code> notation means that each listed equipment or interface provides separate <code>mock/</code> and <code>hil/</code> implementations. Pytest CT execution ultimately resolves to one of these two modes.</p>
+<p><br/></p>
 </article>
 </div>
 <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
@@ -755,7 +1163,7 @@ pip install -r requirements.txt
 </main>
 <footer class="md-footer">
 <nav aria-label="하단/푸터" class="md-footer__inner md-grid">
-<a aria-label="이전: Overview" class="md-footer__link md-footer__link--prev" href="index.html">
+<a aria-label="이전: Setup VSCode" class="md-footer__link md-footer__link--prev" href="vscode_environment.html">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
 </div>
@@ -764,17 +1172,17 @@ pip install -r requirements.txt
                 이전
               </span>
 <div class="md-ellipsis">
-                Overview
+                Setup VSCode
               </div>
 </div>
 </a>
-<a aria-label="다음: Envs LLM" class="md-footer__link md-footer__link--next" href="local_llm_environment.html">
+<a aria-label="다음: Setup LLM" class="md-footer__link md-footer__link--next" href="local_llm_environment.html">
 <div class="md-footer__title">
 <span class="md-footer__direction">
                 다음
               </span>
 <div class="md-ellipsis">
-                Envs LLM
+                Setup LLM
               </div>
 </div>
 <div class="md-footer__button md-icon">

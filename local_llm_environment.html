@@ -7,10 +7,10 @@
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Test results and execution history" name="description"/>
 <link href="python_environment.html" rel="prev"/>
-<link href="vscode_environment.html" rel="next"/>
+<link href="pytest_framework.html" rel="next"/>
 <link href="imgs/logo.jpg" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
-<title>Envs LLM - AI-driven CI/CT</title>
+<title>Setup LLM - AI-driven CI/CT</title>
 <link href="assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
 <link href="assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/iframe-worker/shim"></script>
@@ -52,7 +52,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              Envs LLM
+              Setup LLM
             
           </span>
 </div>
@@ -176,11 +176,23 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
+<a class="md-nav__link" href="vscode_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Setup VSCode
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="python_environment.html">
 <span class="md-ellipsis">
     
   
-    Envs Python
+    Setup Python
   
 
     
@@ -193,7 +205,7 @@
 <span class="md-ellipsis">
     
   
-    Envs LLM
+    Setup LLM
   
 
     
@@ -204,7 +216,7 @@
 <span class="md-ellipsis">
     
   
-    Envs LLM
+    Setup LLM
   
 
     
@@ -217,73 +229,29 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#components">
+<a class="md-nav__link" href="#local-llm-usage">
 <span class="md-ellipsis">
       
-        Components
+        Local LLM Usage
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#config">
+<a class="md-nav__link" href="#pytest-analysis">
 <span class="md-ellipsis">
       
-        Config
+        Pytest Analysis
       
     </span>
 </a>
-</li>
+<nav aria-label="Pytest Analysis" class="md-nav">
+<ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#setup">
+<a class="md-nav__link" href="#retry-and-fallback">
 <span class="md-ellipsis">
       
-        Setup
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#vs-code">
-<span class="md-ellipsis">
-      
-        VS Code
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#commands">
-<span class="md-ellipsis">
-      
-        Commands
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#check-file">
-<span class="md-ellipsis">
-      
-        Check file
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#test-usage">
-<span class="md-ellipsis">
-      
-        Test usage
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#logs">
-<span class="md-ellipsis">
-      
-        Logs
+        Retry and Fallback
       
     </span>
 </a>
@@ -292,16 +260,150 @@
 </nav>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="vscode_environment.html">
+<a class="md-nav__link" href="#configuration-and-status">
 <span class="md-ellipsis">
-    
-  
-    Envs VSCode
-  
-
-    
-  </span>
+      
+        Configuration and Status
+      
+    </span>
 </a>
+<nav aria-label="Configuration and Status" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ollama-configuration">
+<span class="md-ellipsis">
+      
+        Ollama Configuration
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ollama-status">
+<span class="md-ellipsis">
+      
+        Ollama Status
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#runtime-inspection">
+<span class="md-ellipsis">
+      
+        Runtime Inspection
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#vs-code-usage">
+<span class="md-ellipsis">
+      
+        VS Code Usage
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#output-and-logs">
+<span class="md-ellipsis">
+      
+        Output and Logs
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#usage-rules">
+<span class="md-ellipsis">
+      
+        Usage Rules
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#troubleshooting">
+<span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#environment-installation">
+<span class="md-ellipsis">
+      
+        Environment Installation
+      
+    </span>
+</a>
+<nav aria-label="Environment Installation" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#requirements">
+<span class="md-ellipsis">
+      
+        Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#os-installers">
+<span class="md-ellipsis">
+      
+        OS Installers
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#windows-powershell">
+<span class="md-ellipsis">
+      
+        Windows PowerShell
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#linux-and-macos">
+<span class="md-ellipsis">
+      
+        Linux and macOS
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation-flow">
+<span class="md-ellipsis">
+      
+        Installation Flow
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#full-local-llm-structure">
+<span class="md-ellipsis">
+      
+        Full Local LLM Structure
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>
@@ -330,7 +432,7 @@
           </label>
 <ul class="md-nav__list" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="pytest.html">
+<a class="md-nav__link" href="pytest_framework.html">
 <span class="md-ellipsis">
     
   
@@ -342,7 +444,7 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="unittest.html">
+<a class="md-nav__link" href="unittest_framework.html">
 <span class="md-ellipsis">
     
   
@@ -471,73 +573,175 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#components">
+<a class="md-nav__link" href="#local-llm-usage">
 <span class="md-ellipsis">
       
-        Components
+        Local LLM Usage
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#config">
+<a class="md-nav__link" href="#pytest-analysis">
 <span class="md-ellipsis">
       
-        Config
+        Pytest Analysis
+      
+    </span>
+</a>
+<nav aria-label="Pytest Analysis" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#retry-and-fallback">
+<span class="md-ellipsis">
+      
+        Retry and Fallback
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration-and-status">
+<span class="md-ellipsis">
+      
+        Configuration and Status
+      
+    </span>
+</a>
+<nav aria-label="Configuration and Status" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ollama-configuration">
+<span class="md-ellipsis">
+      
+        Ollama Configuration
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#setup">
+<a class="md-nav__link" href="#ollama-status">
 <span class="md-ellipsis">
       
-        Setup
+        Ollama Status
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#runtime-inspection">
+<span class="md-ellipsis">
+      
+        Runtime Inspection
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#vs-code">
+<a class="md-nav__link" href="#vs-code-usage">
 <span class="md-ellipsis">
       
-        VS Code
+        VS Code Usage
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#commands">
+<a class="md-nav__link" href="#output-and-logs">
 <span class="md-ellipsis">
       
-        Commands
+        Output and Logs
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#check-file">
+<a class="md-nav__link" href="#usage-rules">
 <span class="md-ellipsis">
       
-        Check file
+        Usage Rules
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#test-usage">
+<a class="md-nav__link" href="#troubleshooting">
 <span class="md-ellipsis">
       
-        Test usage
+        Troubleshooting
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#logs">
+<a class="md-nav__link" href="#environment-installation">
 <span class="md-ellipsis">
       
-        Logs
+        Environment Installation
+      
+    </span>
+</a>
+<nav aria-label="Environment Installation" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#requirements">
+<span class="md-ellipsis">
+      
+        Requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#os-installers">
+<span class="md-ellipsis">
+      
+        OS Installers
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#windows-powershell">
+<span class="md-ellipsis">
+      
+        Windows PowerShell
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#linux-and-macos">
+<span class="md-ellipsis">
+      
+        Linux and macOS
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation-flow">
+<span class="md-ellipsis">
+      
+        Installation Flow
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#full-local-llm-structure">
+<span class="md-ellipsis">
+      
+        Full Local LLM Structure
       
     </span>
 </a>
@@ -558,7 +762,7 @@
 </a>
 </li>
 <li class="md-path__item">
-<a class="md-path__link" href="python_environment.html">
+<a class="md-path__link" href="vscode_environment.html">
 <span class="md-ellipsis">
     Getting Started
   </span>
@@ -568,12 +772,18 @@
 </nav>
 <article class="md-content__inner md-typeset">
 <h1 id="local-llm-environment">Local LLM Environment</h1>
-<h2 id="components">Components</h2>
+<p><br/></p>
+<p>The current Local LLM integration uses Ollama to analyze Pytest CT results. Unittest reports do not use the Local LLM.</p>
+<p><br/></p>
+<p><img alt="Ollama Local LLM" src="imgs/ollama_llm_00.png"/></p>
+<p><br/></p>
+<h2 id="local-llm-usage">Local LLM Usage</h2>
+<p><br/></p>
 <table>
 <thead>
 <tr>
 <th>Item</th>
-<th>Value</th>
+<th>Current value</th>
 </tr>
 </thead>
 <tbody>
@@ -582,28 +792,109 @@
 <td>Ollama</td>
 </tr>
 <tr>
-<td>Endpoint</td>
+<td>Default endpoint</td>
 <td><code>http://127.0.0.1:11434</code></td>
-</tr>
-<tr>
-<td>Config</td>
-<td><code>test_envs/configs/config.json → ollama</code></td>
-</tr>
-<tr>
-<td>Check</td>
-<td><code>test_envs/configs/check.json → ollama</code></td>
 </tr>
 <tr>
 <td>Default model</td>
 <td><code>deepseek-r1:7b</code></td>
 </tr>
 <tr>
-<td>Model ownership</td>
-<td>Config JSON</td>
+<td>Analysis target</td>
+<td>Pytest CT result and logs</td>
+</tr>
+<tr>
+<td>Unittest analysis</td>
+<td>Not used</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td><code>test_envs/configs/config.json</code> → <code>ollama</code></td>
+</tr>
+<tr>
+<td>Runtime status</td>
+<td><code>test_envs/configs/check.json</code> → <code>ollama</code></td>
+</tr>
+<tr>
+<td>Analysis log</td>
+<td><code>test_envs/reports/local_llm/&lt;execution-id&gt;_local_llm.log</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="config">Config</h2>
+<p><br/></p>
+<h2 id="pytest-analysis">Pytest Analysis</h2>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>Pytest CT result and execution log
+                ↓
+Normalize result and parse log evidence
+                ↓
+Select test prompt or default prompt
+                ↓
+POST /api/generate to the configured Ollama model
+                ↓
+Validate structured analysis response
+                ↓
+Write Local LLM log and Pytest Markdown report
+</code></pre></div>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Prompt source</th>
+<th style="text-align: right;">Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Non-empty CT marker <code>test_prompt</code></td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td><code>ollama.default_prompt</code></td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>The analyzer sends normalized test data, extracted errors, warnings, important log lines, and an optional source diff. The model must return structured JSON containing summary, classification, confidence, warnings, failure analysis, source review, recommendations, and escalation status.</p>
+<p><br/></p>
+<h3 id="retry-and-fallback">Retry and Fallback</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ollama response is valid</td>
+<td>Use the Local LLM analysis</td>
+</tr>
+<tr>
+<td>Request or response validation fails</td>
+<td>Retry up to <code>max_retry</code> times after the initial attempt</td>
+</tr>
+<tr>
+<td>All attempts fail</td>
+<td>Generate a deterministic fallback analysis</td>
+</tr>
+<tr>
+<td>Ollama is unavailable</td>
+<td>Preserve report generation through the fallback</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>With the current <code>max_retry: 3</code>, the analyzer can make up to four total attempts.</p>
+<p><br/></p>
+<h2 id="configuration-and-status">Configuration and Status</h2>
+<p><br/></p>
+<h3 id="ollama-configuration">Ollama Configuration</h3>
+<p><br/></p>
+<p>Source: <code>test_envs/configs/config.json</code></p>
+<p><br/></p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"ollama"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://127.0.0.1:11434"</span><span class="p">,</span>
@@ -614,11 +905,12 @@
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+<p><br/></p>
 <table>
 <thead>
 <tr>
 <th>Field</th>
-<th>Rule</th>
+<th>Role</th>
 </tr>
 </thead>
 <tbody>
@@ -628,44 +920,283 @@
 </tr>
 <tr>
 <td><code>selected_model</code></td>
-<td>Pull and analysis model</td>
+<td>Model used for pull and analysis</td>
 </tr>
 <tr>
 <td><code>default_prompt</code></td>
-<td>Empty <code>test_prompt</code> fallback</td>
+<td>Fallback when the CT has no <code>test_prompt</code></td>
 </tr>
 <tr>
 <td><code>max_timeout_s</code></td>
-<td>Request timeout</td>
+<td>Timeout for each analysis request</td>
 </tr>
 <tr>
 <td><code>max_retry</code></td>
-<td>Retry count</td>
+<td>Additional attempts after the first failure</td>
 </tr>
 </tbody>
 </table>
-<h2 id="setup">Setup</h2>
-<div class="highlight"><pre><span></span><code>Ollama installation check
-      ↓
-OS installer
-      ↓
-Foreground server
-      ↓
-Model inventory
-      ↓
-ollama pull &lt;selected_model&gt;
+<p><br/></p>
+<p><code>OLLAMA_URL</code> and <code>OLLAMA_MODEL</code> can override the configured endpoint and model for the current process.</p>
+<p><br/></p>
+<h3 id="ollama-status">Ollama Status</h3>
+<p><br/></p>
+<p>Source: <code>test_envs/configs/check.json</code></p>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>installed</code></td>
+<td>Ollama executable was found</td>
+</tr>
+<tr>
+<td><code>executable</code></td>
+<td>Resolved executable path</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>Ollama version output</td>
+</tr>
+<tr>
+<td><code>available</code></td>
+<td>The configured <code>/api/tags</code> endpoint responded</td>
+</tr>
+<tr>
+<td><code>endpoint</code></td>
+<td>Configured Ollama URL</td>
+</tr>
+<tr>
+<td><code>selected_model</code></td>
+<td>Model selected in project configuration</td>
+</tr>
+<tr>
+<td><code>selected_model_installed</code></td>
+<td>Selected model exists in the Ollama inventory</td>
+</tr>
+<tr>
+<td><code>supported_models</code></td>
+<td>Model inventory returned by Ollama</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>Refresh this generated status instead of manually editing <code>check.json</code>.</p>
+<p><br/></p>
+<h2 id="runtime-inspection">Runtime Inspection</h2>
+<p><br/></p>
+<p>Show the selected endpoint and model:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">local_llm</span> <span class="n">config</span>
 </code></pre></div>
+<p><br/></p>
+<p>Show endpoint availability and the installed model inventory:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">local_llm</span> <span class="n">status</span>
+</code></pre></div>
+<p><br/></p>
+<p>Refresh the complete project environment status:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">configuration</span> <span class="n">check</span>
+</code></pre></div>
+<p><br/></p>
+<h2 id="vs-code-usage">VS Code Usage</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>VS Code entry</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SETUP 3: Install Ollama and Local LLM</code></td>
+<td>Installs or detects Ollama and pulls the selected model</td>
+</tr>
+<tr>
+<td><code>CHECK 1: Refresh Environment Check File</code></td>
+<td>Refreshes Python and Ollama status in <code>check.json</code></td>
+</tr>
+<tr>
+<td><code>CHECK 3: Run Ollama Server (Foreground)</code></td>
+<td>Runs the local Ollama server in its Task terminal</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>The server Task is deliberately foreground-owned. Stopping or closing that Task stops the process it owns. No hidden background-server lifecycle is managed by the repository.</p>
+<p><br/></p>
+<p>See <a href="vscode_environment.html">VS Code Environment</a> for the corresponding Run and Debug and Run Tasks configuration.</p>
+<p><br/></p>
+<h2 id="output-and-logs">Output and Logs</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Output</th>
+<th>Location</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local LLM request log</td>
+<td><code>test_envs/reports/local_llm/&lt;execution-id&gt;_local_llm.log</code></td>
+<td>Pytest only</td>
+</tr>
+<tr>
+<td>Generated Markdown</td>
+<td><code>test_envs/reports/markdown/</code></td>
+<td>Processed test reports</td>
+</tr>
+<tr>
+<td>Published MkDocs result</td>
+<td><code>docs/tests/pytest/</code></td>
+<td>Pytest result pages</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>The Local LLM log records the execution ID, TEST ID, model, endpoint, timeout, retry count, effective prompt, each attempt, and fallback source when used.</p>
+<p><br/></p>
+<h2 id="usage-rules">Usage Rules</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create <code>.venv</code> before Local LLM setup</td>
+<td>Setup and analysis tools run with project Python</td>
+</tr>
+<tr>
+<td>Configure the model in <code>config.json</code></td>
+<td>Model selection is project-owned</td>
+</tr>
+<tr>
+<td>Run the local server before pulling or analyzing</td>
+<td><code>/api/tags</code>, <code>/api/pull</code>, and <code>/api/generate</code> require a reachable endpoint</td>
+</tr>
+<tr>
+<td>Keep the server in the foreground Task</td>
+<td>Process ownership and shutdown remain visible</td>
+</tr>
+<tr>
+<td>Use Local LLM analysis only for Pytest</td>
+<td>This is the currently implemented reporting path</td>
+</tr>
+<tr>
+<td>Keep generated logs out of source control</td>
+<td>Report outputs are runtime artifacts</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ollama executable not found</td>
+<td>Run the setup command and verify the OS installer is available</td>
+</tr>
+<tr>
+<td><code>Ollama is not reachable</code></td>
+<td>Start the foreground server and verify <code>ollama.url</code></td>
+</tr>
+<tr>
+<td>Selected model is missing</td>
+<td>Run model setup again to pull <code>selected_model</code></td>
+</tr>
+<tr>
+<td>Status reports <code>available: false</code></td>
+<td>Verify the server and <code>/api/tags</code> endpoint</td>
+</tr>
+<tr>
+<td>Analysis uses <code>deterministic-fallback</code></td>
+<td>Inspect the execution-specific Local LLM log for request or validation errors</td>
+</tr>
+<tr>
+<td>Requests time out</td>
+<td>Check model size, system resources, and <code>max_timeout_s</code></td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<h2 id="environment-installation">Environment Installation</h2>
+<p><br/></p>
+<h3 id="requirements">Requirements</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Project <code>.venv</code></td>
+<td>Runs the setup and Local LLM tools</td>
+</tr>
+<tr>
+<td>Supported OS configuration</td>
+<td>Selects the platform installer</td>
+</tr>
+<tr>
+<td>Network access</td>
+<td>Installs Ollama and pulls the configured model</td>
+</tr>
+<tr>
+<td>Local endpoint access</td>
+<td>Connects to Ollama through HTTP</td>
+</tr>
+<tr>
+<td>Windows <code>winget</code></td>
+<td>Automatic Windows installation</td>
+</tr>
+<tr>
+<td>macOS Homebrew</td>
+<td>Automatic macOS installation</td>
+</tr>
+<tr>
+<td>Linux <code>sh</code></td>
+<td>Runs the downloaded Ollama installer</td>
+</tr>
+</tbody>
+</table>
+<p><br/></p>
+<p>Create the Python environment first by following <a href="python_environment.html">Python Environment</a>.</p>
+<p><br/></p>
+<h3 id="os-installers">OS Installers</h3>
+<p><br/></p>
 <table>
 <thead>
 <tr>
 <th>OS</th>
-<th>Installer</th>
+<th>Automatic installation path</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Windows</td>
-<td><code>winget install Ollama.Ollama</code></td>
+<td><code>winget install --id Ollama.Ollama --exact</code></td>
 </tr>
 <tr>
 <td>macOS</td>
@@ -673,113 +1204,84 @@ ollama pull &lt;selected_model&gt;
 </tr>
 <tr>
 <td>Linux</td>
-<td>Ollama installer</td>
+<td>Download and run <code>https://ollama.com/install.sh</code> with <code>sh</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="vs-code">VS Code</h2>
-<table>
-<thead>
-<tr>
-<th>Item</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Launch</td>
-<td><code>SETUP 3: Install Ollama and Local LLM</code></td>
-</tr>
-<tr>
-<td>Task</td>
-<td><code>SETUP 3: Install Ollama and Local LLM</code></td>
-</tr>
-<tr>
-<td>Check</td>
-<td><code>CHECK 1: Refresh Environment Check File</code></td>
-</tr>
-<tr>
-<td>Server</td>
-<td><code>CHECK 3: Run Ollama Server (Foreground)</code></td>
-</tr>
-<tr>
-<td>Background server</td>
-<td>Prohibited</td>
-</tr>
-</tbody>
-</table>
-<h2 id="commands">Commands</h2>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">environment_setup</span> <span class="n">ollama</span>
-<span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">environment_setup</span> <span class="n">serve</span>
-<span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">configuration</span> <span class="n">check</span>
+<p><br/></p>
+<p>The installer is used only when the configured endpoint is local and an Ollama executable cannot be found. A remote Ollama endpoint is never installed or started by this project.</p>
+<p><br/></p>
+<h3 id="windows-powershell">Windows PowerShell</h3>
+<p><br/></p>
+<p>Start the local server in a dedicated foreground terminal:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">environment_setup</span> <span class="n">serve</span> <span class="p">-</span><span class="n">-platform</span> <span class="n">config</span>
 </code></pre></div>
-<h2 id="check-file">Check file</h2>
-<div class="highlight"><pre><span></span><code>ollama
-├── installed
-├── executable
-├── version
-├── available
-├── endpoint
-├── selected_model
-├── selected_model_installed
-└── supported_models[]
+<p><br/></p>
+<p>Keep that terminal running. In another PowerShell terminal, install or update the selected model:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">environment_setup</span> <span class="n">ollama</span> <span class="p">-</span><span class="n">-platform</span> <span class="n">config</span>
 </code></pre></div>
-<h2 id="test-usage">Test usage</h2>
-<table>
-<thead>
-<tr>
-<th>Runner</th>
-<th style="text-align: right;">Local LLM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>pytest</td>
-<td style="text-align: right;">O</td>
-</tr>
-<tr>
-<td>unittest</td>
-<td style="text-align: right;">X</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>pytest prompt</th>
-<th style="text-align: right;">Priority</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Non-empty marker <code>test_prompt</code></td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr>
-<td><code>ollama.default_prompt</code></td>
-<td style="text-align: right;">2</td>
-</tr>
-</tbody>
-</table>
-<h2 id="logs">Logs</h2>
-<table>
-<thead>
-<tr>
-<th>Runner</th>
-<th>Output</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>pytest</td>
-<td><code>test_envs/reports/local_llm/&lt;execution-id&gt;_local_llm.log</code></td>
-</tr>
-<tr>
-<td>unittest</td>
-<td>None</td>
-</tr>
-</tbody>
-</table>
+<p><br/></p>
+<p>Refresh the environment status:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">configuration</span> <span class="n">check</span>
+</code></pre></div>
+<p><br/></p>
+<h3 id="linux-and-macos">Linux and macOS</h3>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>./.venv/bin/python<span class="w"> </span>-m<span class="w"> </span>test_envs.tools.environment_setup<span class="w"> </span>serve<span class="w"> </span>--platform<span class="w"> </span>config
+</code></pre></div>
+<p><br/></p>
+<p>In another terminal:</p>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>./.venv/bin/python<span class="w"> </span>-m<span class="w"> </span>test_envs.tools.environment_setup<span class="w"> </span>ollama<span class="w"> </span>--platform<span class="w"> </span>config
+</code></pre></div>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>./.venv/bin/python<span class="w"> </span>-m<span class="w"> </span>test_envs.tools.configuration<span class="w"> </span>check
+</code></pre></div>
+<p><br/></p>
+<h3 id="installation-flow">Installation Flow</h3>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>Resolve config.json OS and Ollama settings
+                ↓
+Verify configured OS matches the host OS
+                ↓
+Locate Ollama executable
+                ↓
+Install Ollama when the endpoint is local and executable is missing
+                ↓
+Run the Ollama server in the foreground
+                ↓
+Read /api/tags model inventory
+                ↓
+Pull the configured selected_model through /api/pull
+                ↓
+Refresh check.json
+</code></pre></div>
+<p><br/></p>
+<h2 id="full-local-llm-structure">Full Local LLM Structure</h2>
+<p><br/></p>
+<div class="highlight"><pre><span></span><code>test_envs/
+├── configs/
+│   ├── config.json                 # Endpoint, model, prompt, timeout, and retry
+│   └── check.json                  # Executable, server, and model inventory status
+├── tools/
+│   ├── environment_setup.py        # Install Ollama, run server, and pull model
+│   ├── local_llm/
+│   │   ├── __init__.py             # Runtime status and LocalLLMAnalyzer
+│   │   └── __main__.py             # config and status CLI
+│   ├── log_parser/                 # Extracts errors, warnings, and important logs
+│   ├── result_normalizer/           # Provides normalized ResultRecord input
+│   └── test_result/                # Connects results, analysis, and reporting
+└── reports/
+    ├── local_llm/                   # Per-execution Local LLM logs
+    └── markdown/                    # Generated report Markdown
+
+docs/
+└── tests/pytest/                    # Published Pytest result pages
+</code></pre></div>
+<p><br/></p>
 </article>
 </div>
 <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
@@ -792,7 +1294,7 @@ ollama pull &lt;selected_model&gt;
 </main>
 <footer class="md-footer">
 <nav aria-label="하단/푸터" class="md-footer__inner md-grid">
-<a aria-label="이전: Envs Python" class="md-footer__link md-footer__link--prev" href="python_environment.html">
+<a aria-label="이전: Setup Python" class="md-footer__link md-footer__link--prev" href="python_environment.html">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
 </div>
@@ -801,17 +1303,17 @@ ollama pull &lt;selected_model&gt;
                 이전
               </span>
 <div class="md-ellipsis">
-                Envs Python
+                Setup Python
               </div>
 </div>
 </a>
-<a aria-label="다음: Envs VSCode" class="md-footer__link md-footer__link--next" href="vscode_environment.html">
+<a aria-label="다음: Pytest (HIL or Mock)" class="md-footer__link md-footer__link--next" href="pytest_framework.html">
 <div class="md-footer__title">
 <span class="md-footer__direction">
                 다음
               </span>
 <div class="md-ellipsis">
-                Envs VSCode
+                Pytest (HIL or Mock)
               </div>
 </div>
 <div class="md-footer__button md-icon">
