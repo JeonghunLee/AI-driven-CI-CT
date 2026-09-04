@@ -62,12 +62,12 @@ flowchart TD
     UNITTEST[Unittest Operation]
     PYTEST_RESULT[Pytest Result]
     UNITTEST_RESULT[Unittest Result]
-    PYTEST_REPORT[Pytest Report Generation]
-    UNITTEST_REPORT[Unittest Report Generation]
     LLM[Local LLM]
-    PYTEST_MD[Pytest Markdown]
-    UNITTEST_MD[Unittest Markdown]
-    MKDOCS[MkDocs]
+    REPORTER["**src:test_envs/tools/mkdocs_reporter**<br/>MarkdownReporter"]
+    MARKDOWN["Pytest / Unittest Markdown"]
+    MKDOCS["MkDocs (TEST Results)"]
+    PANDOC_REPORTER["**src:test_envs/tools/pandoc_reporter**<br/>convert"]
+    PANDOC[Pandoc Report - HTML / DOCX]
 
     VSCODE --> EXTENSION
     VSCODE --> TASK
@@ -78,14 +78,18 @@ flowchart TD
     EXTENSION --> UNITTEST
     TASK --> PYTEST
 
-    PYTEST --> PYTEST_RESULT --> PYTEST_REPORT --> LLM --> PYTEST_MD
-    UNITTEST --> UNITTEST_RESULT --> UNITTEST_REPORT --> UNITTEST_MD
+    PYTEST --> PYTEST_RESULT --> LLM --> REPORTER
+    UNITTEST --> UNITTEST_RESULT --> REPORTER
 
-    TASK --> PYTEST_REPORT
-    TASK --> UNITTEST_REPORT
-    PYTEST_MD --> MKDOCS
-    UNITTEST_MD --> MKDOCS
+    TASK --> REPORTER
+    REPORTER --> MARKDOWN
+    MARKDOWN --> MKDOCS
+    MARKDOWN --> PANDOC_REPORTER --> PANDOC
     TASK --> MKDOCS
+    TASK --> PANDOC_REPORTER
+
+    classDef testResults fill:#fff3bf,stroke:#f08c00,stroke-width:4px,color:#5f3d00,font-weight:bold
+    class MKDOCS testResults
 ```
 
 <br/>
@@ -93,7 +97,9 @@ flowchart TD
 | VS Code entry | Execution scope |
 |---|---|
 | VS Extension Testing | Discovers and runs both pytest CT and unittest through the pytest adapter |
-| VS Code Task | Prepares the test environment, runs pytest CT by TEST ID/mode, generates reports, and serves/builds MkDocs |
+| VS Code Task | Prepares the environment, runs pytest CT, generates MkDocs reports, and converts the latest Markdown to Pandoc HTML/DOCX |
+| Common Markdown reporter | `test_envs/tools/mkdocs_reporter` renders both pytest and unittest results through `MarkdownReporter` |
+| Pandoc reporter | `test_envs/tools/pandoc_reporter` converts the latest common Markdown report to HTML or DOCX |
 
 
 !!! success "Automatically Generate Report"
@@ -122,12 +128,10 @@ flowchart TD
     UNITTEST[Unittest Operation]
     PYTEST_RESULT[Pytest Result]
     UNITTEST_RESULT[Unittest Result]
-    PYTEST_REPORT[Pytest Report Generation]
-    UNITTEST_REPORT[Unittest Report Generation]
     LLM[Local LLM]
-    PYTEST_MD[Pytest Markdown]
-    UNITTEST_MD[Unittest Markdown]
-    MKDOCS[MkDocs Documents]
+    REPORTER["test_envs/tools/mkdocs_reporter<br/>MarkdownReporter"]
+    MARKDOWN["Pytest / Unittest Markdown"]
+    MKDOCS["MkDocs (TEST Results)"]
     ISSUE[GitHub Issue Comment]
     ARTIFACT[GitHub Artifact]
 
@@ -140,14 +144,16 @@ flowchart TD
     CONTINUOUS -->|Unit Test| UNITTEST
     SPECIAL -->|Special pytest path| PYTEST
 
-    PYTEST --> PYTEST_RESULT --> PYTEST_REPORT --> LLM --> PYTEST_MD
-    UNITTEST --> UNITTEST_RESULT --> UNITTEST_REPORT --> UNITTEST_MD
+    PYTEST --> PYTEST_RESULT --> LLM --> REPORTER
+    UNITTEST --> UNITTEST_RESULT --> REPORTER
 
-    PYTEST_MD --> MKDOCS
-    UNITTEST_MD --> MKDOCS
+    REPORTER --> MARKDOWN
+    MARKDOWN --> MKDOCS
     CONTINUOUS --> ISSUE
-    PYTEST_MD --> ARTIFACT
-    UNITTEST_MD --> ARTIFACT
+    MARKDOWN --> ARTIFACT
+
+    classDef testResults fill:#fff3bf,stroke:#f08c00,stroke-width:4px,color:#5f3d00,font-weight:bold
+    class MKDOCS testResults
 ```
 
 <br/>
@@ -156,6 +162,7 @@ flowchart TD
 |---|---|
 | `continuous-test.yml` | Runs unittest or Mock CT on a GitHub-hosted Ubuntu runner, generates reports, comments on issue requests, and uploads evidence |
 | `special-environment-test.yml` | Runs a selected pytest path on a self-hosted hardware runner, generates a report, and uploads evidence |
+| Common Markdown reporter | `test_envs/tools/mkdocs_reporter` renders both result types before MkDocs publication and artifact upload |
 
 <br/>
 
