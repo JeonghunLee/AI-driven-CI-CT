@@ -1,6 +1,10 @@
 # VS Code Environment
 
+<br/>
+
 ## VS Code Files
+
+<br/>
 
 ```text
 .vscode/
@@ -9,15 +13,23 @@
 └── tasks.json       # Setup, check, test, report, and MkDocs tasks
 ```
 
+<br/>
+
 | File | Responsibility |
 |---|---|
 | `settings.json` | Define Project [Settings](#settings) configurations  |
 | `launch.json` | Define [Run and Debug](#run-and-debug) configurations |
 | `tasks.json` | Define [Tasks](#tasks) configurations  |
 
+<br/>
+
 There is currently no `.vscode/extensions.json`; extension recommendations are not managed by the repository.
 
+<br/>
+
 ### Settings
+
+<br/>
 
 Source: `.vscode/settings.json`
 
@@ -41,6 +53,8 @@ Source: `.vscode/settings.json`
 }
 ```
 
+<br/>
+
 | Setting | Current value | Effect |
 |---|---|---|
 | `python.defaultInterpreterPath` | `${workspaceFolder}/.venv/Scripts/python.exe` | Testing, debugging, and most Tasks use the project virtual environment |
@@ -54,14 +68,21 @@ Source: `.vscode/settings.json`
 
 `-p no:cacheprovider` disables pytest's cache provider, so VS Code discovery and execution do not create or update `.pytest_cache`.
 
+<br/>
+
 ## Run and Debug
+
+<br/>
 
 Source: `.vscode/launch.json`
 
 ![VS Code Run and Debug panel](imgs/vscode_runanddebug_00.png)
 
+<br/>
 
 ### Configurations
+
+<br/>
 
 | Configuration | Python | Entry point | Console | `justMyCode` | Function |
 |---|---|---|---|---:|---|
@@ -74,11 +95,19 @@ Source: `.vscode/launch.json`
 | `Debug: Current Python File` | Project Python | `${file}` | Integrated terminal | `true` | Debugs the open Python file |
 | `Debug: Current pytest File` | Project Python | `pytest` | Integrated terminal | `false` | Debugs the open test with the selected fixture mode |
 
+<br/>
+
 “Project Python” means `${config:python.defaultInterpreterPath}`.
+
+<br/>
 
 ### Setup and Check delegation
 
+<br/>
+
 The first four configurations use `preLaunchTask`. The Task performs the state-changing work; after it succeeds, the launch configuration runs `test_envs.tools.configuration config` and exits.
+
+<br/>
 
 | Launch configuration | `preLaunchTask` |
 |---|---|
@@ -87,9 +116,15 @@ The first four configurations use `preLaunchTask`. The Task performs the state-c
 | `SETUP 3: Install Ollama and Local LLM` | Same label |
 | `CHECK 1: Refresh Environment Check File` | Same label |
 
+<br/>
+
 All launch configurations use `${workspaceFolder}` as `cwd`. Setup 1 and Setup 2 deliberately use system `python`; every later configuration uses the interpreter selected by `python.defaultInterpreterPath`.
 
+<br/>
+
 ### Current pytest debugging
+
+<br/>
 
 `Debug: Current pytest File` runs:
 
@@ -97,18 +132,29 @@ All launch configurations use `${workspaceFolder}` as `cwd`. Setup 1 and Setup 2
 python -m pytest ${file} -s -vv --fixture-mode <selection>
 ```
 
+<br/>
+
 The launch input `fixtureMode` offers `marker`, `mock`, and `hil`, with `marker` as the default. `marker` is a selection instruction; the CT itself resolves to `mock` or `hil`.
 
+<br/>
+
 ## Tasks
+
+<br/>
 
 Source: `.vscode/tasks.json`
 
 ![VS Code Tasks](imgs/vscode_task_00.png)
 
+<br/>
 
 Every Task has `type: process`, runs in the foreground, and has no `isBackground` flag. Setup 1 and Setup 2 use system `python`; all later Tasks use `${config:python.defaultInterpreterPath}`.
 
+<br/>
+
 ### Setup and Check Tasks
+
+<br/>
 
 | Task label | Module | Arguments | Function |
 |---|---|---|---|
@@ -119,16 +165,26 @@ Every Task has `type: process`, runs in the foreground, and has no `isBackground
 | `CHECK 2: Show Environment Configuration` | `test_envs.tools.configuration` | `config` | Prints the current project configuration |
 | `CHECK 3: Run Ollama Server (Foreground)` | `test_envs.tools.environment_setup` | `serve` | Runs an Ollama server owned by the terminal Task |
 
+<br/>
+
 The dedicated-terminal presentation is configured for Setup 1 and Check 3. Closing or stopping Check 3 ends the foreground server process owned by that Task.
 
+<br/>
+
 ### TEST CASE Tasks
+
+<br/>
 
 | Task label | Scope | Arguments | Test group |
 |---|---|---|---|
 | `TEST CASE: ALL` | All CT files in `test_cases` | `--fixture-mode ${input:fixtureMode}` | Default test Task |
 | `TEST CASE: TEST ID` | One selected TEST ID | `--test-id ${input:testCaseId} --fixture-mode ${input:fixtureMode}` | Non-default test Task |
 
+<br/>
+
 Both Tasks disable the pytest cache provider and execute `test_envs/tests/pytest/test_cases`.
+
+<br/>
 
 ### Report Tasks
 
@@ -162,9 +218,15 @@ OS selection is not a Task or launch input. It is managed by `test_envs/configs/
 
 ## Testing
 
+<br/>
+
 ![VS Code Testing panel](imgs/vscode_testing_00.png)
 
+<br/>
+
 ### Discovery model
+
+<br/>
 
 ```text
 VS Code Testing
@@ -175,6 +237,8 @@ VS Code Testing
         └── test_envs/tests/unittest
             └── unittest.TestCase collected by pytest
 ```
+
+<br/>
 
 | Component | Current rule |
 |---|---|
@@ -187,7 +251,11 @@ VS Code Testing
 | Automatic discovery | Enabled on save |
 | Cache provider | Disabled |
 
+<br/>
+
 ### Discovery lifecycle
+
+<br/>
 
 ```text
 Open workspace
@@ -200,6 +268,7 @@ Run pytest collection from workspace root
       ↓
 Build the unified Testing tree
 ```
+<br/>
 
 | Trigger | Result |
 |---|---|
@@ -208,7 +277,11 @@ Build the unified Testing tree
 | Refresh Tests | Full manual recollection |
 | Change Testing settings | Adapter restarts with the new scope |
 
+<br/>
+
 ### Execution contracts
+
+<br/>
 
 | Area | Identifier | Mode | Result |
 |---|---|---|---|
@@ -216,6 +289,8 @@ Build the unified Testing tree
 | unittest | Test function | Fixture mode is not used | `<execution-id>_result.json` + `<execution-id>_result.log` |
 
 The Testing panel supports running or debugging the full tree, a folder, a module, a class, or one test function. CT normalization is handled by `test_envs/tests/pytest/conftest.py`; unittest normalization is handled by `test_envs/tests/unittest/conftest.py`.
+
+<br/>
 
 ### Discovery troubleshooting
 
