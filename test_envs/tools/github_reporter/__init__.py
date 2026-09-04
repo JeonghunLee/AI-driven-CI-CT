@@ -9,6 +9,10 @@ from test_envs.tools.local_llm import Analysis
 from test_envs.tools.result_normalizer import ResultRecord
 
 
+def _env_value(name: str) -> str:
+    return os.getenv(name) or "Not set"
+
+
 def render_environment_comment(check: dict[str, Any]) -> str:
     requested_runner = os.getenv("REQUESTED_RUNNER", "unknown")
     if requested_runner.startswith("Self-hosted"):
@@ -34,6 +38,13 @@ def render_environment_comment(check: dict[str, Any]) -> str:
 - Runner: `{runner_name}`
 - Runner OS: `{runner_os}`
 - Architecture: `{runner_arch}`
+
+### Environment Variables
+- ImageOS: `{_env_value('ImageOS')}`
+- ImageVersion: `{_env_value('ImageVersion')}`
+- pythonLocation: `{_env_value('pythonLocation')}`
+- Python_ROOT_DIR: `{_env_value('Python_ROOT_DIR')}`
+- Python_VERSION: `{_env_value('Python_VERSION')}`
 
 ### Operating System
 - Detected: `{os_check.get('detected', 'unknown')}`

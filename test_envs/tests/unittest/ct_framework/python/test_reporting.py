@@ -39,12 +39,19 @@ class ReportingTests(unittest.TestCase):
             "RUNNER_NAME": "GitHub Actions 1",
             "RUNNER_OS": "Linux",
             "RUNNER_ARCH": "X64",
+            "ImageOS": "ubuntu24",
+            "ImageVersion": "20260901.1.0",
+            "pythonLocation": "/opt/hostedtoolcache/Python/3.12.0/x64",
+            "Python_ROOT_DIR": "/opt/hostedtoolcache/Python/3.12.0/x64",
+            "Python_VERSION": "3.12.0",
         }
         with patch.dict("os.environ", environment, clear=False):
             comment = render_environment_comment(check)
         self.assertIn("**Result: CHECKED**", comment)
         self.assertIn("Requested: `GitHub-hosted Linux`", comment)
         self.assertIn("Type: `github-hosted`", comment)
+        self.assertIn("ImageOS: `ubuntu24`", comment)
+        self.assertIn("pythonLocation: `/opt/hostedtoolcache/Python/3.12.0/x64`", comment)
         self.assertIn("Version: `3.12.0`", comment)
         self.assertIn("API available: `False`", comment)
 
