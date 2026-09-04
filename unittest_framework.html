@@ -571,6 +571,18 @@
 </ul>
 </nav>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://jeonghunlee.github.io/project_ai.html#ai-driven-embedded-continuous-testing">
+<span class="md-ellipsis">
+    
+  
+    Go To My Profile Page
+  
+
+    
+  </span>
+</a>
+</li>
 </ul>
 </nav>
 </div>
@@ -959,17 +971,19 @@
 <p><br/></p>
 <h3 id="github-actions">GitHub Actions</h3>
 <p><code>continuous-test.yml</code> selects the Unit Test path when the parsed request type is <code>Unit Test</code>:</p>
-<div class="highlight"><pre><span></span><code>pytest test_envs/tests/unittest --junitxml=&lt;runner-temp&gt;/unit-junit.xml
-              ↓
+<div class="highlight"><pre><span></span><code>test_request.yml Issue
+        ↓
+issue_parser selects Unit Test scope and runner
+        ↓
+pytest test_envs/tests/unittest
+        ↓
 unittest conftest session result
-              +
-explicit JUnit normalization
-              ↓
-pipeline --docs
-              ↓
-Markdown + uploaded evidence
+        ↓
+pipeline processes the explicit result
+        ↓
+Markdown + Issue comment + uploaded evidence
 </code></pre></div>
-<p>The current workflow uses both the unittest pytest hook and a separate <code>result_normalizer</code> call for the JUnit XML. Consequently, a GitHub Unit Test run can create an execution record from each capture path.</p>
+<p>The unified workflow uses the unittest pytest hook as the single result-capture path. It does not run Local LLM analysis for the resulting <code>category: unit</code> record.</p>
 <p><br/></p>
 <h2 id="result-capture-lifecycle">Result Capture Lifecycle</h2>
 <p>Source: <code>test_envs/tests/unittest/conftest.py</code></p>

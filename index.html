@@ -237,15 +237,6 @@
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#special-environment-testyml">
-<span class="md-ellipsis">
-      
-        special-environment-test.yml
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="#workflow-roles">
 <span class="md-ellipsis">
       
@@ -521,6 +512,18 @@
 </ul>
 </nav>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="https://jeonghunlee.github.io/project_ai.html#ai-driven-embedded-continuous-testing">
+<span class="md-ellipsis">
+    
+  
+    Go To My Profile Page
+  
+
+    
+  </span>
+</a>
+</li>
 </ul>
 </nav>
 </div>
@@ -599,15 +602,6 @@
 <span class="md-ellipsis">
       
         continuous-test.yml
-      
-    </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#special-environment-testyml">
-<span class="md-ellipsis">
-      
-        special-environment-test.yml
       
     </span>
 </a>
@@ -723,6 +717,12 @@
 </table>
 <p><br/></p>
 <p>Go to <a href="https://jeonghunlee.github.io/vscode_doc/#vscode-testing">VSCode Testing</a> </p>
+<div class="admonition success">
+<p class="admonition-title">AI Agent workflow based on MCP</p>
+<p>Connect Claude, Codex, Ollama, and GitHub operations through MCP<br/>
+Support Local MCP execution, GitHub Issue based TEST automation, and documentation-first project flow  <br/>
+<a href="https://jeonghunlee.github.io/local-ai-agent-mcp/index.html">https://jeonghunlee.github.io/local-ai-agent-mcp/index.html</a></p>
+</div>
 <p><br/></p>
 <h2 id="documents">Documents</h2>
 <p><br/></p>
@@ -870,36 +870,39 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <h3 id="github-actions-based-flow">GitHub Actions-based flow</h3>
 <p><br/></p>
 <pre class="mermaid"><code>flowchart TD
-    GITHUB[GitHub Actions]
-    CONTINUOUS[continuous-test.yml]
-    SPECIAL[special-environment-test.yml]
+    REQUEST[test_request.yml Issue]
+    CHECK_REQUEST[test_check.yml Issue]
+    WORKFLOW[continuous-test.yml]
+    PARSER[test_envs.tools.issue_parser]
+    RUNNER[Hosted or Self-hosted Runner]
     ENV[TEST System Environment]
+    ENV_CHECK[Automatic OS / Python / Ollama Check]
     PYTEST[Pytest Operation]
     UNITTEST[Unittest Operation]
     PYTEST_RESULT[Pytest Result]
     UNITTEST_RESULT[Unittest Result]
     LLM[Local LLM]
     REPORTER["test_envs/tools/mkdocs_reporter&lt;br/&gt;MarkdownReporter"]
+    GITHUB_REPORTER[test_envs.tools.github_reporter]
     MARKDOWN["Pytest / Unittest Markdown"]
     MKDOCS["MkDocs (TEST Results)"]
     ISSUE[GitHub Issue Comment]
     ARTIFACT[GitHub Artifact]
 
-    GITHUB --&gt; CONTINUOUS
-    GITHUB --&gt; SPECIAL
-    CONTINUOUS --&gt; ENV
-    SPECIAL --&gt; ENV
-
-    CONTINUOUS --&gt;|Mock CT| PYTEST
-    CONTINUOUS --&gt;|Unit Test| UNITTEST
-    SPECIAL --&gt;|Special pytest path| PYTEST
+    REQUEST --&gt; WORKFLOW
+    CHECK_REQUEST --&gt; WORKFLOW
+    WORKFLOW --&gt; PARSER --&gt; RUNNER
+    RUNNER --&gt;|Test request| ENV
+    RUNNER --&gt;|TEST-CHECK| ENV_CHECK --&gt; GITHUB_REPORTER --&gt; ISSUE
+    ENV --&gt;|Fixture-based CT| PYTEST
+    ENV --&gt;|Function-based Unit Test| UNITTEST
 
     PYTEST --&gt; PYTEST_RESULT --&gt; LLM --&gt; REPORTER
     UNITTEST --&gt; UNITTEST_RESULT --&gt; REPORTER
 
     REPORTER --&gt; MARKDOWN
     MARKDOWN --&gt; MKDOCS
-    CONTINUOUS --&gt; ISSUE
+    REPORTER --&gt; GITHUB_REPORTER
     MARKDOWN --&gt; ARTIFACT
 
     classDef testResults fill:#fff3bf,stroke:#f08c00,stroke-width:4px,color:#5f3d00,font-weight:bold
@@ -914,12 +917,16 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </thead>
 <tbody>
 <tr>
-<td><code>continuous-test.yml</code></td>
-<td>Runs unittest or Mock CT on a GitHub-hosted Ubuntu runner, generates reports, comments on issue requests, and uploads evidence</td>
+<td><code>test_request.yml</code></td>
+<td>Collects Pytest/Unittest, runner, revision, Coverage, and Report selections</td>
 </tr>
 <tr>
-<td><code>special-environment-test.yml</code></td>
-<td>Runs a selected pytest path on a self-hosted hardware runner, generates a report, and uploads evidence</td>
+<td><code>test_check.yml</code></td>
+<td>Selects only a runner; the workflow detects its host type, OS, Python, and Ollama state and comments on the Issue</td>
+</tr>
+<tr>
+<td><code>continuous-test.yml</code></td>
+<td>Routes the request to a hosted or self-hosted runner, executes the test, generates reports, updates the Issue, and uploads evidence</td>
 </tr>
 <tr>
 <td>Common Markdown reporter</td>
@@ -927,6 +934,8 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </tr>
 </tbody>
 </table>
+<p><br/></p>
+<p>Go to <a href="https://github.com/JeonghunLee/AI-driven-CI-CT/issues">Github Issue</a></p>
 <p><br/></p>
 <h2 id="github-actions-flow">GitHub Actions Flow</h2>
 <p><br/></p>
@@ -941,23 +950,27 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <tbody>
 <tr>
 <td>Workflow name</td>
-<td><code>Continuous Test</code></td>
+<td><code>Test Request</code></td>
 </tr>
 <tr>
 <td>Trigger</td>
-<td>Issue labeled <code>run-test</code> or manual <code>workflow_dispatch</code></td>
+<td>Test Request Issue opened, edited, or reopened; <code>run-test</code> label; or manual <code>workflow_dispatch</code></td>
 </tr>
 <tr>
-<td>Job condition</td>
-<td>Manual run, or the added issue label is exactly <code>run-test</code></td>
+<td>Request Job</td>
+<td>Parses the Issue Form and emits normalized execution settings</td>
 </tr>
 <tr>
-<td>Runner</td>
-<td><code>ubuntu-latest</code></td>
+<td>Issue labels</td>
+<td>A relevant default-branch push creates both labels; the request job also creates and applies the matching label as a first-Issue fallback</td>
+</tr>
+<tr>
+<td>Runner routing</td>
+<td>GitHub-hosted Linux → <code>ubuntu-latest</code>; GitHub-hosted Windows → <code>windows-latest</code>; HIL Linux → <code>[self-hosted, linux, hw-test]</code>; HIL Windows → <code>[self-hosted, windows, hw-test]</code></td>
 </tr>
 <tr>
 <td>Timeout</td>
-<td>30 minutes</td>
+<td>60 minutes</td>
 </tr>
 <tr>
 <td>Permissions</td>
@@ -972,82 +985,28 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <td>Creates <code>.venv</code> and installs <code>requirements.txt</code></td>
 </tr>
 <tr>
-<td>Request routing</td>
-<td><code>test_envs.tools.issue_parser</code> selects Unit Test or CT</td>
-</tr>
-<tr>
 <td>Unit Test</td>
-<td>pytest over <code>test_envs/tests/unittest</code>, then JUnit normalization</td>
+<td>Runs the requested Unittest scope through pytest without Local LLM analysis</td>
 </tr>
 <tr>
-<td>CT</td>
-<td>Selected TEST ID under <code>test_envs/tests/pytest/test_cases</code>; current marker defaults produce Mock CT</td>
+<td>Pytest CT</td>
+<td>Mock runs on GitHub-hosted Linux/Windows; physical HIL routes to the self-hosted hardware runner</td>
+</tr>
+<tr>
+<td>Coverage</td>
+<td>Optional terminal or HTML <code>pytest-cov</code> report</td>
 </tr>
 <tr>
 <td>Report</td>
-<td><code>test_envs.tools.pipeline --docs</code> runs even after test failure</td>
+<td>Processes the explicit result; optionally publishes MkDocs and converts Pandoc HTML/DOCX</td>
 </tr>
 <tr>
 <td>Issue output</td>
-<td><code>test_envs.tools.github_reporter</code> comments when an issue number exists</td>
+<td><code>test_envs.tools.github_reporter</code> comments on success, test failure, report failure, or missing result</td>
 </tr>
 <tr>
 <td>Artifact</td>
-<td>Uploads <code>test_envs/reports/</code> and published pytest/unittest documents</td>
-</tr>
-</tbody>
-</table>
-<p>The manual <code>runner</code> input currently accepts <code>Default</code>, <code>Windows</code>, or <code>Linux</code>, but the job's <code>runs-on</code> remains fixed to <code>ubuntu-latest</code>; that input does not select a runner in the current workflow.</p>
-<p><br/></p>
-<h3 id="special-environment-testyml"><code>special-environment-test.yml</code></h3>
-<p><br/></p>
-<table>
-<thead>
-<tr>
-<th>Item</th>
-<th>Current behavior</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Workflow name</td>
-<td><code>Optional Special Environment Test</code></td>
-</tr>
-<tr>
-<td>Trigger</td>
-<td>Manual <code>workflow_dispatch</code> only</td>
-</tr>
-<tr>
-<td>Input</td>
-<td><code>test_path</code>, default <code>test_envs/tests/pytest</code></td>
-</tr>
-<tr>
-<td>Runner</td>
-<td><code>[self-hosted, hw-test]</code></td>
-</tr>
-<tr>
-<td>Timeout</td>
-<td>60 minutes</td>
-</tr>
-<tr>
-<td>Shell</td>
-<td>PowerShell (<code>pwsh</code>)</td>
-</tr>
-<tr>
-<td>Environment</td>
-<td>Reuses <code>.venv</code> when present or creates it, then installs <code>requirements.txt</code></td>
-</tr>
-<tr>
-<td>Test</td>
-<td>Executes pytest for the selected special hardware/environment path</td>
-</tr>
-<tr>
-<td>Report</td>
-<td><code>test_envs.tools.pipeline --docs</code> runs even after test failure</td>
-</tr>
-<tr>
-<td>Artifact</td>
-<td>Uploads <code>test_envs/reports/</code> as <code>special-test-&lt;run-id&gt;</code></td>
+<td>Uploads results, MkDocs pages, <code>.coverage</code>, and <code>htmlcov/</code></td>
 </tr>
 </tbody>
 </table>
@@ -1065,13 +1024,8 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <tbody>
 <tr>
 <td><code>continuous-test.yml</code></td>
-<td>Repeatable hosted Unit Test and Mock CT automation</td>
-<td>Used only when the selected result is pytest CT; unittest bypasses it</td>
-</tr>
-<tr>
-<td><code>special-environment-test.yml</code></td>
-<td>Optional hardware, vendor-tool, internal-network, or machine-specific testing</td>
-<td>Used for pytest CT results; unavailable Ollama falls back to deterministic analysis</td>
+<td>Unified hosted, Windows, and self-hosted HIL test-request automation</td>
+<td>Pytest uses Local LLM with deterministic fallback; Unittest bypasses Local LLM</td>
 </tr>
 </tbody>
 </table>
@@ -1080,9 +1034,11 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <p><br/></p>
 <p><div class="highlight"><pre><span></span><code>.
 ├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── test_request.yml
+│   │   └── test_check.yml
 │   └── workflows/
 │       ├── continuous-test.yml
-│       ├── special-environment-test.yml
 │       └── github_pages.yaml
 ├── .vscode/
 │   ├── settings.json
