@@ -6,6 +6,7 @@ import platform
 import shutil
 import subprocess
 import sys
+import ctypes
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -138,6 +139,52 @@ def _ollama_inventory(url: str) -> tuple[bool, list[dict[str, Any]], str | None]
         return False, [], str(error)
 
 
+def _physical_memory_bytes() -> int | None:
+    if os.name == "nt":
+        class MEMORYSTATUSEX(ctypes.Structure):
+            _fields_ = [
+                ("dwLength", ctypes.c_ulong),
+                ("dwMemoryLoad", ctypes.c_ulong),
+                ("ullTotalPhys", ctypes.c_ulonglong),
+                ("ullAvailPhys", ctypes.c_ulonglong),
+                ("ullTotalPageFile", ctypes.c_ulonglong),
+                ("ullAvailPageFile", ctypes.c_ulonglong),
+                ("ullTotalVirtual", ctypes.c_ulonglong),
+                ("ullAvailVirtual", ctypes.c_ulonglong),
+                ("ullAvailExtendedVirtual", ctypes.c_ulonglong),
+            ]
+
+        status = MEMORYSTATUSEX()
+        status.dwLength = ctypes.sizeof(MEMORYSTATUSEX)
+        if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status)):
+            return int(status.ullTotalPhys)
+        return None
+    try:
+        page_size = os.sysconf("SC_PAGE_SIZE")
+        page_count = os.sysconf("SC_PHYS_PAGES")
+    except (AttributeError, OSError, ValueError):
+        return None
+    if isinstance(page_size, int) and isinstance(page_count, int) and page_size > 0 and page_count > 0:
+        return page_size * page_count
+    return None
+
+
+def _hardware_check() -> dict[str, Any]:
+    try:
+        disk = shutil.disk_usage(WORKSPACE_ROOT)
+    except OSError:
+        disk = None
+    processor = platform.processor() or platform.machine() or "unknown"
+    return {
+        "machine": platform.machine() or "unknown",
+        "processor": processor,
+        "logical_cores": os.cpu_count(),
+        "memory_bytes": _physical_memory_bytes(),
+        "workspace_disk_total_bytes": None if disk is None else int(disk.total),
+        "workspace_disk_free_bytes": None if disk is None else int(disk.free),
+    }
+
+
 def build_check() -> dict[str, Any]:
     config = load_config()
     ollama = config.get("ollama", {})
@@ -160,6 +207,7 @@ def build_check() -> dict[str, Any]:
             "executable": sys.executable,
             "version": platform.python_version(),
         },
+        "hardware": _hardware_check(),
         "ollama": {
             "installed": executable is not None,
             "executable": executable,

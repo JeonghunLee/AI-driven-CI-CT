@@ -30,6 +30,14 @@ class ReportingTests(unittest.TestCase):
     def test_environment_comment_contains_detected_runner_values(self) -> None:
         check = {
             "os": {"detected": "linux", "name": "Linux-test"},
+            "hardware": {
+                "machine": "x86_64",
+                "processor": "cpu-test",
+                "logical_cores": 4,
+                "memory_bytes": 8 * 1024**3,
+                "workspace_disk_total_bytes": 14 * 1024**3,
+                "workspace_disk_free_bytes": 9 * 1024**3,
+            },
             "python": {"installed": True, "version": "3.12.0", "executable": "/python"},
             "ollama": {"installed": False, "available": False, "endpoint": "http://127.0.0.1:11434"},
         }
@@ -45,6 +53,8 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("**Result: CHECKED**", comment)
         self.assertIn("Requested: `GitHub-hosted Linux`", comment)
         self.assertIn("Type: `github-hosted`", comment)
+        self.assertIn("Logical CPU cores: `4`", comment)
+        self.assertIn("Physical memory: `8.00 GiB`", comment)
         self.assertIn("Version: `3.12.0`", comment)
         self.assertIn("API available: `False`", comment)
 

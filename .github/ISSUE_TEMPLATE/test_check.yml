@@ -1,5 +1,5 @@
 name: Test Environment Check
-description: Detect the selected runner's host type, OS, Python, and Ollama status
+description: Detect the selected runner's host type, OS, hardware, Python, and Ollama status
 title: "[TEST-CHECK] "
 labels:
   - test-check-runner
@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Select only the runner to inspect. GitHub Actions detects the environment and posts the result to this Issue.
+        Select only the runner to inspect. GitHub Actions detects the host type, OS, hardware, Python, and Ollama state and posts the result to this Issue.
 
   - type: dropdown
     id: runner

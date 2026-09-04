@@ -170,7 +170,7 @@ flowchart TD
 | GitHub Actions entry | Execution scope |
 |---|---|
 | `test_request.yml` | Collects Pytest/Unittest, runner, revision, Coverage, and Report selections |
-| `test_check.yml` | Selects only a runner; the workflow detects its host type, OS, Python, and Ollama state and comments on the Issue |
+| `test_check.yml` | Selects only a runner; the workflow detects its host type, OS, hardware, Python, and Ollama state and comments on the Issue |
 | `continuous-test.yml` | Routes the request to a hosted or self-hosted runner, executes the test, generates reports, updates the Issue, and uploads evidence |
 | Common Markdown reporter | `test_envs/tools/mkdocs_reporter` renders both result types before MkDocs publication and artifact upload |
 

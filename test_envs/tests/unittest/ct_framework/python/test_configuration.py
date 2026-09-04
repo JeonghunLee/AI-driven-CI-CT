@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import unittest
+from collections import namedtuple
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -85,14 +86,27 @@ class ConfigurationTests(unittest.TestCase):
         "test_envs.tools.configuration._ollama_inventory",
         return_value=(True, [{"name": "qwen:test", "size": 42}], None),
     )
+    @patch(
+        "test_envs.tools.configuration.shutil.disk_usage",
+        return_value=namedtuple("usage", "total used free")(100, 40, 60),
+    )
+    @patch("test_envs.tools.configuration._physical_memory_bytes", return_value=80)
+    @patch("test_envs.tools.configuration.os.cpu_count", return_value=4)
+    @patch("test_envs.tools.configuration.platform.machine", return_value="x86_64")
+    @patch("test_envs.tools.configuration.platform.processor", return_value="cpu-test")
     @patch("test_envs.tools.configuration._ollama_executable", return_value="ollama")
     def test_check_contains_required_environment_state(
-        self, _executable, _inventory, _version
+        self, _executable, _processor, _machine, _cpu_count, _memory, _disk_usage, _inventory, _version
     ) -> None:
         value = configuration.build_check()
         self.assertIn("configured", value["os"])
         self.assertIn("detected", value["os"])
         self.assertTrue(value["python"]["installed"])
+        self.assertEqual(value["hardware"]["machine"], "x86_64")
+        self.assertEqual(value["hardware"]["processor"], "cpu-test")
+        self.assertEqual(value["hardware"]["logical_cores"], 4)
+        self.assertEqual(value["hardware"]["memory_bytes"], 80)
+        self.assertEqual(value["hardware"]["workspace_disk_free_bytes"], 60)
         self.assertTrue(value["ollama"]["installed"])
         self.assertEqual(value["ollama"]["supported_models"][0]["name"], "qwen:test")
 

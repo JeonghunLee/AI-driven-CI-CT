@@ -370,7 +370,7 @@ test_envs/reports/
 | Workload | Runner |
 |---|---|
 | Test request | `.github/ISSUE_TEMPLATE/test_request.yml` |
-| Environment check | `.github/ISSUE_TEMPLATE/test_check.yml` → automatic runner environment Issue comment |
+| Environment check | `.github/ISSUE_TEMPLATE/test_check.yml` → automatic runner host, OS, hardware, Python, and Ollama Issue comment |
 | Unit Test / Mock CT / GitHub-hosted Linux | `ubuntu-latest` |
 | Unit Test / Mock CT / GitHub-hosted Windows | `windows-latest` |
 | HIL equipment and interfaces on Linux | `[self-hosted, linux, hw-test]` |

@@ -769,7 +769,7 @@ test_envs.tools.pipeline
 |---|---|
 | Request source | `.github/ISSUE_TEMPLATE/test_request.yml` |
 | Environment check request | `.github/ISSUE_TEMPLATE/test_check.yml`; user selects only the runner |
-| Environment check result | Workflow detects host type, OS, Python, and Ollama and posts them through `github_reporter` |
+| Environment check result | Workflow detects host type, OS, hardware, Python, and Ollama and posts them through `github_reporter` |
 | Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
 | Automatic trigger | Request Issue opened, edited, or reopened |
 | Rerun trigger | Issue label `run-test` |

@@ -9,6 +9,13 @@ from test_envs.tools.local_llm import Analysis
 from test_envs.tools.result_normalizer import ResultRecord
 
 
+def _format_bytes(value: Any) -> str:
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+        return "unknown"
+    gib = value / (1024**3)
+    return f"{gib:.2f} GiB"
+
+
 def render_environment_comment(check: dict[str, Any]) -> str:
     requested_runner = os.getenv("REQUESTED_RUNNER", "unknown")
     if requested_runner.startswith("Self-hosted"):
@@ -23,6 +30,7 @@ def render_environment_comment(check: dict[str, Any]) -> str:
     runner_arch = os.getenv("RUNNER_ARCH", "unknown")
     os_check = dict(check.get("os", {}))
     python_check = dict(check.get("python", {}))
+    hardware_check = dict(check.get("hardware", {}))
     ollama_check = dict(check.get("ollama", {}))
     return f"""## Test Environment Check
 
@@ -38,6 +46,13 @@ def render_environment_comment(check: dict[str, Any]) -> str:
 ### Operating System
 - Detected: `{os_check.get('detected', 'unknown')}`
 - Platform: `{os_check.get('name', 'unknown')}`
+
+### Hardware
+- Machine: `{hardware_check.get('machine', 'unknown')}`
+- Processor: `{hardware_check.get('processor', 'unknown')}`
+- Logical CPU cores: `{hardware_check.get('logical_cores', 'unknown')}`
+- Physical memory: `{_format_bytes(hardware_check.get('memory_bytes'))}`
+- Workspace disk: `{_format_bytes(hardware_check.get('workspace_disk_total_bytes'))} total / {_format_bytes(hardware_check.get('workspace_disk_free_bytes'))} free`
 
 ### Python
 - Installed: `{python_check.get('installed', False)}`
