@@ -57,7 +57,7 @@
     },
     // Run and Debug Section
     {
-      "name": "Run : Extension Module",
+      "name": "Run : Extension Module (Not Support Now)",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
@@ -66,27 +66,6 @@
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
-    },
-    {
-      "name": "Debug: Current Python File",
-      "type": "debugpy",
-      "request": "launch",
-      "python": "${config:python.defaultInterpreterPath}",
-      "program": "${file}",
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": true
-    },
-    {
-      "name": "Debug: Current pytest File",
-      "type": "debugpy",
-      "request": "launch",
-      "python": "${config:python.defaultInterpreterPath}",
-      "module": "pytest",
-      "args": ["${file}", "-s", "-vv", "--fixture-mode", "${input:fixtureMode}"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": false
     },
     // Reporting Section (Mkdocs Markdown and Pandoc(HTML/DOCX))
     {
