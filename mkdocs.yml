@@ -11,9 +11,9 @@ repo_name: JeonghunLee/AI-driven-CI-CT
 nav:
   - Overview: index.md
   - Getting Started:
+    - Setup VSCode: vscode_environment.md  
     - Setup Python: python_environment.md
-    - Setup LLM: local_llm_environment.md
-    - Setup VSCode: vscode_environment.md    
+    - Setup LLM: local_llm_environment.md  
   - TEST Framework:
     - Pytest (HIL or Mock): pytest_framework.md
     - Unittest: unittest_framework.md

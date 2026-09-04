@@ -6,6 +6,18 @@
 
 <br/>
 
+Go To [VS Code Testing](https://jeonghunlee.github.io/vscode_doc/#vscode-testing) 
+
+* **VS Code Testing**    
+https://code.visualstudio.com/docs/debugtest/testing
+
+<br/>
+
+* **VS Code Testing for Python**     
+https://code.visualstudio.com/docs/python/testing  
+
+<br/>
+
 ```text
 .vscode/
 ├── settings.json    # Python interpreter, analysis, and Testing
