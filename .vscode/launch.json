@@ -104,7 +104,7 @@
   ],
   // End of Configurations Section
 
-  // Inputs Section for fixture mode selection
+  // Inputs Section for fixture mode selection (Not use currently, reserved for future use)
   "inputs": [
     {
       "id": "fixtureMode",

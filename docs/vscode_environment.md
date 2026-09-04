@@ -31,7 +31,7 @@ https://code.visualstudio.com/docs/python/testing
 |---|---|
 | `settings.json` | Define project settings for [Testing](#testing) and the [Python Extension](#python-extension) |
 | `launch.json` | Define [Run and Debug](#run-and-debug) configurations |
-| `tasks.json` | Define [Tasks](#tasks) configurations |
+| `tasks.json` | Define [Run Tasks](#run-tasks) configurations |
 
 <br/>
 
@@ -389,6 +389,8 @@ Connected VS Code feature: [Run and Debug](#run-and-debug)
 {
   "version": "0.2.0",
   "configurations": [
+    //
+    // Setup Section : OS and Python/LLM Envs
     {
       "name": "SETUP 1: Select Operating System",
       "type": "debugpy",
@@ -441,8 +443,9 @@ Connected VS Code feature: [Run and Debug](#run-and-debug)
       "cwd": "${workspaceFolder}",
       "justMyCode": true
     },
+    // Run and Debug Section
     {
-      "name": "Run 1: Extension Module",
+      "name": "Run : Extension Module (Not Support Now)",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
@@ -452,6 +455,7 @@ Connected VS Code feature: [Run and Debug](#run-and-debug)
       "cwd": "${workspaceFolder}",
       "justMyCode": true
     },
+    // Reporting Section (Mkdocs Markdown and Pandoc(HTML/DOCX))
     {
       "name": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
       "type": "debugpy",
@@ -484,62 +488,11 @@ Connected VS Code feature: [Run and Debug](#run-and-debug)
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
-    },
-    {
-      "name": "Debug: Current Python File",
-      "type": "debugpy",
-      "request": "launch",
-      "python": "${config:python.defaultInterpreterPath}",
-      "program": "${file}",
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": true
-    },
-    {
-      "name": "Debug: Current pytest File",
-      "type": "debugpy",
-      "request": "launch",
-      "python": "${config:python.defaultInterpreterPath}",
-      "module": "pytest",
-      "args": ["${file}", "-s", "-vv", "--fixture-mode", "${input:fixtureMode}"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": false
-    },
-    {
-      "name": "TEST CASE: CT-UART-001",
-      "type": "debugpy",
-      "request": "launch",
-      "python": "${config:python.defaultInterpreterPath}",
-      "module": "pytest",
-      "args": ["-p", "no:cacheprovider", "test_envs/tests/pytest/test_cases", "--test-id", "CT-UART-001", "--fixture-mode", "${input:fixtureMode}", "-s", "-vv"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": false
-    },
-    {
-      "name": "TEST CASE: CT-USB-001",
-      "type": "debugpy",
-      "request": "launch",
-      "python": "${config:python.defaultInterpreterPath}",
-      "module": "pytest",
-      "args": ["-p", "no:cacheprovider", "test_envs/tests/pytest/test_cases", "--test-id", "CT-USB-001", "--fixture-mode", "${input:fixtureMode}", "-s", "-vv"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": false
-    },
-    {
-      "name": "TEST CASE: CT-NETWORK-001",
-      "type": "debugpy",
-      "request": "launch",
-      "python": "${config:python.defaultInterpreterPath}",
-      "module": "pytest",
-      "args": ["-p", "no:cacheprovider", "test_envs/tests/pytest/test_cases", "--test-id", "CT-NETWORK-001", "--fixture-mode", "${input:fixtureMode}", "-s", "-vv"],
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}",
-      "justMyCode": false
     }
   ],
+  // End of Configurations Section
+
+  // Inputs Section for fixture mode selection (Not use currently, reserved for future use)
   "inputs": [
     {
       "id": "fixtureMode",
@@ -566,25 +519,16 @@ Source: `.vscode/launch.json`
 
 <br/>
 
-### Configurations
+### Run and Debug-Setup and Check
 
 <br/>
 
-| Configuration | Python | Entry point | Console | `justMyCode` | Function |
-|---|---|---|---|---:|---|
-| `SETUP 1: Select Operating System` | `python` | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Setup Task, then displays configuration |
-| `SETUP 2: Install Python Virtual Environment` | `python` | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Setup Task, then displays configuration |
-| `SETUP 3: Install Ollama and Local LLM` | Project Python | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Setup Task, then displays configuration |
-| `CHECK 1: Refresh Environment Check File` | Project Python | `test_envs.tools.configuration config` | Internal | `true` | Runs the matching Check Task, then displays configuration |
-| `Run 1: Extension Module` | Project Python | `test_envs.tools.extension_runner` | Integrated terminal | `true` | Runs `test_envs.tools.extensions.example` |
-| `REPORT-Mkdocs: Generate Markdown to Pytest/Unittest` | Project Python | `test_envs.tools.test_result` | Integrated terminal | `true` | Runs `--pending --docs` |
-| `REPORT-Pandoc: Convert Latest Markdown to HTML` | Project Python | `test_envs.tools.pandoc_reporter` | Integrated terminal | `true` | Converts the latest Markdown report to HTML |
-| `REPORT-Pandoc: Convert Latest Markdown to DOCX` | Project Python | `test_envs.tools.pandoc_reporter` | Integrated terminal | `true` | Converts the latest Markdown report to DOCX |
-| `Debug: Current Python File` | Project Python | `${file}` | Integrated terminal | `true` | Debugs the open Python file |
-| `Debug: Current pytest File` | Project Python | `pytest` | Integrated terminal | `false` | Debugs the open test with the selected fixture mode |
-| `TEST CASE: CT-UART-001` | Project Python | `pytest --test-id CT-UART-001` | Integrated terminal | `false` | Runs or debugs the UART CT with the selected fixture mode |
-| `TEST CASE: CT-USB-001` | Project Python | `pytest --test-id CT-USB-001` | Integrated terminal | `false` | Runs or debugs the USB CT with the selected fixture mode |
-| `TEST CASE: CT-NETWORK-001` | Project Python | `pytest --test-id CT-NETWORK-001` | Integrated terminal | `false` | Runs or debugs the Network CT with the selected fixture mode |
+| Launch configuration | Python | `preLaunchTask` | Purpose | Related Task |
+|---|---|---|---|---|
+| `SETUP 1: Select Operating System` | System `python` | Same label | Selects the project operating system, then displays the resulting configuration | [Tasks-Setup and Check](#tasks-setup-and-check) |
+| `SETUP 2: Install Python Virtual Environment` | System `python` | Same label | Creates `.venv`, then displays the resulting configuration | [Tasks-Setup and Check](#tasks-setup-and-check) |
+| `SETUP 3: Install Ollama and Local LLM` | Project Python | Same label | Installs or checks Ollama and the configured model, then displays the resulting configuration | [Tasks-Setup and Check](#tasks-setup-and-check) |
+| `CHECK 1: Refresh Environment Check File` | Project Python | Same label | Refreshes `check.json`, then displays the resulting configuration | [Tasks-Setup and Check](#tasks-setup-and-check) |
 
 <br/>
 
@@ -592,40 +536,51 @@ Source: `.vscode/launch.json`
 
 <br/>
 
-### Setup and Check delegation
+These four configurations intentionally overlap with [Run Tasks](#run-tasks). The matching Task performs the setup or check operation through `preLaunchTask`; after it succeeds, Run and Debug executes `test_envs.tools.configuration config` to show the current configuration.
 
 <br/>
 
-The first four configurations use `preLaunchTask`. The Task performs the state-changing work; after it succeeds, the launch configuration runs `test_envs.tools.configuration config` and exits.
+Setup 1 and Setup 2 use system `python`. Setup 3 and later configurations use the interpreter selected by `python.defaultInterpreterPath`.
 
 <br/>
 
-| Launch configuration | `preLaunchTask` |
-|---|---|
-| `SETUP 1: Select Operating System` | Same label |
-| `SETUP 2: Install Python Virtual Environment` | Same label |
-| `SETUP 3: Install Ollama and Local LLM` | Same label |
-| `CHECK 1: Refresh Environment Check File` | Same label |
+### Run and Debug-Extension Module
 
 <br/>
 
-All launch configurations use `${workspaceFolder}` as `cwd`. Setup 1 and Setup 2 deliberately use system `python`; every later configuration uses the interpreter selected by `python.defaultInterpreterPath`.
+| Launch configuration | Entry point | Current status | Future purpose |
+|---|---|---|---|
+| `Run : Extension Module (Not Support Now)` | `test_envs.tools.extension_runner` | **Not supported now** | Extension execution with future GDB-based debugging |
 
 <br/>
 
-### Current pytest debugging
+This configuration is a placeholder and is not part of the currently supported test workflow. It has no matching Task. A future implementation will connect extension modules to GDB or another target debugger.
 
 <br/>
 
-`Debug: Current pytest File` runs:
-
-```text
-python -m pytest ${file} -s -vv --fixture-mode <selection>
-```
+### Run and Debug-Report
 
 <br/>
 
-The launch input `fixtureMode` offers `marker`, `mock`, and `hil`, with `marker` as the default. `marker` is a selection instruction; the CT itself resolves to `mock` or `hil`.
+| Launch configuration | Entry point and arguments | Purpose | Related Task |
+|---|---|---|---|
+| `REPORT-Mkdocs: Generate Markdown to Pytest/Unittest` | `test_envs.tools.test_result --pending --docs` | Generates pending Pytest and Unittest Markdown and publishes MkDocs result pages | [Tasks-Report](#tasks-report) |
+| `REPORT-Pandoc: Convert Latest Markdown to HTML` | `test_envs.tools.pandoc_reporter --latest --format html` | Converts the latest Markdown report to HTML | [Tasks-Report](#tasks-report) |
+| `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown report to DOCX | [Tasks-Report](#tasks-report) |
+
+<br/>
+
+These configurations overlap with [Tasks-Report](#tasks-report), but they do not use `preLaunchTask`. Run and Debug starts the same Python modules through `debugpy`, while Run Tasks executes them directly as foreground processes. Use Run Tasks for normal report generation and Run and Debug when breakpoints or debugger inspection are required.
+
+<br/>
+
+### Run and Debug-Inputs
+
+<br/>
+
+| Input ID | Options | Current use |
+|---|---|---|
+| `fixtureMode` | `marker`, `mock`, `hil` | Declared in `launch.json`, but no current launch configuration references it |
 
 <br/>
 
@@ -662,6 +617,10 @@ The dedicated-terminal presentation is configured for Setup 1 and Check 3. Closi
 
 <br/>
 
+Setup 1 through Setup 3 and Check 1 are also exposed through [Run and Debug-Setup and Check](#run-and-debug-setup-and-check). In Run and Debug, each matching Task runs first through `preLaunchTask`.
+
+<br/>
+
 ### Tasks-TEST CASE 
 
 <br/>
@@ -679,13 +638,23 @@ Both Tasks disable the pytest cache provider and execute `test_envs/tests/pytest
 
 ### Tasks-Report 
 
+<br/>
+
 | Task label | Entry point | Function |
 |---|---|---|
 | `REPORT-Mkdocs: Generate Markdown to Pytest/Unittest` | `test_envs.tools.test_result --pending --docs` | Generates missing Markdown and publishes MkDocs pages |
 | `REPORT-Pandoc: Convert Latest Markdown to HTML` | `test_envs.tools.pandoc_reporter --latest --format html` | Converts the latest Markdown to HTML |
 | `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown to Word |
 
+<br/>
+
+The same report operations are available through [Run and Debug-Report](#run-and-debug-report). Run Tasks is the normal execution path; Run and Debug uses `debugpy` when debugger inspection is needed.
+
+<br/>
+
 ### Tasks-MkDocs 
+
+<br/>
 
 | Task label | Arguments | Address / result |
 |---|---|---|
@@ -697,9 +666,11 @@ Both Tasks disable the pytest cache provider and execute `test_envs/tests/pytest
 
 The `MkDocs: Serve Remote ` source label currently contains a trailing space.
 
-### Tasks-Inputs 
+<br/>
 
+### Tasks-Inputs
 
+<br/>
 
 | Input ID | Type | Options | Default | Used by |
 |---|---|---|---|---|
@@ -708,6 +679,7 @@ The `MkDocs: Serve Remote ` source label currently contains a trailing space.
 
 OS selection is not a Task or launch input. It is managed by `test_envs/configs/config.json` through the Setup 1 command.
 
+<br/>
 
 ## Testing
 
