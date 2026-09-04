@@ -109,18 +109,20 @@ Running `python -m unittest` bypasses the pytest hooks and therefore does not ge
 `continuous-test.yml` selects the Unit Test path when the parsed request type is `Unit Test`:
 
 ```text
-pytest test_envs/tests/unittest --junitxml=<runner-temp>/unit-junit.xml
-              ↓
+test_request.yml Issue
+        ↓
+issue_parser selects Unit Test scope and runner
+        ↓
+pytest test_envs/tests/unittest
+        ↓
 unittest conftest session result
-              +
-explicit JUnit normalization
-              ↓
-pipeline --docs
-              ↓
-Markdown + uploaded evidence
+        ↓
+pipeline processes the explicit result
+        ↓
+Markdown + Issue comment + uploaded evidence
 ```
 
-The current workflow uses both the unittest pytest hook and a separate `result_normalizer` call for the JUnit XML. Consequently, a GitHub Unit Test run can create an execution record from each capture path.
+The unified workflow uses the unittest pytest hook as the single result-capture path. It does not run Local LLM analysis for the resulting `category: unit` record.
 
 <br/>
 

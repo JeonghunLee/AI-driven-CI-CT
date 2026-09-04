@@ -1,67 +1,290 @@
-name: Continuous Test
+name: Test Request
+
 on:
   issues:
-    types: [labeled]
+    types: [opened, edited, reopened, labeled]
   workflow_dispatch:
     inputs:
+      test_type:
+        description: Test type
+        required: true
+        type: choice
+        options: [pytest / CT, Unit Test]
+        default: pytest / CT
       test_id:
-        description: Test ID
+        description: Pytest TEST ID
         required: true
+        type: choice
+        options: [CT-UART-001, CT-USB-001, CT-NETWORK-001]
         default: CT-UART-001
-      runner:
-        description: Runner selector (Default, Windows, Linux)
+      fixture_mode:
+        description: Pytest Fixture mode
         required: true
+        type: choice
+        options: [marker, mock, hil]
+        default: marker
+      unittest_scope:
+        description: Unittest scope
+        required: true
+        type: choice
+        options: [All Unittest, CT Framework Python, One test file or function]
+        default: All Unittest
+      unittest_target:
+        description: Pytest path or node ID for one Unittest target
+        required: false
+        default: test_envs/tests/unittest
+      runner:
+        description: Runner
+        required: true
+        type: choice
+        options: [Default, Windows, Linux, Self-hosted HIL]
         default: Default
+      request_ref:
+        description: Branch, tag, or commit
+        required: true
+        default: main
+      coverage:
+        description: Test Coverage
+        required: true
+        type: choice
+        options: [No coverage, Terminal missing-lines report, HTML coverage report]
+        default: No coverage
+      report_mkdocs:
+        description: Publish MkDocs Markdown
+        required: true
+        type: boolean
+        default: true
+      report_html:
+        description: Generate Pandoc HTML
+        required: true
+        type: boolean
+        default: false
+      report_docx:
+        description: Generate Pandoc DOCX
+        required: true
+        type: boolean
+        default: false
+      issue_number:
+        description: Optional Issue number for a manual run comment
+        required: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+  issues: write
 
 jobs:
-  continuous-test:
-    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'run-test'
+  request:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'run-test') ||
+      (github.event.action != 'labeled' && contains(github.event.issue.labels.*.name, 'test-request-runner'))
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: read
-      issues: write
-    env:
-      TEST_ID: ${{ inputs.test_id || 'CT-UART-001' }}
-      ISSUE_NUMBER: ${{ github.event.issue.number }}
+    outputs:
+      test_type: ${{ steps.request.outputs.test_type }}
+      category: ${{ steps.request.outputs.category }}
+      test_id: ${{ steps.request.outputs.test_id }}
+      fixture_mode: ${{ steps.request.outputs.fixture_mode }}
+      unittest_scope: ${{ steps.request.outputs.unittest_scope }}
+      unittest_target: ${{ steps.request.outputs.unittest_target }}
+      runner: ${{ steps.request.outputs.runner }}
+      runner_labels: ${{ steps.request.outputs.runner_labels }}
+      request_ref: ${{ steps.request.outputs.request_ref }}
+      coverage: ${{ steps.request.outputs.coverage }}
+      report_mkdocs: ${{ steps.request.outputs.report_mkdocs }}
+      report_html: ${{ steps.request.outputs.report_html }}
+      report_docx: ${{ steps.request.outputs.report_docx }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: "3.12", cache: pip}
-      - run: python -m venv .venv
-      - run: .venv/bin/python -m pip install -r requirements.txt
+      - name: Checkout request parser
+        uses: actions/checkout@v4
+
+      - name: Set up request parser Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Read test request
         id: request
-        run: .venv/bin/python -m test_envs.tools.issue_parser
-      - name: Run unit tests
-        if: steps.request.outputs.test_type == 'Unit Test'
-        run: .venv/bin/python -m pytest test_envs/tests/unittest -s --junitxml=${{ runner.temp }}/unit-junit.xml
-      - name: Normalize unit-test result
-        if: always() && steps.request.outputs.test_type == 'Unit Test'
-        run: .venv/bin/python -m test_envs.tools.result_normalizer ${{ runner.temp }}/unit-junit.xml --test-id UNIT-TEST
-      - name: Run mock CT
-        if: steps.request.outputs.test_type != 'Unit Test'
-        run: .venv/bin/python -m pytest test_envs/tests/pytest/test_cases --test-id "${TEST_ID}" -m ct -s
-      - name: Analyze and generate reports
+        run: python -m test_envs.tools.issue_parser
+
+  test:
+    name: ${{ needs.request.outputs.test_type }} / ${{ needs.request.outputs.runner }}
+    needs: request
+    runs-on: ${{ fromJSON(needs.request.outputs.runner_labels) }}
+    timeout-minutes: 60
+    env:
+      TEST_TYPE: ${{ needs.request.outputs.test_type }}
+      TEST_ID: ${{ needs.request.outputs.test_id }}
+      FIXTURE_MODE: ${{ needs.request.outputs.fixture_mode }}
+      UNITTEST_SCOPE: ${{ needs.request.outputs.unittest_scope }}
+      UNITTEST_TARGET: ${{ needs.request.outputs.unittest_target }}
+      COVERAGE_MODE: ${{ needs.request.outputs.coverage }}
+      REPORT_MKDOCS: ${{ needs.request.outputs.report_mkdocs }}
+      REPORT_HTML: ${{ needs.request.outputs.report_html }}
+      REPORT_DOCX: ${{ needs.request.outputs.report_docx }}
+      REQUEST_REF: ${{ needs.request.outputs.request_ref }}
+      ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+      GITHUB_RUN_ID: ${{ github.run_id }}
+      GITHUB_SHA: ${{ github.sha }}
+    steps:
+      - name: Checkout requested revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.request.outputs.request_ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Create project environment
+        shell: pwsh
+        run: |
+          if (-not (Test-Path .venv)) {
+            python -m venv .venv
+          }
+          $python = if ($env:RUNNER_OS -eq "Windows") {
+            ".\.venv\Scripts\python.exe"
+          } else {
+            "./.venv/bin/python"
+          }
+          "VENV_PYTHON=$python" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          & $python -m pip install --upgrade pip
+          & $python -m pip install -r requirements.txt
+
+      - name: Show request
+        shell: pwsh
+        run: |
+          Write-Host "Test Type: $env:TEST_TYPE"
+          Write-Host "TEST ID: $env:TEST_ID"
+          Write-Host "Fixture Mode: $env:FIXTURE_MODE"
+          Write-Host "Unittest Scope: $env:UNITTEST_SCOPE"
+          Write-Host "Runner: $env:RUNNER_NAME / $env:RUNNER_OS"
+          Write-Host "Coverage: $env:COVERAGE_MODE"
+          Write-Host "Revision: $env:REQUEST_REF"
+
+      - name: Mark test start
+        shell: pwsh
+        run: |
+          $marker = Join-Path $env:RUNNER_TEMP "test-request-${{ github.run_id }}.marker"
+          Set-Content -Path $marker -Value "started"
+          "TEST_START_MARKER=$marker" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Run requested test
+        shell: pwsh
+        run: |
+          $coverageArgs = @()
+          if ($env:COVERAGE_MODE -eq "Terminal missing-lines report") {
+            $coverageArgs = @("--cov=test_envs", "--cov-report=term-missing")
+          } elseif ($env:COVERAGE_MODE -eq "HTML coverage report") {
+            $coverageArgs = @("--cov=test_envs", "--cov-report=term-missing", "--cov-report=html")
+          }
+
+          if ($env:TEST_TYPE -eq "Unit Test") {
+            $target = switch ($env:UNITTEST_SCOPE) {
+              "CT Framework Python" { "test_envs/tests/unittest/ct_framework/python" }
+              "One test file or function" { $env:UNITTEST_TARGET }
+              default { "test_envs/tests/unittest" }
+            }
+            if ($target -notmatch '^test_envs[/\\]tests[/\\]unittest(?:[/\\]|$)') {
+              throw "Unittest target must stay under test_envs/tests/unittest"
+            }
+            & $env:VENV_PYTHON -m pytest -p no:cacheprovider $target -s @coverageArgs
+          } else {
+            & $env:VENV_PYTHON -m pytest -p no:cacheprovider test_envs/tests/pytest/test_cases `
+              --test-id $env:TEST_ID --fixture-mode $env:FIXTURE_MODE -m ct -s @coverageArgs
+          }
+          exit $LASTEXITCODE
+
+      - name: Locate current result
+        id: result
         if: always()
+        shell: pwsh
+        run: |
+          if (-not $env:TEST_START_MARKER -or -not (Test-Path $env:TEST_START_MARKER)) {
+            "found=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            exit 0
+          }
+          $markerTime = (Get-Item $env:TEST_START_MARKER).LastWriteTimeUtc
+          $root = if ($env:TEST_TYPE -eq "Unit Test") {
+            "test_envs/reports/results/unittest"
+          } else {
+            "test_envs/reports/results/pytest/test_cases/$env:TEST_ID"
+          }
+          $result = Get-ChildItem $root -Filter "*_result.json" -File -Recurse -ErrorAction SilentlyContinue |
+            Where-Object { $_.LastWriteTimeUtc -ge $markerTime } |
+            Sort-Object LastWriteTimeUtc |
+            Select-Object -Last 1
+          if ($null -eq $result) {
+            "found=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          } else {
+            "found=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            "path=$($result.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          }
+
+      - name: Analyze and generate Markdown
+        id: report
+        if: always() && steps.result.outputs.found == 'true'
+        continue-on-error: true
+        shell: pwsh
         env:
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
-          GITHUB_SHA: ${{ github.sha }}
-          RUNNER_NAME: ${{ runner.name }}
-        run: .venv/bin/python -m test_envs.tools.pipeline --docs
-      - name: Comment on request issue
-        if: always() && github.event.issue.number
+          RESULT_PATH: ${{ steps.result.outputs.path }}
+        run: |
+          $arguments = @("-m", "test_envs.tools.pipeline", "--result-path", $env:RESULT_PATH)
+          if ($env:REPORT_MKDOCS -eq "true") {
+            $arguments += "--docs"
+          }
+          & $env:VENV_PYTHON @arguments
+
+      - name: Convert latest Markdown to HTML
+        if: always() && steps.report.outcome == 'success' && needs.request.outputs.report_html == 'true'
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          & $env:VENV_PYTHON -m test_envs.tools.pandoc_reporter --latest --format html
+
+      - name: Convert latest Markdown to DOCX
+        if: always() && steps.report.outcome == 'success' && needs.request.outputs.report_docx == 'true'
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          & $env:VENV_PYTHON -m test_envs.tools.pandoc_reporter --latest --format docx
+
+      - name: Update Issue with test result
+        if: always() && env.ISSUE_NUMBER != '' && steps.result.outputs.found == 'true'
+        shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-        run: .venv/bin/python -m test_envs.tools.github_reporter --latest --issue "${{ env.ISSUE_NUMBER }}"
-      - name: Upload CT evidence
+          RESULT_PATH: ${{ steps.result.outputs.path }}
+        run: |
+          & $env:VENV_PYTHON -m test_envs.tools.github_reporter `
+            --result-path $env:RESULT_PATH `
+            --issue $env:ISSUE_NUMBER
+
+      - name: Update Issue when no result was captured
+        if: always() && env.ISSUE_NUMBER != '' && steps.result.outputs.found != 'true'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $python = if ($env:VENV_PYTHON) { $env:VENV_PYTHON } else { "python" }
+          & $python -m test_envs.tools.github_reporter `
+            --message "The requested test ended before a normalized result could be captured. Review the workflow run and artifacts." `
+            --issue $env:ISSUE_NUMBER
+
+      - name: Upload test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.TEST_ID }}-${{ github.run_id }}
+          name: test-request-${{ github.run_id }}
+          if-no-files-found: warn
           path: |
             test_envs/reports/
             docs/tests/pytest/
             docs/tests/unittest/
-          if-no-files-found: warn
+            .coverage
+            htmlcov/

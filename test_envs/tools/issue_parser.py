@@ -7,6 +7,14 @@ import re
 from pathlib import Path
 
 
+RUNNER_LABELS = {
+    "Default": ["ubuntu-latest"],
+    "Linux": ["ubuntu-latest"],
+    "Windows": ["windows-latest"],
+    "Self-hosted HIL": ["self-hosted", "hw-test"],
+}
+
+
 def parse_issue_body(body: str) -> dict[str, str]:
     fields: dict[str, str] = {}
     parts = re.split(r"^###\s+", body, flags=re.MULTILINE)
@@ -19,17 +27,61 @@ def parse_issue_body(body: str) -> dict[str, str]:
     return fields
 
 
+def _first_line(value: str, default: str) -> str:
+    for line in value.splitlines():
+        selected = line.strip()
+        if selected and selected != "_No response_":
+            return selected
+    return default
+
+
+def _checked(value: str, label: str) -> str:
+    return str(bool(re.search(rf"^- \[[xX]\]\s+{re.escape(label)}\s*$", value, re.MULTILINE))).lower()
+
+
+def request_configuration(values: dict[str, str]) -> dict[str, str]:
+    runner = values.get("Runner", values.get("runner", "Default"))
+    if runner not in RUNNER_LABELS:
+        runner = "Default"
+    reports = values.get("Report Outputs", values.get("reports", ""))
+    test_type = values.get("Test Type", values.get("test_type", "pytest / CT"))
+    unittest_target = _first_line(
+        values.get("Unittest Target", values.get("unittest_target", "")),
+        "test_envs/tests/unittest",
+    )
+    if unittest_target.upper() == "N/A":
+        unittest_target = "test_envs/tests/unittest"
+    return {
+        "test_type": test_type,
+        "category": values.get("Test Category", values.get("test_category", "Timing")),
+        "test_id": values.get("Test ID", values.get("test_id", "CT-UART-001")),
+        "fixture_mode": values.get("Fixture Mode", values.get("fixture_mode", "marker")),
+        "unittest_scope": values.get("Unittest Scope", values.get("unittest_scope", "All Unittest")),
+        "unittest_target": unittest_target,
+        "runner": runner,
+        "runner_labels": json.dumps(RUNNER_LABELS[runner], separators=(",", ":")),
+        "request_ref": values.get("Branch / Tag / Commit", values.get("request_ref", "main")),
+        "coverage": values.get("Test Coverage", values.get("coverage", "No coverage")),
+        "report_mkdocs": _checked(reports, "MkDocs Markdown"),
+        "report_html": _checked(reports, "Pandoc HTML"),
+        "report_docx": _checked(reports, "Pandoc DOCX"),
+    }
+
+
 def event_configuration(event_path: str | Path) -> dict[str, str]:
     event = json.loads(Path(event_path).read_text(encoding="utf-8"))
     if "issue" in event:
-        fields = parse_issue_body(event["issue"].get("body", ""))
-        return {
-            "test_type": fields.get("Test Type", "pytest / CT"),
-            "category": fields.get("Test Category", "Timing"),
-            "runner": fields.get("Runner", "Default"),
-        }
-    inputs = event.get("inputs", {})
-    return {"test_type": "pytest / CT", "category": "Timing", "runner": inputs.get("runner", "Default")}
+        return request_configuration(parse_issue_body(event["issue"].get("body", "")))
+    inputs = {str(key): str(value) for key, value in event.get("inputs", {}).items()}
+    report_values = []
+    if inputs.get("report_mkdocs", "true").lower() == "true":
+        report_values.append("- [x] MkDocs Markdown")
+    if inputs.get("report_html", "false").lower() == "true":
+        report_values.append("- [x] Pandoc HTML")
+    if inputs.get("report_docx", "false").lower() == "true":
+        report_values.append("- [x] Pandoc DOCX")
+    inputs["reports"] = "\n".join(report_values)
+    return request_configuration(inputs)
 
 
 def main() -> None:

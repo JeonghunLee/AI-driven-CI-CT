@@ -86,13 +86,19 @@ def _consecutive_failures(store: ResultStore, test_id: str) -> int:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Analyze the latest test and create a Markdown-first report")
     parser.add_argument("--latest", action="store_true", help="Compatibility flag; latest is always processed")
+    parser.add_argument("--result-path", help="Process one explicit normalized result JSON")
     parser.add_argument("--docs", action="store_true", help="Also publish the canonical Markdown into docs/tests")
     parser.add_argument("--source-review", action="store_true", help="Include the local git diff in Local LLM analysis")
     parser.add_argument("--model", help="Override test_envs/configs/config.json for this analysis")
     args = parser.parse_args()
     print(
         json.dumps(
-            run(publish_docs=args.docs, review_source=args.source_review, model=args.model),
+            run(
+                publish_docs=args.docs,
+                review_source=args.source_review,
+                model=args.model,
+                result_path=args.result_path,
+            ),
             indent=2,
             ensure_ascii=False,
         )

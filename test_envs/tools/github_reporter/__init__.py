@@ -17,7 +17,10 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
     run_id = os.getenv("GITHUB_RUN_ID")
     artifact = f"https://github.com/{repository}/actions/runs/{run_id}" if run_id else "Available in the workflow run"
     report_type = "unittest" if result.category.lower() == "unit" else "pytest"
-    mkdocs_source = f"docs/tests/{report_type}/{result.test_id}.md"
+    is_unittest = report_type == "unittest"
+    mkdocs_name = f"{result.execution_id}.md" if is_unittest else f"{result.test_id}.md"
+    mkdocs_source = f"docs/tests/{report_type}/{mkdocs_name}"
+    markdown_group = "unittest" if is_unittest else result.test_id
     warnings = "\n".join(
         f"- {item.get('severity', 'Important')}: {item.get('message', '')}" for item in analysis.warnings
     ) or "- None"
@@ -41,17 +44,17 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
 ### Warning Summary
 {warnings}
 
-### AI Analysis
+### Analysis
 {analysis.summary}
 
 - Classification: {analysis.classification}
 - Confidence: {analysis.confidence:.2f}
-- Local LLM analyzer: {analysis.source}
+- Local LLM analyzer: {"Not used" if is_unittest else analysis.source}
 
 ### Evidence
 - [Workflow run and artifacts]({artifact})
 - MkDocs source: `{mkdocs_source}`
-- Markdown result: `test_envs/reports/markdown/{result.test_id}/{result.execution_id}_result.md`
+- Markdown result: `test_envs/reports/markdown/{markdown_group}/{result.execution_id}_result.md`
 - Commit: `{result.commit}`
 - Branch: `{result.branch}`
 - Runner: {result.runner}

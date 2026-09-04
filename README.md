@@ -369,7 +369,8 @@ test_envs/reports/
 
 | Workload | Runner |
 |---|---|
-| Unit Test | GitHub-hosted |
-| Mock CT | GitHub-hosted |
-| USB / JTAG / vendor tool / internal network | `[self-hosted, hw-test]` |
-| Special workflow | `Optional Special Environment Test` |
+| Test request | `.github/ISSUE_TEMPLATE/test_request.yml` |
+| Unit Test / Mock CT / Linux | `ubuntu-latest` |
+| Windows | `windows-latest` |
+| HIL equipment and interfaces | `[self-hosted, hw-test]` |
+| Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |

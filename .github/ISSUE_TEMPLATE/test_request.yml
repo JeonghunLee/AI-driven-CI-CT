@@ -1,0 +1,184 @@
+name: Pytest / Unittest Request
+description: Request a Pytest CT or Unittest execution on a GitHub runner
+title: "[TEST] "
+labels:
+  - test-request-runner
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request one Pytest CT or Unittest execution.
+        Check the target environment with `.github/ISSUE_TEMPLATE/test_check.md` before submitting the request.
+
+  - type: dropdown
+    id: template_version
+    attributes:
+      label: Template Version
+      options:
+        - v0.1.0
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_type
+    attributes:
+      label: Test Type
+      description: Pytest runs Fixture-based CT; Unit Test runs the unittest framework through pytest.
+      options:
+        - pytest / CT
+        - Unit Test
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_category
+    attributes:
+      label: Test Category
+      description: Select Unit for a Unit Test request.
+      options:
+        - Timing
+        - Communication
+        - Functional
+        - Performance
+        - Stability
+        - Regression
+        - Unit
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_id
+    attributes:
+      label: Test ID
+      description: Select Not applicable for a Unit Test request.
+      options:
+        - CT-UART-001
+        - CT-USB-001
+        - CT-NETWORK-001
+        - Not applicable - Unit Test
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: fixture_mode
+    attributes:
+      label: Fixture Mode
+      description: Marker resolves to the mock or hil value declared by the Pytest CT marker.
+      options:
+        - marker
+        - mock
+        - hil
+        - Not applicable - Unit Test
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: unittest_scope
+    attributes:
+      label: Unittest Scope
+      description: Select Not applicable for a Pytest CT request.
+      options:
+        - Not applicable - Pytest CT
+        - All Unittest
+        - CT Framework Python
+        - One test file or function
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runner
+    attributes:
+      label: Runner
+      description: HIL requires a compatible self-hosted runner and attached hardware.
+      options:
+        - Default
+        - Windows
+        - Linux
+        - Self-hosted HIL
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: request_ref
+    attributes:
+      label: Branch / Tag / Commit
+      value: main
+      placeholder: main
+    validations:
+      required: true
+
+  - type: dropdown
+    id: coverage
+    attributes:
+      label: Test Coverage
+      options:
+        - No coverage
+        - Terminal missing-lines report
+        - HTML coverage report
+      default: 0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: reports
+    attributes:
+      label: Report Outputs
+      description: Pytest uses Local LLM analysis; Unittest does not use Local LLM.
+      options:
+        - label: MkDocs Markdown
+        - label: Pandoc HTML
+        - label: Pandoc DOCX
+
+  - type: textarea
+    id: unittest_target
+    attributes:
+      label: Unittest Target
+      description: For one-file or one-function execution, enter the pytest path or node ID. Otherwise enter N/A.
+      placeholder: test_envs/tests/unittest/ct_framework/python/test_configuration.py::ConfigurationTests
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Test Environment
+      description: Record the OS, Python, device, interface, equipment, firmware, and relevant configuration.
+      placeholder: |
+        OS:
+        Python:
+        Device / Board:
+        Interface:
+        Equipment:
+        Firmware:
+        Notes:
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Expected Result
+      description: Describe the expected behavior, measurements, or pass condition.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Additional Evidence
+      description: Add logs, screenshots, related issues, or source paths.
+
+  - type: checkboxes
+    id: environment_check
+    attributes:
+      label: Environment Check
+      options:
+        - label: I completed the applicable checks in `.github/ISSUE_TEMPLATE/test_check.md`.
+          required: true

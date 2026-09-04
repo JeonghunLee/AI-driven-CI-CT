@@ -126,9 +126,10 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    GITHUB[GitHub Actions]
-    CONTINUOUS[continuous-test.yml]
-    SPECIAL[special-environment-test.yml]
+    REQUEST[test_request.yml Issue]
+    WORKFLOW[continuous-test.yml]
+    PARSER[test_envs.tools.issue_parser]
+    RUNNER[Hosted or Self-hosted Runner]
     ENV[TEST System Environment]
     PYTEST[Pytest Operation]
     UNITTEST[Unittest Operation]
@@ -141,21 +142,16 @@ flowchart TD
     ISSUE[GitHub Issue Comment]
     ARTIFACT[GitHub Artifact]
 
-    GITHUB --> CONTINUOUS
-    GITHUB --> SPECIAL
-    CONTINUOUS --> ENV
-    SPECIAL --> ENV
-
-    CONTINUOUS -->|Mock CT| PYTEST
-    CONTINUOUS -->|Unit Test| UNITTEST
-    SPECIAL -->|Special pytest path| PYTEST
+    REQUEST --> WORKFLOW --> PARSER --> RUNNER --> ENV
+    ENV -->|Fixture-based CT| PYTEST
+    ENV -->|Function-based Unit Test| UNITTEST
 
     PYTEST --> PYTEST_RESULT --> LLM --> REPORTER
     UNITTEST --> UNITTEST_RESULT --> REPORTER
 
     REPORTER --> MARKDOWN
     MARKDOWN --> MKDOCS
-    CONTINUOUS --> ISSUE
+    REPORTER --> ISSUE
     MARKDOWN --> ARTIFACT
 
     classDef testResults fill:#fff3bf,stroke:#f08c00,stroke-width:4px,color:#5f3d00,font-weight:bold
@@ -166,8 +162,8 @@ flowchart TD
 
 | GitHub Actions entry | Execution scope |
 |---|---|
-| `continuous-test.yml` | Runs unittest or Mock CT on a GitHub-hosted Ubuntu runner, generates reports, comments on issue requests, and uploads evidence |
-| `special-environment-test.yml` | Runs a selected pytest path on a self-hosted hardware runner, generates a report, and uploads evidence |
+| `test_request.yml` | Collects Pytest/Unittest, runner, revision, Coverage, and Report selections |
+| `continuous-test.yml` | Routes the request to a hosted or self-hosted runner, executes the test, generates reports, updates the Issue, and uploads evidence |
 | Common Markdown reporter | `test_envs/tools/mkdocs_reporter` renders both result types before MkDocs publication and artifact upload |
 
 <br/>
@@ -180,41 +176,20 @@ flowchart TD
 
 | Item | Current behavior |
 |---|---|
-| Workflow name | `Continuous Test` |
-| Trigger | Issue labeled `run-test` or manual `workflow_dispatch` |
-| Job condition | Manual run, or the added issue label is exactly `run-test` |
-| Runner | `ubuntu-latest` |
-| Timeout | 30 minutes |
+| Workflow name | `Test Request` |
+| Trigger | Test Request Issue opened, edited, or reopened; `run-test` label; or manual `workflow_dispatch` |
+| Request Job | Parses the Issue Form and emits normalized execution settings |
+| Runner routing | Default/Linux → `ubuntu-latest`; Windows → `windows-latest`; HIL → `[self-hosted, hw-test]` |
+| Timeout | 60 minutes |
 | Permissions | Repository contents read; issues write |
 | Python | `actions/setup-python@v5`, Python 3.12, pip cache |
 | Environment | Creates `.venv` and installs `requirements.txt` |
-| Request routing | `test_envs.tools.issue_parser` selects Unit Test or CT |
-| Unit Test | pytest over `test_envs/tests/unittest`, then JUnit normalization |
-| CT | Selected TEST ID under `test_envs/tests/pytest/test_cases`; current marker defaults produce Mock CT |
-| Report | `test_envs.tools.pipeline --docs` runs even after test failure |
-| Issue output | `test_envs.tools.github_reporter` comments when an issue number exists |
-| Artifact | Uploads `test_envs/reports/` and published pytest/unittest documents |
-
-The manual `runner` input currently accepts `Default`, `Windows`, or `Linux`, but the job's `runs-on` remains fixed to `ubuntu-latest`; that input does not select a runner in the current workflow.
-
-<br/>
-
-### `special-environment-test.yml`
-
-<br/>
-
-| Item | Current behavior |
-|---|---|
-| Workflow name | `Optional Special Environment Test` |
-| Trigger | Manual `workflow_dispatch` only |
-| Input | `test_path`, default `test_envs/tests/pytest` |
-| Runner | `[self-hosted, hw-test]` |
-| Timeout | 60 minutes |
-| Shell | PowerShell (`pwsh`) |
-| Environment | Reuses `.venv` when present or creates it, then installs `requirements.txt` |
-| Test | Executes pytest for the selected special hardware/environment path |
-| Report | `test_envs.tools.pipeline --docs` runs even after test failure |
-| Artifact | Uploads `test_envs/reports/` as `special-test-<run-id>` |
+| Unit Test | Runs the requested Unittest scope through pytest without Local LLM analysis |
+| Pytest CT | Runs the selected TEST ID and Fixture mode; HIL can route to the hardware runner |
+| Coverage | Optional terminal or HTML `pytest-cov` report |
+| Report | Processes the explicit result; optionally publishes MkDocs and converts Pandoc HTML/DOCX |
+| Issue output | `test_envs.tools.github_reporter` comments on success, test failure, report failure, or missing result |
+| Artifact | Uploads results, MkDocs pages, `.coverage`, and `htmlcov/` |
 
 <br/>
 
@@ -224,8 +199,7 @@ The manual `runner` input currently accepts `Default`, `Windows`, or `Linux`, bu
 
 | Workflow | Primary role | Local LLM rule |
 |---|---|---|
-| `continuous-test.yml` | Repeatable hosted Unit Test and Mock CT automation | Used only when the selected result is pytest CT; unittest bypasses it |
-| `special-environment-test.yml` | Optional hardware, vendor-tool, internal-network, or machine-specific testing | Used for pytest CT results; unavailable Ollama falls back to deterministic analysis |
+| `continuous-test.yml` | Unified hosted, Windows, and self-hosted HIL test-request automation | Pytest uses Local LLM with deterministic fallback; Unittest bypasses Local LLM |
 
 <br/>
 
@@ -236,9 +210,11 @@ The manual `runner` input currently accepts `Default`, `Windows`, or `Linux`, bu
 ```
 .
 ├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── test_request.yml
+│   │   └── test_check.md
 │   └── workflows/
 │       ├── continuous-test.yml
-│       ├── special-environment-test.yml
 │       └── github_pages.yaml
 ├── .vscode/
 │   ├── settings.json
