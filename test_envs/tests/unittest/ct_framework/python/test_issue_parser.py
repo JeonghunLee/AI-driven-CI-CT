@@ -1,6 +1,8 @@
+import json
 import unittest
+from unittest.mock import patch
 
-from test_envs.tools.issue_parser import parse_issue_body, request_configuration
+from test_envs.tools.issue_parser import event_configuration, parse_issue_body, request_configuration
 
 
 class IssueParserTests(unittest.TestCase):
@@ -81,6 +83,19 @@ HTML coverage report
     def test_self_hosted_runner_requires_an_os(self) -> None:
         with self.assertRaisesRegex(ValueError, "unsupported runner"):
             request_configuration({"runner": "Self-hosted HIL"})
+
+    def test_environment_check_is_detected_from_issue_title(self) -> None:
+        event = {
+            "issue": {
+                "title": "[TEST-CHECK] hosted Linux",
+                "body": "### Runner\n\nGitHub-hosted Linux",
+                "labels": [],
+            }
+        }
+        with patch("test_envs.tools.issue_parser.Path.read_text", return_value=json.dumps(event)):
+            value = event_configuration("event.json")
+        self.assertEqual(value["request_kind"], "environment-check")
+        self.assertEqual(value["runner_labels"], '["ubuntu-latest"]')
 
 
 if __name__ == "__main__":

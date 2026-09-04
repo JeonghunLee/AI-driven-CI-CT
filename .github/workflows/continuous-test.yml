@@ -80,9 +80,14 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event.action == 'labeled' && github.event.label.name == 'run-test') ||
-      (github.event.action != 'labeled' && contains(github.event.issue.labels.*.name, 'test-request-runner'))
+      (github.event.action != 'labeled' &&
+        (contains(github.event.issue.labels.*.name, 'test-request-runner') ||
+         contains(github.event.issue.labels.*.name, 'test-check-runner') ||
+         startsWith(github.event.issue.title, '[TEST]') ||
+         startsWith(github.event.issue.title, '[TEST-CHECK]')))
     runs-on: ubuntu-latest
     outputs:
+      request_kind: ${{ steps.request.outputs.request_kind }}
       test_type: ${{ steps.request.outputs.test_type }}
       category: ${{ steps.request.outputs.category }}
       test_id: ${{ steps.request.outputs.test_id }}
@@ -115,6 +120,8 @@ jobs:
     runs-on: ${{ fromJSON(needs.request.outputs.runner_labels) }}
     timeout-minutes: 60
     env:
+      REQUEST_KIND: ${{ needs.request.outputs.request_kind }}
+      REQUESTED_RUNNER: ${{ needs.request.outputs.runner }}
       TEST_TYPE: ${{ needs.request.outputs.test_type }}
       TEST_ID: ${{ needs.request.outputs.test_id }}
       FIXTURE_MODE: ${{ needs.request.outputs.fixture_mode }}
@@ -142,6 +149,7 @@ jobs:
           cache: pip
 
       - name: Create project environment
+        if: env.REQUEST_KIND == 'test'
         shell: pwsh
         run: |
           if (-not (Test-Path .venv)) {
@@ -157,6 +165,7 @@ jobs:
           & $python -m pip install -r requirements.txt
 
       - name: Show request
+        if: env.REQUEST_KIND == 'test'
         shell: pwsh
         run: |
           Write-Host "Test Type: $env:TEST_TYPE"
@@ -168,6 +177,7 @@ jobs:
           Write-Host "Revision: $env:REQUEST_REF"
 
       - name: Mark test start
+        if: env.REQUEST_KIND == 'test'
         shell: pwsh
         run: |
           $marker = Join-Path $env:RUNNER_TEMP "test-request-${{ github.run_id }}.marker"
@@ -175,6 +185,7 @@ jobs:
           "TEST_START_MARKER=$marker" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Run requested test
+        if: env.REQUEST_KIND == 'test'
         shell: pwsh
         run: |
           $coverageArgs = @()
@@ -202,7 +213,7 @@ jobs:
 
       - name: Locate current result
         id: result
-        if: always()
+        if: always() && env.REQUEST_KIND == 'test'
         shell: pwsh
         run: |
           if (-not $env:TEST_START_MARKER -or -not (Test-Path $env:TEST_START_MARKER)) {
@@ -228,7 +239,7 @@ jobs:
 
       - name: Analyze and generate Markdown
         id: report
-        if: always() && steps.result.outputs.found == 'true'
+        if: always() && env.REQUEST_KIND == 'test' && steps.result.outputs.found == 'true'
         continue-on-error: true
         shell: pwsh
         env:
@@ -266,7 +277,7 @@ jobs:
             --issue $env:ISSUE_NUMBER
 
       - name: Update Issue when no result was captured
-        if: always() && env.ISSUE_NUMBER != '' && steps.result.outputs.found != 'true'
+        if: always() && env.REQUEST_KIND == 'test' && env.ISSUE_NUMBER != '' && steps.result.outputs.found != 'true'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
@@ -275,6 +286,29 @@ jobs:
           & $python -m test_envs.tools.github_reporter `
             --message "The requested test ended before a normalized result could be captured. Review the workflow run and artifacts." `
             --issue $env:ISSUE_NUMBER
+
+      - name: Detect environment and update Issue
+        id: environment_check
+        if: env.REQUEST_KIND == 'environment-check' && env.ISSUE_NUMBER != ''
+        continue-on-error: true
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -m test_envs.tools.github_reporter `
+            --environment-check `
+            --issue $env:ISSUE_NUMBER
+
+      - name: Update Issue when environment detection failed
+        if: always() && env.REQUEST_KIND == 'environment-check' && env.ISSUE_NUMBER != '' && steps.environment_check.outcome != 'success'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -m test_envs.tools.github_reporter `
+            --message "The runner environment check failed. Review the workflow run for setup or detection errors." `
+            --issue $env:ISSUE_NUMBER
+          exit 1
 
       - name: Upload test evidence
         if: always()

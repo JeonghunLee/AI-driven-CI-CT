@@ -127,22 +127,29 @@ flowchart TD
 ```mermaid
 flowchart TD
     REQUEST[test_request.yml Issue]
+    CHECK_REQUEST[test_check.yml Issue]
     WORKFLOW[continuous-test.yml]
     PARSER[test_envs.tools.issue_parser]
     RUNNER[Hosted or Self-hosted Runner]
     ENV[TEST System Environment]
+    ENV_CHECK[Automatic OS / Python / Ollama Check]
     PYTEST[Pytest Operation]
     UNITTEST[Unittest Operation]
     PYTEST_RESULT[Pytest Result]
     UNITTEST_RESULT[Unittest Result]
     LLM[Local LLM]
     REPORTER["test_envs/tools/mkdocs_reporter<br/>MarkdownReporter"]
+    GITHUB_REPORTER[test_envs.tools.github_reporter]
     MARKDOWN["Pytest / Unittest Markdown"]
     MKDOCS["MkDocs (TEST Results)"]
     ISSUE[GitHub Issue Comment]
     ARTIFACT[GitHub Artifact]
 
-    REQUEST --> WORKFLOW --> PARSER --> RUNNER --> ENV
+    REQUEST --> WORKFLOW
+    CHECK_REQUEST --> WORKFLOW
+    WORKFLOW --> PARSER --> RUNNER
+    RUNNER -->|Test request| ENV
+    RUNNER -->|TEST-CHECK| ENV_CHECK --> GITHUB_REPORTER --> ISSUE
     ENV -->|Fixture-based CT| PYTEST
     ENV -->|Function-based Unit Test| UNITTEST
 
@@ -151,7 +158,7 @@ flowchart TD
 
     REPORTER --> MARKDOWN
     MARKDOWN --> MKDOCS
-    REPORTER --> ISSUE
+    REPORTER --> GITHUB_REPORTER
     MARKDOWN --> ARTIFACT
 
     classDef testResults fill:#fff3bf,stroke:#f08c00,stroke-width:4px,color:#5f3d00,font-weight:bold
@@ -163,6 +170,7 @@ flowchart TD
 | GitHub Actions entry | Execution scope |
 |---|---|
 | `test_request.yml` | Collects Pytest/Unittest, runner, revision, Coverage, and Report selections |
+| `test_check.yml` | Selects only a runner; the workflow detects its host type, OS, Python, and Ollama state and comments on the Issue |
 | `continuous-test.yml` | Routes the request to a hosted or self-hosted runner, executes the test, generates reports, updates the Issue, and uploads evidence |
 | Common Markdown reporter | `test_envs/tools/mkdocs_reporter` renders both result types before MkDocs publication and artifact upload |
 

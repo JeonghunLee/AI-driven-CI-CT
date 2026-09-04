@@ -4,10 +4,11 @@ import argparse
 import json
 from pathlib import Path
 
+from test_envs.tools.configuration import build_check
 from test_envs.tools.local_llm import Analysis
 from test_envs.tools.result_normalizer import ResultStore
 
-from . import post_comment, render_comment
+from . import post_comment, render_comment, render_environment_comment
 
 
 def main() -> None:
@@ -16,8 +17,16 @@ def main() -> None:
     parser.add_argument("--result-path", help="Use one explicit normalized result JSON")
     parser.add_argument("--issue", required=True, type=int)
     parser.add_argument("--message", help="Post a workflow error when no normalized result exists")
+    parser.add_argument("--environment-check", action="store_true", help="Detect this runner and post its environment")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
+    if args.environment_check:
+        comment = render_environment_comment(build_check())
+        if args.dry_run:
+            print(comment)
+        else:
+            post_comment(args.issue, comment)
+        return
     if args.message:
         comment = f"## Test Result\n\n**Result: ERROR**\n\n{args.message}"
         if args.dry_run:

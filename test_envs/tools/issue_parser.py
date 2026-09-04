@@ -79,7 +79,16 @@ def request_configuration(values: dict[str, str]) -> dict[str, str]:
 def event_configuration(event_path: str | Path) -> dict[str, str]:
     event = json.loads(Path(event_path).read_text(encoding="utf-8"))
     if "issue" in event:
-        return request_configuration(parse_issue_body(event["issue"].get("body", "")))
+        config = request_configuration(parse_issue_body(event["issue"].get("body", "")))
+        labels = {
+            str(item.get("name", ""))
+            for item in event["issue"].get("labels", [])
+            if isinstance(item, dict)
+        }
+        title = str(event["issue"].get("title", ""))
+        is_environment_check = "test-check-runner" in labels or title.startswith("[TEST-CHECK]")
+        config["request_kind"] = "environment-check" if is_environment_check else "test"
+        return config
     inputs = {str(key): str(value) for key, value in event.get("inputs", {}).items()}
     report_values = []
     if inputs.get("report_mkdocs", "true").lower() == "true":
@@ -89,7 +98,9 @@ def event_configuration(event_path: str | Path) -> dict[str, str]:
     if inputs.get("report_docx", "false").lower() == "true":
         report_values.append("- [x] Pandoc DOCX")
     inputs["reports"] = "\n".join(report_values)
-    return request_configuration(inputs)
+    config = request_configuration(inputs)
+    config["request_kind"] = "test"
+    return config
 
 
 def main() -> None:

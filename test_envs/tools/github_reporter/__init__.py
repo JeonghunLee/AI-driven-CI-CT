@@ -9,6 +9,51 @@ from test_envs.tools.local_llm import Analysis
 from test_envs.tools.result_normalizer import ResultRecord
 
 
+def render_environment_comment(check: dict[str, Any]) -> str:
+    requested_runner = os.getenv("REQUESTED_RUNNER", "unknown")
+    if requested_runner.startswith("Self-hosted"):
+        inferred_environment = "self-hosted"
+    elif requested_runner.startswith("GitHub-hosted"):
+        inferred_environment = "github-hosted"
+    else:
+        inferred_environment = "unknown"
+    runner_environment = os.getenv("RUNNER_ENVIRONMENT", inferred_environment)
+    runner_name = os.getenv("RUNNER_NAME", "unknown")
+    runner_os = os.getenv("RUNNER_OS", str(check.get("os", {}).get("detected", "unknown")))
+    runner_arch = os.getenv("RUNNER_ARCH", "unknown")
+    os_check = dict(check.get("os", {}))
+    python_check = dict(check.get("python", {}))
+    ollama_check = dict(check.get("ollama", {}))
+    return f"""## Test Environment Check
+
+**Result: CHECKED**
+
+### Host
+- Requested: `{requested_runner}`
+- Type: `{runner_environment}`
+- Runner: `{runner_name}`
+- Runner OS: `{runner_os}`
+- Architecture: `{runner_arch}`
+
+### Operating System
+- Detected: `{os_check.get('detected', 'unknown')}`
+- Platform: `{os_check.get('name', 'unknown')}`
+
+### Python
+- Installed: `{python_check.get('installed', False)}`
+- Version: `{python_check.get('version', 'unknown')}`
+- Executable: `{python_check.get('executable', 'unknown')}`
+
+### Ollama
+- Installed: `{ollama_check.get('installed', False)}`
+- API available: `{ollama_check.get('available', False)}`
+- Version: `{ollama_check.get('version') or 'Not available'}`
+- Endpoint: `{ollama_check.get('endpoint', 'unknown')}`
+- Selected model: `{ollama_check.get('selected_model') or 'Not configured'}`
+- Selected model installed: `{ollama_check.get('selected_model_installed', False)}`
+"""
+
+
 def render_comment(result: ResultRecord, analysis: Analysis) -> str:
     def rows(values: dict[str, Any]) -> str:
         return "\n".join(f"- {key}: {value}" for key, value in values.items()) or "- None"
@@ -83,4 +128,4 @@ def post_comment(issue: int, body: str, repository: str | None = None, token: st
             raise RuntimeError(f"GitHub returned HTTP {response.status}")
 
 
-__all__ = ["post_comment", "render_comment"]
+__all__ = ["post_comment", "render_comment", "render_environment_comment"]

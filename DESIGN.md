@@ -723,6 +723,14 @@ Local LLM
 <br/>
 
 ```text
+test_check.yml Issue
+        |
+        v
+continuous-test.yml --> selected runner --> automatic environment detection
+                                                |
+                                                v
+                                       github_reporter --> Issue comment
+
 test_request.yml Issue
         |
         v
@@ -760,7 +768,8 @@ test_envs.tools.pipeline
 | Automation item | Design rule |
 |---|---|
 | Request source | `.github/ISSUE_TEMPLATE/test_request.yml` |
-| Environment check form | `.github/ISSUE_TEMPLATE/test_check.yml` |
+| Environment check request | `.github/ISSUE_TEMPLATE/test_check.yml`; user selects only the runner |
+| Environment check result | Workflow detects host type, OS, Python, and Ollama and posts them through `github_reporter` |
 | Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
 | Automatic trigger | Request Issue opened, edited, or reopened |
 | Rerun trigger | Issue label `run-test` |
@@ -807,7 +816,7 @@ Excluded from GitHub Issue:
 | GitHub automation source | Role |
 |---|---|
 | `.github/ISSUE_TEMPLATE/test_request.yml` | Pytest/Unittest request form |
-| `.github/ISSUE_TEMPLATE/test_check.yml` | Host type, OS, Python, and Ollama environment form |
+| `.github/ISSUE_TEMPLATE/test_check.yml` | Runner-only request for automatic host type, OS, Python, and Ollama detection |
 | `.github/workflows/continuous-test.yml` | Unified request parsing, runner routing, test, report, Issue update, and artifact workflow |
 | `test_envs/tools/issue_parser.py` | Issue Form and manual input normalization |
 | `test_envs/tools/github_reporter/` | Result and workflow-error Issue comments |

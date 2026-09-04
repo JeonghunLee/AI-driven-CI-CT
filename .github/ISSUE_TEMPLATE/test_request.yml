@@ -180,5 +180,5 @@ body:
     attributes:
       label: Environment Check
       options:
-        - label: I completed `.github/ISSUE_TEMPLATE/test_check.yml` for the target host.
+        - label: I ran `.github/ISSUE_TEMPLATE/test_check.yml` and reviewed its automatic Issue comment.
           required: true

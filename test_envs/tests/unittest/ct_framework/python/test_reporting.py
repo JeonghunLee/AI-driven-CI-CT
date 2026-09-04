@@ -1,7 +1,8 @@
 import unittest
+from unittest.mock import patch
 
 from test_envs.tools.local_llm import Analysis
-from test_envs.tools.github_reporter import render_comment
+from test_envs.tools.github_reporter import render_comment, render_environment_comment
 from test_envs.tools.result_normalizer import ResultRecord
 
 
@@ -25,6 +26,27 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("Local LLM analyzer: Not used", comment)
         self.assertIn("docs/tests/unittest/20260904_120000_000001.md", comment)
         self.assertIn("reports/markdown/unittest/20260904_120000_000001_result.md", comment)
+
+    def test_environment_comment_contains_detected_runner_values(self) -> None:
+        check = {
+            "os": {"detected": "linux", "name": "Linux-test"},
+            "python": {"installed": True, "version": "3.12.0", "executable": "/python"},
+            "ollama": {"installed": False, "available": False, "endpoint": "http://127.0.0.1:11434"},
+        }
+        environment = {
+            "REQUESTED_RUNNER": "GitHub-hosted Linux",
+            "RUNNER_ENVIRONMENT": "github-hosted",
+            "RUNNER_NAME": "GitHub Actions 1",
+            "RUNNER_OS": "Linux",
+            "RUNNER_ARCH": "X64",
+        }
+        with patch.dict("os.environ", environment, clear=False):
+            comment = render_environment_comment(check)
+        self.assertIn("**Result: CHECKED**", comment)
+        self.assertIn("Requested: `GitHub-hosted Linux`", comment)
+        self.assertIn("Type: `github-hosted`", comment)
+        self.assertIn("Version: `3.12.0`", comment)
+        self.assertIn("API available: `False`", comment)
 
 
 if __name__ == "__main__":
