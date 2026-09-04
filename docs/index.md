@@ -126,40 +126,73 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    REQUEST[pytest_request.yml / unittest_request.yml Issues]
-    CHECK_REQUEST[test_check.yml Issue]
-    WORKFLOW[continuous-test.yml]
-    PARSER[test_envs.tools.issue_parser]
-    RUNNER[Hosted or Self-hosted Runner]
-    ENV[TEST System Environment]
-    ENV_CHECK[Automatic OS / Python / Ollama Check]
-    PYTEST[Pytest Operation]
-    UNITTEST[Unittest Operation]
-    PYTEST_RESULT[Pytest Result]
-    UNITTEST_RESULT[Unittest Result]
-    LLM[Local LLM]
-    REPORTER["test_envs/tools/mkdocs_reporter<br/>MarkdownReporter"]
-    GITHUB_REPORTER[test_envs.tools.github_reporter]
-    MARKDOWN["Pytest / Unittest Markdown"]
-    MKDOCS["MkDocs (TEST Results)"]
-    ISSUE[GitHub Issue Comment]
-    ARTIFACT[GitHub Artifact]
+    PUSH["Push to main<br/>Issue Form or Workflow files"]
+    PYTEST_ISSUE["pytest_request.yml<br/>Issue opened / edited / reopened"]
+    UNITTEST_ISSUE["unittest_request.yml<br/>Issue opened / edited / reopened"]
+    CHECK_ISSUE["test_check.yml<br/>Issue opened / edited / reopened"]
+    MANUAL[workflow_dispatch]
 
-    REQUEST --> WORKFLOW
-    CHECK_REQUEST --> WORKFLOW
-    WORKFLOW --> PARSER --> RUNNER
-    RUNNER -->|Test request| ENV
-    RUNNER -->|TEST-CHECK| ENV_CHECK --> GITHUB_REPORTER --> ISSUE
-    ENV -->|Fixture-based CT| PYTEST
-    ENV -->|Function-based Unittest| UNITTEST
+    subgraph LABEL_JOB["labels job · ubuntu-latest"]
+        LABELS["Create test-request-runner<br/>and test-check-runner labels"]
+    end
 
-    PYTEST --> PYTEST_RESULT --> LLM --> REPORTER
-    UNITTEST --> UNITTEST_RESULT --> REPORTER
+    subgraph REQUEST_JOB["request job · ubuntu-latest"]
+        CHECKOUT_REQUEST[Checkout]
+        APPLY_LABEL[Ensure and apply matching Issue label]
+        PARSER[test_envs.tools.issue_parser]
+        OUTPUTS["Normalize request_kind, test settings,<br/>revision, reports, and runner_labels"]
 
-    REPORTER --> MARKDOWN
-    MARKDOWN --> MKDOCS
-    REPORTER --> GITHUB_REPORTER
-    MARKDOWN --> ARTIFACT
+        CHECKOUT_REQUEST --> APPLY_LABEL --> PARSER --> OUTPUTS
+    end
+
+    subgraph TEST_JOB["test job · runs-on: runner_labels"]
+        CHECKOUT_TEST[Checkout requested revision]
+        SETUP_PYTHON[Setup Python 3.12]
+        REQUEST_KIND{request_kind}
+        ENV_CHECK["TEST-CHECK<br/>Host / OS / Python / Ollama"]
+        TEST_TYPE{test_type}
+        PYTEST["Pytest CT<br/>TEST ID + marker / mock / hil"]
+        UNITTEST["Unittest through pytest<br/>All or CT Framework"]
+        PYTEST_RESULT[Pytest Result]
+        UNITTEST_RESULT[Unittest Result]
+        COVERAGE[Optional Coverage]
+        PIPELINE[test_envs.tools.pipeline]
+        LLM["Local LLM<br/>Pytest only"]
+        REPORTER["test_envs/tools/mkdocs_reporter<br/>Canonical Markdown"]
+        MKDOCS["MkDocs (TEST Results)<br/>when report_mkdocs is enabled"]
+        PANDOC["test_envs.tools.pandoc_reporter<br/>optional HTML / DOCX"]
+        GITHUB_REPORTER[test_envs.tools.github_reporter]
+        ISSUE[GitHub Issue Comment]
+        ARTIFACT["GitHub Artifact<br/>results / reports / coverage"]
+
+        CHECKOUT_TEST --> SETUP_PYTHON --> REQUEST_KIND
+        REQUEST_KIND -->|environment-check| ENV_CHECK --> GITHUB_REPORTER
+        REQUEST_KIND -->|test| TEST_TYPE
+        TEST_TYPE -->|Pytest| PYTEST --> PYTEST_RESULT
+        TEST_TYPE -->|Unittest| UNITTEST --> UNITTEST_RESULT
+        PYTEST_RESULT --> COVERAGE
+        UNITTEST_RESULT --> COVERAGE
+        PYTEST_RESULT --> PIPELINE
+        UNITTEST_RESULT --> PIPELINE
+        PIPELINE -->|Pytest analysis| LLM --> REPORTER
+        PIPELINE -->|Unittest · no LLM| REPORTER
+        REPORTER -. report_mkdocs .-> MKDOCS
+        REPORTER -. report_html / report_docx .-> PANDOC
+        PIPELINE --> GITHUB_REPORTER --> ISSUE
+        PYTEST_RESULT --> ARTIFACT
+        UNITTEST_RESULT --> ARTIFACT
+        COVERAGE --> ARTIFACT
+        REPORTER --> ARTIFACT
+        MKDOCS --> ARTIFACT
+        PANDOC --> ARTIFACT
+    end
+
+    PUSH --> LABELS
+    PYTEST_ISSUE --> CHECKOUT_REQUEST
+    UNITTEST_ISSUE --> CHECKOUT_REQUEST
+    CHECK_ISSUE --> CHECKOUT_REQUEST
+    MANUAL --> CHECKOUT_REQUEST
+    OUTPUTS --> CHECKOUT_TEST
 
     classDef testResults fill:#fff3bf,stroke:#f08c00,stroke-width:4px,color:#5f3d00,font-weight:bold
     class MKDOCS testResults
@@ -173,7 +206,7 @@ flowchart TD
 | `unittest_request.yml` | Unittest-only form: All or CT Framework scope, runner, revision, Coverage, and optional Pandoc; no TEST ID, Fixture, Target, Evidence, or Expected Result |
 | `test_check.yml` | Selects only a runner; the workflow detects its host type, OS, Python, and Ollama state and comments on the Issue |
 | `continuous-test.yml` | Routes the request to a hosted or self-hosted runner, executes the test, generates reports, updates the Issue, and uploads evidence |
-| Common Markdown reporter | `test_envs/tools/mkdocs_reporter` renders both result types before MkDocs publication and artifact upload |
+| Common Markdown reporter | `test_envs/tools/mkdocs_reporter` always renders the canonical Markdown; MkDocs publication is enabled separately and the generated reports are uploaded as artifacts |
 
 <br/>
 
