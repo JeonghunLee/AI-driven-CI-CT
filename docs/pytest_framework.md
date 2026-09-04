@@ -184,6 +184,100 @@ FIXTURE_META = {
 
 `enabled: true` declares that a mode may be selected. It does not prove that the fixture has been wired to physical hardware. The current repository has no end-to-end executable HIL CT test case.
 
+<br/>
+
+## Fixture-Based Test Case Composition
+
+<br/>
+
+A CT Test Case does not create hardware or communication objects directly. It requests one numbered fixture, and that fixture composes the required interfaces and equipment for the selected test topology.
+
+<br/>
+
+```text
+Test Case
+   ├── @pytest.mark.ct
+   │   ├── TEST ID
+   │   ├── Fixture ID
+   │   └── Default mock or hil mode
+   ├── fixture_<NNN>
+   │   ├── Interface: DUT communication and data transfer
+   │   ├── Equipment: measurement, capture, or target control
+   │   └── connect → yield → disconnect lifecycle
+   └── ct_result
+       ├── metrics: interface and protocol measurements
+       └── statistics: equipment observations
+```
+
+<br/>
+
+| Layer | Responsibility | Examples |
+|---|---|---|
+| Test Case | Defines stimulus, assertions, TEST ID, category, and result values | UART timing, USB loopback, Network packet loopback |
+| Fixture | Defines the reusable test topology and resource lifecycle | UART + Saleae, USB + Digilent |
+| Interface | Communicates with the DUT or protocol endpoint | UART, USB, JTAG, Network |
+| Equipment | Measures, captures, programs, or controls the test environment | Saleae, Digilent, FPGA |
+| Result recorder | Separates interface metrics from equipment statistics | `ct_result.metrics`, `ct_result.statistics` |
+
+<br/>
+
+### Current Fixture and Test Case Behavior
+
+<br/>
+
+| Fixture | Test Case status | Interface action | Equipment action | Recorded result |
+|---|---|---|---|---|
+| `FIXTURE-001` | Executable as `CT-UART-001` | UART writes and reads a timing probe | Saleae measures UART timing | Baudrate error and jitter metrics; Saleae statistics |
+| `FIXTURE-002` | Executable as `CT-USB-001` | USB performs a 256-byte loopback | Digilent measures the USB transfer | Bytes, packets, endpoint, voltage, and integrity data |
+| `FIXTURE-003` | Executable as `CT-NETWORK-001` | Network performs a packet loopback | No equipment is currently composed | Bytes, packet count, latency, host, and port |
+| `FIXTURE-004` | Extension fixture; no CT Test Case | JTAG mock connection and transfer | FPGA connection and programmed-image tracking | Available for a future FPGA/JTAG Test Case |
+| `FIXTURE-005` | HIL gate; no CT Test Case | No interface | No equipment | Skips unless `CICT_HIL=1` |
+
+<br/>
+
+The numbered contract connects the files and runtime objects: `test_fixture_001_*.py` must declare `FIXTURE-001` and request `fixture_001`. Collection stops before execution if the number, marker metadata, fixture argument, or registry entry does not agree.
+
+<br/>
+
+### Equipment Extension
+
+<br/>
+
+FPGA, Saleae, and Digilent are equipment adapters. Each equipment type owns separate `mock/` and `hil/` implementations so a fixture can keep the same Test Case contract while changing the runtime backend.
+
+<br/>
+
+```text
+test_equipments/
+├── fpga/{mock,hil}/
+├── saleae/{mock,hil}/
+├── digilent/{mock,hil}/
+└── wireshark/{mock,hil}/            # Planned extension
+```
+
+<br/>
+
+Wireshark should be added as Network capture equipment, not as a replacement for `NetworkInterface`. The Network interface continues to send and receive DUT traffic; the Wireshark equipment adapter starts capture, stops capture, and converts packet observations into fixture statistics.
+
+<br/>
+
+A future Wireshark CT extension can use this structure:
+
+<br/>
+
+```text
+test_envs/tests/pytest/
+├── test_equipments/wireshark/{mock,hil}/
+├── fixtures/fixture_006_network_wireshark.py
+└── test_cases/test_fixture_006_network_capture.py
+```
+
+<br/>
+
+The extension must add `Wireshark` to `FIXTURE_META.equipments`, declare both mode flags, keep capture cleanup in `finally`, and record capture statistics through `ct_result.statistics`. HIL availability must fail or skip explicitly and must never fall back silently to mock behavior.
+
+<br/>
+
 ## Mock and HIL Mode Selection
 
 <br/>
@@ -347,32 +441,6 @@ forcing `--fixture-mode=hil` fails with an explicit “HIL implementation is req
 
 <br/>
 
-## Output Files
-
-<br/>
-
-| Type | Path |
-|---|---|
-| Normalized result | `test_envs/reports/results/pytest/test_cases/<test-id>/<execution-id>_result.json` |
-| Test log | `test_envs/reports/results/pytest/test_cases/<test-id>/<execution-id>_test.log` |
-| Canonical Markdown | `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` |
-| MkDocs latest page | `docs/tests/pytest/<test-id>.md` |
-| MkDocs execution page | `docs/tests/pytest/<test-id>__<execution-id>.md` |
-| Pandoc output | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.<format>` |
-
-<br/>
-
-Generate pending reports and publish MkDocs pages with:
-
-```powershell
-.\.venv\Scripts\python.exe -m test_envs.tools.test_result --pending --docs
-```
-
-* VSCode-Task   
-    * REPORT-Mkdocs: Generate Markdown to Pytest/Unittest  
-
-<br/>
-
 ## VS Code
 
 <br/>
@@ -380,7 +448,79 @@ Generate pending reports and publish MkDocs pages with:
 | Item | Value |
 |---|---|
 | Testing path | `test_envs/tests/pytest` |
-| Debug configuration | `Debug: Current pytest File` |
+| Debug configuration | Not currently configured in `launch.json` |
 | All-test task | `TEST CASE: ALL` |
 | TEST ID task | `TEST CASE: TEST ID` |
 | Mode picker | `marker`, `mock`, `hil` |
+
+<br/>
+
+## Report
+
+<br/>
+
+Pytest and unittest connect to the same Markdown-first Report pipeline. Pytest adds Local LLM analysis and conditional escalation before the shared Markdown is generated.
+
+<br/>
+
+```text
+Pytest result JSON + test log
+              ↓
+test_envs.tools.test_result
+              ↓
+Local LLM analysis + escalation decision
+              ↓
+test_envs.tools.mkdocs_reporter
+              ↓
+Canonical Markdown
+       ┌──────┴──────┐
+       ↓             ↓
+MkDocs Results   Pandoc Report
+```
+
+<br/>
+
+| Report stage | Source or tool | Output |
+|---|---|---|
+| Test evidence | `test_envs/reports/results/pytest/test_cases/<test-id>/` | `<execution-id>_result.json` and `<execution-id>_test.log` |
+| Analysis | `test_envs.tools.local_llm` | Analysis stored in result JSON and Local LLM log |
+| Report coordination | `test_envs.tools.test_result` | Processes the latest or every pending result |
+| Canonical Markdown | `test_envs.tools.mkdocs_reporter` | `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` |
+| MkDocs publication | `test_envs.tools.mkdocs_reporter` | `docs/tests/pytest/<test-id>.md` and execution pages |
+| Pandoc conversion | `test_envs.tools.pandoc_reporter` | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.<format>` |
+
+<br/>
+
+Generate pending Markdown and publish MkDocs result pages:
+
+<br/>
+
+```powershell
+.\.venv\Scripts\python.exe -m test_envs.tools.test_result --pending --docs
+```
+
+<br/>
+
+Convert the latest Markdown to HTML:
+
+<br/>
+
+```powershell
+.\.venv\Scripts\python.exe -m test_envs.tools.pandoc_reporter --latest --format html
+```
+
+<br/>
+
+Convert the latest Markdown to DOCX:
+
+<br/>
+
+```powershell
+.\.venv\Scripts\python.exe -m test_envs.tools.pandoc_reporter --latest --format docx
+```
+
+<br/>
+
+The same commands are available from VS Code through [Run and Debug-Report](vscode_environment.md#run-and-debug-report) and [Tasks-Report](vscode_environment.md#tasks-report). Pytest result pages are published under [Pytest Results](tests/pytest/index.md).
+
+<br/>

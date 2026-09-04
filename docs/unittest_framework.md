@@ -326,3 +326,75 @@ The function table's `Pass` column is a simplified Boolean display: `PASS` when 
 | Unittest operation | [unittest_operation.md](unittest_operation.md) |
 | Unittest results | [tests/unittest/index.md](tests/unittest/index.md) |
 | Pytest CT comparison | [pytest_framework.md](pytest_framework.md) |
+
+<br/>
+
+## Report
+
+<br/>
+
+Unittest and Pytest connect to the same Markdown-first Report pipeline. Unittest bypasses Local LLM analysis and escalation, then uses the shared Markdown, MkDocs, and Pandoc reporters.
+
+<br/>
+
+```text
+Unittest result JSON + result log
+                ↓
+test_envs.tools.test_result
+                ↓
+Local LLM and escalation: not used
+                ↓
+test_envs.tools.mkdocs_reporter
+                ↓
+Canonical Markdown
+       ┌────────┴────────┐
+       ↓                 ↓
+MkDocs Results       Pandoc Report
+```
+
+<br/>
+
+| Report stage | Source or tool | Output |
+|---|---|---|
+| Test evidence | `test_envs/reports/results/unittest/` | `<execution-id>_result.json` and `<execution-id>_result.log` |
+| Analysis | Not used for unittest | No Local LLM analysis or escalation |
+| Report coordination | `test_envs.tools.test_result` | Processes the latest or every pending result |
+| Canonical Markdown | `test_envs.tools.mkdocs_reporter` | `test_envs/reports/markdown/unittest/<execution-id>_result.md` |
+| MkDocs publication | `test_envs.tools.mkdocs_reporter` | `docs/tests/unittest/<execution-id>.md` and index page |
+| Pandoc conversion | `test_envs.tools.pandoc_reporter` | `test_envs/reports/pandoc/unittest/<execution-id>_result.<format>` |
+
+<br/>
+
+Generate pending Markdown and publish MkDocs result pages:
+
+<br/>
+
+```powershell
+.\.venv\Scripts\python.exe -m test_envs.tools.test_result --pending --docs
+```
+
+<br/>
+
+Convert the latest Markdown to HTML:
+
+<br/>
+
+```powershell
+.\.venv\Scripts\python.exe -m test_envs.tools.pandoc_reporter --latest --format html
+```
+
+<br/>
+
+Convert the latest Markdown to DOCX:
+
+<br/>
+
+```powershell
+.\.venv\Scripts\python.exe -m test_envs.tools.pandoc_reporter --latest --format docx
+```
+
+<br/>
+
+The same commands are available from VS Code through [Run and Debug-Report](vscode_environment.md#run-and-debug-report) and [Tasks-Report](vscode_environment.md#tasks-report). Unittest result pages are published under [Unittest Results](tests/unittest/index.md).
+
+<br/>
