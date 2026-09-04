@@ -176,6 +176,10 @@ flowchart TD
 
 <br/>
 
+Go to [Github Issue](https://github.com/JeonghunLee/AI-driven-CI-CT/issues)
+
+<br/>
+
 ## GitHub Actions Flow
 
 <br/>
