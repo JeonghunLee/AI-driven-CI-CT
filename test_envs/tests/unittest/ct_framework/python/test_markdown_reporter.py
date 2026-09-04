@@ -158,7 +158,7 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertTrue((base / "CT-MD-HISTORY__20260101-000001.md").exists())
         self.assertTrue((base / "CT-MD-HISTORY__20260101-000002.md").exists())
         latest = (base / "CT-MD-HISTORY.md").read_text(encoding="utf-8")
-        self.assertIn("| Result | FAIL |", latest)
+        self.assertIn("| FAIL | 0.200 | local |", latest)
         self.assertIn("## Test History", latest)
         self.assertIn("| Date | Time | Execution ID | Commit | Branch |", latest)
         history = latest.partition("## Test History")[2]
@@ -187,7 +187,7 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertIn("# Pytest Results Index", pytest_index)
         self.assertIn("# Unittest Results Index", unittest_index)
         self.assertIn(
-            "| Test Function Count | Pass | Latest |",
+            "| Unittest Function Count | Pass | Latest |",
             unittest_index,
         )
         self.assertIn("| 1 | PASS |", unittest_index)

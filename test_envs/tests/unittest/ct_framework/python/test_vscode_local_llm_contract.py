@@ -3,11 +3,19 @@ import unittest
 from pathlib import Path
 
 
+def load_jsonc(path: str) -> dict[str, object]:
+    text = Path(path).read_text(encoding="utf-8")
+    without_line_comments = "\n".join(
+        line for line in text.splitlines() if not line.lstrip().startswith("//")
+    )
+    return json.loads(without_line_comments)
+
+
 class VSCodeLocalLLMContractTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.launch = json.loads(Path(".vscode/launch.json").read_text(encoding="utf-8"))
-        self.tasks = json.loads(Path(".vscode/tasks.json").read_text(encoding="utf-8"))
-        self.settings = json.loads(Path(".vscode/settings.json").read_text(encoding="utf-8"))
+        self.launch = load_jsonc(".vscode/launch.json")
+        self.tasks = load_jsonc(".vscode/tasks.json")
+        self.settings = load_jsonc(".vscode/settings.json")
         self.config = json.loads(Path("test_envs/configs/config.json").read_text(encoding="utf-8"))
 
     def test_selected_preset_has_model_name(self) -> None:
@@ -152,8 +160,8 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
 
     def test_report_tasks_include_html_and_docx(self) -> None:
         labels = {item["label"] for item in self.tasks["tasks"]}
-        self.assertIn("REPORT: Convert Latest Markdown to HTML", labels)
-        self.assertIn("REPORT: Convert Latest Markdown to DOCX", labels)
+        self.assertIn("REPORT-Pandoc: Convert Latest Markdown to HTML", labels)
+        self.assertIn("REPORT-Pandoc: Convert Latest Markdown to DOCX", labels)
 
 
 if __name__ == "__main__":
