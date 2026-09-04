@@ -77,8 +77,4 @@ body:
         - label: Pandoc HTML
         - label: Pandoc DOCX
 
-  - type: textarea
-    id: evidence
-    attributes:
-      label: Additional Evidence
-      description: Add logs, screenshots, related issues, or source paths.
+
