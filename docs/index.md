@@ -176,7 +176,11 @@ flowchart TD
 
 <br/>
 
-Go to [Github Issue](https://github.com/JeonghunLee/AI-driven-CI-CT/issues)
+!!! success "Github Issues and Automatically Generate Report"
+    - Request [Github Issue and Github Actions](https://github.com/JeonghunLee/AI-driven-CI-CT/issues)               
+    * **Left Menu TEST Results**    
+        * Go To [TEST Results Pytest](./tests/pytest/index.md)   
+        * Go To [TEST Results Unittest](./tests/unittest/index.md)     
 
 <br/>
 
