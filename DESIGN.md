@@ -720,20 +720,60 @@ Local LLM
 
 ## 13. GitHub Automation
 
+<br/>
+
 ```text
-GitHub Actions
-├── GitHub-hosted Runner
-│   ├── Unit Test
-│   ├── Mock CT
-│   ├── Result Analysis
-│   └── Markdown Generation
-└── Self-hosted Runner [Optional]
-    ├── USB / JTAG
-    ├── Vendor Tool
-    ├── Internal Network
-    ├── Hardware Equipment
-    └── Machine-specific Environment
+test_request.yml Issue
+        |
+        v
+continuous-test.yml: request job
+        |
+        v
+test_envs.tools.issue_parser
+        |
+        +-- Default / Linux --> ubuntu-latest
+        +-- Windows ---------> windows-latest
+        +-- Self-hosted HIL -> [self-hosted, hw-test]
+        |
+        v
+continuous-test.yml: test job
+        |
+        +-- pytest / CT --> TEST ID + Fixture mode --> Local LLM
+        |
+        +-- Unit Test ---> Unittest scope ---------> No Local LLM
+        |
+        v
+Explicit normalized result
+        |
+        v
+test_envs.tools.pipeline
+        |
+        +-- mkdocs_reporter ------> MkDocs Markdown
+        +-- pandoc_reporter ------> HTML / DOCX
+        +-- github_reporter ------> Request Issue comment
+        +-- upload-artifact ------> Test evidence / Coverage
 ```
+
+<br/>
+
+| Automation item | Design rule |
+|---|---|
+| Request source | `.github/ISSUE_TEMPLATE/test_request.yml` |
+| Environment checklist | `.github/ISSUE_TEMPLATE/test_check.md` |
+| Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
+| Automatic trigger | Request Issue opened, edited, or reopened |
+| Rerun trigger | Issue label `run-test` |
+| Local/manual trigger | `workflow_dispatch`; replaces the former local request workflow |
+| Pytest selection | `CT-UART-001`, `CT-USB-001`, or `CT-NETWORK-001` plus `marker`, `mock`, or `hil` Fixture mode |
+| Unittest selection | All Unittest, CT Framework Python, or one path/node ID below `test_envs/tests/unittest` |
+| Coverage | None, terminal missing-lines, or HTML report |
+| Result selection | Only the normalized result created after the current workflow marker |
+| Report selection | MkDocs Markdown and optional Pandoc HTML/DOCX |
+| Failure handling | Test failures keep the normalized result; setup/capture failures post an ERROR comment |
+
+The previous separate HIL responsibility is handled by dynamic runner selection. Local/manual requests are handled by `workflow_dispatch` inputs in the same unified workflow.
+
+<br/>
 
 GitHub Issue content:
 
@@ -741,7 +781,7 @@ GitHub Issue content:
 - PASS / FAIL
 - Measurement summary
 - Warning summary
-- Local LLM summary
+- Pytest Local LLM summary, or `Not used` for Unittest
 - Markdown path
 - MkDocs path
 - Artifact path
@@ -752,7 +792,19 @@ Excluded from GitHub Issue:
 - Full measurement data
 - Complete stack trace dump
 
+<br/>
+
 ## 14. Repository Structure
+
+<br/>
+
+| GitHub automation source | Role |
+|---|---|
+| `.github/ISSUE_TEMPLATE/test_request.yml` | Pytest/Unittest request form |
+| `.github/ISSUE_TEMPLATE/test_check.md` | Request environment checklist |
+| `.github/workflows/continuous-test.yml` | Unified request parsing, runner routing, test, report, Issue update, and artifact workflow |
+| `test_envs/tools/issue_parser.py` | Issue Form and manual input normalization |
+| `test_envs/tools/github_reporter/` | Result and workflow-error Issue comments |
 
 ```text
 .
@@ -762,7 +814,11 @@ Excluded from GitHub Issue:
 │   └── tasks.json
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
+│   │   ├── test_request.yml
+│   │   └── test_check.md
 │   └── workflows/
+│       ├── continuous-test.yml
+│       └── github_pages.yaml
 ├── .venv/                         # Git ignored
 ├── docs/
 │   ├── index.md                     # Manual system overview
