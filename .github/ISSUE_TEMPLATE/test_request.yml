@@ -1,6 +1,6 @@
 name: Pytest / Unittest Request
 description: Request a Pytest CT or Unittest execution on a GitHub runner
-title: "[TEST] "
+title: "[TEST-REQUEST] "
 labels:
   - test-request-runner
 body:
@@ -8,7 +8,7 @@ body:
     attributes:
       value: |
         Request one Pytest CT or Unittest execution.
-        Check the target environment with `.github/ISSUE_TEMPLATE/test_check.md` before submitting the request.
+        Check the target environment with `.github/ISSUE_TEMPLATE/test_check.yml` before submitting the request.
 
   - type: dropdown
     id: template_version
@@ -180,5 +180,5 @@ body:
     attributes:
       label: Environment Check
       options:
-        - label: I completed the applicable checks in `.github/ISSUE_TEMPLATE/test_check.md`.
+        - label: I completed `.github/ISSUE_TEMPLATE/test_check.yml` for the target host.
           required: true

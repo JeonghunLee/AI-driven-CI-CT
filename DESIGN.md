@@ -760,7 +760,7 @@ test_envs.tools.pipeline
 | Automation item | Design rule |
 |---|---|
 | Request source | `.github/ISSUE_TEMPLATE/test_request.yml` |
-| Environment checklist | `.github/ISSUE_TEMPLATE/test_check.md` |
+| Environment check form | `.github/ISSUE_TEMPLATE/test_check.yml` |
 | Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
 | Automatic trigger | Request Issue opened, edited, or reopened |
 | Rerun trigger | Issue label `run-test` |
@@ -807,7 +807,7 @@ Excluded from GitHub Issue:
 | GitHub automation source | Role |
 |---|---|
 | `.github/ISSUE_TEMPLATE/test_request.yml` | Pytest/Unittest request form |
-| `.github/ISSUE_TEMPLATE/test_check.md` | Request environment checklist |
+| `.github/ISSUE_TEMPLATE/test_check.yml` | Host type, OS, Python, and Ollama environment form |
 | `.github/workflows/continuous-test.yml` | Unified request parsing, runner routing, test, report, Issue update, and artifact workflow |
 | `test_envs/tools/issue_parser.py` | Issue Form and manual input normalization |
 | `test_envs/tools/github_reporter/` | Result and workflow-error Issue comments |
@@ -821,7 +821,7 @@ Excluded from GitHub Issue:
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── test_request.yml
-│   │   └── test_check.md
+│   │   └── test_check.yml
 │   └── workflows/
 │       ├── continuous-test.yml
 │       └── github_pages.yaml

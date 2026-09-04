@@ -1,0 +1,51 @@
+name: Test Environment Check
+description: Record the host, OS, Python, and Ollama environment used for testing
+title: "[TEST-CHECK] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Record the minimum environment information required before running a test request.
+
+  - type: dropdown
+    id: host_type
+    attributes:
+      label: Host Type
+      description: Select where the test will run.
+      options:
+        - GitHub-hosted
+        - Self-hosted
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Linux
+        - Windows
+        - macOS
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python
+      description: Enter the Python version available on the selected host.
+      placeholder: Python 3.12
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ollama
+    attributes:
+      label: Ollama
+      description: Pytest can use Ollama; Unittest does not require it.
+      options:
+        - Available
+        - Not available
+        - Not required
+    validations:
+      required: true

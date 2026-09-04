@@ -212,7 +212,7 @@ flowchart TD
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── test_request.yml
-│   │   └── test_check.md
+│   │   └── test_check.yml
 │   └── workflows/
 │       ├── continuous-test.yml
 │       └── github_pages.yaml
