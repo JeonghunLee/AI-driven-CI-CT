@@ -16,17 +16,7 @@ body:
       options:
         - All Unittest
         - CT Framework Python
-        - One test file or function
       default: 0
-    validations:
-      required: true
-
-  - type: textarea
-    id: unittest_target
-    attributes:
-      label: Unittest Target
-      description: Enter a path or node ID only for one-file/function scope. Otherwise enter N/A.
-      placeholder: test_envs/tests/unittest/ct_framework/python/test_configuration.py::ConfigurationTests
     validations:
       required: true
 
@@ -69,7 +59,6 @@ body:
       label: Report Outputs
       description: Unittest results do not use Local LLM analysis.
       options:
-        - label: MkDocs Markdown
         - label: Pandoc HTML
         - label: Pandoc DOCX
 
@@ -79,9 +68,3 @@ body:
       label: Expected Result
     validations:
       required: true
-
-  - type: textarea
-    id: evidence
-    attributes:
-      label: Additional Evidence
-      description: Add logs, screenshots, related issues, or source paths.

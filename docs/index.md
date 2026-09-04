@@ -126,7 +126,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    REQUEST[test_request.yml Issue]
+    REQUEST[pytest_request.yml / unittest_request.yml Issues]
     CHECK_REQUEST[test_check.yml Issue]
     WORKFLOW[continuous-test.yml]
     PARSER[test_envs.tools.issue_parser]
@@ -169,7 +169,8 @@ flowchart TD
 
 | GitHub Actions entry | Execution scope |
 |---|---|
-| `test_request.yml` | Collects Pytest/Unittest, runner, revision, Coverage, and Report selections |
+| `pytest_request.yml` | Collects Pytest TEST ID, `marker`/`mock`/`hil` Fixture mode, runner, revision, Coverage, and Pandoc outputs |
+| `unittest_request.yml` | Collects Unittest scope, runner, revision, Coverage, and Pandoc outputs |
 | `test_check.yml` | Selects only a runner; the workflow detects its host type, OS, Python, and Ollama state and comments on the Issue |
 | `continuous-test.yml` | Routes the request to a hosted or self-hosted runner, executes the test, generates reports, updates the Issue, and uploads evidence |
 | Common Markdown reporter | `test_envs/tools/mkdocs_reporter` renders both result types before MkDocs publication and artifact upload |
@@ -228,7 +229,8 @@ flowchart TD
 .
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
-│   │   ├── test_request.yml
+│   │   ├── pytest_request.yml
+│   │   ├── unittest_request.yml
 │   │   └── test_check.yml
 │   └── workflows/
 │       ├── continuous-test.yml

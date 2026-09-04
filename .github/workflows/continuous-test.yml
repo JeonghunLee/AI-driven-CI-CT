@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - .github/ISSUE_TEMPLATE/test_check.yml
-      - .github/ISSUE_TEMPLATE/test_request.yml
+      - .github/ISSUE_TEMPLATE/pytest_request.yml
       - .github/ISSUE_TEMPLATE/unittest_request.yml
       - .github/workflows/continuous-test.yml
   issues:
@@ -110,7 +110,8 @@ jobs:
       (github.event.action != 'labeled' &&
         (contains(github.event.issue.labels.*.name, 'test-request-runner') ||
          contains(github.event.issue.labels.*.name, 'test-check-runner') ||
-         startsWith(github.event.issue.title, '[TEST-REQUEST]') ||
+         startsWith(github.event.issue.title, '[PYTEST-REQUEST]') ||
+         startsWith(github.event.issue.title, '[UNITTEST-REQUEST]') ||
          startsWith(github.event.issue.title, '[TEST-CHECK]')))
     runs-on: ubuntu-latest
     outputs:
@@ -148,7 +149,8 @@ jobs:
             $label = "test-check-runner"
             $color = "1D76DB"
             $description = "Run an automatic test environment check"
-          } elseif ($env:ISSUE_TITLE.StartsWith("[TEST-REQUEST]") -or $env:ISSUE_TITLE.StartsWith("[TEST]")) {
+          } elseif ($env:ISSUE_TITLE.StartsWith("[PYTEST-REQUEST]") -or
+                    $env:ISSUE_TITLE.StartsWith("[UNITTEST-REQUEST]")) {
             $label = "test-request-runner"
             $color = "0E8A16"
             $description = "Run a Pytest CT or Unittest request"
@@ -170,7 +172,7 @@ jobs:
         run: python -m test_envs.tools.issue_parser
 
   test:
-    name: ${{ needs.request.outputs.test_type }} / ${{ needs.request.outputs.runner }}
+    name: Execute requested test or environment check
     needs: request
     runs-on: ${{ fromJSON(needs.request.outputs.runner_labels) }}
     timeout-minutes: 60

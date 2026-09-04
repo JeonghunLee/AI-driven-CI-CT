@@ -369,7 +369,8 @@ test_envs/reports/
 
 | Workload | Runner |
 |---|---|
-| Test request | `.github/ISSUE_TEMPLATE/test_request.yml` |
+| Pytest request | `.github/ISSUE_TEMPLATE/pytest_request.yml` |
+| Unittest request | `.github/ISSUE_TEMPLATE/unittest_request.yml` |
 | Environment check | `.github/ISSUE_TEMPLATE/test_check.yml` → automatic runner environment Issue comment |
 | Unit Test / Mock CT / GitHub-hosted Linux | `ubuntu-latest` |
 | Unit Test / Mock CT / GitHub-hosted Windows | `windows-latest` |

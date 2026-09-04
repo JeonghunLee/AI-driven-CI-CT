@@ -106,12 +106,12 @@ Running `python -m unittest` bypasses the pytest hooks and therefore does not ge
 
 ### GitHub Actions
 
-`continuous-test.yml` selects the Unit Test path when the parsed request type is `Unit Test`:
+`continuous-test.yml` selects the Unittest path when the request comes from `unittest_request.yml` or the manual Test Type is `Unittest`:
 
 ```text
-test_request.yml Issue
+unittest_request.yml Issue
         ↓
-issue_parser selects Unit Test scope and runner
+issue_parser selects Unittest scope and runner
         ↓
 pytest test_envs/tests/unittest
         ↓

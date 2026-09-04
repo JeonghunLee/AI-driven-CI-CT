@@ -731,7 +731,7 @@ continuous-test.yml --> selected runner --> automatic environment detection
                                                 v
                                        github_reporter --> Issue comment
 
-test_request.yml Issue
+pytest_request.yml or unittest_request.yml Issue
         |
         v
 continuous-test.yml: request job
@@ -747,9 +747,9 @@ test_envs.tools.issue_parser
         v
 continuous-test.yml: test job
         |
-        +-- pytest / CT --> TEST ID + Fixture mode --> Local LLM
+        +-- Pytest ------> TEST ID + marker/mock/hil --> Local LLM
         |
-        +-- Unit Test ---> Unittest scope ---------> No Local LLM
+        +-- Unittest ----> Unittest scope ----------> No Local LLM
         |
         v
 Explicit normalized result
@@ -767,12 +767,13 @@ test_envs.tools.pipeline
 
 | Automation item | Design rule |
 |---|---|
-| Request source | `.github/ISSUE_TEMPLATE/test_request.yml` |
+| Pytest request | `.github/ISSUE_TEMPLATE/pytest_request.yml`; TEST ID and Fixture mode are present only here |
+| Unittest request | `.github/ISSUE_TEMPLATE/unittest_request.yml`; Unittest scope is present only here |
 | Environment check request | `.github/ISSUE_TEMPLATE/test_check.yml`; user selects only the runner |
 | Environment check result | Workflow detects host type, OS, Python, and Ollama and posts them through `github_reporter` |
 | Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
 | Automatic trigger | Request Issue opened, edited, or reopened |
-| Label provisioning | A relevant default-branch push creates both labels; the request job also creates/applies the matching label using `[TEST-REQUEST]` or `[TEST-CHECK]` title detection |
+| Label provisioning | A relevant default-branch push creates both labels; the request job also recognizes `[PYTEST-REQUEST]`, `[UNITTEST-REQUEST]`, and `[TEST-CHECK]` |
 | Rerun trigger | Issue label `run-test` |
 | Local/manual trigger | `workflow_dispatch`; replaces the former local request workflow |
 | Default runner | GitHub-hosted Linux (`ubuntu-latest`) |
@@ -784,7 +785,7 @@ test_envs.tools.pipeline
 | Unittest selection | All Unittest, CT Framework Python, or one path/node ID below `test_envs/tests/unittest` |
 | Coverage | None, terminal missing-lines, or HTML report |
 | Result selection | Only the normalized result created after the current workflow marker |
-| Report selection | MkDocs Markdown and optional Pandoc HTML/DOCX |
+| Issue-form report selection | Optional Pandoc HTML/DOCX; canonical Markdown remains part of the common pipeline |
 | Failure handling | Test failures keep the normalized result; setup/capture failures post an ERROR comment |
 
 The previous separate HIL responsibility is handled by dynamic runner selection. Local/manual requests are handled by `workflow_dispatch` inputs in the same unified workflow.
@@ -816,7 +817,8 @@ Excluded from GitHub Issue:
 
 | GitHub automation source | Role |
 |---|---|
-| `.github/ISSUE_TEMPLATE/test_request.yml` | Pytest/Unittest request form |
+| `.github/ISSUE_TEMPLATE/pytest_request.yml` | Pytest-only request form |
+| `.github/ISSUE_TEMPLATE/unittest_request.yml` | Unittest-only request form |
 | `.github/ISSUE_TEMPLATE/test_check.yml` | Runner-only request for automatic host type, OS, Python, and Ollama detection |
 | `.github/workflows/continuous-test.yml` | Unified request parsing, runner routing, test, report, Issue update, and artifact workflow |
 | `test_envs/tools/issue_parser.py` | Issue Form and manual input normalization |
@@ -830,7 +832,8 @@ Excluded from GitHub Issue:
 │   └── tasks.json
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
-│   │   ├── test_request.yml
+│   │   ├── pytest_request.yml
+│   │   ├── unittest_request.yml
 │   │   └── test_check.yml
 │   └── workflows/
 │       ├── continuous-test.yml
