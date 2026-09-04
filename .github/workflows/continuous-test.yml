@@ -6,6 +6,7 @@ on:
     paths:
       - .github/ISSUE_TEMPLATE/test_check.yml
       - .github/ISSUE_TEMPLATE/test_request.yml
+      - .github/ISSUE_TEMPLATE/unittest_request.yml
       - .github/workflows/continuous-test.yml
   issues:
     types: [opened, edited, reopened, labeled]
@@ -15,8 +16,8 @@ on:
         description: Test type
         required: true
         type: choice
-        options: [pytest / CT, Unit Test]
-        default: pytest / CT
+        options: [Pytest, Unittest]
+        default: Pytest
       test_id:
         description: Pytest TEST ID
         required: true
@@ -115,7 +116,6 @@ jobs:
     outputs:
       request_kind: ${{ steps.request.outputs.request_kind }}
       test_type: ${{ steps.request.outputs.test_type }}
-      category: ${{ steps.request.outputs.category }}
       test_id: ${{ steps.request.outputs.test_id }}
       fixture_mode: ${{ steps.request.outputs.fixture_mode }}
       unittest_scope: ${{ steps.request.outputs.unittest_scope }}
@@ -250,7 +250,7 @@ jobs:
             $coverageArgs = @("--cov=test_envs", "--cov-report=term-missing", "--cov-report=html")
           }
 
-          if ($env:TEST_TYPE -eq "Unit Test") {
+          if ($env:TEST_TYPE -eq "Unittest") {
             $target = switch ($env:UNITTEST_SCOPE) {
               "CT Framework Python" { "test_envs/tests/unittest/ct_framework/python" }
               "One test file or function" { $env:UNITTEST_TARGET }
@@ -276,7 +276,7 @@ jobs:
             exit 0
           }
           $markerTime = (Get-Item $env:TEST_START_MARKER).LastWriteTimeUtc
-          $root = if ($env:TEST_TYPE -eq "Unit Test") {
+          $root = if ($env:TEST_TYPE -eq "Unittest") {
             "test_envs/reports/results/unittest"
           } else {
             "test_envs/reports/results/pytest/test_cases/$env:TEST_ID"

@@ -20,6 +20,11 @@ RUNNER_ALIASES = {
     "Windows": "GitHub-hosted Windows",
 }
 
+TEST_TYPE_ALIASES = {
+    "pytest / CT": "Pytest",
+    "Unit Test": "Unittest",
+}
+
 
 def parse_issue_body(body: str) -> dict[str, str]:
     fields: dict[str, str] = {}
@@ -52,7 +57,10 @@ def request_configuration(values: dict[str, str]) -> dict[str, str]:
         choices = ", ".join(RUNNER_LABELS)
         raise ValueError(f"unsupported runner {runner!r}; select one of: {choices}")
     reports = values.get("Report Outputs", values.get("reports", ""))
-    test_type = values.get("Test Type", values.get("test_type", "pytest / CT"))
+    test_type = values.get("Test Type", values.get("test_type", "Pytest"))
+    test_type = TEST_TYPE_ALIASES.get(test_type, test_type)
+    if test_type not in {"Pytest", "Unittest"}:
+        raise ValueError(f"unsupported test type: {test_type!r}")
     unittest_target = _first_line(
         values.get("Unittest Target", values.get("unittest_target", "")),
         "test_envs/tests/unittest",
@@ -61,7 +69,6 @@ def request_configuration(values: dict[str, str]) -> dict[str, str]:
         unittest_target = "test_envs/tests/unittest"
     return {
         "test_type": test_type,
-        "category": values.get("Test Category", values.get("test_category", "Timing")),
         "test_id": values.get("Test ID", values.get("test_id", "CT-UART-001")),
         "fixture_mode": values.get("Fixture Mode", values.get("fixture_mode", "marker")),
         "unittest_scope": values.get("Unittest Scope", values.get("unittest_scope", "All Unittest")),
@@ -79,13 +86,18 @@ def request_configuration(values: dict[str, str]) -> dict[str, str]:
 def event_configuration(event_path: str | Path) -> dict[str, str]:
     event = json.loads(Path(event_path).read_text(encoding="utf-8"))
     if "issue" in event:
-        config = request_configuration(parse_issue_body(event["issue"].get("body", "")))
+        values = parse_issue_body(event["issue"].get("body", ""))
+        title = str(event["issue"].get("title", ""))
+        if title.startswith("[UNITTEST-REQUEST]"):
+            values["Test Type"] = "Unittest"
+        elif title.startswith("[PYTEST-REQUEST]"):
+            values["Test Type"] = "Pytest"
+        config = request_configuration(values)
         labels = {
             str(item.get("name", ""))
             for item in event["issue"].get("labels", [])
             if isinstance(item, dict)
         }
-        title = str(event["issue"].get("title", ""))
         is_environment_check = "test-check-runner" in labels or title.startswith("[TEST-CHECK]")
         config["request_kind"] = "environment-check" if is_environment_check else "test"
         return config

@@ -1,0 +1,92 @@
+name: Pytest Request
+description: Request a Fixture-based Pytest CT execution
+title: "[PYTEST-REQUEST] "
+labels:
+  - test-request-runner
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request one Pytest CT. Test ID and Fixture Mode apply only to this Pytest form.
+
+  - type: dropdown
+    id: test_id
+    attributes:
+      label: Test ID
+      options:
+        - CT-UART-001
+        - CT-USB-001
+        - CT-NETWORK-001
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: fixture_mode
+    attributes:
+      label: Fixture Mode
+      description: Marker uses the mode declared by the selected Pytest CT marker.
+      options:
+        - marker
+        - mock
+        - hil
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runner
+    attributes:
+      label: Runner
+      description: Physical HIL requires a matching Self-hosted HIL runner.
+      options:
+        - GitHub-hosted Linux
+        - GitHub-hosted Windows
+        - Self-hosted HIL Linux
+        - Self-hosted HIL Windows
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: request_ref
+    attributes:
+      label: Branch / Tag / Commit
+      value: main
+    validations:
+      required: true
+
+  - type: dropdown
+    id: coverage
+    attributes:
+      label: Test Coverage
+      options:
+        - No coverage
+        - Terminal missing-lines report
+        - HTML coverage report
+      default: 0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: reports
+    attributes:
+      label: Report Outputs
+      description: Pytest results use Local LLM analysis with deterministic fallback.
+      options:
+        - label: MkDocs Markdown
+        - label: Pandoc HTML
+        - label: Pandoc DOCX
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Expected Result
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Additional Evidence
+      description: Add logs, screenshots, related issues, or source paths.

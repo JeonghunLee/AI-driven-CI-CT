@@ -1,0 +1,87 @@
+name: Unittest Request
+description: Request a function-based Unittest execution through pytest
+title: "[UNITTEST-REQUEST] "
+labels:
+  - test-request-runner
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request one Unittest execution. Test ID and Fixture Mode do not apply to this form.
+
+  - type: dropdown
+    id: unittest_scope
+    attributes:
+      label: Unittest Scope
+      options:
+        - All Unittest
+        - CT Framework Python
+        - One test file or function
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: unittest_target
+    attributes:
+      label: Unittest Target
+      description: Enter a path or node ID only for one-file/function scope. Otherwise enter N/A.
+      placeholder: test_envs/tests/unittest/ct_framework/python/test_configuration.py::ConfigurationTests
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runner
+    attributes:
+      label: Runner
+      options:
+        - GitHub-hosted Linux
+        - GitHub-hosted Windows
+        - Self-hosted HIL Linux
+        - Self-hosted HIL Windows
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: request_ref
+    attributes:
+      label: Branch / Tag / Commit
+      value: main
+    validations:
+      required: true
+
+  - type: dropdown
+    id: coverage
+    attributes:
+      label: Test Coverage
+      options:
+        - No coverage
+        - Terminal missing-lines report
+        - HTML coverage report
+      default: 0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: reports
+    attributes:
+      label: Report Outputs
+      description: Unittest results do not use Local LLM analysis.
+      options:
+        - label: MkDocs Markdown
+        - label: Pandoc HTML
+        - label: Pandoc DOCX
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Expected Result
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Additional Evidence
+      description: Add logs, screenshots, related issues, or source paths.
