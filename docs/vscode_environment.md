@@ -39,16 +39,27 @@ There is currently no `.vscode/extensions.json`; extension recommendations are n
 
 <br/>
 
-### Settings
+### settings
 
 <br/>
+
+* **VS Code Testing for Python**     
+https://code.visualstudio.com/docs/python/testing  
 
 Source: `.vscode/settings.json`
 
 ```json
 {
+  //.venv
+  //Python Automatic Environment Activation 
+  //    true: automatically activate venv  (.\.venv\Scripts\Activate.ps1)
+  //    false: do not automatically activate venv  
+  "python.terminal.activateEnvironment": false,
+  
+  //venv path for Python
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
-  "python.terminal.activateEnvironment": true,
+  
+  //Python Testing Configuration
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
   "python.testing.pytestArgs": [
@@ -63,6 +74,7 @@ Source: `.vscode/settings.json`
     "${workspaceFolder}"
   ]
 }
+
 ```
 
 <br/>
@@ -81,6 +93,21 @@ Source: `.vscode/settings.json`
 `-p no:cacheprovider` disables pytest's cache provider, so VS Code discovery and execution do not create or update `.pytest_cache`.
 
 <br/>
+
+### tasks 
+
+<br/>
+
+
+<br/>
+
+### launch
+
+<br/>
+
+
+<br/>
+
 
 ## Run and Debug
 
@@ -164,7 +191,7 @@ Every Task has `type: process`, runs in the foreground, and has no `isBackground
 
 <br/>
 
-### Setup and Check Tasks
+### Tasks-Setup and Check 
 
 <br/>
 
@@ -183,7 +210,7 @@ The dedicated-terminal presentation is configured for Setup 1 and Check 3. Closi
 
 <br/>
 
-### TEST CASE Tasks
+### Tasks-TEST CASE 
 
 <br/>
 
@@ -198,7 +225,7 @@ Both Tasks disable the pytest cache provider and execute `test_envs/tests/pytest
 
 <br/>
 
-### Report Tasks
+### Tasks-Report 
 
 | Task label | Entry point | Function |
 |---|---|---|
@@ -206,7 +233,7 @@ Both Tasks disable the pytest cache provider and execute `test_envs/tests/pytest
 | `REPORT-Pandoc: Convert Latest Markdown to HTML` | `test_envs.tools.pandoc_reporter --latest --format html` | Converts the latest Markdown to HTML |
 | `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown to Word |
 
-### MkDocs Tasks
+### Tasks-MkDocs 
 
 | Task label | Arguments | Address / result |
 |---|---|---|
@@ -218,7 +245,9 @@ Both Tasks disable the pytest cache provider and execute `test_envs/tests/pytest
 
 The `MkDocs: Serve Remote ` source label currently contains a trailing space.
 
-### Task inputs
+### Tasks-Inputs 
+
+
 
 | Input ID | Type | Options | Default | Used by |
 |---|---|---|---|---|
