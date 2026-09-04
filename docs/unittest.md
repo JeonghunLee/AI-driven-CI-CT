@@ -16,6 +16,7 @@
 ```powershell
 .\.venv\Scripts\python.exe -m pytest test_envs/tests/unittest
 ```
+<br/>
 
 | Runtime | Result capture |
 |---|---|
@@ -23,7 +24,11 @@
 | VS Code Testing | pytest adapter |
 | Native `python -m unittest` | Result capture not applied |
 
+<br/>
+
 ## Result files
+
+<br/>
 
 ```text
 test_envs/reports/results/unittest/
@@ -31,12 +36,18 @@ test_envs/reports/results/unittest/
 └── <execution-id>_result.log
 ```
 
+<br/>
+
 | File | Source |
 |---|---|
 | `<execution-id>_result.json` | unittest function reports |
 | `<execution-id>_result.log` | Function status + failure detail |
 
+<br/>
+
 ## Result JSON
+
+<br/>
 
 ```text
 execution
@@ -63,12 +74,18 @@ test_functions[]
 └── failure
 ```
 
+<br/>
+
 ## Markdown
+
+<br/>
 
 ```text
 test_envs/reports/markdown/unittest/<execution-id>_result.md
 docs/tests/unittest/<execution-id>.md
 ```
+
+<br/>
 
 ```text
 # unittest Result
@@ -81,13 +98,19 @@ docs/tests/unittest/<execution-id>.md
     └── Logs
 ```
 
+<br/>
+
 | Local LLM | Rule |
 |---|---|
 | Ollama request | Not used |
 | Analysis | Not used |
 | Local LLM log | Not generated |
 
+<br/>
+
 ## Index
+
+<br/>
 
 | Column | Source |
 |---|---|
@@ -102,3 +125,5 @@ docs/tests/unittest/<execution-id>.md
 | Tests | `summary.total` |
 | Passed | `summary.passed` |
 | Failed | `summary.failed + summary.errors` |
+
+<br/>

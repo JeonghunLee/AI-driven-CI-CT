@@ -2,6 +2,8 @@
 
 ## System Overview
 
+<br/>
+
 | Area | Role |
 |---|---|
 | VS Code | Common entry point for Testing, Tasks, debugging, and environment setup |
@@ -11,6 +13,12 @@
 | Result pipeline | Normalizes execution data and generates Markdown reports |
 | Local LLM | Analyzes pytest CT results only; it is not used for unittest |
 | MkDocs | Publishes pytest and unittest Markdown and execution history |
+
+<br/>
+
+Go to [VSCode Testing](https://jeonghunlee.github.io/vscode_doc/#vscode-testing)  
+
+<br/>
 
 ## Documents
 
@@ -28,9 +36,21 @@
 | Pytest Results | [tests/pytest/index.md](tests/pytest/index.md) | TEST ID, Execution history |
 | Unittest Results | [tests/unittest/index.md](tests/unittest/index.md) | Function count, Execution history |
 
+<br/>
+
 ## TEST Flow
 
+<br/>
+
 ### VS Code-based flow
+
+<br/>
+
+
+Go To [VS Code Testing Setup](https://jeonghunlee.github.io/vscode_doc/#settingjson)   
+Go To [VS Code Testing](https://jeonghunlee.github.io/vscode_doc/#vscode-testing)    
+
+<br/>
 
 ```mermaid
 flowchart TD
@@ -68,12 +88,29 @@ flowchart TD
     TASK --> MKDOCS
 ```
 
+<br/>
+
 | VS Code entry | Execution scope |
 |---|---|
 | VS Extension Testing | Discovers and runs both pytest CT and unittest through the pytest adapter |
 | VS Code Task | Prepares the test environment, runs pytest CT by TEST ID/mode, generates reports, and serves/builds MkDocs |
 
+
+!!! success "Automatically Generate Report"
+    Analyze Result.log and result.json using an LLM, 
+    then automatically update the analysis report in the **MkDocs documentation.**    
+    
+    * **Left Menu TEST Results**    
+        * Go To [TEST Results Pytest](./tests/pytest/index.md)   
+        * Go To [TEST Results Unittest](./tests/unittest/index.md)       
+
+
+
+<br/>
+
 ### GitHub Actions-based flow
+
+<br/>
 
 ```mermaid
 flowchart TD
@@ -113,12 +150,18 @@ flowchart TD
     UNITTEST_MD --> ARTIFACT
 ```
 
+<br/>
+
 | GitHub Actions entry | Execution scope |
 |---|---|
 | `continuous-test.yml` | Runs unittest or Mock CT on a GitHub-hosted Ubuntu runner, generates reports, comments on issue requests, and uploads evidence |
 | `special-environment-test.yml` | Runs a selected pytest path on a self-hosted hardware runner, generates a report, and uploads evidence |
 
+<br/>
+
 ## GitHub Actions Flow
+
+<br/>
 
 ### `continuous-test.yml`
 
@@ -141,7 +184,11 @@ flowchart TD
 
 The manual `runner` input currently accepts `Default`, `Windows`, or `Linux`, but the job's `runs-on` remains fixed to `ubuntu-latest`; that input does not select a runner in the current workflow.
 
+<br/>
+
 ### `special-environment-test.yml`
+
+<br/>
 
 | Item | Current behavior |
 |---|---|
@@ -156,12 +203,18 @@ The manual `runner` input currently accepts `Default`, `Windows`, or `Linux`, bu
 | Report | `test_envs.tools.pipeline --docs` runs even after test failure |
 | Artifact | Uploads `test_envs/reports/` as `special-test-<run-id>` |
 
+<br/>
+
 ### Workflow roles
+
+<br/>
 
 | Workflow | Primary role | Local LLM rule |
 |---|---|---|
 | `continuous-test.yml` | Repeatable hosted Unit Test and Mock CT automation | Used only when the selected result is pytest CT; unittest bypasses it |
 | `special-environment-test.yml` | Optional hardware, vendor-tool, internal-network, or machine-specific testing | Used for pytest CT results; unavailable Ollama falls back to deterministic analysis |
+
+<br/>
 
 ## Test System Paths
 
@@ -190,6 +243,7 @@ The manual `runner` input currently accepts `Default`, `Windows`, or `Linux`, bu
     ├── reports/
     └── tools/
 ```
+<br/>
 
 | Scope | Path |
 |---|---|
@@ -202,23 +256,37 @@ The manual `runner` input currently accepts `Default`, `Windows`, or `Linux`, bu
 | Markdown | `test_envs/reports/markdown` |
 | Pandoc | `test_envs/reports/pandoc` |
 
+<br/>
+
 ## Identifier
+
+<br/>
 
 | Identifier | pytest | unittest | Format |
 |---|---:|---:|---|
 | TEST ID | O | X | `CT-<TARGET>-<NNN>` |
 | Execution ID | O | O | `YYYYMMDD_HHMMSS_ffffff` |
 
+<br/>
+
 ## Local LLM
 
+<br/>
+
 The Local LLM is part of the pytest report branch only. A unittest result is converted directly to Markdown without an Ollama request, Local LLM log, analysis payload, or escalation decision.
+
+<br/>
 
 | Runner | Local LLM | Processing rule |
 |---|---:|---|
 | pytest CT | O | Analyze result, logs, warnings, and optional source diff before Markdown generation |
 | unittest | X | Generate execution summary and function results directly from normalized data |
 
+<br/>
+
 ### Local LLM roles
+
+<br/>
 
 | Role | Input | Output / decision |
 |---|---|---|
@@ -233,7 +301,11 @@ The Local LLM is part of the pytest report branch only. A unittest result is con
 | Escalation judgment | LLM escalation flag, confidence, failure classification, and repeated failures | `needs_escalation` plus Codex escalation reasons |
 | Offline fallback | Ollama request failure or invalid response | Deterministic summary, classification, warnings, and recommendation |
 
+<br/>
+
 ### Pytest analysis flow
+
+<br/>
 
 ```text
 Pytest Result JSON + Test Log
@@ -251,6 +323,8 @@ Test analysis + Escalation decision
 Pytest Markdown + MkDocs
 ```
 
+<br/>
+
 | Item | Path / rule |
 |---|---|
 | Runtime | Ollama |
@@ -259,3 +333,5 @@ Pytest Markdown + MkDocs
 | Diagnostic log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` |
 | Unittest Local LLM log | Not generated |
 | Detailed setup | [local_llm_environment.md](local_llm_environment.md) |
+
+<br/>

@@ -11,6 +11,8 @@
 
 ## Runtime
 
+<br/>
+
 ```text
 VS Code Testing / pytest adapter
        ↓
@@ -22,8 +24,11 @@ Result JSON + Result log
        ↓
 Markdown + MkDocs
 ```
+<br/>
 
 ## Capture
+
+<br/>
 
 | Item | Value |
 |---|---|
@@ -34,13 +39,19 @@ Markdown + MkDocs
 | Pass | Boolean + status |
 | Failure | Failure detail |
 
+<br/>
+
 ## Result
+
+<br/>
 
 ```text
 test_envs/reports/results/unittest/
 ├── <execution-id>_result.json
 └── <execution-id>_result.log
 ```
+
+<br/>
 
 ```text
 execution
@@ -66,7 +77,11 @@ test_functions[]
 └── failure
 ```
 
+<br/>
+
 ## Local LLM
+
+<br/>
 
 | Item | Rule |
 |---|---|
@@ -74,12 +89,18 @@ test_functions[]
 | Ollama request | Not generated |
 | Local LLM log | Not generated |
 
+<br/>
+
 ## Markdown
+
+<br/>
 
 ```text
 test_envs/reports/markdown/unittest/<execution-id>_result.md
 docs/tests/unittest/<execution-id>.md
 ```
+
+<br/>
 
 ```text
 # unittest Result
@@ -92,7 +113,11 @@ docs/tests/unittest/<execution-id>.md
     └── Logs
 ```
 
+<br/>
+
 ## Index
+
+<br/>
 
 ```text
 docs/tests/unittest/index.md
@@ -108,11 +133,16 @@ docs/tests/unittest/index.md
     └── Failed
 ```
 
+<br/>
+
 ## Report generation
+
+<br/>
 
 ```powershell
 .\.venv\Scripts\python.exe -m test_envs.tools.test_result --pending --docs
 ```
+<br/>
 
 | Output | Rule |
 |---|---|
@@ -120,9 +150,15 @@ docs/tests/unittest/index.md
 | MkDocs document | Execution ID |
 | Unittest index | Automatic |
 
+<br/>
+
 ## Documents
+
+<br/>
 
 | Scope | Document |
 |---|---|
 | unittest | [unittest.md](unittest.md) |
 | Results | [tests/unittest/index.md](tests/unittest/index.md) |
+
+<br/>

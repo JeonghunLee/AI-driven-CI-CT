@@ -2,6 +2,8 @@
 
 ## Components
 
+<br/>
+
 | Item | Value |
 |---|---|
 | Runtime | Ollama |
@@ -11,7 +13,11 @@
 | Default model | `deepseek-r1:7b` |
 | Model ownership | Config JSON |
 
+<br/>
+
 ## Config
+
+<br/>
 
 ```json
 {
@@ -24,6 +30,7 @@
   }
 }
 ```
+<br/>
 
 | Field | Rule |
 |---|---|
@@ -33,7 +40,11 @@
 | `max_timeout_s` | Request timeout |
 | `max_retry` | Retry count |
 
+<br/>
+
 ## Setup
+
+<br/>
 
 ```text
 Ollama installation check
@@ -47,13 +58,19 @@ Model inventory
 ollama pull <selected_model>
 ```
 
+<br/>
+
 | OS | Installer |
 |---|---|
 | Windows | `winget install Ollama.Ollama` |
 | macOS | `brew install ollama` |
 | Linux | Ollama installer |
 
+<br/>
+
 ## VS Code
+
+<br/>
 
 | Item | Value |
 |---|---|
@@ -63,7 +80,11 @@ ollama pull <selected_model>
 | Server | `CHECK 3: Run Ollama Server (Foreground)` |
 | Background server | Prohibited |
 
+<br/>
+
 ## Commands
+
+<br/>
 
 ```powershell
 .\.venv\Scripts\python.exe -m test_envs.tools.environment_setup ollama
@@ -71,7 +92,11 @@ ollama pull <selected_model>
 .\.venv\Scripts\python.exe -m test_envs.tools.configuration check
 ```
 
+<br/>
+
 ## Check file
+
+<br/>
 
 ```text
 ollama
@@ -84,22 +109,33 @@ ollama
 ├── selected_model_installed
 └── supported_models[]
 ```
+<br/>
 
 ## Test usage
+
+<br/>
 
 | Runner | Local LLM |
 |---|---:|
 | pytest | O |
 | unittest | X |
 
+<br/>
+
 | pytest prompt | Priority |
 |---|---:|
 | Non-empty marker `test_prompt` | 1 |
 | `ollama.default_prompt` | 2 |
 
+<br/>
+
 ## Logs
+
+<br/>
 
 | Runner | Output |
 |---|---|
 | pytest | `test_envs/reports/local_llm/<execution-id>_local_llm.log` |
 | unittest | None |
+
+<br/>

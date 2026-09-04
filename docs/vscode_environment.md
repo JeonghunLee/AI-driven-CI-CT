@@ -219,6 +219,8 @@ The Testing panel supports running or debugging the full tree, a folder, a modul
 
 ### Discovery troubleshooting
 
+<br/>
+
 | Symptom | Check |
 |---|---|
 | No tests found | Verify both paths in `python.testing.pytestArgs` |
@@ -227,10 +229,15 @@ The Testing panel supports running or debugging the full tree, a folder, a modul
 | Duplicate unittest nodes | Keep `python.testing.unittestEnabled` set to `false` |
 | Cache path warning | Keep `-p no:cacheprovider` in `pytestArgs` |
 
+<br/>
 
 ## Python
 
+<br/>
+
 ![VS Code Python interpreter](imgs/vscode_python_00.png)
+
+<br/>
 
 | Stage | Interpreter |
 |---|---|
@@ -240,7 +247,11 @@ The Testing panel supports running or debugging the full tree, a folder, a modul
 | VS Code Testing | `${workspaceFolder}/.venv/Scripts/python.exe` |
 | Python terminal | Selected environment, automatically activated |
 
+<br/>
+
 ## Result Flow
+
+<br/>
 
 ```text
 VS Code Testing or TEST CASE Task
@@ -256,7 +267,11 @@ REPORT-Mkdocs: Generate Markdown to Pytest/Unittest
 docs/tests/{pytest,unittest}
 ```
 
+<br/>
+
 ## Related Documents
+
+<br/>
 
 | Scope | Document |
 |---|---|
@@ -265,3 +280,5 @@ docs/tests/{pytest,unittest}
 | Unittest operation | [unittest_operation.md](unittest_operation.md) |
 | Pytest results | [tests/pytest/index.md](tests/pytest/index.md) |
 | Unittest results | [tests/unittest/index.md](tests/unittest/index.md) |
+
+<br/>

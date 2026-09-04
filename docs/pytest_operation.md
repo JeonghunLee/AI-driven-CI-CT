@@ -2,13 +2,19 @@
 
 ## Identifier
 
+<br/>
+
 | Identifier | Rule | Format |
 |---|---|---|
 | TEST ID | Required | `CT-<TARGET>-<NNN>` |
 | Fixture ID | Required | `FIXTURE-<NNN>` |
 | Execution ID | Required | `YYYYMMDD_HHMMSS_ffffff` |
 
+<br/>
+
 ## Runtime
+
+<br/>
 
 ```text
 Test case marker
@@ -32,7 +38,11 @@ Local LLM
 Markdown + MkDocs
 ```
 
+<br/>
+
 ## Structure
+
+<br/>
 
 ```text
 test_envs/tests/pytest/
@@ -43,12 +53,18 @@ test_envs/tests/pytest/
 └── conftest.py
 ```
 
+<br/>
+
 ## Mode
+
+<br/>
 
 | Priority | Source |
 |---:|---|
 | 1 | CLI `--fixture-mode=mock|hil` |
 | 2 | Marker `fixture_mode` |
+
+<br/>
 
 | Validation | Source |
 |---|---|
@@ -56,13 +72,19 @@ test_envs/tests/pytest/
 | Interface | `FIXTURE_META.interfaces` |
 | Equipment | `FIXTURE_META.equipments` |
 
+<br/>
+
 ## Result
+
+<br/>
 
 ```text
 test_envs/reports/results/pytest/test_cases/<test-id>/
 ├── <execution-id>_result.json
 └── <execution-id>_test.log
 ```
+
+<br/>
 
 | Result field | Source |
 |---|---|
@@ -75,12 +97,16 @@ test_envs/reports/results/pytest/test_cases/<test-id>/
 
 ## Local LLM
 
+<br/>
+
 | Item | Rule |
 |---|---|
 | Usage | Enabled |
 | Model | `config.json → ollama.selected_model` |
 | Prompt priority | Test `test_prompt` → `ollama.default_prompt` |
 | Log | `reports/local_llm/<execution-id>_local_llm.log` |
+
+<br/>
 
 | Warning count | Severity |
 |---:|---|
@@ -89,19 +115,28 @@ test_envs/reports/results/pytest/test_cases/<test-id>/
 | 4–5 | `HIGH` |
 | 6+ | `CRITICAL` |
 
+<br/>
+
 ## Markdown
+
+<br/>
 
 ```text
 test_envs/reports/markdown/<test-id>/<execution-id>_result.md
 docs/tests/pytest/<test-id>__<execution-id>.md
 docs/tests/pytest/<test-id>.md
 ```
+<br/>
 
 ## Report generation
+
+<br/>
 
 ```powershell
 .\.venv\Scripts\python.exe -m test_envs.tools.test_result --pending --docs
 ```
+
+<br/>
 
 | Output | Rule |
 |---|---|
@@ -110,9 +145,15 @@ docs/tests/pytest/<test-id>.md
 | Test History | TEST ID execution list |
 | Pytest index | Automatic |
 
+<br/>
+
 ## Documents
+
+<br/>
 
 | Scope | Document |
 |---|---|
 | pytest (HIL or Mock) | [pytest.md](pytest.md) |
 | Results | [tests/pytest/index.md](tests/pytest/index.md) |
+
+<br/>
