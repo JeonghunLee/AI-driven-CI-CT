@@ -75,9 +75,6 @@ on:
         description: Optional Issue number for a manual run comment
         required: false
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 permissions:
   contents: read
   issues: write
