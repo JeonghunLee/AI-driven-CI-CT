@@ -194,7 +194,7 @@ flowchart TD
 | Item | Current behavior |
 |---|---|
 | Workflow name | `Test Request` |
-| Trigger | Test Request Issue opened, edited, or reopened; `run-test` label; or manual `workflow_dispatch` |
+| Trigger | Test Request Issue opened, edited, or reopened; or manual `workflow_dispatch` |
 | Request Job | Parses the Issue Form and emits normalized execution settings |
 | Issue labels | A relevant default-branch push creates both labels; the request job also creates and applies the matching label as a first-Issue fallback |
 | Runner routing | GitHub-hosted Linux → `ubuntu-latest`; GitHub-hosted Windows → `windows-latest`; HIL Linux → `[self-hosted, linux, hw-test]`; HIL Windows → `[self-hosted, windows, hw-test]` |

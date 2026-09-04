@@ -9,7 +9,7 @@ on:
       - .github/ISSUE_TEMPLATE/unittest_request.yml
       - .github/workflows/continuous-test.yml
   issues:
-    types: [opened, edited, reopened, labeled]
+    types: [opened, edited, reopened]
   workflow_dispatch:
     inputs:
       test_type:
@@ -106,13 +106,11 @@ jobs:
   request:
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (github.event.action == 'labeled' && github.event.label.name == 'run-test') ||
-      (github.event.action != 'labeled' &&
-        (contains(github.event.issue.labels.*.name, 'test-request-runner') ||
-         contains(github.event.issue.labels.*.name, 'test-check-runner') ||
-         startsWith(github.event.issue.title, '[PYTEST-REQUEST]') ||
-         startsWith(github.event.issue.title, '[UNITTEST-REQUEST]') ||
-         startsWith(github.event.issue.title, '[TEST-CHECK]')))
+      contains(github.event.issue.labels.*.name, 'test-request-runner') ||
+      contains(github.event.issue.labels.*.name, 'test-check-runner') ||
+      startsWith(github.event.issue.title, '[PYTEST-REQUEST]') ||
+      startsWith(github.event.issue.title, '[UNITTEST-REQUEST]') ||
+      startsWith(github.event.issue.title, '[TEST-CHECK]')
     runs-on: ubuntu-latest
     outputs:
       request_kind: ${{ steps.request.outputs.request_kind }}

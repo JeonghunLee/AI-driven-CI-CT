@@ -774,7 +774,7 @@ test_envs.tools.pipeline
 | Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
 | Automatic trigger | Request Issue opened, edited, or reopened |
 | Label provisioning | A relevant default-branch push creates both labels; the request job also recognizes `[PYTEST-REQUEST]`, `[UNITTEST-REQUEST]`, and `[TEST-CHECK]` |
-| Rerun trigger | Issue label `run-test` |
+| Rerun trigger | Edit or reopen the Issue, or use manual `workflow_dispatch` |
 | Local/manual trigger | `workflow_dispatch`; replaces the former local request workflow |
 | Default runner | GitHub-hosted Linux (`ubuntu-latest`) |
 | Hosted compatibility | Mock CT and Unittest run on GitHub-hosted Linux or Windows |
