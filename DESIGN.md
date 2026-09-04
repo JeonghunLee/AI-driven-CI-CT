@@ -773,6 +773,7 @@ test_envs.tools.pipeline
 | Environment check result | Workflow detects host type, OS, Python, and Ollama and posts them through `github_reporter` |
 | Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
 | Automatic trigger | Request Issue opened, edited, or reopened |
+| Duplicate-run rule | `labeled` is not subscribed; workflow-applied labels do not start another run |
 | Label provisioning | A relevant default-branch push creates both labels; the request job also recognizes `[PYTEST-REQUEST]`, `[UNITTEST-REQUEST]`, and `[TEST-CHECK]` |
 | Rerun trigger | Edit or reopen the Issue, or use manual `workflow_dispatch` |
 | Local/manual trigger | `workflow_dispatch`; replaces the former local request workflow |
@@ -782,11 +783,14 @@ test_envs.tools.pipeline
 | HIL Windows | `[self-hosted, windows, hw-test]` |
 | HIL constraint | Physical equipment requires a matching Self-hosted OS runner and never falls back to Mock |
 | Pytest selection | `CT-UART-001`, `CT-USB-001`, or `CT-NETWORK-001` plus `marker`, `mock`, or `hil` Fixture mode |
-| Unittest selection | All Unittest, CT Framework Python, or one path/node ID below `test_envs/tests/unittest` |
+| Pytest-only fields | TEST ID and Fixture Mode; Test Category is not requested |
+| Unittest selection | All Unittest or CT Framework Python |
+| Unittest excluded fields | TEST ID, Fixture Mode, Unittest Target, Additional Evidence, Expected Result, and MkDocs selection |
 | Coverage | None, terminal missing-lines, or HTML report |
 | Result selection | Only the normalized result created after the current workflow marker |
 | Issue-form report selection | Optional Pandoc HTML/DOCX; canonical Markdown remains part of the common pipeline |
 | Failure handling | Test failures keep the normalized result; setup/capture failures post an ERROR comment |
+| Node.js | No project Node.js installation or command; JavaScript-based official Actions use their GitHub-managed runtime |
 
 The previous separate HIL responsibility is handled by dynamic runner selection. Local/manual requests are handled by `workflow_dispatch` inputs in the same unified workflow.
 

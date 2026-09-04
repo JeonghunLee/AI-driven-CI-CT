@@ -16,6 +16,14 @@
 
 ```text
 .
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── pytest_request.yml
+│   │   ├── unittest_request.yml
+│   │   └── test_check.yml
+│   └── workflows/
+│       ├── continuous-test.yml
+│       └── github_pages.yaml
 ├── docs/
 │   ├── index.md
 │   ├── python_environment.md
@@ -367,13 +375,18 @@ test_envs/reports/
 
 ## GitHub 자동화
 
-| Workload | Runner |
+| 항목 | 구성 |
 |---|---|
-| Pytest request | `.github/ISSUE_TEMPLATE/pytest_request.yml` |
-| Unittest request | `.github/ISSUE_TEMPLATE/unittest_request.yml` |
-| Environment check | `.github/ISSUE_TEMPLATE/test_check.yml` → automatic runner environment Issue comment |
-| Unit Test / Mock CT / GitHub-hosted Linux | `ubuntu-latest` |
-| Unit Test / Mock CT / GitHub-hosted Windows | `windows-latest` |
-| HIL equipment and interfaces on Linux | `[self-hosted, linux, hw-test]` |
-| HIL equipment and interfaces on Windows | `[self-hosted, windows, hw-test]` |
-| Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
+| Pytest 요청 | `pytest_request.yml`: TEST ID, `marker`/`mock`/`hil`, Runner, Revision, Coverage, Pandoc, Evidence |
+| Unittest 요청 | `unittest_request.yml`: All 또는 CT Framework, Runner, Revision, Coverage, Pandoc |
+| Unittest 제외 항목 | TEST ID, Fixture Mode, Target, Additional Evidence, Expected Result, MkDocs 선택 |
+| 환경 확인 | `test_check.yml`: Runner만 선택하고 Host, OS, Python, Ollama 결과를 Issue에 자동 기록 |
+| 통합 Workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
+| Issue Trigger | `opened`, `edited`, `reopened`; `labeled` 이벤트는 중복 실행 방지를 위해 제외 |
+| GitHub-hosted Linux | `ubuntu-latest`: Mock CT, Unittest, TEST-CHECK |
+| GitHub-hosted Windows | `windows-latest`: Mock CT, Unittest, TEST-CHECK |
+| Self-hosted HIL Linux | `[self-hosted, linux, hw-test]` |
+| Self-hosted HIL Windows | `[self-hosted, windows, hw-test]` |
+| 분석 | Pytest만 Local LLM 사용; Unittest는 사용하지 않음 |
+| Issue 결과 | `github_reporter`: 테스트 결과, 환경 확인 결과, 실행 오류 코멘트 |
+| Node.js | 프로젝트 설치 및 실행 없음; 공식 GitHub Action 내부 런타임은 GitHub가 관리 |

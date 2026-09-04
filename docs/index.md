@@ -89,7 +89,7 @@ flowchart TD
 
     TASK --> REPORTER
     REPORTER --> MARKDOWN
-    MARKDOWN --> MKDOCS
+    MARKDOWN -. Manual --docs .-> MKDOCS
     MARKDOWN --> PANDOC_REPORTER --> PANDOC
     TASK --> MKDOCS
     TASK --> PANDOC_REPORTER
@@ -151,7 +151,7 @@ flowchart TD
     RUNNER -->|Test request| ENV
     RUNNER -->|TEST-CHECK| ENV_CHECK --> GITHUB_REPORTER --> ISSUE
     ENV -->|Fixture-based CT| PYTEST
-    ENV -->|Function-based Unit Test| UNITTEST
+    ENV -->|Function-based Unittest| UNITTEST
 
     PYTEST --> PYTEST_RESULT --> LLM --> REPORTER
     UNITTEST --> UNITTEST_RESULT --> REPORTER
@@ -169,8 +169,8 @@ flowchart TD
 
 | GitHub Actions entry | Execution scope |
 |---|---|
-| `pytest_request.yml` | Collects Pytest TEST ID, `marker`/`mock`/`hil` Fixture mode, runner, revision, Coverage, and Pandoc outputs |
-| `unittest_request.yml` | Collects Unittest scope, runner, revision, Coverage, and Pandoc outputs |
+| `pytest_request.yml` | Pytest-only form: TEST ID, `marker`/`mock`/`hil`, runner, revision, Coverage, optional Pandoc, and evidence |
+| `unittest_request.yml` | Unittest-only form: All or CT Framework scope, runner, revision, Coverage, and optional Pandoc; no TEST ID, Fixture, Target, Evidence, or Expected Result |
 | `test_check.yml` | Selects only a runner; the workflow detects its host type, OS, Python, and Ollama state and comments on the Issue |
 | `continuous-test.yml` | Routes the request to a hosted or self-hosted runner, executes the test, generates reports, updates the Issue, and uploads evidence |
 | Common Markdown reporter | `test_envs/tools/mkdocs_reporter` renders both result types before MkDocs publication and artifact upload |
@@ -194,20 +194,22 @@ flowchart TD
 | Item | Current behavior |
 |---|---|
 | Workflow name | `Test Request` |
-| Trigger | Test Request Issue opened, edited, or reopened; or manual `workflow_dispatch` |
-| Request Job | Parses the Issue Form and emits normalized execution settings |
+| Trigger | Request Issue `opened`, `edited`, or `reopened`; or manual `workflow_dispatch` |
+| Duplicate prevention | The workflow does not subscribe to `labeled`; automatic label attachment therefore does not create a second run |
+| Request Job | Detects Pytest, Unittest, or TEST-CHECK from the form title and emits normalized execution settings |
 | Issue labels | A relevant default-branch push creates both labels; the request job also creates and applies the matching label as a first-Issue fallback |
 | Runner routing | GitHub-hosted Linux → `ubuntu-latest`; GitHub-hosted Windows → `windows-latest`; HIL Linux → `[self-hosted, linux, hw-test]`; HIL Windows → `[self-hosted, windows, hw-test]` |
 | Timeout | 60 minutes |
 | Permissions | Repository contents read; issues write |
 | Python | `actions/setup-python@v5`, Python 3.12, pip cache |
-| Environment | Creates `.venv` and installs `requirements.txt` |
-| Unit Test | Runs the requested Unittest scope through pytest without Local LLM analysis |
+| Environment | Test requests create `.venv` and install `requirements.txt`; TEST-CHECK inspects the selected runner directly |
+| Unittest | Runs All Unittest or CT Framework Python through pytest without Local LLM analysis |
 | Pytest CT | Mock runs on GitHub-hosted Linux/Windows; physical HIL routes to the self-hosted hardware runner |
 | Coverage | Optional terminal or HTML `pytest-cov` report |
-| Report | Processes the explicit result; optionally publishes MkDocs and converts Pandoc HTML/DOCX |
+| Report | Always creates canonical Markdown; Issue Forms optionally convert Pandoc HTML/DOCX, while manual dispatch can additionally publish MkDocs |
 | Issue output | `test_envs.tools.github_reporter` comments on success, test failure, report failure, or missing result |
 | Artifact | Uploads results, MkDocs pages, `.coverage`, and `htmlcov/` |
+| Node.js | No project Node.js setup or command; official GitHub Actions manage their own embedded runtime |
 
 <br/>
 
