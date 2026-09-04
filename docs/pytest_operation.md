@@ -1,134 +1,180 @@
 # Pytest Operation
 
-## Identifier
+<br/>
+
+Pytest executes Fixture-based CT Test Cases in `mock` or `hil` mode. After execution, the Report operation uses a Local LLM to analyze the result and generate Markdown.
 
 <br/>
 
-| Identifier | Rule | Format |
-|---|---|---|
-| TEST ID | Required | `CT-<TARGET>-<NNN>` |
-| Fixture ID | Required | `FIXTURE-<NNN>` |
-| Execution ID | Required | `YYYYMMDD_HHMMSS_ffffff` |
+Framework structure and Fixture contracts are documented in [Pytest CT Framework](pytest_framework.md).
 
 <br/>
 
-## Runtime
+## Operation Summary
 
 <br/>
 
-```text
-Test case marker
-├── test_id
-├── category
-├── fixture_id
-├── fixture_mode
-└── test_prompt
-       ↓
-Fixture FIXTURE_META
-├── interfaces[]
-├── equipments[]
-└── modes
-       ↓
-pytest execution
-       ↓
-Result JSON + Test log
-       ↓
-Local LLM
-       ↓
-Markdown + MkDocs
-```
+| Item | Pytest operation |
+|---|---|
+| Test unit | One CT Test Case |
+| Primary identifier | TEST ID, such as `CT-UART-001` |
+| Test composition | Numbered Fixture with interfaces and equipment |
+| Runtime mode | `mock` or `hil` |
+| Result capture | `test_envs/tests/pytest/conftest.py` |
+| Local LLM | Used during Report generation |
+| Coverage | `pytest-cov` or VS Code Testing Coverage |
 
 <br/>
 
-## Structure
+## Execution Sequence
 
 <br/>
 
 ```text
-test_envs/tests/pytest/
-├── test_cases/
-├── fixtures/
-├── test_interfaces/{usb,uart,jtag,network}/{mock,hil}/
-├── test_equipments/{fpga,saleae,digilent}/{mock,hil}/
-└── conftest.py
+Collect CT Test Cases
+        ↓
+Validate TEST ID, Fixture ID, marker, and Fixture metadata
+        ↓
+Apply optional --test-id selection
+        ↓
+Resolve mock or hil mode
+        ↓
+Connect Fixture interfaces and equipment
+        ↓
+Execute Test Case and record metrics/statistics
+        ↓
+Disconnect Fixture resources
+        ↓
+Write Result JSON and Test Log
 ```
 
 <br/>
 
-## Mode
-
-<br/>
-
-| Priority | Source |
+| Step | Operation |
 |---:|---|
-| 1 | CLI `--fixture-mode=mock|hil` |
-| 2 | Marker `fixture_mode` |
+| 1 | Pytest collects `test_envs/tests/pytest/test_cases` |
+| 2 | `conftest.py` validates the CT marker and numbered Fixture contract |
+| 3 | `--test-id` keeps one TEST ID when provided |
+| 4 | `--fixture-mode` overrides the marker or uses its default mode |
+| 5 | The Fixture connects its interface and equipment before `yield` |
+| 6 | The Test Case executes assertions and updates `ct_result` |
+| 7 | Fixture cleanup disconnects resources in reverse order |
+| 8 | The result hook stores normalized evidence by TEST ID and Execution ID |
 
 <br/>
 
-| Validation | Source |
-|---|---|
-| Mode enabled | `FIXTURE_META.modes.<mode>.enabled` |
-| Interface | `FIXTURE_META.interfaces` |
-| Equipment | `FIXTURE_META.equipments` |
+`marker` is a mode-selection instruction, not a final execution mode. It resolves to the `mock` or `hil` value declared by `@pytest.mark.ct`.
 
 <br/>
 
-## Result
+## Run Pytest
 
 <br/>
 
-```text
-test_envs/reports/results/pytest/test_cases/<test-id>/
-├── <execution-id>_result.json
-└── <execution-id>_test.log
+Run every configured test:
+
+<br/>
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest
 ```
 
 <br/>
 
-| Result field | Source |
-|---|---|
-| Test ID | Test case marker |
-| Category | Test case marker |
-| Fixture configs | `FIXTURE_META` snapshot |
-| Test mode | Effective Fixture mode |
-| Metrics | `ct_result.metrics` |
-| Statistics | `ct_result.statistics` |
-
-## Local LLM
+Run all CT Test Cases with their marker modes:
 
 <br/>
 
-| Item | Rule |
-|---|---|
-| Usage | Enabled |
-| Model | `config.json → ollama.selected_model` |
-| Prompt priority | Test `test_prompt` → `ollama.default_prompt` |
-| Log | `reports/local_llm/<execution-id>_local_llm.log` |
+```powershell
+.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=marker
+```
 
 <br/>
 
-| Warning count | Severity |
-|---:|---|
-| 0–1 | `LOW` |
-| 2–3 | `MEDIUM` |
-| 4–5 | `HIGH` |
-| 6+ | `CRITICAL` |
+Force Mock mode:
 
 <br/>
 
-## Markdown
+```powershell
+.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=mock
+```
+
+<br/>
+
+Run one TEST ID:
+
+<br/>
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --test-id CT-UART-001 --fixture-mode=mock
+```
+
+<br/>
+
+The current executable CT Test Cases use Mock implementations. Selecting HIL fails explicitly where a physical Fixture implementation has not been completed.
+
+<br/>
+
+## Test Coverage
+
+<br/>
+
+Run CT Test Cases and print missing Python lines:
+
+<br/>
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=mock --cov=test_envs --cov-report=term-missing
+```
+
+<br/>
+
+`pytest-cov` stores coverage data in `.coverage`. Add `--cov-report=html` when an HTML report under `htmlcov/` is needed.
+
+<br/>
+
+In VS Code Testing, select a Pytest node and use **Run Test with Coverage**. Coverage measures executed Python code; it does not measure physical HIL signal or protocol coverage.
+
+<br/>
+
+## Result and Report
+
+<br/>
+
+Pytest execution and Report generation are separate operations.
 
 <br/>
 
 ```text
-test_envs/reports/markdown/<test-id>/<execution-id>_result.md
-docs/tests/pytest/<test-id>__<execution-id>.md
-docs/tests/pytest/<test-id>.md
+Pytest execution
+      ↓
+Result JSON + Test Log
+      ↓
+test_envs.tools.test_result
+      ↓
+Local LLM analysis
+      ↓
+Conditional escalation decision
+      ↓
+Canonical Markdown
+      ├── MkDocs Results
+      └── Pandoc Report
 ```
+
 <br/>
 
-## Report generation
+| Output | Path |
+|---|---|
+| Result JSON | `test_envs/reports/results/pytest/test_cases/<test-id>/<execution-id>_result.json` |
+| Test log | `test_envs/reports/results/pytest/test_cases/<test-id>/<execution-id>_test.log` |
+| Local LLM log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` |
+| Canonical Markdown | `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` |
+| MkDocs result | `docs/tests/pytest/` |
+| Pandoc output | `test_envs/reports/pandoc/<test-id>/` |
+
+<br/>
+
+Generate every pending Markdown report and publish MkDocs result pages:
 
 <br/>
 
@@ -138,22 +184,10 @@ docs/tests/pytest/<test-id>.md
 
 <br/>
 
-| Output | Rule |
-|---|---|
-| Canonical Markdown | Execution ID |
-| Latest TEST page | TEST ID |
-| Test History | TEST ID execution list |
-| Pytest index | Automatic |
+If Ollama is unavailable or returns invalid analysis, the reporter records the attempts and uses deterministic fallback analysis so Report generation can continue.
 
 <br/>
 
-## Documents
-
-<br/>
-
-| Scope | Document |
-|---|---|
-| pytest (HIL or Mock) | [pytest_framework.md](pytest_framework.md) |
-| Results | [tests/pytest/index.md](tests/pytest/index.md) |
+See [Pytest Results](tests/pytest/index.md) for published results.
 
 <br/>
