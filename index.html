@@ -820,7 +820,7 @@ Go To <a href="https://jeonghunlee.github.io/vscode_doc/#vscode-testing">VS Code
 
     TASK --&gt; REPORTER
     REPORTER --&gt; MARKDOWN
-    MARKDOWN --&gt; MKDOCS
+    MARKDOWN -. Manual --docs .-&gt; MKDOCS
     MARKDOWN --&gt; PANDOC_REPORTER --&gt; PANDOC
     TASK --&gt; MKDOCS
     TASK --&gt; PANDOC_REPORTER
@@ -870,40 +870,73 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <h3 id="github-actions-based-flow">GitHub Actions-based flow</h3>
 <p><br/></p>
 <pre class="mermaid"><code>flowchart TD
-    REQUEST[test_request.yml Issue]
-    CHECK_REQUEST[test_check.yml Issue]
-    WORKFLOW[continuous-test.yml]
-    PARSER[test_envs.tools.issue_parser]
-    RUNNER[Hosted or Self-hosted Runner]
-    ENV[TEST System Environment]
-    ENV_CHECK[Automatic OS / Python / Ollama Check]
-    PYTEST[Pytest Operation]
-    UNITTEST[Unittest Operation]
-    PYTEST_RESULT[Pytest Result]
-    UNITTEST_RESULT[Unittest Result]
-    LLM[Local LLM]
-    REPORTER["test_envs/tools/mkdocs_reporter&lt;br/&gt;MarkdownReporter"]
-    GITHUB_REPORTER[test_envs.tools.github_reporter]
-    MARKDOWN["Pytest / Unittest Markdown"]
-    MKDOCS["MkDocs (TEST Results)"]
-    ISSUE[GitHub Issue Comment]
-    ARTIFACT[GitHub Artifact]
+    PUSH["Push to main&lt;br/&gt;Issue Form or Workflow files"]
+    PYTEST_ISSUE["pytest_request.yml&lt;br/&gt;Issue opened / edited / reopened"]
+    UNITTEST_ISSUE["unittest_request.yml&lt;br/&gt;Issue opened / edited / reopened"]
+    CHECK_ISSUE["test_check.yml&lt;br/&gt;Issue opened / edited / reopened"]
+    MANUAL[workflow_dispatch]
 
-    REQUEST --&gt; WORKFLOW
-    CHECK_REQUEST --&gt; WORKFLOW
-    WORKFLOW --&gt; PARSER --&gt; RUNNER
-    RUNNER --&gt;|Test request| ENV
-    RUNNER --&gt;|TEST-CHECK| ENV_CHECK --&gt; GITHUB_REPORTER --&gt; ISSUE
-    ENV --&gt;|Fixture-based CT| PYTEST
-    ENV --&gt;|Function-based Unit Test| UNITTEST
+    subgraph LABEL_JOB["labels job · ubuntu-latest"]
+        LABELS["Create test-request-runner&lt;br/&gt;and test-check-runner labels"]
+    end
 
-    PYTEST --&gt; PYTEST_RESULT --&gt; LLM --&gt; REPORTER
-    UNITTEST --&gt; UNITTEST_RESULT --&gt; REPORTER
+    subgraph REQUEST_JOB["request job · ubuntu-latest"]
+        CHECKOUT_REQUEST[Checkout]
+        APPLY_LABEL[Ensure and apply matching Issue label]
+        PARSER[test_envs.tools.issue_parser]
+        OUTPUTS["Normalize request_kind, test settings,&lt;br/&gt;revision, reports, and runner_labels"]
 
-    REPORTER --&gt; MARKDOWN
-    MARKDOWN --&gt; MKDOCS
-    REPORTER --&gt; GITHUB_REPORTER
-    MARKDOWN --&gt; ARTIFACT
+        CHECKOUT_REQUEST --&gt; APPLY_LABEL --&gt; PARSER --&gt; OUTPUTS
+    end
+
+    subgraph TEST_JOB["test job · runs-on: runner_labels"]
+        CHECKOUT_TEST[Checkout requested revision]
+        SETUP_PYTHON[Setup Python 3.12]
+        REQUEST_KIND{request_kind}
+        ENV_CHECK["TEST-CHECK&lt;br/&gt;Host / OS / Python / Ollama"]
+        TEST_TYPE{test_type}
+        PYTEST["Pytest CT&lt;br/&gt;TEST ID + marker / mock / hil"]
+        UNITTEST["Unittest through pytest&lt;br/&gt;All or CT Framework"]
+        PYTEST_RESULT[Pytest Result]
+        UNITTEST_RESULT[Unittest Result]
+        COVERAGE[Optional Coverage]
+        PIPELINE[test_envs.tools.pipeline]
+        LLM["Local LLM&lt;br/&gt;Pytest only"]
+        REPORTER["test_envs/tools/mkdocs_reporter&lt;br/&gt;Canonical Markdown"]
+        MKDOCS["MkDocs (TEST Results)&lt;br/&gt;when report_mkdocs is enabled"]
+        PANDOC["test_envs.tools.pandoc_reporter&lt;br/&gt;optional HTML / DOCX"]
+        GITHUB_REPORTER[test_envs.tools.github_reporter]
+        ISSUE[GitHub Issue Comment]
+        ARTIFACT["GitHub Artifact&lt;br/&gt;results / reports / coverage"]
+
+        CHECKOUT_TEST --&gt; SETUP_PYTHON --&gt; REQUEST_KIND
+        REQUEST_KIND --&gt;|environment-check| ENV_CHECK --&gt; GITHUB_REPORTER
+        REQUEST_KIND --&gt;|test| TEST_TYPE
+        TEST_TYPE --&gt;|Pytest| PYTEST --&gt; PYTEST_RESULT
+        TEST_TYPE --&gt;|Unittest| UNITTEST --&gt; UNITTEST_RESULT
+        PYTEST_RESULT --&gt; COVERAGE
+        UNITTEST_RESULT --&gt; COVERAGE
+        PYTEST_RESULT --&gt; PIPELINE
+        UNITTEST_RESULT --&gt; PIPELINE
+        PIPELINE --&gt;|Pytest analysis| LLM --&gt; REPORTER
+        PIPELINE --&gt;|Unittest · no LLM| REPORTER
+        REPORTER -. report_mkdocs .-&gt; MKDOCS
+        REPORTER -. report_html / report_docx .-&gt; PANDOC
+        PIPELINE --&gt; GITHUB_REPORTER --&gt; ISSUE
+        PYTEST_RESULT --&gt; ARTIFACT
+        UNITTEST_RESULT --&gt; ARTIFACT
+        COVERAGE --&gt; ARTIFACT
+        REPORTER --&gt; ARTIFACT
+        MKDOCS --&gt; ARTIFACT
+        PANDOC --&gt; ARTIFACT
+    end
+
+    PUSH --&gt; LABELS
+    PYTEST_ISSUE --&gt; CHECKOUT_REQUEST
+    UNITTEST_ISSUE --&gt; CHECKOUT_REQUEST
+    CHECK_ISSUE --&gt; CHECKOUT_REQUEST
+    MANUAL --&gt; CHECKOUT_REQUEST
+    OUTPUTS --&gt; CHECKOUT_TEST
 
     classDef testResults fill:#fff3bf,stroke:#f08c00,stroke-width:4px,color:#5f3d00,font-weight:bold
     class MKDOCS testResults</code></pre>
@@ -917,8 +950,12 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </thead>
 <tbody>
 <tr>
-<td><code>test_request.yml</code></td>
-<td>Collects Pytest/Unittest, runner, revision, Coverage, and Report selections</td>
+<td><code>pytest_request.yml</code></td>
+<td>Pytest-only form: TEST ID, <code>marker</code>/<code>mock</code>/<code>hil</code>, runner, revision, Coverage, optional Pandoc, and evidence</td>
+</tr>
+<tr>
+<td><code>unittest_request.yml</code></td>
+<td>Unittest-only form: All or CT Framework scope, runner, revision, Coverage, and optional Pandoc; no TEST ID, Fixture, Target, Evidence, or Expected Result</td>
 </tr>
 <tr>
 <td><code>test_check.yml</code></td>
@@ -930,12 +967,17 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </tr>
 <tr>
 <td>Common Markdown reporter</td>
-<td><code>test_envs/tools/mkdocs_reporter</code> renders both result types before MkDocs publication and artifact upload</td>
+<td><code>test_envs/tools/mkdocs_reporter</code> always renders the canonical Markdown; MkDocs publication is enabled separately and the generated reports are uploaded as artifacts</td>
 </tr>
 </tbody>
 </table>
 <p><br/></p>
-<p>Go to <a href="https://github.com/JeonghunLee/AI-driven-CI-CT/issues">Github Issue</a></p>
+<div class="admonition success">
+<p class="admonition-title">Github Issues and Automatically Generate Report</p>
+<ul>
+<li>Request <a href="https://github.com/JeonghunLee/AI-driven-CI-CT/issues">Github Issue and Github Actions</a> </li>
+</ul>
+</div>
 <p><br/></p>
 <h2 id="github-actions-flow">GitHub Actions Flow</h2>
 <p><br/></p>
@@ -954,11 +996,15 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </tr>
 <tr>
 <td>Trigger</td>
-<td>Test Request Issue opened, edited, or reopened; <code>run-test</code> label; or manual <code>workflow_dispatch</code></td>
+<td>Request Issue <code>opened</code>, <code>edited</code>, or <code>reopened</code>; or manual <code>workflow_dispatch</code></td>
+</tr>
+<tr>
+<td>Duplicate prevention</td>
+<td>The workflow does not subscribe to <code>labeled</code>; automatic label attachment therefore does not create a second run</td>
 </tr>
 <tr>
 <td>Request Job</td>
-<td>Parses the Issue Form and emits normalized execution settings</td>
+<td>Detects Pytest, Unittest, or TEST-CHECK from the form title and emits normalized execution settings</td>
 </tr>
 <tr>
 <td>Issue labels</td>
@@ -982,11 +1028,11 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </tr>
 <tr>
 <td>Environment</td>
-<td>Creates <code>.venv</code> and installs <code>requirements.txt</code></td>
+<td>Test requests create <code>.venv</code> and install <code>requirements.txt</code>; TEST-CHECK inspects the selected runner directly</td>
 </tr>
 <tr>
-<td>Unit Test</td>
-<td>Runs the requested Unittest scope through pytest without Local LLM analysis</td>
+<td>Unittest</td>
+<td>Runs All Unittest or CT Framework Python through pytest without Local LLM analysis</td>
 </tr>
 <tr>
 <td>Pytest CT</td>
@@ -998,7 +1044,7 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </tr>
 <tr>
 <td>Report</td>
-<td>Processes the explicit result; optionally publishes MkDocs and converts Pandoc HTML/DOCX</td>
+<td>Always creates canonical Markdown; Issue Forms optionally convert Pandoc HTML/DOCX, while manual dispatch can additionally publish MkDocs</td>
 </tr>
 <tr>
 <td>Issue output</td>
@@ -1007,6 +1053,10 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <tr>
 <td>Artifact</td>
 <td>Uploads results, MkDocs pages, <code>.coverage</code>, and <code>htmlcov/</code></td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>No project Node.js setup or command; official GitHub Actions manage their own embedded runtime</td>
 </tr>
 </tbody>
 </table>
@@ -1035,7 +1085,8 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <p><div class="highlight"><pre><span></span><code>.
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
-│   │   ├── test_request.yml
+│   │   ├── pytest_request.yml
+│   │   ├── unittest_request.yml
 │   │   └── test_check.yml
 │   └── workflows/
 │       ├── continuous-test.yml

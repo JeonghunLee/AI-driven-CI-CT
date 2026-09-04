@@ -970,10 +970,10 @@
 <p>Running <code>python -m unittest</code> bypasses the pytest hooks and therefore does not generate this framework's normalized result or log.</p>
 <p><br/></p>
 <h3 id="github-actions">GitHub Actions</h3>
-<p><code>continuous-test.yml</code> selects the Unit Test path when the parsed request type is <code>Unit Test</code>:</p>
-<div class="highlight"><pre><span></span><code>test_request.yml Issue
+<p><code>continuous-test.yml</code> selects the Unittest path when the request comes from <code>unittest_request.yml</code> or the manual Test Type is <code>Unittest</code>:</p>
+<div class="highlight"><pre><span></span><code>unittest_request.yml Issue
         ↓
-issue_parser selects Unit Test scope and runner
+issue_parser selects Unittest scope and runner
         ↓
 pytest test_envs/tests/unittest
         ↓
