@@ -1,6 +1,12 @@
 name: Test Request
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/ISSUE_TEMPLATE/test_check.yml
+      - .github/ISSUE_TEMPLATE/test_request.yml
+      - .github/workflows/continuous-test.yml
   issues:
     types: [opened, edited, reopened, labeled]
   workflow_dispatch:
@@ -76,6 +82,26 @@ permissions:
   issues: write
 
 jobs:
+  labels:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Issue labels
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create "test-request-runner" `
+            --repo $env:GITHUB_REPOSITORY `
+            --color "0E8A16" `
+            --description "Run a Pytest CT or Unittest request" `
+            --force
+          gh label create "test-check-runner" `
+            --repo $env:GITHUB_REPOSITORY `
+            --color "1D76DB" `
+            --description "Run an automatic test environment check" `
+            --force
+
   request:
     if: >-
       github.event_name == 'workflow_dispatch' ||
@@ -83,7 +109,7 @@ jobs:
       (github.event.action != 'labeled' &&
         (contains(github.event.issue.labels.*.name, 'test-request-runner') ||
          contains(github.event.issue.labels.*.name, 'test-check-runner') ||
-         startsWith(github.event.issue.title, '[TEST]') ||
+         startsWith(github.event.issue.title, '[TEST-REQUEST]') ||
          startsWith(github.event.issue.title, '[TEST-CHECK]')))
     runs-on: ubuntu-latest
     outputs:
@@ -109,6 +135,35 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Ensure request label
+        if: github.event_name == 'issues'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          if ($env:ISSUE_TITLE.StartsWith("[TEST-CHECK]")) {
+            $label = "test-check-runner"
+            $color = "1D76DB"
+            $description = "Run an automatic test environment check"
+          } elseif ($env:ISSUE_TITLE.StartsWith("[TEST-REQUEST]") -or $env:ISSUE_TITLE.StartsWith("[TEST]")) {
+            $label = "test-request-runner"
+            $color = "0E8A16"
+            $description = "Run a Pytest CT or Unittest request"
+          } else {
+            exit 0
+          }
+
+          gh label create $label `
+            --repo $env:GITHUB_REPOSITORY `
+            --color $color `
+            --description $description `
+            --force
+          gh issue edit $env:ISSUE_NUMBER `
+            --repo $env:GITHUB_REPOSITORY `
+            --add-label $label
 
       - name: Read test request
         id: request

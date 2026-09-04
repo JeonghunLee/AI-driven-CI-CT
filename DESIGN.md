@@ -772,6 +772,7 @@ test_envs.tools.pipeline
 | Environment check result | Workflow detects host type, OS, Python, and Ollama and posts them through `github_reporter` |
 | Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
 | Automatic trigger | Request Issue opened, edited, or reopened |
+| Label provisioning | A relevant default-branch push creates both labels; the request job also creates/applies the matching label using `[TEST-REQUEST]` or `[TEST-CHECK]` title detection |
 | Rerun trigger | Issue label `run-test` |
 | Local/manual trigger | `workflow_dispatch`; replaces the former local request workflow |
 | Default runner | GitHub-hosted Linux (`ubuntu-latest`) |
