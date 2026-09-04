@@ -179,13 +179,13 @@ flowchart TD
 | Workflow name | `Test Request` |
 | Trigger | Test Request Issue opened, edited, or reopened; `run-test` label; or manual `workflow_dispatch` |
 | Request Job | Parses the Issue Form and emits normalized execution settings |
-| Runner routing | Default/Linux → `ubuntu-latest`; Windows → `windows-latest`; HIL → `[self-hosted, hw-test]` |
+| Runner routing | GitHub-hosted Linux → `ubuntu-latest`; GitHub-hosted Windows → `windows-latest`; HIL Linux → `[self-hosted, linux, hw-test]`; HIL Windows → `[self-hosted, windows, hw-test]` |
 | Timeout | 60 minutes |
 | Permissions | Repository contents read; issues write |
 | Python | `actions/setup-python@v5`, Python 3.12, pip cache |
 | Environment | Creates `.venv` and installs `requirements.txt` |
 | Unit Test | Runs the requested Unittest scope through pytest without Local LLM analysis |
-| Pytest CT | Runs the selected TEST ID and Fixture mode; HIL can route to the hardware runner |
+| Pytest CT | Mock runs on GitHub-hosted Linux/Windows; physical HIL routes to the self-hosted hardware runner |
 | Coverage | Optional terminal or HTML `pytest-cov` report |
 | Report | Processes the explicit result; optionally publishes MkDocs and converts Pandoc HTML/DOCX |
 | Issue output | `test_envs.tools.github_reporter` comments on success, test failure, report failure, or missing result |

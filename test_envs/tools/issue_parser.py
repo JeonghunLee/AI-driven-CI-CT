@@ -8,10 +8,16 @@ from pathlib import Path
 
 
 RUNNER_LABELS = {
-    "Default": ["ubuntu-latest"],
-    "Linux": ["ubuntu-latest"],
-    "Windows": ["windows-latest"],
-    "Self-hosted HIL": ["self-hosted", "hw-test"],
+    "GitHub-hosted Linux": ["ubuntu-latest"],
+    "GitHub-hosted Windows": ["windows-latest"],
+    "Self-hosted HIL Linux": ["self-hosted", "linux", "hw-test"],
+    "Self-hosted HIL Windows": ["self-hosted", "windows", "hw-test"],
+}
+
+RUNNER_ALIASES = {
+    "Default": "GitHub-hosted Linux",
+    "Linux": "GitHub-hosted Linux",
+    "Windows": "GitHub-hosted Windows",
 }
 
 
@@ -40,9 +46,11 @@ def _checked(value: str, label: str) -> str:
 
 
 def request_configuration(values: dict[str, str]) -> dict[str, str]:
-    runner = values.get("Runner", values.get("runner", "Default"))
+    runner = values.get("Runner", values.get("runner", "GitHub-hosted Linux"))
+    runner = RUNNER_ALIASES.get(runner, runner)
     if runner not in RUNNER_LABELS:
-        runner = "Default"
+        choices = ", ".join(RUNNER_LABELS)
+        raise ValueError(f"unsupported runner {runner!r}; select one of: {choices}")
     reports = values.get("Report Outputs", values.get("reports", ""))
     test_type = values.get("Test Type", values.get("test_type", "pytest / CT"))
     unittest_target = _first_line(

@@ -139,7 +139,11 @@ For Unittest, mark this section as not applicable because Local LLM is not used.
 
 - [ ] The requested runner label is available.
 - [ ] The runner has permission to read the repository and upload artifacts.
+- [ ] GitHub-hosted Linux or Windows is selected for Mock CT or Unittest when physical hardware is not required.
+- [ ] A GitHub-hosted run does not depend on local devices, vendor drivers, or an internal-only network.
+- [ ] A self-hosted HIL runner has the matching `linux` or `windows` OS label.
 - [ ] A self-hosted HIL runner has the required hardware, drivers, and device permissions.
+- [ ] Physical HIL uses the matching `Self-hosted HIL Linux` or `Self-hosted HIL Windows` selection; GitHub-hosted execution is not treated as an HIL fallback.
 - [ ] Required environment variables and secrets are configured without including secret values in this issue.
 - [ ] Generated reports and logs are included in the workflow artifacts.
 

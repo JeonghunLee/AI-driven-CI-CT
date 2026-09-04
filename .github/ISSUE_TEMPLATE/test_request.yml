@@ -95,12 +95,12 @@ body:
     id: runner
     attributes:
       label: Runner
-      description: HIL requires a compatible self-hosted runner and attached hardware.
+      description: Select both the hosting type and OS. Physical HIL requires a matching Self-hosted HIL runner.
       options:
-        - Default
-        - Windows
-        - Linux
-        - Self-hosted HIL
+        - GitHub-hosted Linux
+        - GitHub-hosted Windows
+        - Self-hosted HIL Linux
+        - Self-hosted HIL Windows
       default: 0
     validations:
       required: true

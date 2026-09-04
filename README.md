@@ -370,7 +370,8 @@ test_envs/reports/
 | Workload | Runner |
 |---|---|
 | Test request | `.github/ISSUE_TEMPLATE/test_request.yml` |
-| Unit Test / Mock CT / Linux | `ubuntu-latest` |
-| Windows | `windows-latest` |
-| HIL equipment and interfaces | `[self-hosted, hw-test]` |
+| Unit Test / Mock CT / GitHub-hosted Linux | `ubuntu-latest` |
+| Unit Test / Mock CT / GitHub-hosted Windows | `windows-latest` |
+| HIL equipment and interfaces on Linux | `[self-hosted, linux, hw-test]` |
+| HIL equipment and interfaces on Windows | `[self-hosted, windows, hw-test]` |
 | Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |

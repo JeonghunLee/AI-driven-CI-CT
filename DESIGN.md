@@ -731,9 +731,10 @@ continuous-test.yml: request job
         v
 test_envs.tools.issue_parser
         |
-        +-- Default / Linux --> ubuntu-latest
-        +-- Windows ---------> windows-latest
-        +-- Self-hosted HIL -> [self-hosted, hw-test]
+        +-- GitHub-hosted Linux ---> ubuntu-latest
+        +-- GitHub-hosted Windows --> windows-latest
+        +-- Self-hosted HIL Linux --> [self-hosted, linux, hw-test]
+        +-- Self-hosted HIL Windows -> [self-hosted, windows, hw-test]
         |
         v
 continuous-test.yml: test job
@@ -764,6 +765,11 @@ test_envs.tools.pipeline
 | Automatic trigger | Request Issue opened, edited, or reopened |
 | Rerun trigger | Issue label `run-test` |
 | Local/manual trigger | `workflow_dispatch`; replaces the former local request workflow |
+| Default runner | GitHub-hosted Linux (`ubuntu-latest`) |
+| Hosted compatibility | Mock CT and Unittest run on GitHub-hosted Linux or Windows |
+| HIL Linux | `[self-hosted, linux, hw-test]` |
+| HIL Windows | `[self-hosted, windows, hw-test]` |
+| HIL constraint | Physical equipment requires a matching Self-hosted OS runner and never falls back to Mock |
 | Pytest selection | `CT-UART-001`, `CT-USB-001`, or `CT-NETWORK-001` plus `marker`, `mock`, or `hil` Fixture mode |
 | Unittest selection | All Unittest, CT Framework Python, or one path/node ID below `test_envs/tests/unittest` |
 | Coverage | None, terminal missing-lines, or HTML report |

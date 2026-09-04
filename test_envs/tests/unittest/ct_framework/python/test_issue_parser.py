@@ -57,6 +57,7 @@ HTML coverage report
         value = request_configuration(parse_issue_body(body))
         self.assertEqual(value["test_id"], "CT-USB-001")
         self.assertEqual(value["fixture_mode"], "mock")
+        self.assertEqual(value["runner"], "GitHub-hosted Linux")
         self.assertEqual(value["runner_labels"], '["ubuntu-latest"]')
         self.assertEqual(value["request_ref"], "feature/test")
         self.assertEqual(value["report_mkdocs"], "true")
@@ -65,14 +66,21 @@ HTML coverage report
 
     def test_runner_selection_maps_to_github_labels(self) -> None:
         expected = {
+            "GitHub-hosted Linux": '["ubuntu-latest"]',
+            "GitHub-hosted Windows": '["windows-latest"]',
+            "Self-hosted HIL Linux": '["self-hosted","linux","hw-test"]',
+            "Self-hosted HIL Windows": '["self-hosted","windows","hw-test"]',
             "Default": '["ubuntu-latest"]',
             "Linux": '["ubuntu-latest"]',
             "Windows": '["windows-latest"]',
-            "Self-hosted HIL": '["self-hosted","hw-test"]',
         }
         for runner, labels in expected.items():
             with self.subTest(runner=runner):
                 self.assertEqual(request_configuration({"runner": runner})["runner_labels"], labels)
+
+    def test_self_hosted_runner_requires_an_os(self) -> None:
+        with self.assertRaisesRegex(ValueError, "unsupported runner"):
+            request_configuration({"runner": "Self-hosted HIL"})
 
 
 if __name__ == "__main__":
