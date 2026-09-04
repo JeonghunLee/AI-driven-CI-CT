@@ -100,12 +100,12 @@ Connected VS Code features: [Testing](#testing) and [Python Extension](#python-e
 
 <br/>
 
-* **Tasks**
+* **Tasks**   
 https://code.visualstudio.com/docs/debugtest/tasks
 
 <br/>
 
-* Source: `.vscode/tasks.json`
+* Source: `.vscode/tasks.json`    
 Connected VS Code feature: [Run Tasks](#run-tasks)
 ```
 {
@@ -505,6 +505,39 @@ Connected VS Code feature: [Run and Debug](#run-and-debug)
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": false
+    },
+    {
+      "name": "TEST CASE: CT-UART-001",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "pytest",
+      "args": ["-p", "no:cacheprovider", "test_envs/tests/pytest/test_cases", "--test-id", "CT-UART-001", "--fixture-mode", "${input:fixtureMode}", "-s", "-vv"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+    },
+    {
+      "name": "TEST CASE: CT-USB-001",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "pytest",
+      "args": ["-p", "no:cacheprovider", "test_envs/tests/pytest/test_cases", "--test-id", "CT-USB-001", "--fixture-mode", "${input:fixtureMode}", "-s", "-vv"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+    },
+    {
+      "name": "TEST CASE: CT-NETWORK-001",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "pytest",
+      "args": ["-p", "no:cacheprovider", "test_envs/tests/pytest/test_cases", "--test-id", "CT-NETWORK-001", "--fixture-mode", "${input:fixtureMode}", "-s", "-vv"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
     }
   ],
   "inputs": [
@@ -549,6 +582,9 @@ Source: `.vscode/launch.json`
 | `REPORT-Pandoc: Convert Latest Markdown to DOCX` | Project Python | `test_envs.tools.pandoc_reporter` | Integrated terminal | `true` | Converts the latest Markdown report to DOCX |
 | `Debug: Current Python File` | Project Python | `${file}` | Integrated terminal | `true` | Debugs the open Python file |
 | `Debug: Current pytest File` | Project Python | `pytest` | Integrated terminal | `false` | Debugs the open test with the selected fixture mode |
+| `TEST CASE: CT-UART-001` | Project Python | `pytest --test-id CT-UART-001` | Integrated terminal | `false` | Runs or debugs the UART CT with the selected fixture mode |
+| `TEST CASE: CT-USB-001` | Project Python | `pytest --test-id CT-USB-001` | Integrated terminal | `false` | Runs or debugs the USB CT with the selected fixture mode |
+| `TEST CASE: CT-NETWORK-001` | Project Python | `pytest --test-id CT-NETWORK-001` | Integrated terminal | `false` | Runs or debugs the Network CT with the selected fixture mode |
 
 <br/>
 
@@ -677,7 +713,11 @@ OS selection is not a Task or launch input. It is managed by `test_envs/configs/
 
 <br/>
 
-![VS Code Testing panel](imgs/vscode_testing_00.png)
+* **Pytest and Unittest**   
+![](imgs/vscode_testing_00.png)
+
+* **Testing Coverage**   
+![](imgs/vscode_testing_01.png)
 
 <br/>
 

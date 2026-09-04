@@ -57,7 +57,7 @@
     },
     // Run and Debug Section
     {
-      "name": "Run 1: Extension Module",
+      "name": "Run : Extension Module",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
@@ -88,7 +88,7 @@
       "cwd": "${workspaceFolder}",
       "justMyCode": false
     },
-    // Reporting Section
+    // Reporting Section (Mkdocs Markdown and Pandoc(HTML/DOCX))
     {
       "name": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
       "type": "debugpy",
