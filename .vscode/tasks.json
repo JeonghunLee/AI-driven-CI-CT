@@ -226,7 +226,19 @@
                 "build",
                 "--strict"
             ]
-        }
+        },
+        {
+            "label": "Git: Show Local Config",
+            "type": "shell",
+            "command": "git config --local --list",
+            "problemMatcher": []
+        },
+        {
+            "label": "Git: Show Remotes",
+            "type": "shell",
+            "command": "git remote -v",
+            "problemMatcher": []
+        },        
     ],
     // End of tasks array
     // End of tasks section
