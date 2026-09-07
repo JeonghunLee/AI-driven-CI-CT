@@ -12,6 +12,29 @@
 | Document conversion | Pandoc |
 | Design | [DESIGN.md](DESIGN.md) |
 
+## Setup Python venv  
+
+```
+python -m venv .venv
+```
+
+```
+.\.venv\Scripts\Activate.ps1
+```
+
+or
+
+```powershell 
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+.\.venv\Scripts\Activate.ps1
+```
+
+
+```
+(.venv) PS D:\Works\git\AI-driven-CI-CT> pip install -r requirements.txt
+```
+
+
 ## Repository Structure
 
 ```text
