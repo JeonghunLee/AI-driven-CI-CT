@@ -792,7 +792,8 @@ test_envs.test_pipeline.pipeline
 | Unittest excluded fields | TEST ID, Fixture Mode, Unittest Target, Additional Evidence, Expected Result, and MkDocs selection |
 | Coverage | None, terminal missing-lines, or HTML report |
 | Result selection | Only the normalized result created after the current workflow marker |
-| Issue-form report selection | Optional Pandoc HTML/DOCX; canonical Markdown remains part of the common pipeline |
+| Issue-form report selection | Log, canonical Markdown, Pandoc DOCX, and Pandoc HTML are normalized independently |
+| `report_mkdocs` | Publishes the generated canonical Markdown into `docs/tests`; it does not mean Markdown generation itself |
 | Failure handling | Test failures keep the normalized result; setup/capture failures post an ERROR comment |
 | Node.js | No project Node.js installation or command; JavaScript-based official Actions use their GitHub-managed runtime |
 

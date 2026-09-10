@@ -36,6 +36,8 @@ HTML coverage report
 
 ### Report Outputs
 
+- [x] Log
+- [x] Markdown
 - [x] Pandoc HTML
 - [ ] Pandoc DOCX
 """
@@ -46,6 +48,8 @@ HTML coverage report
         self.assertEqual(value["runner_labels"], '["ubuntu-latest"]')
         self.assertEqual(value["request_ref"], "feature/test")
         self.assertEqual(value["test_type"], "Pytest")
+        self.assertEqual(value["report_log"], "true")
+        self.assertEqual(value["report_markdown"], "true")
         self.assertEqual(value["report_mkdocs"], "false")
         self.assertEqual(value["report_html"], "true")
         self.assertEqual(value["report_docx"], "false")
@@ -63,6 +67,15 @@ HTML coverage report
         for runner, labels in expected.items():
             with self.subTest(runner=runner):
                 self.assertEqual(request_configuration({"runner": runner})["runner_labels"], labels)
+
+    def test_markdown_and_mkdocs_publication_are_separate_outputs(self) -> None:
+        markdown = request_configuration({"reports": "- [x] Markdown"})
+        mkdocs = request_configuration({"reports": "- [x] MkDocs Markdown"})
+
+        self.assertEqual(markdown["report_markdown"], "true")
+        self.assertEqual(markdown["report_mkdocs"], "false")
+        self.assertEqual(mkdocs["report_markdown"], "false")
+        self.assertEqual(mkdocs["report_mkdocs"], "true")
 
     def test_self_hosted_runner_requires_an_os(self) -> None:
         with self.assertRaisesRegex(ValueError, "unsupported runner"):

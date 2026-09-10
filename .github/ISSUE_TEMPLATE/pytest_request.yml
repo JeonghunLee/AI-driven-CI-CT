@@ -74,7 +74,8 @@ body:
       label: Report Outputs
       description: Pytest results use Local LLM analysis with deterministic fallback.
       options:
-        - label: Pandoc HTML
+        - label: Log
+        - label: Markdown
         - label: Pandoc DOCX
-
+        - label: Pandoc HTML
 

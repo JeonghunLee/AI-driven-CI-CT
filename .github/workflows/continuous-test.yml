@@ -56,18 +56,28 @@ on:
         type: choice
         options: [No coverage, Terminal missing-lines report, HTML coverage report]
         default: No coverage
-      report_mkdocs:
-        description: Publish MkDocs Markdown
+      report_log:
+        description: Include the generated test log
         required: true
         type: boolean
         default: true
-      report_html:
-        description: Generate Pandoc HTML
+      report_markdown:
+        description: Generate canonical Markdown under test_reports/markdown
+        required: true
+        type: boolean
+        default: true
+      report_mkdocs:
+        description: Publish the generated Markdown to docs/tests for MkDocs
+        required: true
+        type: boolean
+        default: true
+      report_docx:
+        description: Generate Pandoc DOCX
         required: true
         type: boolean
         default: false
-      report_docx:
-        description: Generate Pandoc DOCX
+      report_html:
+        description: Generate Pandoc HTML
         required: true
         type: boolean
         default: false
@@ -120,9 +130,11 @@ jobs:
       runner_labels: ${{ steps.request.outputs.runner_labels }}
       request_ref: ${{ steps.request.outputs.request_ref }}
       coverage: ${{ steps.request.outputs.coverage }}
+      report_log: ${{ steps.request.outputs.report_log }}
+      report_markdown: ${{ steps.request.outputs.report_markdown }}
       report_mkdocs: ${{ steps.request.outputs.report_mkdocs }}
-      report_html: ${{ steps.request.outputs.report_html }}
       report_docx: ${{ steps.request.outputs.report_docx }}
+      report_html: ${{ steps.request.outputs.report_html }}
     steps:
       - name: Checkout request parser
         uses: actions/checkout@v4
@@ -180,9 +192,11 @@ jobs:
       UNITTEST_SCOPE: ${{ needs.request.outputs.unittest_scope }}
       UNITTEST_TARGET: ${{ needs.request.outputs.unittest_target }}
       COVERAGE_MODE: ${{ needs.request.outputs.coverage }}
+      REPORT_LOG: ${{ needs.request.outputs.report_log }}
+      REPORT_MARKDOWN: ${{ needs.request.outputs.report_markdown }}
       REPORT_MKDOCS: ${{ needs.request.outputs.report_mkdocs }}
-      REPORT_HTML: ${{ needs.request.outputs.report_html }}
       REPORT_DOCX: ${{ needs.request.outputs.report_docx }}
+      REPORT_HTML: ${{ needs.request.outputs.report_html }}
       REQUEST_REF: ${{ needs.request.outputs.request_ref }}
       ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
       GITHUB_REPOSITORY: ${{ github.repository }}
@@ -226,6 +240,7 @@ jobs:
           Write-Host "Unittest Scope: $env:UNITTEST_SCOPE"
           Write-Host "Runner: $env:RUNNER_NAME / $env:RUNNER_OS"
           Write-Host "Coverage: $env:COVERAGE_MODE"
+          Write-Host "Report Outputs: Log=$env:REPORT_LOG, Markdown=$env:REPORT_MARKDOWN, Pandoc DOCX=$env:REPORT_DOCX, Pandoc HTML=$env:REPORT_HTML"
           Write-Host "Revision: $env:REQUEST_REF"
 
       - name: Mark test start

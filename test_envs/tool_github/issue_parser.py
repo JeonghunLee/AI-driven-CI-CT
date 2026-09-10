@@ -77,9 +77,11 @@ def request_configuration(values: dict[str, str]) -> dict[str, str]:
         "runner_labels": json.dumps(RUNNER_LABELS[runner], separators=(",", ":")),
         "request_ref": values.get("Branch / Tag / Commit", values.get("request_ref", "main")),
         "coverage": values.get("Test Coverage", values.get("coverage", "No coverage")),
+        "report_log": _checked(reports, "Log"),
+        "report_markdown": _checked(reports, "Markdown"),
         "report_mkdocs": _checked(reports, "MkDocs Markdown"),
-        "report_html": _checked(reports, "Pandoc HTML"),
         "report_docx": _checked(reports, "Pandoc DOCX"),
+        "report_html": _checked(reports, "Pandoc HTML"),
     }
 
 
@@ -103,12 +105,16 @@ def event_configuration(event_path: str | Path) -> dict[str, str]:
         return config
     inputs = {str(key): str(value) for key, value in event.get("inputs", {}).items()}
     report_values = []
+    if inputs.get("report_log", "true").lower() == "true":
+        report_values.append("- [x] Log")
+    if inputs.get("report_markdown", "true").lower() == "true":
+        report_values.append("- [x] Markdown")
     if inputs.get("report_mkdocs", "true").lower() == "true":
         report_values.append("- [x] MkDocs Markdown")
-    if inputs.get("report_html", "false").lower() == "true":
-        report_values.append("- [x] Pandoc HTML")
     if inputs.get("report_docx", "false").lower() == "true":
         report_values.append("- [x] Pandoc DOCX")
+    if inputs.get("report_html", "false").lower() == "true":
+        report_values.append("- [x] Pandoc HTML")
     inputs["reports"] = "\n".join(report_values)
     config = request_configuration(inputs)
     config["request_kind"] = "test"

@@ -238,7 +238,8 @@ flowchart TD
 | Unittest | Runs All Unittest or CT Framework Python through pytest without Local LLM analysis |
 | Pytest CT | Mock runs on GitHub-hosted Linux/Windows; physical HIL routes to the self-hosted hardware runner |
 | Coverage | Optional terminal or HTML `pytest-cov` report |
-| Report | Always creates canonical Markdown; Issue Forms optionally convert Pandoc HTML/DOCX, while manual dispatch can additionally publish MkDocs |
+| Report | Issue Forms normalize Log, canonical Markdown, Pandoc DOCX, and Pandoc HTML separately |
+| MkDocs publication | `report_mkdocs` copies the generated Markdown into `docs/tests`; Markdown generation itself is represented by `report_markdown` |
 | Issue output | `test_envs.tool_github.github_reporter` comments on success, test failure, report failure, or missing result |
 | Artifact | Uploads results, MkDocs pages, `.coverage`, and `htmlcov/` |
 | Node.js | No project Node.js setup or command; official GitHub Actions manage their own embedded runtime |
