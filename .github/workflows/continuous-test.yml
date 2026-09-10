@@ -368,6 +368,7 @@ jobs:
         with:
           name: test-request-${{ github.run_id }}
           if-no-files-found: warn
+          retention-days: 1
           path: |
             test_reports/
             docs/tests/pytest/
