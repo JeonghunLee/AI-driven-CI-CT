@@ -5,7 +5,7 @@ from pathlib import Path
 class RepositoryStructureTests(unittest.TestCase):
     def test_top_level_structure(self) -> None:
         self.assertTrue(Path("docs").is_dir())
-        for name in ("configs", "tests", "tools", "tool_github", "test_pipeline"):
+        for name in ("configs", "tests", "tools", "tool_github", "test_pipeline", "mcp_server"):
             self.assertTrue((Path("test_envs") / name).is_dir())
         self.assertTrue(Path("test_reports").is_dir())
         for name in ("config", "configs", "tests", "reports", "tools"):
@@ -79,6 +79,9 @@ class RepositoryStructureTests(unittest.TestCase):
         pipeline_root = Path("test_envs/test_pipeline")
         self.assertTrue((pipeline_root / "environment_setup.py").is_file())
         self.assertTrue((pipeline_root / "pipeline.py").is_file())
+        mcp_root = Path("test_envs/mcp_server")
+        self.assertTrue((mcp_root / "runner.py").is_file())
+        self.assertTrue((mcp_root / "server.py").is_file())
         for legacy in (
             "test_envs/tools/issue_parser.py",
             "test_envs/tools/github_reporter",

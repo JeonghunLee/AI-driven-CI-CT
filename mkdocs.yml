@@ -14,6 +14,7 @@ nav:
     - Setup VSCode: vscode_environment.md  
     - Setup Python: python_environment.md
     - Setup LLM: local_llm_environment.md  
+    - Setup MCP: mcp_environment.md
   - TEST Framework:
     - Pytest (HIL or Mock): pytest_framework.md
     - Unittest: unittest_framework.md

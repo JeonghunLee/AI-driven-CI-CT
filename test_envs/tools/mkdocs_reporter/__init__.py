@@ -322,6 +322,13 @@ Go Back to the [Pytest TEST All Index](./index.md)
                 "Execution ID": result.execution_id,
             }
         )
+        test_envs = _named_table(
+            "Test envs",
+            {
+                key: result.test_envs.get(key, "unknown")
+                for key in ("test_os", "test_name", "test_environment", "test_request")
+            },
+        )
         fixture_id = result.configuration.get("fixture_id", result.fixture_id or "None")
         test_configs = _named_table(
             "Test Item",
@@ -379,11 +386,15 @@ Go Back to the [Pytest TEST All Index](./index.md)
 
 <br/> 
 
-## Test summary
+## Test Summary
 
 <br/>
 
 {test_summary}
+
+<br/>
+
+{test_envs}
 
 <br/>
 
@@ -509,11 +520,26 @@ Go Back to the [Pytest TEST All Index](./index.md)
                 "Skipped": summary["skipped"],
             }
         )
+        test_envs = _named_table(
+            "Test envs",
+            {
+                key: result.test_envs.get(key, "unknown")
+                for key in ("test_os", "test_name", "test_environment", "test_request")
+            },
+        )
         return f"""# unittest Result
 
 ## Test Summary
 
+<br/>
+
 {execution_summary}
+
+<br/>
+
+{test_envs}
+
+<br/>
 
 ### Test Functions
 

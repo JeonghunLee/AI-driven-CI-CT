@@ -16,6 +16,13 @@ class MarkdownReporterTests(unittest.TestCase):
             0.2,
             description="UART timing",
             environment="test",
+            test_envs={
+                "test_os": "windows",
+                "test_name": "local_01",
+                "test_environment": "local",
+                "test_request": "local_vscode",
+                "description": "test_environment information",
+            },
             configuration={
                 "category": "timing",
                 "fixture_id": "FIXTURE-001",
@@ -52,6 +59,12 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertIn("### Test Summary", text)
         self.assertIn("### Test Source", text)
         self.assertIn("### Test configs", text)
+        self.assertIn("| Test envs | Value |", text)
+        self.assertIn("| test_os | windows |", text)
+        self.assertIn("| test_name | local_01 |", text)
+        self.assertIn("| test_environment | local |", text)
+        self.assertIn("| test_request | local_vscode |", text)
+        self.assertNotIn("| description |", text)
         self.assertIn("| Commit |", text)
         self.assertIn("| Branch |", text)
         self.assertNotIn("## Test history", text)
@@ -109,6 +122,11 @@ class MarkdownReporterTests(unittest.TestCase):
             Analysis("Failure detected", "unittest", 1.0, "test"),
         )
         self.assertIn("| 0 | test_device_timeout | FAIL |", text)
+        self.assertIn("| Test envs | Value |", text)
+        self.assertIn("| test_os |", text)
+        self.assertIn("| test_name |", text)
+        self.assertIn("| test_environment |", text)
+        self.assertIn("| test_request |", text)
         self.assertIn("| test_device_timeout | FAIL | device timeout |", text)
         self.assertNotIn("Test ID", text)
         self.assertNotIn("Fixture mode", text)

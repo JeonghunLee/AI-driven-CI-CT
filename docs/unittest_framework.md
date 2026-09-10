@@ -359,6 +359,7 @@ MkDocs Results       Pandoc Report
 | Report stage | Source or tool | Output |
 |---|---|---|
 | Test evidence | `test_reports/results/unittest/` | `<execution-id>_result.json` and `<execution-id>_result.log` |
+| Test environment metadata | Top-level `test_envs` in result JSON | OS, unique test server name, host environment, and request source; rendered in the Markdown Test Summary |
 | Analysis | Not used for unittest | No Local LLM analysis or escalation |
 | Report coordination | `test_envs.tools.test_result` | Processes the latest or every pending result |
 | Canonical Markdown | `test_envs.tools.mkdocs_reporter` | `test_reports/markdown/unittest/<execution-id>_result.md` |

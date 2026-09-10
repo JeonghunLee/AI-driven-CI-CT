@@ -483,6 +483,7 @@ MkDocs Results   Pandoc Report
 | Report stage | Source or tool | Output |
 |---|---|---|
 | Test evidence | `test_reports/results/pytest/test_cases/<test-id>/` | `<execution-id>_result.json` and `<execution-id>_test.log` |
+| Test environment metadata | Top-level `test_envs` in result JSON | OS, unique test server name, host environment, and request source; rendered in the Markdown Test Summary |
 | Analysis | `test_envs.tools.local_llm` | Analysis stored in result JSON and Local LLM log |
 | Report coordination | `test_envs.tools.test_result` | Processes the latest or every pending result |
 | Canonical Markdown | `test_envs.tools.mkdocs_reporter` | `test_reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` |

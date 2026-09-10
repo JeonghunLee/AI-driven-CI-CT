@@ -10,6 +10,7 @@
 | Result source | Markdown |
 | Web documentation | MkDocs |
 | Document conversion | Pandoc |
+| External test control | Local MCP `stdio` server |
 | Design | [DESIGN.md](DESIGN.md) |
 
 ## Setup Python venv  
@@ -51,6 +52,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 │   ├── index.md
 │   ├── python_environment.md
 │   ├── local_llm_environment.md
+│   ├── mcp_environment.md
 │   ├── vscode_environment.md
 │   ├── pytest_operation.md
 │   ├── unittest_operation.md
@@ -62,6 +64,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 │   │   ├── config.json
 │   │   └── check.json
 │   ├── tests/
+│   ├── mcp_server/{runner.py,server.py}
 │   ├── tool_github/{github_reporter,issue_parser.py}
 │   ├── test_pipeline/{environment_setup.py,pipeline.py}
 │   └── tools/

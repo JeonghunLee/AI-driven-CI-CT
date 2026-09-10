@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import json
 import os
+import platform
 import subprocess
+import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -11,6 +13,53 @@ from typing import Any, Mapping
 from test_envs.tools.configuration import configured_now
 
 VALID_STATUSES = {"PASS", "FAIL", "ERROR", "SKIP"}
+
+
+def _test_os() -> str:
+    if configured := os.getenv("TEST_OS"):
+        return configured
+    runner_os = os.getenv("RUNNER_OS", "").lower()
+    if runner_os == "windows" or sys.platform == "win32":
+        return "windows"
+    if runner_os == "linux" or sys.platform.startswith("linux"):
+        try:
+            if platform.freedesktop_os_release().get("ID", "").lower() == "ubuntu":
+                return "ubuntu"
+        except OSError:
+            pass
+        return "linux"
+    if runner_os == "macos" or sys.platform == "darwin":
+        return "macos"
+    return sys.platform
+
+
+def _test_environment() -> str:
+    if configured := os.getenv("TEST_ENVIRONMENT"):
+        return configured
+    if os.getenv("GITHUB_ACTIONS", "false").lower() == "true":
+        runner_environment = os.getenv("RUNNER_ENVIRONMENT", "github-hosted").lower()
+        return "self_hosted_runner" if runner_environment == "self-hosted" else "github_hosted_runner"
+    return "local"
+
+
+def _test_request() -> str:
+    if configured := os.getenv("TEST_REQUEST"):
+        return configured
+    if os.getenv("GITHUB_ACTIONS", "false").lower() == "true":
+        return "github_issue"
+    return "local_vscode"
+
+
+def _test_envs() -> dict[str, str]:
+    environment = _test_environment()
+    default_name = os.getenv("RUNNER_NAME") if environment != "local" else "local_01"
+    return {
+        "test_os": _test_os(),
+        "test_name": os.getenv("TEST_NAME", default_name or "local_01"),
+        "test_environment": environment,
+        "test_request": _test_request(),
+        "description": "test_environment information",
+    }
 
 
 def _execution_id() -> str:
@@ -55,6 +104,7 @@ class ResultRecord:
     duration: float
     description: str = "Automated test execution"
     environment: str = "local"
+    test_envs: Mapping[str, str] = field(default_factory=_test_envs)
     configuration: Mapping[str, Any] = field(default_factory=dict)
     fixture_id: str = ""
     test_mode: str = "mock"
@@ -104,6 +154,7 @@ class ResultRecord:
                 "skipped": sum(item.get("status") == "SKIP" for item in functions),
             }
             return {
+                "test_envs": dict(self.test_envs),
                 "execution": {
                     "execution_id": self.execution_id,
                     "timestamp": self.timestamp,
@@ -119,6 +170,7 @@ class ResultRecord:
                 "test_functions": functions,
             }
         return {
+            "test_envs": dict(self.test_envs),
             "test_case": {
                 "test_id": self.test_id,
                 "status": self.status,
@@ -154,6 +206,7 @@ class ResultRecord:
     def from_dict(cls, value: Mapping[str, Any]) -> "ResultRecord":
         if "execution" in value and "test_functions" in value:
             execution = dict(value["execution"])
+            test_envs = dict(value.get("test_envs", {}))
             functions = tuple(value.get("test_functions", ()))
             value = {
                 "test_id": "unittest",
@@ -162,6 +215,7 @@ class ResultRecord:
                 "duration": execution.get("duration", 0.0),
                 "description": "unittest execution",
                 "environment": execution.get("environment", "local"),
+                "test_envs": test_envs or _test_envs(),
                 "runner": execution.get("runner", "local"),
                 "commit": execution.get("commit", "unknown"),
                 "branch": execution.get("branch", "unknown"),
@@ -181,6 +235,7 @@ class ResultRecord:
             test_result = dict(value.get("test_result", {}))
             value = {
                 **test_case,
+                "test_envs": dict(value.get("test_envs", {})) or _test_envs(),
                 "configuration": test_configs,
                 **fixture_configs,
                 **test_src,

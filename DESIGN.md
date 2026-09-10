@@ -14,6 +14,7 @@
 | Human-readable result | Markdown |
 | Web documentation | MkDocs |
 | Document conversion | Pandoc |
+| External test control | Local MCP `stdio` server with allowlisted tools |
 | General automation | GitHub-hosted runner |
 | Special environment | Optional self-hosted runner |
 
@@ -408,6 +409,12 @@ Execution ID
 ```text
 Test Execution
 ├── <execution-id>_result.json
+│   ├── test_envs
+│   │   ├── test_os
+│   │   ├── test_name
+│   │   ├── test_environment
+│   │   ├── test_request
+│   │   └── description
 │   ├── test_case
 │   ├── test_configs
 │   ├── fixture_configs
@@ -481,6 +488,11 @@ unittest : test_reports/markdown/unittest/<execution-id>_result.md
 ```text
 # <Test ID> Test Result
 ├── Test summary
+│   ├── Test envs
+│   │   ├── test_os
+│   │   ├── test_name
+│   │   ├── test_environment
+│   │   └── test_request
 │   ├── Test configs
 │   │   ├── Test Item table
 │   │   │   ├── Test ID
@@ -832,6 +844,7 @@ Excluded from GitHub Issue:
 | `.github/workflows/continuous-test.yml` | Unified request parsing, runner routing, test, report, Issue update, and artifact workflow |
 | `test_envs/tool_github/issue_parser.py` | Issue Form and manual input normalization |
 | `test_envs/tool_github/github_reporter/` | Result and workflow-error Issue comments |
+| `test_envs/mcp_server/` | Local `stdio` MCP tools for allowlisted external Pytest/Unittest execution and result lookup |
 
 ```text
 .

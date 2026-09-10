@@ -1,11 +1,39 @@
 import json
+import os
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from test_envs.tools.result_normalizer import ResultRecord, ResultStore, from_junit
 
 
 class ResultNormalizerTests(unittest.TestCase):
+    def test_test_envs_is_the_first_json_section(self) -> None:
+        test_root = Path("test_envs/tests/.tmp/ct_framework/test-envs-result")
+        environment = {
+            "TEST_OS": "ubuntu",
+            "TEST_NAME": "github_runner_01",
+            "TEST_ENVIRONMENT": "github_hosted_runner",
+            "TEST_REQUEST": "github_issue",
+        }
+        with patch.dict(os.environ, environment):
+            record = ResultRecord("CT-ENV-001", "PASS", "functional", 0.1)
+        payload = record.to_dict()
+
+        self.assertEqual(next(iter(payload)), "test_envs")
+        self.assertEqual(
+            payload["test_envs"],
+            {
+                "test_os": "ubuntu",
+                "test_name": "github_runner_01",
+                "test_environment": "github_hosted_runner",
+                "test_request": "github_issue",
+                "description": "test_environment information",
+            },
+        )
+        path = ResultStore(test_root).save(record)
+        self.assertEqual(next(iter(json.loads(path.read_text(encoding="utf-8")))), "test_envs")
+
     def test_result_store_creates_canonical_result_and_logs(self) -> None:
         test_root = Path("test_envs/tests/.tmp/ct_framework/unit-result-store")
         record = ResultRecord("UT-NORMALIZER-001", "pass", "functional", 0.1)
@@ -96,6 +124,7 @@ class ResultNormalizerTests(unittest.TestCase):
         )
         self.assertTrue((path.parent / "20260101_010203_123456_result.log").exists())
         payload = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(next(iter(payload)), "test_envs")
         self.assertNotIn("test_case", payload)
         self.assertNotIn("test_id", json.dumps(payload))
         self.assertEqual(payload["summary"]["failed"], 1)

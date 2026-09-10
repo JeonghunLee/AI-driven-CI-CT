@@ -11,6 +11,7 @@
 | pytest CT | Runs TEST ID scenarios using a final `mock` or `hil` fixture mode |
 | unittest | Runs function-level framework and extension tests without TEST ID or fixture mode |
 | Result pipeline | Normalizes execution data and generates Markdown reports |
+| MCP server | Allows an external local MCP host to discover and run allowlisted Pytest/Unittest operations through `stdio` |
 | Local LLM | Analyzes pytest CT results only; it is not used for unittest |
 | MkDocs | Publishes pytest and unittest Markdown and execution history |
 
@@ -35,6 +36,7 @@ Go to [VSCode Testing](https://jeonghunlee.github.io/vscode_doc/#vscode-testing)
 | Python Environment | [python_environment.md](python_environment.md) | OS, Python, venv, dependencies |
 | Local LLM Environment | [local_llm_environment.md](local_llm_environment.md) | Ollama, model, prompt, check |
 | VS Code Environment | [vscode_environment.md](vscode_environment.md) | Settings, Launch, Tasks, Testing |
+| MCP Environment | [mcp_environment.md](mcp_environment.md) | External `stdio` tools, execution controls, HIL safety |
 | Pytest Operation | [pytest_operation.md](pytest_operation.md) | TEST ID, Fixture, Mock/HIL, Local LLM |
 | Unittest Operation | [unittest_operation.md](unittest_operation.md) | Function, Execution ID, Result, Markdown |
 | Pytest / HIL / Mock | [pytest_framework.md](pytest_framework.md) | Test cases, fixture mapping, mode selection, HIL gate |
