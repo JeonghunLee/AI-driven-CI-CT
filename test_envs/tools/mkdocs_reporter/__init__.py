@@ -82,8 +82,8 @@ class MarkdownReporter:
 
         #
         # target_dir
-        # docs/test/pytest
-        #       - CT-USB-001.md /CT-UART-001.md            
+        # docs/test/pytest  
+        #       - CT-UART-001.md , CT-USB-001.md , CT-NETWORK-001.md,           
         #
         latest_content = source.read_text(encoding="utf-8")
         history = self.render_history(result.test_id, target_dir)
@@ -251,7 +251,7 @@ Find **Execution ID** History for test results below (Max: 100).
 
 #
 # docs/test/pytest
-#       - CT-USB-001.md /CT-UART-001.md            
+#       - CT-UART-001.md , CT-USB-001.md , CT-NETWORK-001.md,          
 #
     def render_history(self, test_id: str, target_dir: Path) -> str:
         records: list[ResultRecord] = []
@@ -276,7 +276,7 @@ Find **Execution ID** History for test results below (Max: 100).
         #
         # target_dir
         # docs/test/pytest
-        #       - CT-USB-001.md /CT-UART-001.md            
+        #       - CT-UART-001.md , CT-USB-001.md , CT-NETWORK-001.md,          
         #
 
         #latest_target = target_dir / f"{test_id}.md"
