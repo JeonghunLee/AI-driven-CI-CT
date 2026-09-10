@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02T09:58:40.823939+09:00",
+  "generated_at": "2026-09-10T16:07:28.888875+09:00",
   "os": {
     "configured": "auto",
     "detected": "windows",
@@ -13,7 +13,7 @@
   "ollama": {
     "installed": true,
     "executable": "C:\\Users\\LeeJeongHun\\AppData\\Local\\Programs\\Ollama\\ollama.EXE",
-    "version": "ollama version is 0.33.2",
+    "version": "ollama version is 0.33.3",
     "available": true,
     "endpoint": "http://127.0.0.1:11434",
     "selected_model": "deepseek-r1:7b",
