@@ -192,7 +192,7 @@
                 "0.0.0.0:8080"
             ],
             "problemMatcher": []
-        },        
+        },
         {
             "label": "MkDocs: Serve Remote ",
             "type": "process",
@@ -238,7 +238,7 @@
             "type": "shell",
             "command": "git remote -v",
             "problemMatcher": []
-        },        
+        }
     ],
     // End of tasks array
     // End of tasks section

@@ -50,7 +50,11 @@ class MarkdownReporter:
         important_logs: list[str] | None = None,
         publish_docs: bool = False,
     ) -> Path:
-        markdown_group = "unittest" if result.category.lower() == "unit" else result.test_id
+        markdown_group = (
+            Path("unittest")
+            if result.category.lower() == "unit"
+            else Path("pytest") / "test_cases" / result.test_id
+        )
         destination = self.store.root / "markdown" / markdown_group / f"{result.execution_id}_result.md"
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(self.render(result, analysis, important_logs), encoding="utf-8")
@@ -69,7 +73,7 @@ class MarkdownReporter:
             return target
         latest_target = target_dir / f"{result.test_id}.md"
 
-        canonical_dir = self.store.root / "markdown" / result.test_id
+        canonical_dir = self.store.root / "markdown" / "pytest" / "test_cases" / result.test_id
         for canonical in canonical_dir.glob("*_result.md"):
             execution_id = canonical.stem.removesuffix("_result")
             (target_dir / f"{result.test_id}__{execution_id}.md").write_text(

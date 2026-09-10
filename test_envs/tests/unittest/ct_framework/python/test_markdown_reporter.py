@@ -42,6 +42,10 @@ class MarkdownReporterTests(unittest.TestCase):
             ),
         )
         text = path.read_text(encoding="utf-8")
+        self.assertEqual(
+            path,
+            root / "markdown/pytest/test_cases/CT-MD-001" / f"{result.execution_id}_result.md",
+        )
         self.assertIn("## Local LLM Analysis", text)
         self.assertIn("### LLM Test Prompt", text)
         self.assertIn("### Test Result", text)
@@ -152,7 +156,11 @@ class MarkdownReporterTests(unittest.TestCase):
             ),
         )
         ResultStore(reports_root).save(unit_result)
-        reporter.generate(unit_result, analysis, publish_docs=True)
+        unit_path = reporter.generate(unit_result, analysis, publish_docs=True)
+        self.assertEqual(
+            unit_path,
+            reports_root / "markdown/unittest/20260101-000003_result.md",
+        )
 
         base = Path(docs_root) / "tests" / "pytest"
         self.assertTrue((base / "CT-MD-HISTORY__20260101-000001.md").exists())

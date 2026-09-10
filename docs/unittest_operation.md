@@ -139,7 +139,7 @@ Canonical Markdown
 | Local LLM log | Not generated |
 | Canonical Markdown | `test_envs/reports/markdown/unittest/<execution-id>_result.md` |
 | MkDocs result | `docs/tests/unittest/` |
-| Pandoc output | `test_envs/reports/pandoc/unittest/` |
+| Pandoc output | `test_envs/reports/pandocs/unittest/` |
 
 <br/>
 

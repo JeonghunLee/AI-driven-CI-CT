@@ -295,8 +295,8 @@ flowchart TD
 | unittest | `test_envs/tests/unittest` |
 | Results | `test_envs/reports/results` |
 | Local LLM logs | `test_envs/reports/local_llm` |
-| Markdown | `test_envs/reports/markdown` |
-| Pandoc | `test_envs/reports/pandoc` |
+| Markdown | `test_envs/reports/markdown/pytest/test_cases`, `test_envs/reports/markdown/unittest` |
+| Pandoc | `test_envs/reports/pandocs/pytest/test_cases`, `test_envs/reports/pandocs/unittest` |
 
 <br/>
 

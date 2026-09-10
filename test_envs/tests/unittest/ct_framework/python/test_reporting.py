@@ -27,6 +27,21 @@ class ReportingTests(unittest.TestCase):
         self.assertIn("docs/tests/unittest/20260904_120000_000001.md", comment)
         self.assertIn("reports/markdown/unittest/20260904_120000_000001_result.md", comment)
 
+    def test_pytest_comment_uses_test_cases_markdown_path(self) -> None:
+        result = ResultRecord(
+            "CT-UART-001",
+            "PASS",
+            "interface",
+            0.25,
+            execution_id="20260904_120000_000002",
+        )
+        comment = render_comment(result, Analysis("Passed", "passed", 1.0, "test"))
+
+        self.assertIn(
+            "reports/markdown/pytest/test_cases/CT-UART-001/20260904_120000_000002_result.md",
+            comment,
+        )
+
     def test_environment_comment_contains_detected_runner_values(self) -> None:
         check = {
             "os": {"detected": "linux", "name": "Linux-test"},

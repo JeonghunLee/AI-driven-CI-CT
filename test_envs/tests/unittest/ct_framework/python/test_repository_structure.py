@@ -53,8 +53,17 @@ class RepositoryStructureTests(unittest.TestCase):
 
     def test_report_structure(self) -> None:
         root = Path("test_envs/reports")
-        for relative in ("results/pytest/test_cases", "results/unittest", "pandoc", "markdown"):
+        for relative in (
+            "results/pytest/test_cases",
+            "results/unittest",
+            "pandocs/pytest/test_cases",
+            "pandocs/unittest",
+            "markdown/pytest/test_cases",
+            "markdown/unittest",
+        ):
             self.assertTrue((root / relative).is_dir())
+        self.assertFalse((root / "pandoc").exists())
+        self.assertFalse(any((root / "markdown").glob("CT-*")))
         self.assertFalse((root / "results/unittest/.tmp").exists())
         self.assertFalse(any(path.name == "pytest" for path in (root / "results/unittest").rglob("*")))
         self.assertFalse((root / "pytest").exists())

@@ -297,16 +297,21 @@ test_envs/reports/
 │       └── <execution-id>_result.log
 ├── local_llm/
 │   └── <execution-id>_local_llm.log
-├── pandoc/<test-id>/
-│   └── <execution-id>_result.{html,pdf,docx}
+├── pandocs/
+│   ├── pytest/test_cases/<test-id>/
+│   │   └── <execution-id>_result.{html,pdf,docx}
+│   └── unittest/
+│       └── <execution-id>_result.{html,pdf,docx}
 └── markdown/
-    ├── <test-id>/<execution-id>_result.md
-    └── unittest/<execution-id>_result.md
+    ├── pytest/test_cases/<test-id>/
+    │   └── <execution-id>_result.md
+    └── unittest/
+        └── <execution-id>_result.md
 ```
 
 | Artifact | 역할 |
 |---|---|
-| `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` | Canonical human-readable result |
+| `test_envs/reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` | Canonical human-readable result |
 | `test_envs/reports/markdown/unittest/<execution-id>_result.md` | unittest Execution Markdown |
 | `<execution-id>_result.json` | Result, measurement, analysis, escalation |
 | `<execution-id>_test.log` | Test, stdout, stderr, equipment, interface log |

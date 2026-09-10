@@ -201,7 +201,7 @@ See [VS Code Environment](vscode_environment.md) for the corresponding Run and D
 | Output | Location | Scope |
 |---|---|---|
 | Local LLM request log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` | Pytest only |
-| Generated Markdown | `test_envs/reports/markdown/` | Processed test reports |
+| Generated Markdown | `test_envs/reports/markdown/pytest/test_cases/` | Pytest reports processed with Local LLM analysis |
 | Published MkDocs result | `docs/tests/pytest/` | Pytest result pages |
 
 <br/>

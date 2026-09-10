@@ -63,8 +63,10 @@ Ollama + Local LLM
           │
           ▼
 Markdown
-├── test_envs/reports/markdown
-├── test_envs/reports/pandoc
+├── test_envs/reports/markdown/pytest/test_cases
+├── test_envs/reports/markdown/unittest
+├── test_envs/reports/pandocs/pytest/test_cases
+├── test_envs/reports/pandocs/unittest
 ├── MkDocs
 ├── Pandoc
 └── GitHub Issue
@@ -458,10 +460,11 @@ Latest execution logs
 Local LLM Analysis
       │
       ▼
-pytest   : test_envs/reports/markdown/<test-id>/<execution-id>_result.md
+pytest   : test_envs/reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md
 unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
       │
-      ├── test_envs/reports/pandoc/<test-id>/<execution-id>_result.<format>
+      ├── test_envs/reports/pandocs/pytest/test_cases/<test-id>/<execution-id>_result.<format>
+      └── test_envs/reports/pandocs/unittest/<execution-id>_result.<format>
       ├── docs/tests/pytest/  [--docs]
       │   ├── <test-id>.md
       │   └── <test-id>__<execution-id>.md
@@ -696,7 +699,7 @@ Local LLM
 
 | Output | Source | Destination |
 |---|---|---|
-| pytest Canonical Markdown | pytest execution | `test_envs/reports/markdown/<test-id>/<execution-id>_result.md` |
+| pytest Canonical Markdown | pytest execution | `test_envs/reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` |
 | unittest Canonical Markdown | unittest execution | `test_envs/reports/markdown/unittest/<execution-id>_result.md` |
 | Duplicate latest Markdown | None | None |
 | MkDocs pytest latest page | Canonical Markdown | `docs/tests/pytest/<test-id>.md` |
@@ -714,9 +717,9 @@ Local LLM
 | pytest framework document | Test cases·fixtures·HIL·Mock·CLI override·HIL gate | `docs/pytest_framework.md` |
 | MkDocs pytest result index | Published pytest page scan | `docs/tests/pytest/index.md` |
 | MkDocs unittest result index | Published unittest page scan | `docs/tests/unittest/index.md` |
-| DOCX | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.docx` |
-| PDF | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.pdf` |
-| HTML | Canonical Markdown | `test_envs/reports/pandoc/<test-id>/<execution-id>_result.html` |
+| DOCX | Canonical Markdown | `test_envs/reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.docx` |
+| PDF | Canonical Markdown | `test_envs/reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.pdf` |
+| HTML | Canonical Markdown | `test_envs/reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.html` |
 
 ## 13. GitHub Automation
 
@@ -871,7 +874,7 @@ Excluded from GitHub Issue:
 │   │   ├── results/pytest/test_cases/<test-id>/
 │   │   ├── results/unittest/<execution-id>_result.json
 │   │   ├── pandoc/<test-id>/
-│   │   └── markdown/<test-id>/
+│   │   └── markdown/pytest/test_cases/<test-id>/
 │   └── tools/
 │       ├── configuration/
 │       ├── local_llm/

@@ -65,7 +65,7 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
     is_unittest = report_type == "unittest"
     mkdocs_name = f"{result.execution_id}.md" if is_unittest else f"{result.test_id}.md"
     mkdocs_source = f"docs/tests/{report_type}/{mkdocs_name}"
-    markdown_group = "unittest" if is_unittest else result.test_id
+    markdown_group = "unittest" if is_unittest else f"pytest/test_cases/{result.test_id}"
     warnings = "\n".join(
         f"- {item.get('severity', 'Important')}: {item.get('message', '')}" for item in analysis.warnings
     ) or "- None"

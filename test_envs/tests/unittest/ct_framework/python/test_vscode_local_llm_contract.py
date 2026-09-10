@@ -88,20 +88,39 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             self.assertNotIn("linux", configuration)
             self.assertNotIn("osx", configuration)
         for task in self.tasks["tasks"]:
+            self.assertNotIn("windows", task)
+            self.assertNotIn("linux", task)
+            self.assertNotIn("osx", task)
+            if task["label"].startswith("Git:"):
+                continue
             expected_command = (
                 "python"
                 if task["label"].startswith(("SETUP 1", "SETUP 2"))
                 else "${config:python.defaultInterpreterPath}"
             )
             self.assertEqual(task["command"], expected_command)
-            self.assertNotIn("windows", task)
-            self.assertNotIn("linux", task)
-            self.assertNotIn("osx", task)
 
     def test_python_tasks_run_as_managed_processes(self) -> None:
-        for task in self.tasks["tasks"]:
+        python_tasks = [
+            task for task in self.tasks["tasks"]
+            if not task["label"].startswith("Git:")
+        ]
+        for task in python_tasks:
             self.assertEqual(task["type"], "process")
             self.assertNotIn("isBackground", task)
+
+    def test_git_tasks_remain_shell_commands(self) -> None:
+        git_tasks = [
+            task for task in self.tasks["tasks"]
+            if task["label"].startswith("Git:")
+        ]
+        self.assertEqual(
+            {task["label"] for task in git_tasks},
+            {"Git: Show Local Config", "Git: Show Remotes"},
+        )
+        for task in git_tasks:
+            self.assertEqual(task["type"], "shell")
+            self.assertTrue(task["command"].startswith("git "))
 
     def test_setup_1_uses_system_python(self) -> None:
         launch = next(

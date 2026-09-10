@@ -10,6 +10,13 @@ test_envs/tests/.tmp/
 test_envs/reports/results/pytest/*
 test_envs/reports/results/unittest/*
 test_envs/reports/pandoc/*
-test_envs/reports/markdown/*
+test_envs/reports/pandocs/pytest/test_cases/*
+!test_envs/reports/pandocs/pytest/test_cases/.gitkeep
+test_envs/reports/pandocs/unittest/*
+!test_envs/reports/pandocs/unittest/.gitkeep
+test_envs/reports/markdown/pytest/test_cases/*
+!test_envs/reports/markdown/pytest/test_cases/.gitkeep
+test_envs/reports/markdown/unittest/*
+!test_envs/reports/markdown/unittest/.gitkeep
 test_envs/reports/local_llm/*
 !test_envs/reports/**/.gitkeep
