@@ -23,7 +23,7 @@ The current Local LLM integration uses Ollama to analyze Pytest CT results. Unit
 | Unittest analysis | Not used |
 | Configuration | `test_envs/configs/config.json` → `ollama` |
 | Runtime status | `test_envs/configs/check.json` → `ollama` |
-| Analysis log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` |
+| Analysis log | `test_reports/local_llm/<execution-id>_local_llm.log` |
 
 <br/>
 
@@ -200,8 +200,8 @@ See [VS Code Environment](vscode_environment.md) for the corresponding Run and D
 
 | Output | Location | Scope |
 |---|---|---|
-| Local LLM request log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` | Pytest only |
-| Generated Markdown | `test_envs/reports/markdown/pytest/test_cases/` | Pytest reports processed with Local LLM analysis |
+| Local LLM request log | `test_reports/local_llm/<execution-id>_local_llm.log` | Pytest only |
+| Generated Markdown | `test_reports/markdown/pytest/test_cases/` | Pytest reports processed with Local LLM analysis |
 | Published MkDocs result | `docs/tests/pytest/` | Pytest result pages |
 
 <br/>
@@ -289,7 +289,7 @@ Start the local server in a dedicated foreground terminal:
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m test_envs.tools.environment_setup serve --platform config
+.\.venv\Scripts\python.exe -m test_envs.test_pipeline.environment_setup serve --platform config
 ```
 
 <br/>
@@ -299,7 +299,7 @@ Keep that terminal running. In another PowerShell terminal, install or update th
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m test_envs.tools.environment_setup ollama --platform config
+.\.venv\Scripts\python.exe -m test_envs.test_pipeline.environment_setup ollama --platform config
 ```
 
 <br/>
@@ -319,7 +319,7 @@ Refresh the environment status:
 <br/>
 
 ```bash
-./.venv/bin/python -m test_envs.tools.environment_setup serve --platform config
+./.venv/bin/python -m test_envs.test_pipeline.environment_setup serve --platform config
 ```
 
 <br/>
@@ -329,7 +329,7 @@ In another terminal:
 <br/>
 
 ```bash
-./.venv/bin/python -m test_envs.tools.environment_setup ollama --platform config
+./.venv/bin/python -m test_envs.test_pipeline.environment_setup ollama --platform config
 ```
 
 <br/>
@@ -373,17 +373,19 @@ test_envs/
 ├── configs/
 │   ├── config.json                 # Endpoint, model, prompt, timeout, and retry
 │   └── check.json                  # Executable, server, and model inventory status
-├── tools/
-│   ├── environment_setup.py        # Install Ollama, run server, and pull model
-│   ├── local_llm/
-│   │   ├── __init__.py             # Runtime status and LocalLLMAnalyzer
-│   │   └── __main__.py             # config and status CLI
-│   ├── log_parser/                 # Extracts errors, warnings, and important logs
-│   ├── result_normalizer/           # Provides normalized ResultRecord input
-│   └── test_result/                # Connects results, analysis, and reporting
-└── reports/
-    ├── local_llm/                   # Per-execution Local LLM logs
-    └── markdown/                    # Generated report Markdown
+├── test_pipeline/
+│   └── environment_setup.py        # Install Ollama, run server, and pull model
+└── tools/
+    ├── local_llm/
+    │   ├── __init__.py             # Runtime status and LocalLLMAnalyzer
+    │   └── __main__.py             # config and status CLI
+    ├── log_parser/                 # Extracts errors, warnings, and important logs
+    ├── result_normalizer/          # Provides normalized ResultRecord input
+    └── test_result/                # Connects results, analysis, and reporting
+
+test_reports/
+├── local_llm/                      # Per-execution Local LLM logs
+└── markdown/pytest/test_cases/     # Generated Pytest Markdown
 
 docs/
 └── tests/pytest/                    # Published Pytest result pages

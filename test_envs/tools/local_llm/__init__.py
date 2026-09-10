@@ -13,7 +13,7 @@ from test_envs.tools.result_normalizer import ResultRecord
 from test_envs.tools.configuration import configured_now, load_config
 
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
-DEFAULT_LOG_ROOT = Path(__file__).resolve().parents[2] / "reports" / "local_llm"
+DEFAULT_LOG_ROOT = Path(__file__).resolve().parents[3] / "test_reports" / "local_llm"
 
 ANALYSIS_SCHEMA = {
     "type": "object",

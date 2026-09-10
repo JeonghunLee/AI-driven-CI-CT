@@ -5,8 +5,9 @@ from pathlib import Path
 class RepositoryStructureTests(unittest.TestCase):
     def test_top_level_structure(self) -> None:
         self.assertTrue(Path("docs").is_dir())
-        for name in ("configs", "tests", "reports", "tools"):
+        for name in ("configs", "tests", "tools", "tool_github", "test_pipeline"):
             self.assertTrue((Path("test_envs") / name).is_dir())
+        self.assertTrue(Path("test_reports").is_dir())
         for name in ("config", "configs", "tests", "reports", "tools"):
             self.assertFalse(Path(name).exists())
 
@@ -52,7 +53,7 @@ class RepositoryStructureTests(unittest.TestCase):
             self.assertTrue((root / name).is_file())
 
     def test_report_structure(self) -> None:
-        root = Path("test_envs/reports")
+        root = Path("test_reports")
         for relative in (
             "results/pytest/test_cases",
             "results/unittest",
@@ -68,6 +69,22 @@ class RepositoryStructureTests(unittest.TestCase):
         self.assertFalse(any(path.name == "pytest" for path in (root / "results/unittest").rglob("*")))
         self.assertFalse((root / "pytest").exists())
         self.assertFalse((root / "unittest").exists())
+        self.assertFalse(Path("test_envs/reports").exists())
+
+    def test_role_specific_tool_packages(self) -> None:
+        github_root = Path("test_envs/tool_github")
+        self.assertTrue((github_root / "issue_parser.py").is_file())
+        self.assertTrue((github_root / "github_reporter/__init__.py").is_file())
+        pipeline_root = Path("test_envs/test_pipeline")
+        self.assertTrue((pipeline_root / "environment_setup.py").is_file())
+        self.assertTrue((pipeline_root / "pipeline.py").is_file())
+        for legacy in (
+            "test_envs/tools/issue_parser.py",
+            "test_envs/tools/github_reporter",
+            "test_envs/tools/environment_setup.py",
+            "test_envs/tools/pipeline.py",
+        ):
+            self.assertFalse(Path(legacy).exists())
 
     def test_docs_test_structure(self) -> None:
         root = Path("docs/tests")

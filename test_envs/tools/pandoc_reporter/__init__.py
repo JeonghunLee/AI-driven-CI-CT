@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 FORMATS = {"docx": ".docx", "pdf": ".pdf", "html": ".html"}
-PANDOC_ROOT = Path("test_envs/reports/pandocs")
+PANDOC_ROOT = Path("test_reports/pandocs")
 
 
 def _default_output_dir(source_path: Path) -> Path:
@@ -37,10 +37,10 @@ def convert(source: str | Path, output_format: str, output_dir: str | Path | Non
     return destination
 
 
-def latest_markdown(root: str | Path = "test_envs/reports") -> Path:
+def latest_markdown(root: str | Path = "test_reports") -> Path:
     candidates = list((Path(root) / "markdown").rglob("*_result.md"))
     if not candidates:
-        raise FileNotFoundError("No Markdown report exists under test_envs/reports/markdown")
+        raise FileNotFoundError("No Markdown report exists under test_reports/markdown")
     return max(candidates, key=lambda path: path.name)
 
 

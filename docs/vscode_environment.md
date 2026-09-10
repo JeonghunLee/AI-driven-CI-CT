@@ -136,7 +136,7 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
             "command": "python",
             "args": [
                 "-m",
-                "test_envs.tools.environment_setup",
+                "test_envs.test_pipeline.environment_setup",
                 "python"
             ],
             "problemMatcher": []
@@ -147,7 +147,7 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "test_envs.tools.environment_setup",
+                "test_envs.test_pipeline.environment_setup",
                 "ollama"
             ],
             "problemMatcher": []
@@ -183,7 +183,7 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "test_envs.tools.environment_setup",
+                "test_envs.test_pipeline.environment_setup",
                 "serve"
             ],
             "presentation": {
@@ -605,11 +605,11 @@ Every Task has `type: process`, runs in the foreground, and has no `isBackground
 | Task label | Module | Arguments | Function |
 |---|---|---|---|
 | `SETUP 1: Select Operating System` | `test_envs.tools.configuration` | `select-os` | Stores the selected OS in project configuration |
-| `SETUP 2: Install Python Virtual Environment` | `test_envs.tools.environment_setup` | `python` | Creates `.venv` and installs dependencies |
-| `SETUP 3: Install Ollama and Local LLM` | `test_envs.tools.environment_setup` | `ollama` | Installs/checks Ollama and pulls the configured model |
+| `SETUP 2: Install Python Virtual Environment` | `test_envs.test_pipeline.environment_setup` | `python` | Creates `.venv` and installs dependencies |
+| `SETUP 3: Install Ollama and Local LLM` | `test_envs.test_pipeline.environment_setup` | `ollama` | Installs/checks Ollama and pulls the configured model |
 | `CHECK 1: Refresh Environment Check File` | `test_envs.tools.configuration` | `check` | Regenerates `check.json` |
 | `CHECK 2: Show Environment Configuration` | `test_envs.tools.configuration` | `config` | Prints the current project configuration |
-| `CHECK 3: Run Ollama Server (Foreground)` | `test_envs.tools.environment_setup` | `serve` | Runs an Ollama server owned by the terminal Task |
+| `CHECK 3: Run Ollama Server (Foreground)` | `test_envs.test_pipeline.environment_setup` | `serve` | Runs an Ollama server owned by the terminal Task |
 
 <br/>
 

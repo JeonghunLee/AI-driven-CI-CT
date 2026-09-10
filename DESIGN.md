@@ -63,10 +63,10 @@ Ollama + Local LLM
           │
           ▼
 Markdown
-├── test_envs/reports/markdown/pytest/test_cases
-├── test_envs/reports/markdown/unittest
-├── test_envs/reports/pandocs/pytest/test_cases
-├── test_envs/reports/pandocs/unittest
+├── test_reports/markdown/pytest/test_cases
+├── test_reports/markdown/unittest
+├── test_reports/pandocs/pytest/test_cases
+├── test_reports/pandocs/unittest
 ├── MkDocs
 ├── Pandoc
 └── GitHub Issue
@@ -428,9 +428,9 @@ Entry point: `python -m test_envs.tools.test_result`
 Input rule:
 
 ```text
-pytest   : test_envs/reports/results/pytest/test_cases/<test-id>/<execution-id>_result.json
-unittest : test_envs/reports/results/unittest/<execution-id>_result.json
-           test_envs/reports/results/unittest/<execution-id>_result.log
+pytest   : test_reports/results/pytest/test_cases/<test-id>/<execution-id>_result.json
+unittest : test_reports/results/unittest/<execution-id>_result.json
+           test_reports/results/unittest/<execution-id>_result.log
 ```
 
 Execution rule:
@@ -460,11 +460,11 @@ Latest execution logs
 Local LLM Analysis
       │
       ▼
-pytest   : test_envs/reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md
-unittest : test_envs/reports/markdown/unittest/<execution-id>_result.md
+pytest   : test_reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md
+unittest : test_reports/markdown/unittest/<execution-id>_result.md
       │
-      ├── test_envs/reports/pandocs/pytest/test_cases/<test-id>/<execution-id>_result.<format>
-      └── test_envs/reports/pandocs/unittest/<execution-id>_result.<format>
+      ├── test_reports/pandocs/pytest/test_cases/<test-id>/<execution-id>_result.<format>
+      └── test_reports/pandocs/unittest/<execution-id>_result.<format>
       ├── docs/tests/pytest/  [--docs]
       │   ├── <test-id>.md
       │   └── <test-id>__<execution-id>.md
@@ -593,7 +593,7 @@ test_functions[]
 | Prompt priority | Non-empty `test_prompt` → `default_prompt` |
 | Timeout | `ollama.max_timeout_s` |
 | Retry | `ollama.max_retry` |
-| Diagnostic log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` |
+| Diagnostic log | `test_reports/local_llm/<execution-id>_local_llm.log` |
 | Markdown input | `result.json`, `test.log` only |
 
 | Process | Execution mode | Stop rule |
@@ -699,8 +699,8 @@ Local LLM
 
 | Output | Source | Destination |
 |---|---|---|
-| pytest Canonical Markdown | pytest execution | `test_envs/reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` |
-| unittest Canonical Markdown | unittest execution | `test_envs/reports/markdown/unittest/<execution-id>_result.md` |
+| pytest Canonical Markdown | pytest execution | `test_reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` |
+| unittest Canonical Markdown | unittest execution | `test_reports/markdown/unittest/<execution-id>_result.md` |
 | Duplicate latest Markdown | None | None |
 | MkDocs pytest latest page | Canonical Markdown | `docs/tests/pytest/<test-id>.md` |
 | MkDocs unittest execution page | Canonical Markdown | `docs/tests/unittest/<execution-id>.md` |
@@ -717,9 +717,9 @@ Local LLM
 | pytest framework document | Test cases·fixtures·HIL·Mock·CLI override·HIL gate | `docs/pytest_framework.md` |
 | MkDocs pytest result index | Published pytest page scan | `docs/tests/pytest/index.md` |
 | MkDocs unittest result index | Published unittest page scan | `docs/tests/unittest/index.md` |
-| DOCX | Canonical Markdown | `test_envs/reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.docx` |
-| PDF | Canonical Markdown | `test_envs/reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.pdf` |
-| HTML | Canonical Markdown | `test_envs/reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.html` |
+| DOCX | Canonical Markdown | `test_reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.docx` |
+| PDF | Canonical Markdown | `test_reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.pdf` |
+| HTML | Canonical Markdown | `test_reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.html` |
 
 ## 13. GitHub Automation
 
@@ -740,7 +740,7 @@ pytest_request.yml or unittest_request.yml Issue
 continuous-test.yml: request job
         |
         v
-test_envs.tools.issue_parser
+test_envs.tool_github.issue_parser
         |
         +-- GitHub-hosted Linux ---> ubuntu-latest
         +-- GitHub-hosted Windows --> windows-latest
@@ -758,7 +758,7 @@ continuous-test.yml: test job
 Explicit normalized result
         |
         v
-test_envs.tools.pipeline
+test_envs.test_pipeline.pipeline
         |
         +-- mkdocs_reporter ------> MkDocs Markdown
         +-- pandoc_reporter ------> HTML / DOCX
@@ -828,8 +828,8 @@ Excluded from GitHub Issue:
 | `.github/ISSUE_TEMPLATE/unittest_request.yml` | Unittest-only request form |
 | `.github/ISSUE_TEMPLATE/test_check.yml` | Runner-only request for automatic host type, OS, Python, and Ollama detection |
 | `.github/workflows/continuous-test.yml` | Unified request parsing, runner routing, test, report, Issue update, and artifact workflow |
-| `test_envs/tools/issue_parser.py` | Issue Form and manual input normalization |
-| `test_envs/tools/github_reporter/` | Result and workflow-error Issue comments |
+| `test_envs/tool_github/issue_parser.py` | Issue Form and manual input normalization |
+| `test_envs/tool_github/github_reporter/` | Result and workflow-error Issue comments |
 
 ```text
 .
@@ -870,20 +870,24 @@ Excluded from GitHub Issue:
 │   │       ├── c_cpp/
 │   │       ├── firmware/
 │   │       └── common/
-│   ├── reports/
-│   │   ├── results/pytest/test_cases/<test-id>/
-│   │   ├── results/unittest/<execution-id>_result.json
-│   │   ├── pandoc/<test-id>/
-│   │   └── markdown/pytest/test_cases/<test-id>/
+│   ├── tool_github/
+│   │   ├── github_reporter/
+│   │   └── issue_parser.py
+│   ├── test_pipeline/
+│   │   ├── environment_setup.py
+│   │   └── pipeline.py
 │   └── tools/
 │       ├── configuration/
 │       ├── local_llm/
 │       ├── mkdocs_reporter/
 │       ├── pandoc_reporter/
 │       ├── result_normalizer/
-│       ├── test_result/
-│       ├── environment_setup.py
-│       └── pipeline.py
+│       └── test_result/
+├── test_reports/
+│   ├── results/{pytest/test_cases,unittest}/
+│   ├── markdown/{pytest/test_cases,unittest}/
+│   ├── pandocs/{pytest/test_cases,unittest}/
+│   └── local_llm/
 ├── DESIGN.md
 ├── mkdocs.yml
 ├── pytest.ini

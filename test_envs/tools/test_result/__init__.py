@@ -6,7 +6,7 @@ from threading import Event, Thread
 from time import monotonic
 from typing import Callable
 
-from test_envs.tools.pipeline import run
+from test_envs.test_pipeline.pipeline import run
 from test_envs.tools.result_normalizer import ResultStore
 
 def publish_latest(source: str | Path, destination: str | Path) -> Path:
@@ -42,7 +42,14 @@ def pending_result_paths(
             markdown = result_store.root / "markdown" / "unittest" / f"{result.execution_id}_result.md"
             document = Path(docs_root) / "tests" / "unittest" / f"{result.execution_id}.md"
         else:
-            markdown = result_store.root / "markdown" / result.test_id / f"{result.execution_id}_result.md"
+            markdown = (
+                result_store.root
+                / "markdown"
+                / "pytest"
+                / "test_cases"
+                / result.test_id
+                / f"{result.execution_id}_result.md"
+            )
             document = Path(docs_root) / "tests" / "pytest" / f"{result.test_id}__{result.execution_id}.md"
         if not markdown.is_file() or (publish_docs and not document.is_file()):
             pending.append(result_path)

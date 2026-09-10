@@ -165,12 +165,12 @@ Canonical Markdown
 
 | Output | Path |
 |---|---|
-| Result JSON | `test_envs/reports/results/pytest/test_cases/<test-id>/<execution-id>_result.json` |
-| Test log | `test_envs/reports/results/pytest/test_cases/<test-id>/<execution-id>_test.log` |
-| Local LLM log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` |
-| Canonical Markdown | `test_envs/reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` |
+| Result JSON | `test_reports/results/pytest/test_cases/<test-id>/<execution-id>_result.json` |
+| Test log | `test_reports/results/pytest/test_cases/<test-id>/<execution-id>_test.log` |
+| Local LLM log | `test_reports/local_llm/<execution-id>_local_llm.log` |
+| Canonical Markdown | `test_reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` |
 | MkDocs result | `docs/tests/pytest/` |
-| Pandoc output | `test_envs/reports/pandocs/pytest/test_cases/<test-id>/` |
+| Pandoc output | `test_reports/pandocs/pytest/test_cases/<test-id>/` |
 
 <br/>
 

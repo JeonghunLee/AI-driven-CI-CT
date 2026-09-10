@@ -13,7 +13,7 @@ from . import post_comment, render_comment, render_environment_comment
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Post a normalized result to a GitHub issue")
-    parser.add_argument("--latest", action="store_true", help="Use the newest result under test_envs/reports")
+    parser.add_argument("--latest", action="store_true", help="Use the newest result under test_reports")
     parser.add_argument("--result-path", help="Use one explicit normalized result JSON")
     parser.add_argument("--issue", required=True, type=int)
     parser.add_argument("--message", help="Post a workflow error when no normalized result exists")

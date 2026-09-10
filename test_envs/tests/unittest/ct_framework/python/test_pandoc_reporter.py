@@ -6,19 +6,19 @@ from test_envs.tools.pandoc_reporter import _default_output_dir, convert, latest
 
 class PandocReporterTests(unittest.TestCase):
     def test_pytest_output_is_grouped_under_test_cases(self) -> None:
-        source = Path("test_envs/reports/markdown/pytest/test_cases/CT-UART-001/execution_result.md")
+        source = Path("test_reports/markdown/pytest/test_cases/CT-UART-001/execution_result.md")
 
         self.assertEqual(
             _default_output_dir(source),
-            Path("test_envs/reports/pandocs/pytest/test_cases/CT-UART-001"),
+            Path("test_reports/pandocs/pytest/test_cases/CT-UART-001"),
         )
 
     def test_unittest_output_is_grouped_separately(self) -> None:
-        source = Path("test_envs/reports/markdown/unittest/execution_result.md")
+        source = Path("test_reports/markdown/unittest/execution_result.md")
 
         self.assertEqual(
             _default_output_dir(source),
-            Path("test_envs/reports/pandocs/unittest"),
+            Path("test_reports/pandocs/unittest"),
         )
 
     def test_latest_markdown_searches_nested_report_groups(self) -> None:

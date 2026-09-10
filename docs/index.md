@@ -139,7 +139,7 @@ flowchart TD
     subgraph REQUEST_JOB["request job · ubuntu-latest"]
         CHECKOUT_REQUEST[Checkout]
         APPLY_LABEL[Ensure and apply matching Issue label]
-        PARSER[test_envs.tools.issue_parser]
+        PARSER[test_envs.tool_github.issue_parser]
         OUTPUTS["Normalize request_kind, test settings,<br/>revision, reports, and runner_labels"]
 
         CHECKOUT_REQUEST --> APPLY_LABEL --> PARSER --> OUTPUTS
@@ -156,12 +156,12 @@ flowchart TD
         PYTEST_RESULT[Pytest Result]
         UNITTEST_RESULT[Unittest Result]
         COVERAGE[Optional Coverage]
-        PIPELINE[test_envs.tools.pipeline]
+        PIPELINE[test_envs.test_pipeline.pipeline]
         LLM["Local LLM<br/>Pytest only"]
         REPORTER["test_envs/tools/mkdocs_reporter<br/>Canonical Markdown"]
         MKDOCS["MkDocs (TEST Results)<br/>when report_mkdocs is enabled"]
         PANDOC["test_envs.tools.pandoc_reporter<br/>optional HTML / DOCX"]
-        GITHUB_REPORTER[test_envs.tools.github_reporter]
+        GITHUB_REPORTER[test_envs.tool_github.github_reporter]
         ISSUE[GitHub Issue Comment]
         ARTIFACT["GitHub Artifact<br/>results / reports / coverage"]
 
@@ -239,7 +239,7 @@ flowchart TD
 | Pytest CT | Mock runs on GitHub-hosted Linux/Windows; physical HIL routes to the self-hosted hardware runner |
 | Coverage | Optional terminal or HTML `pytest-cov` report |
 | Report | Always creates canonical Markdown; Issue Forms optionally convert Pandoc HTML/DOCX, while manual dispatch can additionally publish MkDocs |
-| Issue output | `test_envs.tools.github_reporter` comments on success, test failure, report failure, or missing result |
+| Issue output | `test_envs.tool_github.github_reporter` comments on success, test failure, report failure, or missing result |
 | Artifact | Uploads results, MkDocs pages, `.coverage`, and `htmlcov/` |
 | Node.js | No project Node.js setup or command; official GitHub Actions manage their own embedded runtime |
 
@@ -293,10 +293,10 @@ flowchart TD
 | Environment check | `test_envs/configs/check.json` |
 | pytest | `test_envs/tests/pytest` |
 | unittest | `test_envs/tests/unittest` |
-| Results | `test_envs/reports/results` |
-| Local LLM logs | `test_envs/reports/local_llm` |
-| Markdown | `test_envs/reports/markdown/pytest/test_cases`, `test_envs/reports/markdown/unittest` |
-| Pandoc | `test_envs/reports/pandocs/pytest/test_cases`, `test_envs/reports/pandocs/unittest` |
+| Results | `test_reports/results` |
+| Local LLM logs | `test_reports/local_llm` |
+| Markdown | `test_reports/markdown/pytest/test_cases`, `test_reports/markdown/unittest` |
+| Pandoc | `test_reports/pandocs/pytest/test_cases`, `test_reports/pandocs/unittest` |
 
 <br/>
 
@@ -372,7 +372,7 @@ Pytest Markdown + MkDocs
 | Runtime | Ollama |
 | Configuration | `test_envs/configs/config.json → ollama` |
 | Analysis payload | Pytest result JSON → `test_analysis` |
-| Diagnostic log | `test_envs/reports/local_llm/<execution-id>_local_llm.log` |
+| Diagnostic log | `test_reports/local_llm/<execution-id>_local_llm.log` |
 | Unittest Local LLM log | Not generated |
 | Detailed setup | [local_llm_environment.md](local_llm_environment.md) |
 

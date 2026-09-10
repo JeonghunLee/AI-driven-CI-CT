@@ -35,7 +35,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             self.assertEqual(configuration["preLaunchTask"], task)
             self.assertEqual(configuration["module"], "test_envs.tools.configuration")
             self.assertEqual(configuration["args"], ["config"])
-            self.assertNotEqual(configuration["module"], "test_envs.tools.environment_setup")
+            self.assertNotEqual(configuration["module"], "test_envs.test_pipeline.environment_setup")
         self.assertEqual([item["id"] for item in self.launch["inputs"]], ["fixtureMode"])
 
     def test_python_setup_uses_platform_picker(self) -> None:
@@ -45,7 +45,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         )
         self.assertEqual(
             task["args"],
-            ["-m", "test_envs.tools.environment_setup", "python"],
+            ["-m", "test_envs.test_pipeline.environment_setup", "python"],
         )
 
     def test_task_setup_uses_internal_model_config(self) -> None:
@@ -55,7 +55,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         )
         self.assertEqual(
             setup["args"],
-            ["-m", "test_envs.tools.environment_setup", "ollama"],
+            ["-m", "test_envs.test_pipeline.environment_setup", "ollama"],
         )
         self.assertTrue(any("Check File" in item["label"] for item in self.tasks["tasks"]))
 
@@ -68,7 +68,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         self.assertNotIn("isBackground", task)
         self.assertEqual(
             task["args"],
-            ["-m", "test_envs.tools.environment_setup", "serve"],
+            ["-m", "test_envs.test_pipeline.environment_setup", "serve"],
         )
 
     def test_vscode_json_contains_no_os_metadata(self) -> None:

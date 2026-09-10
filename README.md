@@ -57,15 +57,15 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 │   ├── pytest_framework.md
 │   ├── unittest_framework.md
 │   └── tests/{pytest,unittest}/
-└── test_envs/
-    ├── configs/
-    │   ├── config.json
-    │   ├── check.json
-    │   ├── pytest/
-    │   └── unittest/
-    ├── tests/
-    ├── reports/
-    └── tools/
+├── test_envs/
+│   ├── configs/
+│   │   ├── config.json
+│   │   └── check.json
+│   ├── tests/
+│   ├── tool_github/{github_reporter,issue_parser.py}
+│   ├── test_pipeline/{environment_setup.py,pipeline.py}
+│   └── tools/
+└── test_reports/
 ```
 
 ## 구성
@@ -91,7 +91,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 | macOS | `python3` |
 
 ```text
-python -m test_envs.tools.environment_setup python --platform config
+python -m test_envs.test_pipeline.environment_setup python --platform config
 ```
 
 ### VS Code 실행 구분
@@ -229,8 +229,8 @@ test_envs/configs/
 | 작업 | 명령 |
 |---|---|
 | Environment check | `python -m test_envs.tools.configuration check` |
-| Model pull/update | `python -m test_envs.tools.environment_setup ollama --platform config` |
-| Foreground server | `python -m test_envs.tools.environment_setup serve --platform config` |
+| Model pull/update | `python -m test_envs.test_pipeline.environment_setup ollama --platform config` |
+| Foreground server | `python -m test_envs.test_pipeline.environment_setup serve --platform config` |
 | Report model override | `python -m test_envs.tools.test_result --model "<ollama-model>:<tag>"` |
 
 | Ollama server state | Setup behavior | Completion behavior |
@@ -287,7 +287,7 @@ Execution ID 검색
 ```
 
 ```text
-test_envs/reports/
+test_reports/
 ├── results/
 │   ├── pytest/test_cases/<test-id>/
 │   │   ├── <execution-id>_result.json
@@ -311,8 +311,8 @@ test_envs/reports/
 
 | Artifact | 역할 |
 |---|---|
-| `test_envs/reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` | Canonical human-readable result |
-| `test_envs/reports/markdown/unittest/<execution-id>_result.md` | unittest Execution Markdown |
+| `test_reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` | Canonical human-readable result |
+| `test_reports/markdown/unittest/<execution-id>_result.md` | unittest Execution Markdown |
 | `<execution-id>_result.json` | Result, measurement, analysis, escalation |
 | `<execution-id>_test.log` | Test, stdout, stderr, equipment, interface log |
 | `<execution-id>_result.log` | unittest function status and failure detail |
@@ -416,5 +416,5 @@ test_envs/reports/
 | Self-hosted HIL Linux | `[self-hosted, linux, hw-test]` |
 | Self-hosted HIL Windows | `[self-hosted, windows, hw-test]` |
 | 분석 | Pytest만 Local LLM 사용; Unittest는 사용하지 않음 |
-| Issue 결과 | `github_reporter`: 테스트 결과, 환경 확인 결과, 실행 오류 코멘트 |
+| Issue 결과 | `test_envs.tool_github.github_reporter`: 테스트 결과, 환경 확인 결과, 실행 오류 코멘트 |
 | Node.js | 프로젝트 설치 및 실행 없음; 공식 GitHub Action 내부 런타임은 GitHub가 관리 |

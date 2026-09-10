@@ -482,12 +482,12 @@ MkDocs Results   Pandoc Report
 
 | Report stage | Source or tool | Output |
 |---|---|---|
-| Test evidence | `test_envs/reports/results/pytest/test_cases/<test-id>/` | `<execution-id>_result.json` and `<execution-id>_test.log` |
+| Test evidence | `test_reports/results/pytest/test_cases/<test-id>/` | `<execution-id>_result.json` and `<execution-id>_test.log` |
 | Analysis | `test_envs.tools.local_llm` | Analysis stored in result JSON and Local LLM log |
 | Report coordination | `test_envs.tools.test_result` | Processes the latest or every pending result |
-| Canonical Markdown | `test_envs.tools.mkdocs_reporter` | `test_envs/reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` |
+| Canonical Markdown | `test_envs.tools.mkdocs_reporter` | `test_reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` |
 | MkDocs publication | `test_envs.tools.mkdocs_reporter` | `docs/tests/pytest/<test-id>.md` and execution pages |
-| Pandoc conversion | `test_envs.tools.pandoc_reporter` | `test_envs/reports/pandocs/pytest/test_cases/<test-id>/<execution-id>_result.<format>` |
+| Pandoc conversion | `test_envs.tools.pandoc_reporter` | `test_reports/pandocs/pytest/test_cases/<test-id>/<execution-id>_result.<format>` |
 
 <br/>
 

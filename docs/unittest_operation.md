@@ -134,12 +134,12 @@ Canonical Markdown
 
 | Output | Path |
 |---|---|
-| Result JSON | `test_envs/reports/results/unittest/<execution-id>_result.json` |
-| Result log | `test_envs/reports/results/unittest/<execution-id>_result.log` |
+| Result JSON | `test_reports/results/unittest/<execution-id>_result.json` |
+| Result log | `test_reports/results/unittest/<execution-id>_result.log` |
 | Local LLM log | Not generated |
-| Canonical Markdown | `test_envs/reports/markdown/unittest/<execution-id>_result.md` |
+| Canonical Markdown | `test_reports/markdown/unittest/<execution-id>_result.md` |
 | MkDocs result | `docs/tests/unittest/` |
-| Pandoc output | `test_envs/reports/pandocs/unittest/` |
+| Pandoc output | `test_reports/pandocs/unittest/` |
 
 <br/>
 

@@ -2,7 +2,7 @@ import json
 import unittest
 from unittest.mock import patch
 
-from test_envs.tools.issue_parser import event_configuration, parse_issue_body, request_configuration
+from test_envs.tool_github.issue_parser import event_configuration, parse_issue_body, request_configuration
 
 
 class IssueParserTests(unittest.TestCase):
@@ -76,7 +76,7 @@ HTML coverage report
                 "labels": [],
             }
         }
-        with patch("test_envs.tools.issue_parser.Path.read_text", return_value=json.dumps(event)):
+        with patch("test_envs.tool_github.issue_parser.Path.read_text", return_value=json.dumps(event)):
             value = event_configuration("event.json")
         self.assertEqual(value["request_kind"], "environment-check")
         self.assertEqual(value["runner_labels"], '["ubuntu-latest"]')
@@ -89,7 +89,7 @@ HTML coverage report
                 "labels": [],
             }
         }
-        with patch("test_envs.tools.issue_parser.Path.read_text", return_value=json.dumps(event)):
+        with patch("test_envs.tool_github.issue_parser.Path.read_text", return_value=json.dumps(event)):
             value = event_configuration("event.json")
         self.assertEqual(value["test_type"], "Unittest")
         self.assertEqual(value["unittest_target"], "test_envs/tests/unittest")

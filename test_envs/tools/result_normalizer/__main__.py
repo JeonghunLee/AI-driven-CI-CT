@@ -10,7 +10,7 @@ from . import ResultRecord, ResultStore, from_junit
 def main() -> None:
     parser = argparse.ArgumentParser(description="Normalize a JSON test result")
     parser.add_argument("input", type=Path)
-    parser.add_argument("--reports", default="test_envs/reports")
+    parser.add_argument("--reports", default="test_reports")
     parser.add_argument("--test-id", default="UNIT-TEST")
     args = parser.parse_args()
     if args.input.suffix.lower() == ".xml":

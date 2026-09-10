@@ -39,7 +39,7 @@ def _warning_severity(warning_count: int) -> str:
 class MarkdownReporter:
     """Create the canonical human-readable report and optionally publish it to MkDocs."""
 
-    def __init__(self, reports_root: str | Path = "test_envs/reports", docs_root: str | Path = "docs") -> None:
+    def __init__(self, reports_root: str | Path = "test_reports", docs_root: str | Path = "docs") -> None:
         self.store = ResultStore(reports_root)
         self.docs_root = Path(docs_root)
 
@@ -426,7 +426,7 @@ Go Back to the [Pytest TEST All Index](./index.md)
 <br/>
 
 * Path:    
-  test_envs/reports/results/pytest/test_cases/{result.test_id}
+  test_reports/results/pytest/test_cases/{result.test_id}
 
 <br/>
 

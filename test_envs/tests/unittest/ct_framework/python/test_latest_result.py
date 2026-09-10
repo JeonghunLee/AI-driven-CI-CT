@@ -4,7 +4,7 @@ from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
-from test_envs.tools.pipeline import run
+from test_envs.test_pipeline.pipeline import run
 from test_envs.tools.result_normalizer import ResultRecord, ResultStore
 from test_envs.tools.test_result import _run_with_progress, pending_result_paths, publish_latest
 
@@ -27,10 +27,24 @@ class LatestResultTests(unittest.TestCase):
         missing = ResultRecord("CT-PENDING-002", "PASS", "timing", 0.1, execution_id="20260101_000002_000002")
         complete_path = store.save(complete)
         missing_path = store.save(missing)
-        complete_markdown = root / "markdown" / complete.test_id / f"{complete.execution_id}_result.md"
+        complete_markdown = (
+            root
+            / "markdown"
+            / "pytest"
+            / "test_cases"
+            / complete.test_id
+            / f"{complete.execution_id}_result.md"
+        )
         complete_markdown.parent.mkdir(parents=True, exist_ok=True)
         complete_markdown.write_text("# complete", encoding="utf-8")
-        missing_markdown = root / "markdown" / missing.test_id / f"{missing.execution_id}_result.md"
+        missing_markdown = (
+            root
+            / "markdown"
+            / "pytest"
+            / "test_cases"
+            / missing.test_id
+            / f"{missing.execution_id}_result.md"
+        )
         missing_markdown.unlink(missing_ok=True)
 
         self.assertEqual(pending_result_paths(store=store, docs_root=docs), [missing_path])
@@ -74,8 +88,8 @@ class LatestResultTests(unittest.TestCase):
             ),
         )
         result_path = store.save(record)
-        with patch("test_envs.tools.pipeline.ResultStore", return_value=store), patch(
-            "test_envs.tools.pipeline.LocalLLMAnalyzer",
+        with patch("test_envs.test_pipeline.pipeline.ResultStore", return_value=store), patch(
+            "test_envs.test_pipeline.pipeline.LocalLLMAnalyzer",
             side_effect=AssertionError("Local LLM must not run for unittest"),
         ):
             output = run(result_path=result_path)

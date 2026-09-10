@@ -26,7 +26,7 @@
             "command": "python",
             "args": [
                 "-m",
-                "test_envs.tools.environment_setup",
+                "test_envs.test_pipeline.environment_setup",
                 "python"
             ],
             "problemMatcher": []
@@ -37,7 +37,7 @@
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "test_envs.tools.environment_setup",
+                "test_envs.test_pipeline.environment_setup",
                 "ollama"
             ],
             "problemMatcher": []
@@ -73,7 +73,7 @@
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "test_envs.tools.environment_setup",
+                "test_envs.test_pipeline.environment_setup",
                 "serve"
             ],
             "presentation": {

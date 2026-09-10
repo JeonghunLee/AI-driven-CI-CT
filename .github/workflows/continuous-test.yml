@@ -164,7 +164,7 @@ jobs:
 
       - name: Read test request
         id: request
-        run: python -m test_envs.tools.issue_parser
+        run: python -m test_envs.tool_github.issue_parser
 
   test:
     name: Execute requested test or environment check
@@ -274,9 +274,9 @@ jobs:
           }
           $markerTime = (Get-Item $env:TEST_START_MARKER).LastWriteTimeUtc
           $root = if ($env:TEST_TYPE -eq "Unittest") {
-            "test_envs/reports/results/unittest"
+            "test_reports/results/unittest"
           } else {
-            "test_envs/reports/results/pytest/test_cases/$env:TEST_ID"
+            "test_reports/results/pytest/test_cases/$env:TEST_ID"
           }
           $result = Get-ChildItem $root -Filter "*_result.json" -File -Recurse -ErrorAction SilentlyContinue |
             Where-Object { $_.LastWriteTimeUtc -ge $markerTime } |
@@ -297,7 +297,7 @@ jobs:
         env:
           RESULT_PATH: ${{ steps.result.outputs.path }}
         run: |
-          $arguments = @("-m", "test_envs.tools.pipeline", "--result-path", $env:RESULT_PATH)
+          $arguments = @("-m", "test_envs.test_pipeline.pipeline", "--result-path", $env:RESULT_PATH)
           if ($env:REPORT_MKDOCS -eq "true") {
             $arguments += "--docs"
           }
@@ -324,7 +324,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RESULT_PATH: ${{ steps.result.outputs.path }}
         run: |
-          & $env:VENV_PYTHON -m test_envs.tools.github_reporter `
+          & $env:VENV_PYTHON -m test_envs.tool_github.github_reporter `
             --result-path $env:RESULT_PATH `
             --issue $env:ISSUE_NUMBER
 
@@ -335,7 +335,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $python = if ($env:VENV_PYTHON) { $env:VENV_PYTHON } else { "python" }
-          & $python -m test_envs.tools.github_reporter `
+          & $python -m test_envs.tool_github.github_reporter `
             --message "The requested test ended before a normalized result could be captured. Review the workflow run and artifacts." `
             --issue $env:ISSUE_NUMBER
 
@@ -347,7 +347,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python -m test_envs.tools.github_reporter `
+          python -m test_envs.tool_github.github_reporter `
             --environment-check `
             --issue $env:ISSUE_NUMBER
 
@@ -357,7 +357,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python -m test_envs.tools.github_reporter `
+          python -m test_envs.tool_github.github_reporter `
             --message "The runner environment check failed. Review the workflow run for setup or detection errors." `
             --issue $env:ISSUE_NUMBER
           exit 1
@@ -369,7 +369,7 @@ jobs:
           name: test-request-${{ github.run_id }}
           if-no-files-found: warn
           path: |
-            test_envs/reports/
+            test_reports/
             docs/tests/pytest/
             docs/tests/unittest/
             .coverage

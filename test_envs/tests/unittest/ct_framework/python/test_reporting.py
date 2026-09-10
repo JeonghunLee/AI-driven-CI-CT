@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 
 from test_envs.tools.local_llm import Analysis
-from test_envs.tools.github_reporter import render_comment, render_environment_comment
+from test_envs.tool_github.github_reporter import render_comment, render_environment_comment
 from test_envs.tools.result_normalizer import ResultRecord
 
 
@@ -25,7 +25,7 @@ class ReportingTests(unittest.TestCase):
         comment = render_comment(result, Analysis("Unit tests passed", "unittest", 1.0, "not-used"))
         self.assertIn("Local LLM analyzer: Not used", comment)
         self.assertIn("docs/tests/unittest/20260904_120000_000001.md", comment)
-        self.assertIn("reports/markdown/unittest/20260904_120000_000001_result.md", comment)
+        self.assertIn("test_reports/markdown/unittest/20260904_120000_000001_result.md", comment)
 
     def test_pytest_comment_uses_test_cases_markdown_path(self) -> None:
         result = ResultRecord(
@@ -38,7 +38,7 @@ class ReportingTests(unittest.TestCase):
         comment = render_comment(result, Analysis("Passed", "passed", 1.0, "test"))
 
         self.assertIn(
-            "reports/markdown/pytest/test_cases/CT-UART-001/20260904_120000_000002_result.md",
+            "test_reports/markdown/pytest/test_cases/CT-UART-001/20260904_120000_000002_result.md",
             comment,
         )
 

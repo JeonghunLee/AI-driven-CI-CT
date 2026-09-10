@@ -194,7 +194,7 @@ class ResultRecord:
 
 
 class ResultStore:
-    def __init__(self, root: str | Path = "test_envs/reports") -> None:
+    def __init__(self, root: str | Path = "test_reports") -> None:
         self.root = Path(root)
 
     def save(self, record: ResultRecord) -> Path:
@@ -215,7 +215,7 @@ class ResultStore:
     def latest(self) -> Path:
         candidates = self.result_paths()
         if not candidates:
-            raise FileNotFoundError("No normalized result exists under test_envs/reports")
+            raise FileNotFoundError("No normalized result exists under test_reports")
         return max(candidates, key=lambda path: path.name)
 
     def result_paths(self, test_id: str | None = None) -> list[Path]:

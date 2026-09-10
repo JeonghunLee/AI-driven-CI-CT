@@ -177,7 +177,7 @@ Create or update `.venv`:
 <br/>
 
 ```powershell
-python -m test_envs.tools.environment_setup python --platform config
+python -m test_envs.test_pipeline.environment_setup python --platform config
 ```
 
 <br/>
@@ -233,7 +233,7 @@ python3 -m test_envs.tools.configuration select-os
 <br/>
 
 ```bash
-python3 -m test_envs.tools.environment_setup python --platform config
+python3 -m test_envs.test_pipeline.environment_setup python --platform config
 ```
 
 <br/>
@@ -248,7 +248,7 @@ python3 -m test_envs.tools.environment_setup python --platform config
 
 <br/>
 
-`test_envs.tools.environment_setup python` performs these operations:
+`test_envs.test_pipeline.environment_setup python` performs these operations:
 
 <br/>
 
@@ -322,25 +322,28 @@ test_envs/
 │   └── unittest/
 │       ├── conftest.py             # Unittest result normalization
 │       └── ct_framework/python/    # Current Python framework tests
-├── tools/
-│   ├── configuration/              # config, check, set-os, and select-os
-│   ├── environment_setup.py        # Python and Ollama setup
-│   ├── extension_runner.py         # Future extension execution
-│   ├── extensions/                 # Extension modules
-│   ├── local_llm/                  # Local LLM client and status
-│   ├── test_result/                # Pending-result processing
-│   ├── mkdocs_reporter/            # MkDocs Markdown publishing
-│   ├── pandoc_reporter/            # HTML, DOCX, and PDF conversion
-│   ├── github_reporter/            # GitHub reporting
-│   ├── result_normalizer/          # Common result model
-│   ├── issue_parser.py
-│   ├── log_parser/
-│   └── pipeline.py
-└── reports/
-    ├── results/{pytest,unittest}/   # Result JSON and execution logs
-    ├── markdown/                    # Generated Markdown reports
-    ├── pandoc/                      # Generated HTML, DOCX, or PDF
-    └── local_llm/                   # Local LLM analysis artifacts
+├── tool_github/
+│   ├── github_reporter/             # GitHub Issue result reporting
+│   └── issue_parser.py              # GitHub Issue request parsing
+├── test_pipeline/
+│   ├── environment_setup.py         # Python and Ollama setup
+│   └── pipeline.py                  # Test result analysis and report pipeline
+└── tools/
+    ├── configuration/               # config, check, set-os, and select-os
+    ├── extension_runner.py          # Future extension execution
+    ├── extensions/                  # Extension modules
+    ├── local_llm/                   # Local LLM client and status
+    ├── test_result/                 # Pending-result processing
+    ├── mkdocs_reporter/             # MkDocs Markdown publishing
+    ├── pandoc_reporter/             # HTML, DOCX, and PDF conversion
+    ├── result_normalizer/           # Common result model
+    └── log_parser/
+
+test_reports/
+├── results/{pytest/test_cases,unittest}/ # Result JSON and execution logs
+├── markdown/{pytest/test_cases,unittest}/ # Generated Markdown reports
+├── pandocs/{pytest/test_cases,unittest}/  # Generated HTML, DOCX, or PDF
+└── local_llm/                            # Local LLM analysis artifacts
 ```
 
 <br/>

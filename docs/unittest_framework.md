@@ -111,7 +111,7 @@ Running `python -m unittest` bypasses the pytest hooks and therefore does not ge
 ```text
 unittest_request.yml Issue
         ↓
-issue_parser selects Unittest scope and runner
+`test_envs.tool_github.issue_parser` selects Unittest scope and runner
         ↓
 pytest test_envs/tests/unittest
         ↓
@@ -169,7 +169,7 @@ If no unittest function report is captured, the session hook does not create res
 Unlike pytest CT, unittest results are flat because they are keyed only by Execution ID.
 
 ```text
-test_envs/reports/results/unittest/
+test_reports/results/unittest/
 ├── <execution-id>_result.json
 └── <execution-id>_result.log
 ```
@@ -254,9 +254,9 @@ Generate every pending execution report and publish the MkDocs pages with:
 ```
 
 ```text
-test_envs/reports/results/unittest/<execution-id>_result.json
+test_reports/results/unittest/<execution-id>_result.json
                          ↓
-test_envs/reports/markdown/unittest/<execution-id>_result.md
+test_reports/markdown/unittest/<execution-id>_result.md
                          ↓
 docs/tests/unittest/<execution-id>.md
                          ↓
@@ -358,12 +358,12 @@ MkDocs Results       Pandoc Report
 
 | Report stage | Source or tool | Output |
 |---|---|---|
-| Test evidence | `test_envs/reports/results/unittest/` | `<execution-id>_result.json` and `<execution-id>_result.log` |
+| Test evidence | `test_reports/results/unittest/` | `<execution-id>_result.json` and `<execution-id>_result.log` |
 | Analysis | Not used for unittest | No Local LLM analysis or escalation |
 | Report coordination | `test_envs.tools.test_result` | Processes the latest or every pending result |
-| Canonical Markdown | `test_envs.tools.mkdocs_reporter` | `test_envs/reports/markdown/unittest/<execution-id>_result.md` |
+| Canonical Markdown | `test_envs.tools.mkdocs_reporter` | `test_reports/markdown/unittest/<execution-id>_result.md` |
 | MkDocs publication | `test_envs.tools.mkdocs_reporter` | `docs/tests/unittest/<execution-id>.md` and index page |
-| Pandoc conversion | `test_envs.tools.pandoc_reporter` | `test_envs/reports/pandocs/unittest/<execution-id>_result.<format>` |
+| Pandoc conversion | `test_envs.tools.pandoc_reporter` | `test_reports/pandocs/unittest/<execution-id>_result.<format>` |
 
 <br/>
 
