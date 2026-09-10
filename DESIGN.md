@@ -67,6 +67,7 @@ Markdown
 ├── test_reports/markdown/unittest
 ├── test_reports/pandocs/pytest/test_cases
 ├── test_reports/pandocs/unittest
+├── test_reports/pandocs/reference.docx
 ├── MkDocs
 ├── Pandoc
 └── GitHub Issue
@@ -717,7 +718,7 @@ Local LLM
 | pytest framework document | Test cases·fixtures·HIL·Mock·CLI override·HIL gate | `docs/pytest_framework.md` |
 | MkDocs pytest result index | Published pytest page scan | `docs/tests/pytest/index.md` |
 | MkDocs unittest result index | Published unittest page scan | `docs/tests/unittest/index.md` |
-| DOCX | Canonical Markdown | `test_reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.docx` |
+| DOCX | Canonical Markdown + `test_reports/pandocs/reference.docx` | `test_reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.docx` |
 | PDF | Canonical Markdown | `test_reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.pdf` |
 | HTML | Canonical Markdown | `test_reports/pandocs/{pytest/test_cases/<test-id>,unittest}/<execution-id>_result.html` |
 

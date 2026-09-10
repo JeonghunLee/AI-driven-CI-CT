@@ -140,6 +140,7 @@ Canonical Markdown
 | Canonical Markdown | `test_reports/markdown/unittest/<execution-id>_result.md` |
 | MkDocs result | `docs/tests/unittest/` |
 | Pandoc output | `test_reports/pandocs/unittest/` |
+| DOCX reference | `test_reports/pandocs/reference.docx` |
 
 <br/>
 

@@ -7,6 +7,7 @@ from pathlib import Path
 
 FORMATS = {"docx": ".docx", "pdf": ".pdf", "html": ".html"}
 PANDOC_ROOT = Path("test_reports/pandocs")
+REFERENCE_DOC = PANDOC_ROOT / "reference.docx"
 
 
 def _default_output_dir(source_path: Path) -> Path:
@@ -33,6 +34,10 @@ def convert(source: str | Path, output_format: str, output_dir: str | Path | Non
     destination_dir.mkdir(parents=True, exist_ok=True)
     destination = destination_dir / f"{source_path.stem}{FORMATS[output_format]}"
     command = [executable, str(source_path), "-o", str(destination), "--standalone"]
+    if output_format == "docx":
+        if not REFERENCE_DOC.is_file():
+            raise FileNotFoundError(f"Pandoc reference DOCX does not exist: {REFERENCE_DOC}")
+        command.extend(["--reference-doc", str(REFERENCE_DOC)])
     subprocess.run(command, check=True)
     return destination
 
@@ -44,4 +49,4 @@ def latest_markdown(root: str | Path = "test_reports") -> Path:
     return max(candidates, key=lambda path: path.name)
 
 
-__all__ = ["FORMATS", "convert", "latest_markdown"]
+__all__ = ["FORMATS", "PANDOC_ROOT", "REFERENCE_DOC", "convert", "latest_markdown"]
