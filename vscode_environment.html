@@ -436,6 +436,18 @@
   </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="mcp_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Setup MCP
+  
+
+    
+  </span>
+</a>
+</li>
 </ul>
 </nav>
 </li>
@@ -1020,7 +1032,7 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
             "command": "python",
             "args": [
                 "-m",
-                "test_envs.tools.environment_setup",
+                "test_envs.test_pipeline.environment_setup",
                 "python"
             ],
             "problemMatcher": []
@@ -1031,7 +1043,7 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "test_envs.tools.environment_setup",
+                "test_envs.test_pipeline.environment_setup",
                 "ollama"
             ],
             "problemMatcher": []
@@ -1067,7 +1079,7 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-m",
-                "test_envs.tools.environment_setup",
+                "test_envs.test_pipeline.environment_setup",
                 "serve"
             ],
             "presentation": {
@@ -1491,7 +1503,7 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <tr>
 <td><code>REPORT-Pandoc: Convert Latest Markdown to DOCX</code></td>
 <td><code>test_envs.tools.pandoc_reporter --latest --format docx</code></td>
-<td>Converts the latest Markdown report to DOCX</td>
+<td>Converts the latest Markdown to DOCX using <code>test_reports/pandocs/reference.docx</code></td>
 <td><a href="#tasks-report">Tasks-Report</a></td>
 </tr>
 </tbody>
@@ -1545,13 +1557,13 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 </tr>
 <tr>
 <td><code>SETUP 2: Install Python Virtual Environment</code></td>
-<td><code>test_envs.tools.environment_setup</code></td>
+<td><code>test_envs.test_pipeline.environment_setup</code></td>
 <td><code>python</code></td>
 <td>Creates <code>.venv</code> and installs dependencies</td>
 </tr>
 <tr>
 <td><code>SETUP 3: Install Ollama and Local LLM</code></td>
-<td><code>test_envs.tools.environment_setup</code></td>
+<td><code>test_envs.test_pipeline.environment_setup</code></td>
 <td><code>ollama</code></td>
 <td>Installs/checks Ollama and pulls the configured model</td>
 </tr>
@@ -1569,7 +1581,7 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 </tr>
 <tr>
 <td><code>CHECK 3: Run Ollama Server (Foreground)</code></td>
-<td><code>test_envs.tools.environment_setup</code></td>
+<td><code>test_envs.test_pipeline.environment_setup</code></td>
 <td><code>serve</code></td>
 <td>Runs an Ollama server owned by the terminal Task</td>
 </tr>
@@ -1633,7 +1645,7 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <tr>
 <td><code>REPORT-Pandoc: Convert Latest Markdown to DOCX</code></td>
 <td><code>test_envs.tools.pandoc_reporter --latest --format docx</code></td>
-<td>Converts the latest Markdown to Word</td>
+<td>Converts the latest Markdown to Word using <code>test_reports/pandocs/reference.docx</code></td>
 </tr>
 </tbody>
 </table>

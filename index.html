@@ -359,6 +359,18 @@
   </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="mcp_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Setup MCP
+  
+
+    
+  </span>
+</a>
+</li>
 </ul>
 </nav>
 </li>
@@ -706,6 +718,10 @@
 <td>Normalizes execution data and generates Markdown reports</td>
 </tr>
 <tr>
+<td>MCP server</td>
+<td>Allows an external local MCP host to discover and run allowlisted Pytest/Unittest operations through <code>stdio</code></td>
+</tr>
+<tr>
 <td>Local LLM</td>
 <td>Analyzes pytest CT results only; it is not used for unittest</td>
 </tr>
@@ -749,6 +765,11 @@ Support Local MCP execution, GitHub Issue based TEST automation, and documentati
 <td>VS Code Environment</td>
 <td><a href="vscode_environment.html">vscode_environment.md</a></td>
 <td>Settings, Launch, Tasks, Testing</td>
+</tr>
+<tr>
+<td>MCP Environment</td>
+<td><a href="mcp_environment.html">mcp_environment.md</a></td>
+<td>External <code>stdio</code> tools, execution controls, HIL safety</td>
 </tr>
 <tr>
 <td>Pytest Operation</td>
@@ -883,7 +904,7 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
     subgraph REQUEST_JOB["request job · ubuntu-latest"]
         CHECKOUT_REQUEST[Checkout]
         APPLY_LABEL[Ensure and apply matching Issue label]
-        PARSER[test_envs.tools.issue_parser]
+        PARSER[test_envs.tool_github.issue_parser]
         OUTPUTS["Normalize request_kind, test settings,&lt;br/&gt;revision, reports, and runner_labels"]
 
         CHECKOUT_REQUEST --&gt; APPLY_LABEL --&gt; PARSER --&gt; OUTPUTS
@@ -900,12 +921,12 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
         PYTEST_RESULT[Pytest Result]
         UNITTEST_RESULT[Unittest Result]
         COVERAGE[Optional Coverage]
-        PIPELINE[test_envs.tools.pipeline]
+        PIPELINE[test_envs.test_pipeline.pipeline]
         LLM["Local LLM&lt;br/&gt;Pytest only"]
         REPORTER["test_envs/tools/mkdocs_reporter&lt;br/&gt;Canonical Markdown"]
         MKDOCS["MkDocs (TEST Results)&lt;br/&gt;when report_mkdocs is enabled"]
         PANDOC["test_envs.tools.pandoc_reporter&lt;br/&gt;optional HTML / DOCX"]
-        GITHUB_REPORTER[test_envs.tools.github_reporter]
+        GITHUB_REPORTER[test_envs.tool_github.github_reporter]
         ISSUE[GitHub Issue Comment]
         ARTIFACT["GitHub Artifact&lt;br/&gt;results / reports / coverage"]
 
@@ -1044,11 +1065,15 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </tr>
 <tr>
 <td>Report</td>
-<td>Always creates canonical Markdown; Issue Forms optionally convert Pandoc HTML/DOCX, while manual dispatch can additionally publish MkDocs</td>
+<td>Issue Forms normalize Log, canonical Markdown, Pandoc DOCX, and Pandoc HTML separately</td>
+</tr>
+<tr>
+<td>MkDocs publication</td>
+<td><code>report_mkdocs</code> copies the generated Markdown into <code>docs/tests</code>; Markdown generation itself is represented by <code>report_markdown</code></td>
 </tr>
 <tr>
 <td>Issue output</td>
-<td><code>test_envs.tools.github_reporter</code> comments on success, test failure, report failure, or missing result</td>
+<td><code>test_envs.tool_github.github_reporter</code> comments on success, test failure, report failure, or missing result</td>
 </tr>
 <tr>
 <td>Artifact</td>
@@ -1134,19 +1159,19 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </tr>
 <tr>
 <td>Results</td>
-<td><code>test_envs/reports/results</code></td>
+<td><code>test_reports/results</code></td>
 </tr>
 <tr>
 <td>Local LLM logs</td>
-<td><code>test_envs/reports/local_llm</code></td>
+<td><code>test_reports/local_llm</code></td>
 </tr>
 <tr>
 <td>Markdown</td>
-<td><code>test_envs/reports/markdown</code></td>
+<td><code>test_reports/markdown/pytest/test_cases</code>, <code>test_reports/markdown/unittest</code></td>
 </tr>
 <tr>
 <td>Pandoc</td>
-<td><code>test_envs/reports/pandoc</code></td>
+<td><code>test_reports/pandocs/pytest/test_cases</code>, <code>test_reports/pandocs/unittest</code>; DOCX reference: <code>test_reports/pandocs/reference.docx</code></td>
 </tr>
 </tbody>
 </table>
@@ -1307,7 +1332,7 @@ Pytest Markdown + MkDocs
 </tr>
 <tr>
 <td>Diagnostic log</td>
-<td><code>test_envs/reports/local_llm/&lt;execution-id&gt;_local_llm.log</code></td>
+<td><code>test_reports/local_llm/&lt;execution-id&gt;_local_llm.log</code></td>
 </tr>
 <tr>
 <td>Unittest Local LLM log</td>

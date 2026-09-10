@@ -365,6 +365,18 @@
   </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="mcp_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Setup MCP
+  
+
+    
+  </span>
+</a>
+</li>
 </ul>
 </nav>
 </li>
@@ -1017,7 +1029,7 @@
 <p><br/></p>
 <p>Create or update <code>.venv</code>:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code><span class="n">python</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">environment_setup</span> <span class="n">python</span> <span class="p">-</span><span class="n">-platform</span> <span class="n">config</span>
+<div class="highlight"><pre><span></span><code><span class="n">python</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">test_pipeline</span><span class="p">.</span><span class="n">environment_setup</span> <span class="n">python</span> <span class="p">-</span><span class="n">-platform</span> <span class="n">config</span>
 </code></pre></div>
 <p><br/></p>
 <p>Verify project Python:</p>
@@ -1045,7 +1057,7 @@
 <div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>test_envs.tools.configuration<span class="w"> </span>select-os
 </code></pre></div>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>test_envs.tools.environment_setup<span class="w"> </span>python<span class="w"> </span>--platform<span class="w"> </span>config
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>test_envs.test_pipeline.environment_setup<span class="w"> </span>python<span class="w"> </span>--platform<span class="w"> </span>config
 </code></pre></div>
 <p><br/></p>
 <div class="highlight"><pre><span></span><code>./.venv/bin/python<span class="w"> </span>-m<span class="w"> </span>test_envs.tools.configuration<span class="w"> </span>check
@@ -1053,7 +1065,7 @@
 <p><br/></p>
 <h3 id="installation-flow">Installation Flow</h3>
 <p><br/></p>
-<p><code>test_envs.tools.environment_setup python</code> performs these operations:</p>
+<p><code>test_envs.test_pipeline.environment_setup python</code> performs these operations:</p>
 <p><br/></p>
 <div class="highlight"><pre><span></span><code>Resolve configured platform
         ↓
@@ -1140,25 +1152,28 @@ Refresh test_envs/configs/check.json
 │   └── unittest/
 │       ├── conftest.py             # Unittest result normalization
 │       └── ct_framework/python/    # Current Python framework tests
-├── tools/
-│   ├── configuration/              # config, check, set-os, and select-os
-│   ├── environment_setup.py        # Python and Ollama setup
-│   ├── extension_runner.py         # Future extension execution
-│   ├── extensions/                 # Extension modules
-│   ├── local_llm/                  # Local LLM client and status
-│   ├── test_result/                # Pending-result processing
-│   ├── mkdocs_reporter/            # MkDocs Markdown publishing
-│   ├── pandoc_reporter/            # HTML, DOCX, and PDF conversion
-│   ├── github_reporter/            # GitHub reporting
-│   ├── result_normalizer/          # Common result model
-│   ├── issue_parser.py
-│   ├── log_parser/
-│   └── pipeline.py
-└── reports/
-    ├── results/{pytest,unittest}/   # Result JSON and execution logs
-    ├── markdown/                    # Generated Markdown reports
-    ├── pandoc/                      # Generated HTML, DOCX, or PDF
-    └── local_llm/                   # Local LLM analysis artifacts
+├── tool_github/
+│   ├── github_reporter/             # GitHub Issue result reporting
+│   └── issue_parser.py              # GitHub Issue request parsing
+├── test_pipeline/
+│   ├── environment_setup.py         # Python and Ollama setup
+│   └── pipeline.py                  # Test result analysis and report pipeline
+└── tools/
+    ├── configuration/               # config, check, set-os, and select-os
+    ├── extension_runner.py          # Future extension execution
+    ├── extensions/                  # Extension modules
+    ├── local_llm/                   # Local LLM client and status
+    ├── test_result/                 # Pending-result processing
+    ├── mkdocs_reporter/             # MkDocs Markdown publishing
+    ├── pandoc_reporter/             # HTML, DOCX, and PDF conversion
+    ├── result_normalizer/           # Common result model
+    └── log_parser/
+
+test_reports/
+├── results/{pytest/test_cases,unittest}/ # Result JSON and execution logs
+├── markdown/{pytest/test_cases,unittest}/ # Generated Markdown reports
+├── pandocs/{pytest/test_cases,unittest}/  # Generated HTML, DOCX, or PDF
+└── local_llm/                            # Local LLM analysis artifacts
 </code></pre></div>
 <p><br/></p>
 <p>The <code>{mock,hil}</code> notation means that each listed equipment or interface provides separate <code>mock/</code> and <code>hil/</code> implementations. Pytest CT execution ultimately resolves to one of these two modes.</p>

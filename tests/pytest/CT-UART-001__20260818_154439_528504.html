@@ -209,6 +209,18 @@
   </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../mcp_environment.html">
+<span class="md-ellipsis">
+    
+  
+    Setup MCP
+  
+
+    
+  </span>
+</a>
+</li>
 </ul>
 </nav>
 </li>
@@ -494,6 +506,8 @@
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
 <h1 id="ct-uart-001-test-result">CT-UART-001 Test Result</h1>
+<p>Go Back to the <a href="index.html">Pytest TEST All Index</a> </p>
+<p><br/> </p>
 <h2 id="test-summary">Test summary</h2>
 <p><br/></p>
 <table>
@@ -676,8 +690,8 @@
 <h3 id="logs">Logs</h3>
 <p><br/></p>
 <ul>
-<li>Path:
-  test_envs/reports/results/pytest/test_cases/CT-UART-001</li>
+<li>Path:  <br/>
+  test_reports/results/pytest/test_cases/CT-UART-001</li>
 </ul>
 <p><br/></p>
 <table>
@@ -693,8 +707,8 @@
 <td>20260818_154439_528504_test.log</td>
 </tr>
 <tr>
-<td>Important</td>
-<td>None</td>
+<td>Test Result</td>
+<td>20260818_154439_528504_result.json</td>
 </tr>
 </tbody>
 </table>
@@ -711,11 +725,11 @@
 <tbody>
 <tr>
 <td>Classification</td>
-<td>timing</td>
+<td>Pass</td>
 </tr>
 <tr>
 <td>Confidence</td>
-<td>0.75</td>
+<td>0.95</td>
 </tr>
 <tr>
 <td>Analyzer</td>
@@ -774,15 +788,15 @@
 <tbody>
 <tr>
 <td>Summary</td>
-<td>The test for CT-UART-001 completed successfully, but there are concerns regarding timing accuracy.</td>
+<td>Test passed with minimal error in measured baudrate compared to expected baudrate.</td>
 </tr>
 <tr>
 <td>Failure Analysis</td>
-<td>The measured_baudrate is slightly lower than the expected_baudrate, which could be due to a minor timing inaccuracy in the UART interface.</td>
+<td>Not applicable</td>
 </tr>
 <tr>
 <td>Source Review</td>
-<td>The source code has no visible issues, but the test configuration shows that the equipment is set to 'Saleae' in 'mock' mode. This might not accurately represent real-world conditions.</td>
+<td>No significant issues found in the source code related to the test failure.</td>
 </tr>
 <tr>
 <td>Warnings</td>
@@ -790,7 +804,7 @@
 </tr>
 <tr>
 <td>Recommendations</td>
-<td>1. Increase test confidence by adding more data points or different scenarios to cover a wider range of possible edge cases. 2. Consider adjusting the test environment if possible to use a more realistic setup, such as connecting to a real UART device.</td>
+<td>Review the test setup to ensure accurate equipment configuration and interface settings. Verify that the equipment model matches the expected specifications. Consider testing under different environmental conditions to assess equipment robustness.</td>
 </tr>
 </tbody>
 </table>
