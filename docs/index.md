@@ -299,7 +299,7 @@ flowchart TD
 | Results | `test_reports/results` |
 | Local LLM logs | `test_reports/local_llm` |
 | Markdown | `test_reports/markdown/pytest/test_cases`, `test_reports/markdown/unittest` |
-| Pandoc | `test_reports/pandocs/pytest/test_cases`, `test_reports/pandocs/unittest`; DOCX reference: `test_reports/pandocs/reference.docx` |
+| Pandoc | `test_reports/pandocs/pytest/test_cases`, `test_reports/pandocs/unittest`; DOCX reference: `docx/reference.docx` |
 
 <br/>
 

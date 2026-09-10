@@ -364,7 +364,7 @@ MkDocs Results       Pandoc Report
 | Report coordination | `test_envs.tools.test_result` | Processes the latest or every pending result |
 | Canonical Markdown | `test_envs.tools.mkdocs_reporter` | `test_reports/markdown/unittest/<execution-id>_result.md` |
 | MkDocs publication | `test_envs.tools.mkdocs_reporter` | `docs/tests/unittest/<execution-id>.md` and index page |
-| Pandoc conversion | `test_envs.tools.pandoc_reporter` | `test_reports/pandocs/unittest/<execution-id>_result.<format>`; DOCX uses `test_reports/pandocs/reference.docx` |
+| Pandoc conversion | `test_envs.tools.pandoc_reporter` | `test_reports/pandocs/unittest/<execution-id>_result.<format>`; DOCX uses `docx/reference.docx` |
 
 <br/>
 

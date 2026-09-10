@@ -114,7 +114,7 @@ flowchart TD
 
 <br/>
 
-`markdown` generates the canonical Markdown report. `update_mkdocs` separately copies that generated Markdown into `docs/tests`. Pandoc DOCX uses `test_reports/pandocs/reference.docx`.
+`markdown` generates the canonical Markdown report. `update_mkdocs` separately copies that generated Markdown into `docs/tests`. Pandoc DOCX uses `docx/reference.docx`.
 
 <br/>
 

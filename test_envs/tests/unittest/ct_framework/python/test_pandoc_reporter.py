@@ -2,10 +2,13 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from test_envs.tools.pandoc_reporter import _default_output_dir, convert, latest_markdown
+from test_envs.tools.pandoc_reporter import REFERENCE_DOC, _default_output_dir, convert, latest_markdown
 
 
 class PandocReporterTests(unittest.TestCase):
+    def test_reference_document_is_stored_outside_test_reports(self) -> None:
+        self.assertEqual(REFERENCE_DOC, Path("docx/reference.docx"))
+
     def test_pytest_output_is_grouped_under_test_cases(self) -> None:
         source = Path("test_reports/markdown/pytest/test_cases/CT-UART-001/execution_result.md")
 

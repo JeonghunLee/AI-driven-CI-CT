@@ -566,7 +566,7 @@ This configuration is a placeholder and is not part of the currently supported t
 |---|---|---|---|
 | `REPORT-Mkdocs: Generate Markdown to Pytest/Unittest` | `test_envs.tools.test_result --pending --docs` | Generates pending Pytest and Unittest Markdown and publishes MkDocs result pages | [Tasks-Report](#tasks-report) |
 | `REPORT-Pandoc: Convert Latest Markdown to HTML` | `test_envs.tools.pandoc_reporter --latest --format html` | Converts the latest Markdown report to HTML | [Tasks-Report](#tasks-report) |
-| `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown to DOCX using `test_reports/pandocs/reference.docx` | [Tasks-Report](#tasks-report) |
+| `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown to DOCX using `docx/reference.docx` | [Tasks-Report](#tasks-report) |
 
 <br/>
 
@@ -644,7 +644,7 @@ Both Tasks disable the pytest cache provider and execute `test_envs/tests/pytest
 |---|---|---|
 | `REPORT-Mkdocs: Generate Markdown to Pytest/Unittest` | `test_envs.tools.test_result --pending --docs` | Generates missing Markdown and publishes MkDocs pages |
 | `REPORT-Pandoc: Convert Latest Markdown to HTML` | `test_envs.tools.pandoc_reporter --latest --format html` | Converts the latest Markdown to HTML |
-| `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown to Word using `test_reports/pandocs/reference.docx` |
+| `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown to Word using `docx/reference.docx` |
 
 <br/>
 

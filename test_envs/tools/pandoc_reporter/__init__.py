@@ -7,7 +7,7 @@ from pathlib import Path
 
 FORMATS = {"docx": ".docx", "pdf": ".pdf", "html": ".html"}
 PANDOC_ROOT = Path("test_reports/pandocs")
-REFERENCE_DOC = PANDOC_ROOT / "reference.docx"
+REFERENCE_DOC = Path("docx/reference.docx")
 
 
 def _default_output_dir(source_path: Path) -> Path:

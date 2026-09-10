@@ -290,6 +290,9 @@ Execution ID 검색
 ```
 
 ```text
+docx/
+└── reference.docx
+
 test_reports/
 ├── results/
 │   ├── pytest/test_cases/<test-id>/
@@ -301,7 +304,6 @@ test_reports/
 ├── local_llm/
 │   └── <execution-id>_local_llm.log
 ├── pandocs/
-│   ├── reference.docx
 │   ├── pytest/test_cases/<test-id>/
 │   │   └── <execution-id>_result.{html,pdf,docx}
 │   └── unittest/
@@ -329,7 +331,7 @@ test_reports/
 | Format | 명령 | 추가 요구사항 |
 |---|---|---|
 | HTML | `python -m test_envs.tools.pandoc_reporter --latest --format html` | Pandoc PATH |
-| DOCX | `python -m test_envs.tools.pandoc_reporter --latest --format docx` | Pandoc PATH + `test_reports/pandocs/reference.docx` |
+| DOCX | `python -m test_envs.tools.pandoc_reporter --latest --format docx` | Pandoc PATH + `docx/reference.docx` |
 | PDF | `python -m test_envs.tools.pandoc_reporter --latest --format pdf` | Pandoc PATH + PDF engine |
 
 ## 실제 장비 확장
