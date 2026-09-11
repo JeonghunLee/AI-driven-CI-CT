@@ -15,6 +15,7 @@ from test_envs.mcp_server.runner import (
     update_mkdocs,
 )
 from test_envs.mcp_server.server import mcp
+from test_envs.tools.test_catalog import catalog_tests
 
 
 class MCPRunnerTests(unittest.TestCase):
@@ -24,7 +25,7 @@ class MCPRunnerTests(unittest.TestCase):
 
         self.assertEqual(
             [item["test_id"] for item in value["test_ids"]],
-            ["CT-UART-001", "CT-USB-001", "CT-NETWORK-001"],
+            [item["test_id"] for item in catalog_tests()],
         )
         self.assertFalse(value["pytest_hil_allow"])
 
@@ -51,7 +52,11 @@ class MCPRunnerTests(unittest.TestCase):
         self.assertIn("--cov-report=html", command)
 
     def test_hil_requires_explicit_pytest_opt_in(self) -> None:
-        request = MCPTestRequest(test_type="pytest", fixture_mode="hil")
+        request = MCPTestRequest(
+            test_type="pytest",
+            test_id=catalog_tests()[0]["test_id"],
+            fixture_mode="hil",
+        )
         with patch.dict(os.environ, {"PYTEST_HIL_ALLOW": "false"}):
             with self.assertRaisesRegex(PermissionError, "PYTEST_HIL_ALLOW"):
                 run_test(request)
@@ -80,16 +85,18 @@ class MCPServerContractTests(unittest.IsolatedAsyncioTestCase):
                 "get_test_list_pytest",
                 "get_test_list_unittest",
                 "get_test_list_all",
+                "get_github_issue_requests",
                 "run_test_pytest",
                 "run_test_unittest",
                 "run_test_all",
+                "run_github_issue",
                 "update_latest_result",
                 "update_mkdocs",
             },
         )
         self.assertEqual(
             [item["test_id"] for item in result.structured_content["pytest"]["test_ids"]],
-            ["CT-UART-001", "CT-USB-001", "CT-NETWORK-001"],
+            [item["test_id"] for item in catalog_tests()],
         )
 
     @unittest.skipUnless(

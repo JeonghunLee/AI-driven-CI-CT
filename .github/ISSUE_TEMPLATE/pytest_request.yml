@@ -35,15 +35,25 @@ body:
       required: true
 
   - type: dropdown
-    id: runner
+    id: test_environment
     attributes:
-      label: Runner
-      description: Physical HIL requires a matching Self-hosted HIL runner.
+      label: Test Environment
+      description: Self-hosted Runner uses GitHub Actions. Local MCP reads and executes the Issue directly without a GitHub Self-hosted Runner.
       options:
-        - GitHub-hosted Linux
-        - GitHub-hosted Windows
-        - Self-hosted HIL Linux
-        - Self-hosted HIL Windows
+        - GitHub-hosted Runner
+        - Self-hosted Runner
+        - Local MCP
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test_os
+    attributes:
+      label: Operating System
+      options:
+        - Ubuntu
+        - Windows
       default: 0
     validations:
       required: true

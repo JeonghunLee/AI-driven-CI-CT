@@ -88,9 +88,10 @@ Source: `.vscode/launch.json`
 | 1 | `SETUP 1: Select Operating System` | Task delegation | `test_envs.tools.configuration select-os` | OS config update |
 | 2 | `SETUP 2: Install Python Virtual Environment` | Task delegation | `preLaunchTask` | `.venv` creation, dependency installation |
 | 3 | `SETUP 3: Install Ollama and Local LLM` | Task delegation | `preLaunchTask` | Ollama installation, selected model pull |
-| 4 | `CHECK 1: Refresh Environment Check File` | Task delegation | `preLaunchTask` | Environment check |
-| 5 | `Run 3: Extension Module` | `.venv` Python | `test_envs.tools.extension_runner` | Future module execution |
-| 6 | `Test Result: Generate Pending Markdown` | `.venv` Python | `test_envs.tools.test_result --pending --docs` | Missing Execution ID analysis, Markdown generation |
+| 4 | `SETUP 4: Register Pytest Test Catalog` | Task delegation | `preLaunchTask` | Generate the shared TEST ID catalog and static pickers |
+| 5 | `CHECK 1: Refresh Environment Check File` | Task delegation | `preLaunchTask` | Environment check |
+| 6 | `Run 3: Extension Module` | `.venv` Python | `test_envs.tools.extension_runner` | Future module execution |
+| 7 | `Test Result: Generate Pending Markdown` | `.venv` Python | `test_envs.tools.test_result --pending --docs` | Missing Execution ID analysis, Markdown generation |
 
 | Pending progress | Format |
 |---|---|
@@ -227,6 +228,7 @@ Source: `.vscode/tasks.json`
 | SETUP | `SETUP 1: Select Operating System` |
 | SETUP | `SETUP 2: Install Python Virtual Environment` |
 | SETUP | `SETUP 3: Install Ollama and Local LLM` |
+| SETUP | `SETUP 4: Register Pytest Test Catalog` |
 | CHECK | `CHECK 1: Refresh Environment Check File` |
 | CHECK | `CHECK 2: Show Environment Configuration` |
 | CHECK | `CHECK 3: Run Ollama Server (Foreground)` |
@@ -257,6 +259,11 @@ Source: `.vscode/tasks.json`
 | Test case registration | Value |
 |---|---|
 | Source | `@pytest.mark.ct` |
+| Generated registry | `test_envs/tests/pytest/test_cases/test_catalog.json` |
+| Generator | `python -m test_envs.tools.test_catalog` |
+| Generated fields | TEST ID, category, Fixture ID, default Fixture mode, prompt, source path |
+| Static consumers | VS Code Task picker, Pytest Issue Form, GitHub workflow dispatch |
+| Runtime consumers | MCP, GitHub request parser, GitHub reporter |
 | Required fields | `test_id`, `category`, `fixture_id`, `fixture_mode` |
 | Optional field | `test_prompt` |
 | Interface / Equipment owner | Fixture `FIXTURE_META` |
@@ -755,13 +762,12 @@ continuous-test.yml: request job
         v
 test_envs.tool_github.issue_parser
         |
-        +-- GitHub-hosted Linux ---> ubuntu-latest
-        +-- GitHub-hosted Windows --> windows-latest
-        +-- Self-hosted HIL Linux --> [self-hosted, linux, hw-test]
-        +-- Self-hosted HIL Windows -> [self-hosted, windows, hw-test]
+        +-- GitHub-hosted Runner + Ubuntu ---> ubuntu-latest --------------------+
+        +-- GitHub-hosted Runner + Windows --> windows-latest -------------------+
+        +-- Self-hosted Runner + Ubuntu ------> [self-hosted, linux, hw-test] -----+--> continuous-test.yml: test job
+        +-- Self-hosted Runner + Windows -----> [self-hosted, windows, hw-test] ---+
         |
-        v
-continuous-test.yml: test job
+        +-- Local MCP + Ubuntu/Windows --> get_github_issue_requests --> run_github_issue
         |
         +-- Pytest ------> TEST ID + marker/mock/hil --> Local LLM
         |
@@ -785,7 +791,7 @@ test_envs.test_pipeline.pipeline
 |---|---|
 | Pytest request | `.github/ISSUE_TEMPLATE/pytest_request.yml`; TEST ID and Fixture mode are present only here |
 | Unittest request | `.github/ISSUE_TEMPLATE/unittest_request.yml`; Unittest scope is present only here |
-| Environment check request | `.github/ISSUE_TEMPLATE/test_check.yml`; user selects only the runner |
+| Environment check request | `.github/ISSUE_TEMPLATE/test_check.yml`; user selects Test Environment and OS separately |
 | Environment check result | Workflow detects host type, OS, Python, and Ollama and posts them through `github_reporter` |
 | Unified workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
 | Automatic trigger | Request Issue opened, edited, or reopened |
@@ -793,23 +799,28 @@ test_envs.test_pipeline.pipeline
 | Label provisioning | A relevant default-branch push creates both labels; the request job also recognizes `[PYTEST-REQUEST]`, `[UNITTEST-REQUEST]`, and `[TEST-CHECK]` |
 | Rerun trigger | Edit or reopen the Issue, or use manual `workflow_dispatch` |
 | Local/manual trigger | `workflow_dispatch`; replaces the former local request workflow |
-| Default runner | GitHub-hosted Linux (`ubuntu-latest`) |
-| Hosted compatibility | Mock CT and Unittest run on GitHub-hosted Linux or Windows |
-| HIL Linux | `[self-hosted, linux, hw-test]` |
-| HIL Windows | `[self-hosted, windows, hw-test]` |
-| HIL constraint | Physical equipment requires a matching Self-hosted OS runner and never falls back to Mock |
-| Pytest selection | `CT-UART-001`, `CT-USB-001`, or `CT-NETWORK-001` plus `marker`, `mock`, or `hil` Fixture mode |
+| Execution environments | GitHub-hosted Runner, Self-hosted Runner, or Local MCP |
+| Operating systems | Ubuntu or Windows |
+| Default combination | GitHub-hosted Runner + Ubuntu (`ubuntu-latest`) |
+| Hosted compatibility | Mock CT and Unittest run on GitHub-hosted Ubuntu or Windows |
+| Self-hosted Ubuntu | `[self-hosted, linux, hw-test]` |
+| Self-hosted Windows | `[self-hosted, windows, hw-test]` |
+| Local MCP Ubuntu | No GitHub Self-hosted Runner registration; `get_github_issue_requests` discovers requests and `run_github_issue` executes one |
+| Local MCP Windows | No GitHub Self-hosted Runner registration; `get_github_issue_requests` discovers requests and `run_github_issue` executes one |
+| HIL constraint | Physical equipment uses either a matching GitHub Self-hosted Runner or a Local MCP host with `PYTEST_HIL_ALLOW=true`; it never falls back to Mock |
+| Pytest selection | A TEST ID generated in `test_catalog.json` plus `marker`, `mock`, or `hil` Fixture mode |
 | Pytest-only fields | TEST ID and Fixture Mode; Test Category is not requested |
 | Unittest selection | All Unittest or CT Framework Python |
 | Unittest excluded fields | TEST ID, Fixture Mode, Unittest Target, Additional Evidence, Expected Result, and MkDocs selection |
 | Coverage | None, terminal missing-lines, or HTML report |
 | Result selection | Only the normalized result created after the current workflow marker |
+| Issue result | Posts the existing canonical Test Report Markdown; its Test Summary already contains Result JSON `test_envs` values |
 | Issue-form report selection | Log, canonical Markdown, Pandoc DOCX, and Pandoc HTML are normalized independently |
 | `report_mkdocs` | Publishes the generated canonical Markdown into `docs/tests`; it does not mean Markdown generation itself |
 | Failure handling | Test failures keep the normalized result; setup/capture failures post an ERROR comment |
 | Node.js | No project Node.js installation or command; JavaScript-based official Actions use their GitHub-managed runtime |
 
-The previous separate HIL responsibility is handled by dynamic runner selection. Local/manual requests are handled by `workflow_dispatch` inputs in the same unified workflow.
+GitHub-hosted and GitHub Self-hosted execution is handled by dynamic runner selection. A Local MCP request is skipped by the Actions test job and is instead pulled from GitHub by the local MCP host, so it does not require GitHub Runner registration.
 
 <br/>
 
@@ -840,11 +851,12 @@ Excluded from GitHub Issue:
 |---|---|
 | `.github/ISSUE_TEMPLATE/pytest_request.yml` | Pytest-only request form |
 | `.github/ISSUE_TEMPLATE/unittest_request.yml` | Unittest-only request form |
-| `.github/ISSUE_TEMPLATE/test_check.yml` | Runner-only request for automatic host type, OS, Python, and Ollama detection |
+| `.github/ISSUE_TEMPLATE/test_check.yml` | Test Environment + OS request for automatic host type, Python, and Ollama detection |
 | `.github/workflows/continuous-test.yml` | Unified request parsing, runner routing, test, report, Issue update, and artifact workflow |
 | `test_envs/tool_github/issue_parser.py` | Issue Form and manual input normalization |
+| `test_envs/tool_github/github_issue.py` | GitHub API access for Runner-free Local MCP Issue discovery |
 | `test_envs/tool_github/github_reporter/` | Result and workflow-error Issue comments |
-| `test_envs/mcp_server/` | Local `stdio` MCP tools for allowlisted external Pytest/Unittest execution and result lookup |
+| `test_envs/mcp_server/` | Local `stdio` MCP tools for allowlisted execution, result lookup, and direct GitHub Issue processing |
 
 ```text
 .
@@ -887,7 +899,11 @@ Excluded from GitHub Issue:
 │   │       └── common/
 │   ├── tool_github/
 │   │   ├── github_reporter/
+│   │   ├── github_issue.py
 │   │   └── issue_parser.py
+│   ├── mcp_server/
+│   │   ├── runner.py
+│   │   └── server.py
 │   ├── test_pipeline/
 │   │   ├── environment_setup.py
 │   │   └── pipeline.py

@@ -1,6 +1,8 @@
 import unittest
 from pathlib import Path
 
+from test_envs.tools.test_catalog import catalog_tests
+
 
 class RepositoryStructureTests(unittest.TestCase):
     def test_top_level_structure(self) -> None:
@@ -32,12 +34,9 @@ class RepositoryStructureTests(unittest.TestCase):
 
     def test_pytest_case_structure(self) -> None:
         root = Path("test_envs/tests/pytest/test_cases")
-        expected = {
-            "test_fixture_001_uart_timing.py",
-            "test_fixture_002_usb_loopback.py",
-            "test_fixture_003_network_loopback.py",
-        }
+        expected = {Path(test["test_path"]).name for test in catalog_tests()}
         self.assertEqual({path.name for path in root.glob("test_*.py")}, expected)
+        self.assertTrue((root / "test_catalog.json").is_file())
         for name in ("communication", "timing", "functional", "performance", "stability", "regression"):
             self.assertFalse((root / name).exists())
 
@@ -75,6 +74,7 @@ class RepositoryStructureTests(unittest.TestCase):
 
     def test_role_specific_tool_packages(self) -> None:
         github_root = Path("test_envs/tool_github")
+        self.assertTrue((github_root / "github_issue.py").is_file())
         self.assertTrue((github_root / "issue_parser.py").is_file())
         self.assertTrue((github_root / "github_reporter/__init__.py").is_file())
         pipeline_root = Path("test_envs/test_pipeline")
@@ -82,6 +82,7 @@ class RepositoryStructureTests(unittest.TestCase):
         self.assertTrue((pipeline_root / "pipeline.py").is_file())
         mcp_root = Path("test_envs/mcp_server")
         self.assertTrue((mcp_root / "runner.py").is_file())
+        self.assertTrue((mcp_root / "request_runner.py").is_file())
         self.assertTrue((mcp_root / "server.py").is_file())
         for legacy in (
             "test_envs/tools/issue_parser.py",

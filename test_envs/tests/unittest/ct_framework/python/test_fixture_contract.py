@@ -4,12 +4,12 @@ from pathlib import Path
 from types import SimpleNamespace
 
 from test_envs.tests.pytest.conftest import effective_fixture_mode, fixture_registry
+from test_envs.tools.test_catalog import catalog_tests
 
 
-TEST_MODULES = (
-    "test_envs.tests.pytest.test_cases.test_fixture_001_uart_timing",
-    "test_envs.tests.pytest.test_cases.test_fixture_002_usb_loopback",
-    "test_envs.tests.pytest.test_cases.test_fixture_003_network_loopback",
+TEST_MODULES = tuple(
+    ".".join(Path(test["test_path"]).with_suffix("").parts)
+    for test in catalog_tests()
 )
 
 
@@ -51,8 +51,8 @@ class FixtureContractTests(unittest.TestCase):
             test_ids.add(marker.kwargs["test_id"])
             fixture_ids.add(marker.kwargs["fixture_id"])
 
-        self.assertEqual(test_ids, {"CT-UART-001", "CT-USB-001", "CT-NETWORK-001"})
-        self.assertEqual(fixture_ids, {"FIXTURE-001", "FIXTURE-002", "FIXTURE-003"})
+        self.assertEqual(test_ids, {test["test_id"] for test in catalog_tests()})
+        self.assertEqual(fixture_ids, {test["fixture_id"] for test in catalog_tests()})
 
     def test_fixture_meta_defines_tools_and_modes(self) -> None:
         registry = fixture_registry()
@@ -68,9 +68,8 @@ class FixtureContractTests(unittest.TestCase):
 
     def test_test_cases_import_pytest_fixtures(self) -> None:
         expected = {
-            TEST_MODULES[0]: {"fixture_001"},
-            TEST_MODULES[1]: {"fixture_002"},
-            TEST_MODULES[2]: {"fixture_003"},
+            module_name: {test["fixture_id"].lower().replace("-", "_")}
+            for module_name, test in zip(TEST_MODULES, catalog_tests())
         }
         for module_name, fixture_names in expected.items():
             module = importlib.import_module(module_name)
@@ -78,7 +77,7 @@ class FixtureContractTests(unittest.TestCase):
                 fixture = getattr(module, fixture_name)
                 self.assertIsNotNone(getattr(fixture, "_fixture_function_marker", None))
 
-    def test_catalog_files_are_not_used(self) -> None:
+    def test_legacy_config_catalog_is_not_used(self) -> None:
         self.assertFalse(Path("test_envs/configs/pytest").exists())
 
     def test_mock_implementations_remain_available(self) -> None:

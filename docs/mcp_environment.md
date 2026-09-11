@@ -13,9 +13,11 @@
 | MCP tool | Purpose |
 |---|---|
 | `get_test_envs` | Checks OS, Python/venv, Ollama/model, Pandoc, and MCP permission flags |
-| `get_test_list_pytest` | Lists Pytest TEST IDs, source paths, fixture modes, and HIL availability |
+| `get_test_list_pytest` | Reads `test_catalog.json` and lists Pytest TEST IDs, source paths, fixture metadata, modes, and HIL availability |
 | `get_test_list_unittest` | Lists Unittest scopes and discovered test files |
 | `get_test_list_all` | Returns the combined Pytest and Unittest inventory |
+| `get_github_issue_requests` | Lists GitHub test-request Issues whose Test Environment is `Local MCP` |
+| `run_github_issue` | Reads one Local MCP Issue, executes it without a GitHub Self-hosted Runner, and posts its generated canonical Markdown |
 | `run_test_pytest` | Runs one allowlisted Pytest CT and returns its normalized result and report paths |
 | `run_test_unittest` | Runs all Unittest tests, CT Framework Python, or another allowlisted extension scope |
 | `run_test_all` | Runs `run_test_pytest` and `run_test_unittest` sequentially |
@@ -115,6 +117,16 @@ flowchart TD
 <br/>
 
 `markdown` generates the canonical Markdown report. `update_mkdocs` separately copies that generated Markdown into `docs/tests`. Pandoc DOCX uses `docx/reference.docx`.
+
+The MCP Pytest allowlist is loaded from `test_envs/tests/pytest/test_cases/test_catalog.json`. Adding a Python CT case therefore requires no MCP source-code edit; run `python -m test_envs.tools.test_catalog` to register it.
+
+<br/>
+
+GitHub Issue forms can select `Local MCP`. This path does not register or require a GitHub Self-hosted Runner. An MCP client first calls `get_github_issue_requests`, then calls `run_github_issue` with the selected Issue number. The MCP host reads the Issue through the GitHub API, executes it locally, generates the canonical Markdown, and posts that exact Markdown back to the Issue.
+
+<br/>
+
+The MCP process needs `GITHUB_REPOSITORY=owner/repository` and either `GH_TOKEN` or `GITHUB_TOKEN` with Issue read/write access. Keep the token in the MCP host's secure user environment rather than committing it to `.vscode/mcp.json`.
 
 <br/>
 

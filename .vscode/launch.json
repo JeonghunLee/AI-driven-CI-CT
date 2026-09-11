@@ -43,6 +43,19 @@
       "justMyCode": true
     },
     {
+      "name": "SETUP 4: Register Pytest Test Catalog",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "SETUP 4: Register Pytest Test Catalog",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
       "name": "CHECK 1: Refresh Environment Check File",
       "type": "debugpy",
       "request": "launch",

@@ -1,16 +1,40 @@
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 from test_envs.tools.local_llm import Analysis
-from test_envs.tool_github.github_reporter import render_comment, render_environment_comment
+from test_envs.tool_github.github_reporter import (
+    load_markdown_report,
+    markdown_report_path,
+    render_comment,
+    render_environment_comment,
+)
 from test_envs.tools.result_normalizer import ResultRecord
 
 
 class ReportingTests(unittest.TestCase):
+    def test_github_reporter_reuses_canonical_markdown(self) -> None:
+        root = Path("test_envs/tests/.tmp/ct_framework/github-markdown")
+        result = ResultRecord(
+            "CT-UART-001",
+            "PASS",
+            "timing",
+            0.1,
+            execution_id="20260911_010203_000001",
+        )
+        path = markdown_report_path(result, root)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("# Existing Test Report\n\n| Test envs | Value |", encoding="utf-8")
+
+        self.assertEqual(load_markdown_report(result, root), path.read_text(encoding="utf-8"))
+
     def test_issue_comment_contains_summary_and_evidence(self) -> None:
         result = ResultRecord("CT-001", "FAIL", "timing", 1.25, metrics={"jitter": 0.03})
         comment = render_comment(result, Analysis("Threshold exceeded", "timing", 0.9, "test"))
         self.assertIn("**Result: FAIL**", comment)
+        self.assertIn("| Test envs | Value |", comment)
+        self.assertIn("| test_environment | local |", comment)
+        self.assertIn("| test_request | local_vscode |", comment)
         self.assertIn("Threshold exceeded", comment)
         self.assertIn("jitter: 0.03", comment)
 
@@ -41,6 +65,9 @@ class ReportingTests(unittest.TestCase):
             "test_reports/markdown/pytest/test_cases/CT-UART-001/20260904_120000_000002_result.md",
             comment,
         )
+        self.assertIn("Fixture ID: FIXTURE-001", comment)
+        self.assertIn("Default Fixture Mode: mock", comment)
+        self.assertIn("Test Path: test_envs/tests/pytest/test_cases/test_fixture_001_uart_timing.py", comment)
 
     def test_environment_comment_contains_detected_runner_values(self) -> None:
         check = {
@@ -49,8 +76,11 @@ class ReportingTests(unittest.TestCase):
             "ollama": {"installed": False, "available": False, "endpoint": "http://127.0.0.1:11434"},
         }
         environment = {
-            "REQUESTED_RUNNER": "GitHub-hosted Linux",
-            "RUNNER_ENVIRONMENT": "github-hosted",
+            "REQUESTED_TEST_ENVIRONMENT": "GitHub-hosted Runner",
+            "REQUESTED_TEST_OS": "ubuntu",
+            "TEST_ENVIRONMENT": "github_hosted_runner",
+            "TEST_OS": "ubuntu",
+            "TEST_REQUEST": "github_issue",
             "RUNNER_NAME": "GitHub Actions 1",
             "RUNNER_OS": "Linux",
             "RUNNER_ARCH": "X64",
@@ -58,8 +88,11 @@ class ReportingTests(unittest.TestCase):
         with patch.dict("os.environ", environment, clear=False):
             comment = render_environment_comment(check)
         self.assertIn("**Result: CHECKED**", comment)
-        self.assertIn("Requested: `GitHub-hosted Linux`", comment)
-        self.assertIn("Type: `github-hosted`", comment)
+        self.assertIn("Requested environment: `GitHub-hosted Runner`", comment)
+        self.assertIn("Type: `github_hosted_runner`", comment)
+        self.assertIn("| test_os | ubuntu |", comment)
+        self.assertIn("| test_name | GitHub Actions 1 |", comment)
+        self.assertIn("| test_request | github_issue |", comment)
         self.assertIn("Version: `3.12.0`", comment)
         self.assertIn("API available: `False`", comment)
 

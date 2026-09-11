@@ -2,25 +2,59 @@ from __future__ import annotations
 
 import json
 import os
+from pathlib import Path
 from typing import Any
 from urllib.request import Request, urlopen
 
 from test_envs.tools.local_llm import Analysis
 from test_envs.tools.result_normalizer import ResultRecord
+from test_envs.tools.test_catalog import catalog_by_id
+
+
+def _test_envs_table(values: dict[str, Any]) -> str:
+    rows = "\n".join(
+        f"| {key} | {values.get(key, 'unknown')} |"
+        for key in ("test_os", "test_name", "test_environment", "test_request")
+    )
+    return f"""| Test envs | Value |
+|---|---|
+{rows}"""
+
+
+def markdown_report_path(result: ResultRecord, root: str | Path = "test_reports/markdown") -> Path:
+    root_path = Path(root)
+    if result.category.lower() == "unit":
+        return root_path / "unittest" / f"{result.execution_id}_result.md"
+    return root_path / "pytest" / "test_cases" / result.test_id / f"{result.execution_id}_result.md"
+
+
+def load_markdown_report(result: ResultRecord, root: str | Path = "test_reports/markdown") -> str:
+    path = markdown_report_path(result, root)
+    if not path.is_file():
+        raise FileNotFoundError(f"Canonical Markdown report does not exist: {path}")
+    return path.read_text(encoding="utf-8")
 
 
 def render_environment_comment(check: dict[str, Any]) -> str:
-    requested_runner = os.getenv("REQUESTED_RUNNER", "unknown")
-    if requested_runner.startswith("Self-hosted"):
-        inferred_environment = "self-hosted"
-    elif requested_runner.startswith("GitHub-hosted"):
-        inferred_environment = "github-hosted"
-    else:
-        inferred_environment = "unknown"
-    runner_environment = os.getenv("RUNNER_ENVIRONMENT", inferred_environment)
+    requested_environment = os.getenv("REQUESTED_TEST_ENVIRONMENT", "unknown")
+    requested_os = os.getenv("REQUESTED_TEST_OS", "unknown")
+    inferred_environment = (
+        "self_hosted_runner"
+        if requested_environment == "Self-hosted Runner"
+        else "github_hosted_runner"
+        if requested_environment == "GitHub-hosted Runner"
+        else "unknown"
+    )
+    runner_environment = os.getenv("TEST_ENVIRONMENT", inferred_environment)
     runner_name = os.getenv("RUNNER_NAME", "unknown")
     runner_os = os.getenv("RUNNER_OS", str(check.get("os", {}).get("detected", "unknown")))
     runner_arch = os.getenv("RUNNER_ARCH", "unknown")
+    test_envs = {
+        "test_os": os.getenv("TEST_OS", requested_os.lower()),
+        "test_name": runner_name,
+        "test_environment": runner_environment,
+        "test_request": os.getenv("TEST_REQUEST", "github_issue"),
+    }
     os_check = dict(check.get("os", {}))
     python_check = dict(check.get("python", {}))
     ollama_check = dict(check.get("ollama", {}))
@@ -28,8 +62,13 @@ def render_environment_comment(check: dict[str, Any]) -> str:
 
 **Result: CHECKED**
 
+### Test envs
+
+{_test_envs_table(test_envs)}
+
 ### Host
-- Requested: `{requested_runner}`
+- Requested environment: `{requested_environment}`
+- Requested OS: `{requested_os}`
 - Type: `{runner_environment}`
 - Runner: `{runner_name}`
 - Runner OS: `{runner_os}`
@@ -63,6 +102,7 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
     artifact = f"https://github.com/{repository}/actions/runs/{run_id}" if run_id else "Available in the workflow run"
     report_type = "unittest" if result.category.lower() == "unit" else "pytest"
     is_unittest = report_type == "unittest"
+    catalog_entry = {} if is_unittest else catalog_by_id().get(result.test_id, {})
     mkdocs_name = f"{result.execution_id}.md" if is_unittest else f"{result.test_id}.md"
     mkdocs_source = f"docs/tests/{report_type}/{mkdocs_name}"
     markdown_group = "unittest" if is_unittest else f"pytest/test_cases/{result.test_id}"
@@ -73,9 +113,16 @@ def render_comment(result: ResultRecord, analysis: Analysis) -> str:
 
 **Result: {result.status}**
 
+### Test envs
+
+{_test_envs_table(dict(result.test_envs))}
+
 ### Test
 - ID: {result.test_id}
 - Category: {result.category}
+- Fixture ID: {catalog_entry.get("fixture_id", "Not applicable")}
+- Default Fixture Mode: {catalog_entry.get("default_fixture_mode", "Not applicable")}
+- Test Path: {catalog_entry.get("test_path", "Not applicable")}
 - Interface: {result.interface}
 - Equipment: {result.equipment}
 - Duration: {result.duration:.3f} seconds
@@ -128,4 +175,10 @@ def post_comment(issue: int, body: str, repository: str | None = None, token: st
             raise RuntimeError(f"GitHub returned HTTP {response.status}")
 
 
-__all__ = ["post_comment", "render_comment", "render_environment_comment"]
+__all__ = [
+    "load_markdown_report",
+    "markdown_report_path",
+    "post_comment",
+    "render_comment",
+    "render_environment_comment",
+]

@@ -42,6 +42,21 @@
             ],
             "problemMatcher": []
         },
+        {
+            "label": "SETUP 4: Register Pytest Test Catalog",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.test_catalog"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
         // Check Task Section
         // This section contains tasks for checking the environment and running the Ollama server.
         // Each task is labeled with a "CHECK" prefix for easy identification.

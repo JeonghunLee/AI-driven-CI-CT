@@ -143,6 +143,30 @@ Collection performs the following validation for every CT item:
 
 An invalid contract raises a pytest collection/usage error before test execution.
 
+<br/>
+
+## Generated Test Catalog
+
+<br/>
+
+`test_envs.tests.pytest.test_cases` Python files are the registration source. The catalog generator reads their `@pytest.mark.ct` decorators with Python AST; it does not import or execute the test modules.
+
+```powershell
+.\.venv\Scripts\python.exe -m test_envs.tools.test_catalog
+```
+
+<br/>
+
+| Catalog item | Value |
+|---|---|
+| Generated file | `test_envs/tests/pytest/test_cases/test_catalog.json` |
+| Fields | `test_id`, `category`, `fixture_id`, `default_fixture_mode`, `test_prompt`, `test_path` |
+| Validation | Required literal fields, supported default mode, and unique TEST ID |
+| Synchronized consumers | VS Code Task picker, Pytest Issue Form, and GitHub `workflow_dispatch` picker |
+| Runtime consumers | MCP, GitHub request parser, and GitHub reporter |
+
+The generated static VS Code and GitHub YAML selections must be committed together with a new test case. Runtime consumers reload the catalog and automatically regenerate it when it is missing or older than a Python test case.
+
 ## Fixture Registry and Metadata
 
 <br/>

@@ -152,6 +152,16 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
             ],
             "problemMatcher": []
         },
+        {
+            "label": "SETUP 4: Register Pytest Test Catalog",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.test_catalog"
+            ],
+            "problemMatcher": []
+        },
         // Check Task Section
         // This section contains tasks for checking the environment and running the Ollama server.
         // Each task is labeled with a "CHECK" prefix for easy identification.
@@ -431,6 +441,19 @@ Connected VS Code feature: [Run and Debug](#run-and-debug)
       "justMyCode": true
     },
     {
+      "name": "SETUP 4: Register Pytest Test Catalog",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "SETUP 4: Register Pytest Test Catalog",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
       "name": "CHECK 1: Refresh Environment Check File",
       "type": "debugpy",
       "request": "launch",
@@ -607,6 +630,7 @@ Every Task has `type: process`, runs in the foreground, and has no `isBackground
 | `SETUP 1: Select Operating System` | `test_envs.tools.configuration` | `select-os` | Stores the selected OS in project configuration |
 | `SETUP 2: Install Python Virtual Environment` | `test_envs.test_pipeline.environment_setup` | `python` | Creates `.venv` and installs dependencies |
 | `SETUP 3: Install Ollama and Local LLM` | `test_envs.test_pipeline.environment_setup` | `ollama` | Installs/checks Ollama and pulls the configured model |
+| `SETUP 4: Register Pytest Test Catalog` | `test_envs.tools.test_catalog` | None | Reads Python CT markers, generates `test_catalog.json`, and synchronizes every static TEST ID picker |
 | `CHECK 1: Refresh Environment Check File` | `test_envs.tools.configuration` | `check` | Regenerates `check.json` |
 | `CHECK 2: Show Environment Configuration` | `test_envs.tools.configuration` | `config` | Prints the current project configuration |
 | `CHECK 3: Run Ollama Server (Foreground)` | `test_envs.test_pipeline.environment_setup` | `serve` | Runs an Ollama server owned by the terminal Task |
@@ -617,7 +641,7 @@ The dedicated-terminal presentation is configured for Setup 1 and Check 3. Closi
 
 <br/>
 
-Setup 1 through Setup 3 and Check 1 are also exposed through [Run and Debug-Setup and Check](#run-and-debug-setup-and-check). In Run and Debug, each matching Task runs first through `preLaunchTask`.
+Setup 1 through Setup 4 and Check 1 are also exposed through [Run and Debug-Setup and Check](#run-and-debug-setup-and-check). In Run and Debug, each matching Task runs first through `preLaunchTask`.
 
 <br/>
 
@@ -674,10 +698,12 @@ The `MkDocs: Serve Remote ` source label currently contains a trailing space.
 
 | Input ID | Type | Options | Default | Used by |
 |---|---|---|---|---|
-| `testCaseId` | `pickString` | `CT-UART-001`, `CT-USB-001`, `CT-NETWORK-001` | `CT-UART-001` | `TEST CASE: TEST ID` |
+| `testCaseId` | `pickString` | Generated from `test_catalog.json` | First registered TEST ID | `TEST CASE: TEST ID` |
 | `fixtureMode` | `pickString` | `marker`, `mock`, `hil` | `marker` | Both TEST CASE Tasks |
 
 OS selection is not a Task or launch input. It is managed by `test_envs/configs/config.json` through the Setup 1 command.
+
+Run Setup 4 after adding or changing a `@pytest.mark.ct` test. VS Code must reload `.vscode/tasks.json` before a newly generated picker option appears.
 
 <br/>
 

@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "generated_date": "2026-09-11T09:20:18+09:00",
+  "tests": [
+    {
+      "test_id": "CT-UART-001",
+      "category": "timing",
+      "fixture_id": "FIXTURE-001",
+      "default_fixture_mode": "mock",
+      "test_prompt": "",
+      "test_path": "test_envs/tests/pytest/test_cases/test_fixture_001_uart_timing.py"
+    },
+    {
+      "test_id": "CT-USB-001",
+      "category": "communication",
+      "fixture_id": "FIXTURE-002",
+      "default_fixture_mode": "mock",
+      "test_prompt": "",
+      "test_path": "test_envs/tests/pytest/test_cases/test_fixture_002_usb_loopback.py"
+    },
+    {
+      "test_id": "CT-NETWORK-001",
+      "category": "communication",
+      "fixture_id": "FIXTURE-003",
+      "default_fixture_mode": "mock",
+      "test_prompt": "",
+      "test_path": "test_envs/tests/pytest/test_cases/test_fixture_003_network_loopback.py"
+    }
+  ]
+}

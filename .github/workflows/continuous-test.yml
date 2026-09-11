@@ -40,12 +40,18 @@ on:
         description: Pytest path or node ID for one Unittest target
         required: false
         default: test_envs/tests/unittest
-      runner:
-        description: GitHub-hosted runner or Self-hosted HIL runner
+      test_environment:
+        description: Test execution environment
         required: true
         type: choice
-        options: [GitHub-hosted Linux, GitHub-hosted Windows, Self-hosted HIL Linux, Self-hosted HIL Windows]
-        default: GitHub-hosted Linux
+        options: [GitHub-hosted Runner, Self-hosted Runner, Local MCP]
+        default: GitHub-hosted Runner
+      test_os:
+        description: Test operating system
+        required: true
+        type: choice
+        options: [Ubuntu, Windows]
+        default: Ubuntu
       request_ref:
         description: Branch, tag, or commit
         required: true
@@ -126,7 +132,9 @@ jobs:
       fixture_mode: ${{ steps.request.outputs.fixture_mode }}
       unittest_scope: ${{ steps.request.outputs.unittest_scope }}
       unittest_target: ${{ steps.request.outputs.unittest_target }}
-      runner: ${{ steps.request.outputs.runner }}
+      execution_host: ${{ steps.request.outputs.execution_host }}
+      test_environment: ${{ steps.request.outputs.test_environment }}
+      test_os: ${{ steps.request.outputs.test_os }}
       runner_labels: ${{ steps.request.outputs.runner_labels }}
       request_ref: ${{ steps.request.outputs.request_ref }}
       coverage: ${{ steps.request.outputs.coverage }}
@@ -143,6 +151,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Validate Pytest test catalog
+        run: python -m test_envs.tools.test_catalog
 
       - name: Ensure request label
         if: github.event_name == 'issues'
@@ -181,11 +192,17 @@ jobs:
   test:
     name: Execute requested test or environment check
     needs: request
+    if: needs.request.outputs.execution_host != 'Local MCP'
     runs-on: ${{ fromJSON(needs.request.outputs.runner_labels) }}
     timeout-minutes: 60
     env:
       REQUEST_KIND: ${{ needs.request.outputs.request_kind }}
-      REQUESTED_RUNNER: ${{ needs.request.outputs.runner }}
+      REQUESTED_TEST_ENVIRONMENT: ${{ needs.request.outputs.execution_host }}
+      REQUESTED_TEST_OS: ${{ needs.request.outputs.test_os }}
+      TEST_ENVIRONMENT: ${{ needs.request.outputs.test_environment }}
+      TEST_OS: ${{ needs.request.outputs.test_os }}
+      TEST_REQUEST: github_issue
+      PYTEST_HIL_ALLOW: ${{ vars.PYTEST_HIL_ALLOW || 'false' }}
       TEST_TYPE: ${{ needs.request.outputs.test_type }}
       TEST_ID: ${{ needs.request.outputs.test_id }}
       FIXTURE_MODE: ${{ needs.request.outputs.fixture_mode }}
@@ -230,6 +247,11 @@ jobs:
           & $python -m pip install --upgrade pip
           & $python -m pip install -r requirements.txt
 
+      - name: Refresh Pytest test catalog
+        if: env.REQUEST_KIND == 'test'
+        shell: pwsh
+        run: '& $env:VENV_PYTHON -m test_envs.tools.test_catalog'
+
       - name: Show request
         if: env.REQUEST_KIND == 'test'
         shell: pwsh
@@ -238,6 +260,8 @@ jobs:
           Write-Host "TEST ID: $env:TEST_ID"
           Write-Host "Fixture Mode: $env:FIXTURE_MODE"
           Write-Host "Unittest Scope: $env:UNITTEST_SCOPE"
+          Write-Host "Test Environment: $env:REQUESTED_TEST_ENVIRONMENT"
+          Write-Host "Requested OS: $env:REQUESTED_TEST_OS"
           Write-Host "Runner: $env:RUNNER_NAME / $env:RUNNER_OS"
           Write-Host "Coverage: $env:COVERAGE_MODE"
           Write-Host "Report Outputs: Log=$env:REPORT_LOG, Markdown=$env:REPORT_MARKDOWN, Pandoc DOCX=$env:REPORT_DOCX, Pandoc HTML=$env:REPORT_HTML"

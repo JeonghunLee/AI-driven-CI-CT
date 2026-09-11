@@ -2,6 +2,8 @@ import json
 import unittest
 from pathlib import Path
 
+from test_envs.tools.test_catalog import catalog_tests
+
 
 def load_jsonc(path: str) -> dict[str, object]:
     text = Path(path).read_text(encoding="utf-8")
@@ -27,6 +29,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             "SETUP 1: Select Operating System": "SETUP 1: Select Operating System",
             "SETUP 2: Install Python Virtual Environment": "SETUP 2: Install Python Virtual Environment",
             "SETUP 3: Install Ollama and Local LLM": "SETUP 3: Install Ollama and Local LLM",
+            "SETUP 4: Register Pytest Test Catalog": "SETUP 4: Register Pytest Test Catalog",
             "CHECK 1: Refresh Environment Check File": "CHECK 1: Refresh Environment Check File",
         }
         configurations = {item["name"]: item for item in self.launch["configurations"]}
@@ -166,7 +169,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
 
     def test_test_case_id_picker_matches_ct_markers(self) -> None:
         picker = next(item for item in self.tasks["inputs"] if item["id"] == "testCaseId")
-        test_ids = ["CT-UART-001", "CT-USB-001", "CT-NETWORK-001"]
+        test_ids = [test["test_id"] for test in catalog_tests()]
 
         self.assertEqual(picker["type"], "pickString")
         self.assertEqual(picker["options"], test_ids)

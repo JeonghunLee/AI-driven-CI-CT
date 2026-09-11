@@ -110,6 +110,7 @@ python -m test_envs.test_pipeline.environment_setup python --platform config
 | Setup 1 | OS selection → `test_envs/configs/config.json` |
 | Setup 2 | `preLaunchTask` → Python setup Task |
 | Setup 3 | `preLaunchTask` → Ollama setup Task |
+| Setup 4 | `preLaunchTask` → Pytest catalog registration Task |
 | Check 1 | `preLaunchTask` → Environment check Task |
 | Launch completion | `test_envs.tools.configuration config` → immediate exit |
 
@@ -153,6 +154,7 @@ python -m test_envs.test_pipeline.environment_setup python --platform config
 |---|---|
 | 전체 TEST | `python -m pytest` |
 | CT | `python -m pytest test_envs/tests/pytest -m ct -s` |
+| Pytest catalog registration | `python -m test_envs.tools.test_catalog` |
 | Latest Markdown | `python -m test_envs.tools.test_result` |
 | Pending Markdown | `python -m test_envs.tools.test_result --pending` |
 | MkDocs publish | `python -m test_envs.tools.test_result --pending --docs` |
@@ -361,6 +363,9 @@ test_reports/
 | TEST CASE registration | 값 |
 |---|---|
 | Source | `@pytest.mark.ct` |
+| Generated catalog | `test_envs/tests/pytest/test_cases/test_catalog.json` |
+| Catalog command | `python -m test_envs.tools.test_catalog` |
+| Synchronized selection | VS Code Tasks, Pytest Issue Form, GitHub workflow dispatch, MCP, Issue parser, GitHub reporter |
 | Validation | `pytest_collection_modifyitems` |
 | Required fields | `test_id`, `category`, `fixture_id`, `fixture_mode` |
 | Optional field | `test_prompt` |
@@ -411,16 +416,20 @@ test_reports/
 
 | 항목 | 구성 |
 |---|---|
-| Pytest 요청 | `pytest_request.yml`: TEST ID, `marker`/`mock`/`hil`, Runner, Revision, Coverage, Pandoc, Evidence |
-| Unittest 요청 | `unittest_request.yml`: All 또는 CT Framework, Runner, Revision, Coverage, Pandoc |
+| Pytest 요청 | `pytest_request.yml`: TEST ID, `marker`/`mock`/`hil`, Test Environment, OS, Revision, Coverage, Pandoc |
+| Unittest 요청 | `unittest_request.yml`: All 또는 CT Framework, Test Environment, OS, Revision, Coverage, Pandoc |
 | Unittest 제외 항목 | TEST ID, Fixture Mode, Target, Additional Evidence, Expected Result, MkDocs 선택 |
-| 환경 확인 | `test_check.yml`: Runner만 선택하고 Host, OS, Python, Ollama 결과를 Issue에 자동 기록 |
+| 환경 확인 | `test_check.yml`: Test Environment와 OS를 선택하고 Host, OS, Python, Ollama 결과를 Issue에 자동 기록 |
 | 통합 Workflow | `.github/workflows/continuous-test.yml` (`Test Request`) |
 | Issue Trigger | `opened`, `edited`, `reopened`; `labeled` 이벤트는 중복 실행 방지를 위해 제외 |
-| GitHub-hosted Linux | `ubuntu-latest`: Mock CT, Unittest, TEST-CHECK |
-| GitHub-hosted Windows | `windows-latest`: Mock CT, Unittest, TEST-CHECK |
-| Self-hosted HIL Linux | `[self-hosted, linux, hw-test]` |
-| Self-hosted HIL Windows | `[self-hosted, windows, hw-test]` |
+| GitHub-hosted Runner + Ubuntu | `ubuntu-latest`: Mock CT, Unittest, TEST-CHECK |
+| GitHub-hosted Runner + Windows | `windows-latest`: Mock CT, Unittest, TEST-CHECK |
+| Self-hosted Runner + Ubuntu | `[self-hosted, linux, hw-test]` |
+| Self-hosted Runner + Windows | `[self-hosted, windows, hw-test]` |
+| Local MCP + Ubuntu | GitHub Self-hosted Runner 없이 로컬 MCP가 Issue를 직접 조회하고 실행 |
+| Local MCP + Windows | GitHub Self-hosted Runner 없이 로컬 MCP가 Issue를 직접 조회하고 실행 |
 | 분석 | Pytest만 Local LLM 사용; Unittest는 사용하지 않음 |
-| Issue 결과 | `test_envs.tool_github.github_reporter`: 테스트 결과, 환경 확인 결과, 실행 오류 코멘트 |
+| Issue 결과 | 새 요약을 만들지 않고 기존 canonical Test Report Markdown 전체를 그대로 게시 |
 | Node.js | 프로젝트 설치 및 실행 없음; 공식 GitHub Action 내부 런타임은 GitHub가 관리 |
+
+Local MCP 방식은 `GITHUB_REPOSITORY`와 `GH_TOKEN` 또는 `GITHUB_TOKEN`을 로컬 MCP 프로세스에 설정한 후 `get_github_issue_requests`로 요청을 찾고 `run_github_issue`로 실행한다. 이 경로는 GitHub Self-hosted Runner 등록이 필요 없다.

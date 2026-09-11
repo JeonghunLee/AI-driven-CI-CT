@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import re
 import shutil
 import subprocess
 import sys
@@ -14,6 +13,7 @@ from test_envs.test_pipeline.pipeline import run as run_pipeline
 from test_envs.tools.configuration import build_check
 from test_envs.tools.pandoc_reporter import REFERENCE_DOC, convert
 from test_envs.tools.result_normalizer import ResultStore
+from test_envs.tools.test_catalog import catalog_by_id, catalog_tests
 
 
 TestType = Literal["pytest", "unittest"]
@@ -23,12 +23,6 @@ CoverageMode = Literal["none", "terminal", "html"]
 PandocFormat = Literal["none", "docx", "html", "both"]
 
 ROOT = Path(__file__).resolve().parents[2]
-TEST_IDS = ("CT-UART-001", "CT-USB-001", "CT-NETWORK-001")
-PYTEST_FILES = {
-    "CT-UART-001": "test_envs/tests/pytest/test_cases/test_fixture_001_uart_timing.py",
-    "CT-USB-001": "test_envs/tests/pytest/test_cases/test_fixture_002_usb_loopback.py",
-    "CT-NETWORK-001": "test_envs/tests/pytest/test_cases/test_fixture_003_network_loopback.py",
-}
 UNITTEST_SCOPES = {
     "all": "test_envs/tests/unittest",
     "ct_framework_python": "test_envs/tests/unittest/ct_framework/python",
@@ -43,7 +37,7 @@ _RUN_LOCK = threading.Lock()
 @dataclass(frozen=True)
 class TestRequest:
     test_type: TestType
-    test_id: str = "CT-UART-001"
+    test_id: str = ""
     fixture_mode: FixtureMode = "marker"
     unittest_scope: UnittestScope = "all"
     coverage: CoverageMode = "none"
@@ -54,8 +48,15 @@ class TestRequest:
 def pytest_test_list() -> dict[str, object]:
     return {
         "test_ids": [
-            {"test_id": item, "path": PYTEST_FILES[item], "marker_mode": _marker_mode(item)}
-            for item in TEST_IDS
+            {
+                "test_id": item["test_id"],
+                "path": item["test_path"],
+                "category": item["category"],
+                "fixture_id": item["fixture_id"],
+                "marker_mode": item["default_fixture_mode"],
+                "test_prompt": item["test_prompt"],
+            }
+            for item in catalog_tests()
         ],
         "fixture_modes": ["marker", "mock", "hil"],
         "pytest_hil_allow": _enabled("PYTEST_HIL_ALLOW"),
@@ -107,16 +108,26 @@ def test_environment() -> dict[str, object]:
     return check
 
 
-def run_test(request: TestRequest, timeout_seconds: int = 3600) -> dict[str, object]:
+def run_test(
+    request: TestRequest,
+    timeout_seconds: int = 3600,
+    environment: dict[str, str] | None = None,
+) -> dict[str, object]:
     _validate(request, timeout_seconds)
     with _RUN_LOCK:
         store = ResultStore(ROOT / "test_reports")
         before = {path.resolve() for path in store.result_paths()}
         command = _pytest_command(request)
+        process_environment = {
+            **os.environ,
+            "TEST_REQUEST": os.getenv("TEST_REQUEST", "mcp"),
+            "TEST_NAME": os.getenv("TEST_NAME", os.getenv("RUNNER_NAME", "local_01")),
+        }
+        process_environment.update(environment or {})
         completed = subprocess.run(
             command,
             cwd=ROOT,
-            env={**os.environ, "TEST_REQUEST": "mcp", "TEST_NAME": os.getenv("TEST_NAME", "local_01")},
+            env=process_environment,
             capture_output=True,
             text=True,
             timeout=timeout_seconds,
@@ -152,7 +163,7 @@ def run_test(request: TestRequest, timeout_seconds: int = 3600) -> dict[str, obj
 
 
 def run_all_tests(
-    test_id: str = "CT-UART-001",
+    test_id: str = "",
     fixture_mode: FixtureMode = "marker",
     unittest_scope: UnittestScope = "all",
     coverage: CoverageMode = "none",
@@ -160,6 +171,7 @@ def run_all_tests(
     pandoc: PandocFormat = "none",
     timeout_seconds: int = 3600,
 ) -> dict[str, object]:
+    test_id = test_id or _default_test_id()
     pytest_result = run_test(
         TestRequest("pytest", test_id, fixture_mode, coverage=coverage, markdown=markdown, pandoc=pandoc),
         timeout_seconds,
@@ -227,8 +239,9 @@ def latest_result(test_type: TestType, test_id: str = "") -> dict[str, object]:
 def _latest_path(test_type: TestType, test_id: str) -> tuple[ResultStore, Path]:
     if test_type not in {"pytest", "unittest"}:
         raise ValueError("test_type must be pytest or unittest")
-    if test_type == "pytest" and test_id not in TEST_IDS:
-        raise ValueError(f"test_id must be one of: {', '.join(TEST_IDS)}")
+    test_ids = catalog_by_id()
+    if test_type == "pytest" and test_id not in test_ids:
+        raise ValueError(f"test_id must be one of: {', '.join(test_ids)}")
     if test_type == "unittest" and test_id:
         raise ValueError("test_id does not apply to unittest")
     store = ResultStore(ROOT / "test_reports")
@@ -265,8 +278,9 @@ def _pytest_command(request: TestRequest) -> list[str]:
 def _validate(request: TestRequest, timeout_seconds: int) -> None:
     if request.test_type not in {"pytest", "unittest"}:
         raise ValueError("test_type must be pytest or unittest")
-    if request.test_type == "pytest" and request.test_id not in TEST_IDS:
-        raise ValueError(f"test_id must be one of: {', '.join(TEST_IDS)}")
+    test_ids = catalog_by_id()
+    if request.test_type == "pytest" and request.test_id not in test_ids:
+        raise ValueError(f"test_id must be one of: {', '.join(test_ids)}")
     if request.fixture_mode not in {"marker", "mock", "hil"}:
         raise ValueError("fixture_mode must be marker, mock, or hil")
     effective_mode = (
@@ -296,11 +310,17 @@ def _convert_pandoc(markdown_path: Path, output: PandocFormat) -> dict[str, str]
 
 
 def _marker_mode(test_id: str) -> str:
-    source = (ROOT / PYTEST_FILES[test_id]).read_text(encoding="utf-8")
-    match = re.search(r"fixture_mode\s*=\s*['\"](mock|hil)['\"]", source)
-    if not match:
-        raise RuntimeError(f"Cannot determine marker fixture mode for {test_id}")
-    return match.group(1)
+    try:
+        return str(catalog_by_id()[test_id]["default_fixture_mode"])
+    except KeyError as error:
+        raise ValueError(f"Unknown TEST ID: {test_id}") from error
+
+
+def _default_test_id() -> str:
+    tests = catalog_tests()
+    if not tests:
+        raise RuntimeError("The Pytest test catalog is empty")
+    return str(tests[0]["test_id"])
 
 
 def _enabled(name: str) -> bool:

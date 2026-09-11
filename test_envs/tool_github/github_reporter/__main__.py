@@ -8,7 +8,7 @@ from test_envs.tools.configuration import build_check
 from test_envs.tools.local_llm import Analysis
 from test_envs.tools.result_normalizer import ResultStore
 
-from . import post_comment, render_comment, render_environment_comment
+from . import load_markdown_report, post_comment, render_comment, render_environment_comment
 
 
 def main() -> None:
@@ -58,7 +58,10 @@ def main() -> None:
             recommendations="Review the report-generation failure and rerun the request.",
             needs_escalation=True,
         )
-    comment = render_comment(result, analysis)
+    try:
+        comment = load_markdown_report(result)
+    except FileNotFoundError:
+        comment = render_comment(result, analysis)
     if args.dry_run:
         print(comment)
     else:

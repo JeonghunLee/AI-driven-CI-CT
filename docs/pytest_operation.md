@@ -18,6 +18,7 @@ Framework structure and Fixture contracts are documented in [Pytest CT Framework
 |---|---|
 | Test unit | One CT Test Case |
 | Primary identifier | TEST ID, such as `CT-UART-001` |
+| Test registration | `python -m test_envs.tools.test_catalog` generates the shared TEST ID catalog |
 | Test composition | Numbered Fixture with interfaces and equipment |
 | Runtime mode | `mock` or `hil` |
 | Result capture | `test_envs/tests/pytest/conftest.py` |
@@ -31,6 +32,8 @@ Framework structure and Fixture contracts are documented in [Pytest CT Framework
 <br/>
 
 ```text
+Register Python CT markers in test_catalog.json
+        ↓
 Collect CT Test Cases
         ↓
 Validate TEST ID, Fixture ID, marker, and Fixture metadata
@@ -52,14 +55,15 @@ Write Result JSON and Test Log
 
 | Step | Operation |
 |---:|---|
-| 1 | Pytest collects `test_envs/tests/pytest/test_cases` |
-| 2 | `conftest.py` validates the CT marker and numbered Fixture contract |
-| 3 | `--test-id` keeps one TEST ID when provided |
-| 4 | `--fixture-mode` overrides the marker or uses its default mode |
-| 5 | The Fixture connects its interface and equipment before `yield` |
-| 6 | The Test Case executes assertions and updates `ct_result` |
-| 7 | Fixture cleanup disconnects resources in reverse order |
-| 8 | The result hook stores normalized evidence by TEST ID and Execution ID |
+| 1 | Setup 4 reads Python CT markers and generates `test_catalog.json` plus static TEST ID choices |
+| 2 | Pytest collects `test_envs/tests/pytest/test_cases` |
+| 3 | `conftest.py` validates the CT marker and numbered Fixture contract |
+| 4 | `--test-id` keeps one TEST ID when provided |
+| 5 | `--fixture-mode` overrides the marker or uses its default mode |
+| 6 | The Fixture connects its interface and equipment before `yield` |
+| 7 | The Test Case executes assertions and updates `ct_result` |
+| 8 | Fixture cleanup disconnects resources in reverse order |
+| 9 | The result hook stores normalized evidence by TEST ID and Execution ID |
 
 <br/>
 
