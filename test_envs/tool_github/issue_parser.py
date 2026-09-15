@@ -14,20 +14,16 @@ RUNNER_LABELS = {
     ("GitHub-hosted Runner", "windows"): ["windows-latest"],
     ("Self-hosted Runner", "ubuntu"): ["self-hosted", "linux", "hw-test"],
     ("Self-hosted Runner", "windows"): ["self-hosted", "windows", "hw-test"],
-    ("Local MCP", "ubuntu"): [],
-    ("Local MCP", "windows"): [],
 }
 
 ENVIRONMENT_VALUES = {
     "GitHub-hosted Runner": "github_hosted_runner",
     "Self-hosted Runner": "self_hosted_runner",
-    "Local MCP": "local",
 }
 
 ENVIRONMENT_ALIASES = {
     "github_hosted_runner": "GitHub-hosted Runner",
     "self_hosted_runner": "Self-hosted Runner",
-    "local": "Local MCP",
 }
 
 OS_ALIASES = {
@@ -114,6 +110,14 @@ def request_configuration(values: dict[str, str]) -> dict[str, str]:
         test_id = values.get("Test ID", values.get("test_id", default_test_id))
         if test_id not in catalog:
             raise ValueError(f"unsupported TEST ID {test_id!r}; select one of: {', '.join(catalog)}")
+        fixture_mode = values.get("Fixture Mode", values.get("fixture_mode", "marker"))
+        effective_fixture_mode = (
+            str(catalog[test_id]["default_fixture_mode"])
+            if fixture_mode == "marker"
+            else fixture_mode
+        )
+        if execution_host == "GitHub-hosted Runner" and effective_fixture_mode == "hil":
+            raise ValueError("GitHub-hosted Runner does not support Pytest HIL; select Self-hosted Runner")
     unittest_target = _first_line(
         values.get("Unittest Target", values.get("unittest_target", "")),
         "test_envs/tests/unittest",

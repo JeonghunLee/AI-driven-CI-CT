@@ -13,11 +13,10 @@ body:
     id: test_environment
     attributes:
       label: Test Environment
-      description: Self-hosted Runner uses GitHub Actions. Local MCP checks the environment directly without a GitHub Self-hosted Runner.
+      description: Select a GitHub-hosted or registered Self-hosted GitHub Actions Runner.
       options:
         - GitHub-hosted Runner
         - Self-hosted Runner
-        - Local MCP
       default: 0
     validations:
       required: true

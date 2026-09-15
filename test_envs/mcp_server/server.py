@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-import os
-import platform
 from typing import Literal
 
 from mcp.server import MCPServer
 
 from test_envs.mcp_server.runner import (
-    ROOT,
     TestRequest,
     all_test_lists,
     pytest_test_list,
@@ -18,9 +15,6 @@ from test_envs.mcp_server.runner import (
     update_latest,
     update_mkdocs as publish_latest_to_mkdocs,
 )
-from test_envs.tool_github.github_issue import get_issue, local_mcp_requests
-from test_envs.tool_github.github_reporter import post_comment
-from test_envs.tool_github.issue_parser import issue_configuration
 
 
 mcp = MCPServer(
@@ -54,86 +48,6 @@ def get_test_list_unittest() -> dict[str, object]:
 def get_test_list_all() -> dict[str, object]:
     """List all Pytest and Unittest targets plus coverage and report options."""
     return all_test_lists()
-
-
-@mcp.tool()
-def get_github_issue_requests(
-    state: Literal["open", "closed", "all"] = "open",
-    limit: int = 20,
-) -> dict[str, object]:
-    """List GitHub test-request Issues assigned to this runner-free Local MCP."""
-    return {"requests": local_mcp_requests(state=state, limit=limit)}
-
-
-@mcp.tool()
-def run_github_issue(
-    issue_number: int,
-    timeout_seconds: int = 3600,
-) -> dict[str, object]:
-    """Read one Local MCP GitHub Issue, run it locally, and post its canonical Markdown."""
-    issue = get_issue(issue_number)
-    config = issue_configuration(issue)
-    if config["request_kind"] != "test":
-        raise ValueError("run_github_issue supports Pytest and Unittest request Issues")
-    if config["execution_host"] != "Local MCP":
-        raise ValueError("The Issue Test Environment must be Local MCP")
-    local_os = "windows" if platform.system().lower() == "windows" else "ubuntu"
-    if config["test_os"] != local_os:
-        raise RuntimeError(
-            f"Issue requests {config['test_os']}, but this Local MCP host is {local_os}"
-        )
-    pandoc = (
-        "both"
-        if config["report_docx"] == "true" and config["report_html"] == "true"
-        else "docx"
-        if config["report_docx"] == "true"
-        else "html"
-        if config["report_html"] == "true"
-        else "none"
-    )
-    coverage = {
-        "Terminal missing-lines report": "terminal",
-        "HTML coverage report": "html",
-    }.get(config["coverage"], "none")
-    if config["test_type"] == "Pytest":
-        request = TestRequest(
-            test_type="pytest",
-            test_id=config["test_id"],
-            fixture_mode=config["fixture_mode"],
-            coverage=coverage,
-            markdown=True,
-            pandoc=pandoc,
-        )
-    else:
-        scope = "ct_framework_python" if config["unittest_scope"] == "CT Framework Python" else "all"
-        request = TestRequest(
-            test_type="unittest",
-            unittest_scope=scope,
-            coverage=coverage,
-            markdown=True,
-            pandoc=pandoc,
-        )
-    result = run_test(
-        request,
-        timeout_seconds,
-        environment={
-            "TEST_REQUEST": "github_issue",
-            "TEST_ENVIRONMENT": "local",
-            "TEST_OS": local_os,
-            "TEST_NAME": os.getenv("TEST_NAME", "local_01"),
-        },
-    )
-    markdown = result.get("reports", {}).get("markdown")
-    if not markdown:
-        raise RuntimeError("The test did not generate the canonical Markdown report")
-    body = (ROOT / str(markdown)).read_text(encoding="utf-8")
-    post_comment(issue_number, body)
-    result["github_issue"] = {
-        "number": issue_number,
-        "url": issue.get("html_url", ""),
-        "comment_source": markdown,
-    }
-    return result
 
 
 @mcp.tool()

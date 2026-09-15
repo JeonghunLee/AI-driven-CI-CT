@@ -38,11 +38,10 @@ body:
     id: test_environment
     attributes:
       label: Test Environment
-      description: Self-hosted Runner uses GitHub Actions. Local MCP reads and executes the Issue directly without a GitHub Self-hosted Runner.
+      description: GitHub-hosted Runner supports Mock only. Select Self-hosted Runner for HIL.
       options:
         - GitHub-hosted Runner
         - Self-hosted Runner
-        - Local MCP
       default: 0
     validations:
       required: true

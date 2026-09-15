@@ -35,9 +35,15 @@ def load_markdown_report(result: ResultRecord, root: str | Path = "test_reports/
     return path.read_text(encoding="utf-8")
 
 
-def render_environment_comment(check: dict[str, Any]) -> str:
-    requested_environment = os.getenv("REQUESTED_TEST_ENVIRONMENT", "unknown")
-    requested_os = os.getenv("REQUESTED_TEST_OS", "unknown")
+def render_environment_comment(
+    check: dict[str, Any],
+    context: dict[str, str] | None = None,
+) -> str:
+    context = context or {}
+    requested_environment = context.get(
+        "requested_environment", os.getenv("REQUESTED_TEST_ENVIRONMENT", "unknown")
+    )
+    requested_os = context.get("requested_os", os.getenv("REQUESTED_TEST_OS", "unknown"))
     inferred_environment = (
         "self_hosted_runner"
         if requested_environment == "Self-hosted Runner"
@@ -45,15 +51,17 @@ def render_environment_comment(check: dict[str, Any]) -> str:
         if requested_environment == "GitHub-hosted Runner"
         else "unknown"
     )
-    runner_environment = os.getenv("TEST_ENVIRONMENT", inferred_environment)
-    runner_name = os.getenv("RUNNER_NAME", "unknown")
+    runner_environment = context.get(
+        "test_environment", os.getenv("TEST_ENVIRONMENT", inferred_environment)
+    )
+    runner_name = context.get("test_name", os.getenv("RUNNER_NAME", "unknown"))
     runner_os = os.getenv("RUNNER_OS", str(check.get("os", {}).get("detected", "unknown")))
     runner_arch = os.getenv("RUNNER_ARCH", "unknown")
     test_envs = {
         "test_os": os.getenv("TEST_OS", requested_os.lower()),
         "test_name": runner_name,
         "test_environment": runner_environment,
-        "test_request": os.getenv("TEST_REQUEST", "github_issue"),
+        "test_request": context.get("test_request", os.getenv("TEST_REQUEST", "github_issue")),
     }
     os_check = dict(check.get("os", {}))
     python_check = dict(check.get("python", {}))

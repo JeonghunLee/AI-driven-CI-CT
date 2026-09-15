@@ -767,8 +767,6 @@ test_envs.tool_github.issue_parser
         +-- Self-hosted Runner + Ubuntu ------> [self-hosted, linux, hw-test] -----+--> continuous-test.yml: test job
         +-- Self-hosted Runner + Windows -----> [self-hosted, windows, hw-test] ---+
         |
-        +-- Local MCP + Ubuntu/Windows --> get_github_issue_requests --> run_github_issue
-        |
         +-- Pytest ------> TEST ID + marker/mock/hil --> Local LLM
         |
         +-- Unittest ----> Unittest scope ----------> No Local LLM
@@ -799,15 +797,13 @@ test_envs.test_pipeline.pipeline
 | Label provisioning | A relevant default-branch push creates both labels; the request job also recognizes `[PYTEST-REQUEST]`, `[UNITTEST-REQUEST]`, and `[TEST-CHECK]` |
 | Rerun trigger | Edit or reopen the Issue, or use manual `workflow_dispatch` |
 | Local/manual trigger | `workflow_dispatch`; replaces the former local request workflow |
-| Execution environments | GitHub-hosted Runner, Self-hosted Runner, or Local MCP |
+| GitHub Issue execution environments | GitHub-hosted Runner or Self-hosted Runner; Local MCP is excluded |
 | Operating systems | Ubuntu or Windows |
 | Default combination | GitHub-hosted Runner + Ubuntu (`ubuntu-latest`) |
 | Hosted compatibility | Mock CT and Unittest run on GitHub-hosted Ubuntu or Windows |
 | Self-hosted Ubuntu | `[self-hosted, linux, hw-test]` |
 | Self-hosted Windows | `[self-hosted, windows, hw-test]` |
-| Local MCP Ubuntu | No GitHub Self-hosted Runner registration; `get_github_issue_requests` discovers requests and `run_github_issue` executes one |
-| Local MCP Windows | No GitHub Self-hosted Runner registration; `get_github_issue_requests` discovers requests and `run_github_issue` executes one |
-| HIL constraint | Physical equipment uses either a matching GitHub Self-hosted Runner or a Local MCP host with `PYTEST_HIL_ALLOW=true`; it never falls back to Mock |
+| HIL constraint | GitHub-hosted Runner rejects explicit HIL and marker-resolved HIL; GitHub Issue HIL requires a matching Self-hosted Runner and never falls back to Mock |
 | Pytest selection | A TEST ID generated in `test_catalog.json` plus `marker`, `mock`, or `hil` Fixture mode |
 | Pytest-only fields | TEST ID and Fixture Mode; Test Category is not requested |
 | Unittest selection | All Unittest or CT Framework Python |
@@ -820,7 +816,7 @@ test_envs.test_pipeline.pipeline
 | Failure handling | Test failures keep the normalized result; setup/capture failures post an ERROR comment |
 | Node.js | No project Node.js installation or command; JavaScript-based official Actions use their GitHub-managed runtime |
 
-GitHub-hosted and GitHub Self-hosted execution is handled by dynamic runner selection. A Local MCP request is skipped by the Actions test job and is instead pulled from GitHub by the local MCP host, so it does not require GitHub Runner registration.
+GitHub Issue automation is handled only by GitHub-hosted and GitHub Self-hosted runner selection. Local MCP remains separate and is invoked directly through its allowlisted MCP tools.
 
 <br/>
 
@@ -854,9 +850,8 @@ Excluded from GitHub Issue:
 | `.github/ISSUE_TEMPLATE/test_check.yml` | Test Environment + OS request for automatic host type, Python, and Ollama detection |
 | `.github/workflows/continuous-test.yml` | Unified request parsing, runner routing, test, report, Issue update, and artifact workflow |
 | `test_envs/tool_github/issue_parser.py` | Issue Form and manual input normalization |
-| `test_envs/tool_github/github_issue.py` | GitHub API access for Runner-free Local MCP Issue discovery |
 | `test_envs/tool_github/github_reporter/` | Result and workflow-error Issue comments |
-| `test_envs/mcp_server/` | Local `stdio` MCP tools for allowlisted execution, result lookup, and direct GitHub Issue processing |
+| `test_envs/mcp_server/` | Local `stdio` MCP tools for allowlisted execution, result lookup, and GitHub MCP request payload processing |
 
 ```text
 .
@@ -899,7 +894,6 @@ Excluded from GitHub Issue:
 │   │       └── common/
 │   ├── tool_github/
 │   │   ├── github_reporter/
-│   │   ├── github_issue.py
 │   │   └── issue_parser.py
 │   ├── mcp_server/
 │   │   ├── runner.py

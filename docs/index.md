@@ -189,23 +189,12 @@ flowchart TD
         PANDOC --> ARTIFACT
     end
 
-    subgraph LOCAL_MCP_FLOW["Local MCP · no GitHub Self-hosted Runner"]
-        MCP_LIST[get_github_issue_requests]
-        MCP_RUN[run_github_issue]
-        MCP_MARKDOWN[Canonical Test Report Markdown]
-
-        MCP_LIST --> MCP_RUN --> MCP_MARKDOWN
-    end
-
     PUSH --> LABELS
     PYTEST_ISSUE --> CHECKOUT_REQUEST
     UNITTEST_ISSUE --> CHECKOUT_REQUEST
     CHECK_ISSUE --> CHECKOUT_REQUEST
     MANUAL --> CHECKOUT_REQUEST
     OUTPUTS -->|GitHub-hosted or Self-hosted Runner| CHECKOUT_TEST
-    PYTEST_ISSUE -->|Test Environment: Local MCP| MCP_LIST
-    UNITTEST_ISSUE -->|Test Environment: Local MCP| MCP_LIST
-    MCP_MARKDOWN --> GITHUB_REPORTER
 
     classDef testResults fill:#fff3bf,stroke:#f08c00,stroke-width:4px,color:#5f3d00,font-weight:bold
     class MKDOCS testResults
@@ -218,7 +207,7 @@ flowchart TD
 | `pytest_request.yml` | Pytest-only form: TEST ID, Fixture mode, Test Environment, OS, revision, Coverage, and optional Pandoc |
 | `unittest_request.yml` | Unittest-only form: scope, Test Environment, OS, revision, Coverage, and optional Pandoc; no TEST ID or Fixture mode |
 | `test_check.yml` | Selects Test Environment and OS; the workflow detects Python and Ollama state and comments on the Issue |
-| `continuous-test.yml` | Routes GitHub-hosted and GitHub Self-hosted requests; it skips the Actions test job when `Local MCP` is selected |
+| `continuous-test.yml` | Routes GitHub Issue requests to GitHub-hosted or GitHub Self-hosted runners |
 | Pytest TEST ID catalog | `test_catalog.json` is generated from Python CT markers; Setup 4 synchronizes the VS Code, Issue Form, and workflow-dispatch choices |
 | Common Markdown reporter | `test_envs/tools/mkdocs_reporter` always renders the canonical Markdown; MkDocs publication is enabled separately and the generated reports are uploaded as artifacts |
 
@@ -244,13 +233,13 @@ flowchart TD
 | Duplicate prevention | The workflow does not subscribe to `labeled`; automatic label attachment therefore does not create a second run |
 | Request Job | Detects Pytest, Unittest, or TEST-CHECK from the form title and emits normalized execution settings |
 | Issue labels | A relevant default-branch push creates both labels; the request job also creates and applies the matching label as a first-Issue fallback |
-| Runner routing | GitHub-hosted and Self-hosted use Actions runners; Local MCP + Ubuntu/Windows is pulled and executed by MCP without GitHub Runner registration |
+| Runner routing | GitHub Issue requests select GitHub-hosted or Self-hosted Runner plus Ubuntu/Windows; Local MCP is not an Issue option |
 | Timeout | 60 minutes |
 | Permissions | Repository contents read; issues write |
 | Python | `actions/setup-python@v5`, Python 3.12, pip cache |
 | Environment | Test requests create `.venv` and install `requirements.txt`; TEST-CHECK inspects the selected runner directly |
 | Unittest | Runs All Unittest or CT Framework Python through pytest without Local LLM analysis |
-| Pytest CT | Mock runs on GitHub-hosted Ubuntu/Windows; physical HIL uses a GitHub Self-hosted hardware runner or an explicitly enabled Local MCP host |
+| Pytest CT | GitHub-hosted Ubuntu/Windows supports Mock only; physical HIL requires the selected GitHub Self-hosted hardware runner |
 | Coverage | Optional terminal or HTML `pytest-cov` report |
 | Report | Issue Forms normalize Log, canonical Markdown, Pandoc DOCX, and Pandoc HTML separately |
 | MkDocs publication | `report_mkdocs` copies the generated Markdown into `docs/tests`; Markdown generation itself is represented by `report_markdown` |

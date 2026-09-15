@@ -16,8 +16,6 @@
 | `get_test_list_pytest` | Reads `test_catalog.json` and lists Pytest TEST IDs, source paths, fixture metadata, modes, and HIL availability |
 | `get_test_list_unittest` | Lists Unittest scopes and discovered test files |
 | `get_test_list_all` | Returns the combined Pytest and Unittest inventory |
-| `get_github_issue_requests` | Lists GitHub test-request Issues whose Test Environment is `Local MCP` |
-| `run_github_issue` | Reads one Local MCP Issue, executes it without a GitHub Self-hosted Runner, and posts its generated canonical Markdown |
 | `run_test_pytest` | Runs one allowlisted Pytest CT and returns its normalized result and report paths |
 | `run_test_unittest` | Runs all Unittest tests, CT Framework Python, or another allowlisted extension scope |
 | `run_test_all` | Runs `run_test_pytest` and `run_test_unittest` sequentially |
@@ -61,6 +59,10 @@ The workspace configuration is stored in `.vscode/mcp.json`. Open the Command Pa
   }
 }
 ```
+
+<br/>
+
+GitHub access uses the GitHub MCP already installed and authenticated in VS Code. This workspace file registers only `ai-driven-ci-ct`, preventing duplicate GitHub MCP tools or conflicting server definitions.
 
 <br/>
 
@@ -122,11 +124,7 @@ The MCP Pytest allowlist is loaded from `test_envs/tests/pytest/test_cases/test_
 
 <br/>
 
-GitHub Issue forms can select `Local MCP`. This path does not register or require a GitHub Self-hosted Runner. An MCP client first calls `get_github_issue_requests`, then calls `run_github_issue` with the selected Issue number. The MCP host reads the Issue through the GitHub API, executes it locally, generates the canonical Markdown, and posts that exact Markdown back to the Issue.
-
-<br/>
-
-The MCP process needs `GITHUB_REPOSITORY=owner/repository` and either `GH_TOKEN` or `GITHUB_TOKEN` with Issue read/write access. Keep the token in the MCP host's secure user environment rather than committing it to `.vscode/mcp.json`.
+Local MCP remains an independent external test-control path. GitHub Issue Forms do not select Local MCP; Issue automation belongs to GitHub-hosted or GitHub Self-hosted runners.
 
 <br/>
 

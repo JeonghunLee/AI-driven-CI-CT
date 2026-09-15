@@ -44,7 +44,7 @@ on:
         description: Test execution environment
         required: true
         type: choice
-        options: [GitHub-hosted Runner, Self-hosted Runner, Local MCP]
+        options: [GitHub-hosted Runner, Self-hosted Runner]
         default: GitHub-hosted Runner
       test_os:
         description: Test operating system
@@ -192,7 +192,6 @@ jobs:
   test:
     name: Execute requested test or environment check
     needs: request
-    if: needs.request.outputs.execution_host != 'Local MCP'
     runs-on: ${{ fromJSON(needs.request.outputs.runner_labels) }}
     timeout-minutes: 60
     env:

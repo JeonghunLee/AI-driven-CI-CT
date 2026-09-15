@@ -2,7 +2,6 @@ import json
 import unittest
 from unittest.mock import patch
 
-from test_envs.tool_github.github_issue import local_mcp_requests
 from test_envs.tool_github.issue_parser import event_configuration, parse_issue_body, request_configuration
 
 
@@ -67,8 +66,6 @@ HTML coverage report
             ("GitHub-hosted Runner", "Windows"): '["windows-latest"]',
             ("Self-hosted Runner", "Ubuntu"): '["self-hosted","linux","hw-test"]',
             ("Self-hosted Runner", "Windows"): '["self-hosted","windows","hw-test"]',
-            ("Local MCP", "Ubuntu"): "[]",
-            ("Local MCP", "Windows"): "[]",
         }
         for (environment, test_os), labels in expected.items():
             with self.subTest(environment=environment, test_os=test_os):
@@ -100,38 +97,56 @@ HTML coverage report
         with self.assertRaisesRegex(ValueError, "unsupported test environment"):
             request_configuration({"test_environment": "Unknown"})
 
-    def test_local_mcp_uses_local_result_environment(self) -> None:
+    def test_local_mcp_is_not_a_github_issue_environment(self) -> None:
+        with self.assertRaisesRegex(ValueError, "unsupported test environment"):
+            request_configuration(
+                {"test_environment": "Local MCP", "test_os": "Windows"}
+            )
+
+    def test_github_hosted_runner_rejects_pytest_hil(self) -> None:
+        with self.assertRaisesRegex(ValueError, "does not support Pytest HIL"):
+            request_configuration(
+                {
+                    "test_type": "Pytest",
+                    "fixture_mode": "hil",
+                    "test_environment": "GitHub-hosted Runner",
+                    "test_os": "Ubuntu",
+                }
+            )
+
+    def test_self_hosted_runner_accepts_pytest_hil(self) -> None:
         value = request_configuration(
-            {"test_environment": "Local MCP", "test_os": "Windows"}
+            {
+                "test_type": "Pytest",
+                "fixture_mode": "hil",
+                "test_environment": "Self-hosted Runner",
+                "test_os": "Windows",
+            }
         )
-        self.assertEqual(value["test_environment"], "local")
-        self.assertEqual(value["test_os"], "windows")
-        self.assertEqual(value["runner_labels"], "[]")
+        self.assertEqual(value["fixture_mode"], "hil")
+        self.assertEqual(value["test_environment"], "self_hosted_runner")
 
-    def test_local_mcp_issue_discovery_does_not_require_runner_labels(self) -> None:
-        issues = [
-            {
-                "number": 10,
-                "title": "[PYTEST-REQUEST] local",
-                "body": "### Test Environment\n\nLocal MCP\n\n### Operating System\n\nWindows",
-                "labels": [{"name": "test-request-runner"}],
-                "html_url": "https://example.test/issues/10",
-            },
-            {
-                "number": 11,
-                "title": "[PYTEST-REQUEST] hosted",
-                "body": "### Test Environment\n\nGitHub-hosted Runner\n\n### Operating System\n\nUbuntu",
-                "labels": [{"name": "test-request-runner"}],
-            },
-        ]
-        with patch.dict(
-            "os.environ",
-            {"GITHUB_REPOSITORY": "owner/repository", "GH_TOKEN": "secret"},
-        ), patch("test_envs.tool_github.github_issue._get", return_value=issues):
-            value = local_mcp_requests()
-
-        self.assertEqual([item["number"] for item in value], [10])
-        self.assertEqual(value[0]["configuration"]["runner_labels"], "[]")
+    def test_github_hosted_rejects_marker_resolved_hil(self) -> None:
+        entry = {
+            "test_id": "CT-HIL-001",
+            "default_fixture_mode": "hil",
+        }
+        with patch(
+            "test_envs.tool_github.issue_parser.catalog_tests", return_value=[entry]
+        ), patch(
+            "test_envs.tool_github.issue_parser.catalog_by_id",
+            return_value={"CT-HIL-001": entry},
+        ):
+            with self.assertRaisesRegex(ValueError, "does not support Pytest HIL"):
+                request_configuration(
+                    {
+                        "test_type": "Pytest",
+                        "test_id": "CT-HIL-001",
+                        "fixture_mode": "marker",
+                        "test_environment": "GitHub-hosted Runner",
+                        "test_os": "Ubuntu",
+                    }
+                )
 
     def test_environment_check_is_detected_from_issue_title(self) -> None:
         event = {

@@ -74,7 +74,6 @@ class RepositoryStructureTests(unittest.TestCase):
 
     def test_role_specific_tool_packages(self) -> None:
         github_root = Path("test_envs/tool_github")
-        self.assertTrue((github_root / "github_issue.py").is_file())
         self.assertTrue((github_root / "issue_parser.py").is_file())
         self.assertTrue((github_root / "github_reporter/__init__.py").is_file())
         pipeline_root = Path("test_envs/test_pipeline")
@@ -82,7 +81,6 @@ class RepositoryStructureTests(unittest.TestCase):
         self.assertTrue((pipeline_root / "pipeline.py").is_file())
         mcp_root = Path("test_envs/mcp_server")
         self.assertTrue((mcp_root / "runner.py").is_file())
-        self.assertTrue((mcp_root / "request_runner.py").is_file())
         self.assertTrue((mcp_root / "server.py").is_file())
         for legacy in (
             "test_envs/tools/issue_parser.py",

@@ -426,10 +426,9 @@ test_reports/
 | GitHub-hosted Runner + Windows | `windows-latest`: Mock CT, Unittest, TEST-CHECK |
 | Self-hosted Runner + Ubuntu | `[self-hosted, linux, hw-test]` |
 | Self-hosted Runner + Windows | `[self-hosted, windows, hw-test]` |
-| Local MCP + Ubuntu | GitHub Self-hosted Runner 없이 로컬 MCP가 Issue를 직접 조회하고 실행 |
-| Local MCP + Windows | GitHub Self-hosted Runner 없이 로컬 MCP가 Issue를 직접 조회하고 실행 |
+| Pytest HIL | GitHub-hosted Runner에서는 금지하며 Self-hosted Runner에서만 실행 |
 | 분석 | Pytest만 Local LLM 사용; Unittest는 사용하지 않음 |
 | Issue 결과 | 새 요약을 만들지 않고 기존 canonical Test Report Markdown 전체를 그대로 게시 |
 | Node.js | 프로젝트 설치 및 실행 없음; 공식 GitHub Action 내부 런타임은 GitHub가 관리 |
 
-Local MCP 방식은 `GITHUB_REPOSITORY`와 `GH_TOKEN` 또는 `GITHUB_TOKEN`을 로컬 MCP 프로세스에 설정한 후 `get_github_issue_requests`로 요청을 찾고 `run_github_issue`로 실행한다. 이 경로는 GitHub Self-hosted Runner 등록이 필요 없다.
+<br/>
