@@ -595,7 +595,7 @@
 <tr>
 <td>test_client_discovers_and_calls_list_tests</td>
 <td>FAIL</td>
-<td>self = <test_envs.tests.unittest.ct_framework.python.test_mcp_runner.mcpservercontracttests testmethod="test_client_discovers_and_calls_list_tests">      async def test_client_discovers_and_calls_list_tests(self) -&gt; None:         async with Client(mcp) as client:             tools = await client.list_tools()             result = await client.call_tool("list_tests", {})              self.assertEqual( &gt;           {tool.name for tool in tools},              <sup>^</sup><sup>^</sup><sup>^</sup>             {"list_tests", "run_pytest_ct", "run_unittest", "get_latest_result"},         ) E       AttributeError: 'tuple' object has no attribute 'name'  test_envs\tests\unittest\ct_framework\python\test_mcp_runner.py:55: AttributeError</test_envs.tests.unittest.ct_framework.python.test_mcp_runner.mcpservercontracttests></td>
+<td>self = <test_envs.tests.unittest.ct_framework.python.test_mcp_runner.mcpservercontracttests testmethod="test_client_discovers_and_calls_list_tests">      async def test_client_discovers_and_calls_list_tests(self) -&gt; None:         async with Client(mcp) as client:             tools = await client.list_tools()             result = await client.call_tool("list_tests", {})              self.assertEqual( &gt;           {tool.name for tool in tools},              ^^^^^^^^^             {"list_tests", "run_pytest_ct", "run_unittest", "get_latest_result"},         ) E       AttributeError: 'tuple' object has no attribute 'name'  test_envs\tests\unittest\ct_framework\python\test_mcp_runner.py:55: AttributeError</test_envs.tests.unittest.ct_framework.python.test_mcp_runner.mcpservercontracttests></td>
 </tr>
 </tbody>
 </table>

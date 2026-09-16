@@ -562,6 +562,10 @@
 <td>TEST ID, such as <code>CT-UART-001</code></td>
 </tr>
 <tr>
+<td>Test registration</td>
+<td><code>python -m test_envs.tools.test_catalog</code> generates the shared TEST ID catalog</td>
+</tr>
+<tr>
 <td>Test composition</td>
 <td>Numbered Fixture with interfaces and equipment</td>
 </tr>
@@ -586,7 +590,9 @@
 <p><br/></p>
 <h2 id="execution-sequence">Execution Sequence</h2>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code>Collect CT Test Cases
+<div class="highlight"><pre><span></span><code>Register Python CT markers in test_catalog.json
+        ↓
+Collect CT Test Cases
         ↓
 Validate TEST ID, Fixture ID, marker, and Fixture metadata
         ↓
@@ -613,34 +619,38 @@ Write Result JSON and Test Log
 <tbody>
 <tr>
 <td style="text-align: right;">1</td>
-<td>Pytest collects <code>test_envs/tests/pytest/test_cases</code></td>
+<td>Setup 4 reads Python CT markers and generates <code>test_catalog.json</code> plus static TEST ID choices</td>
 </tr>
 <tr>
 <td style="text-align: right;">2</td>
-<td><code>conftest.py</code> validates the CT marker and numbered Fixture contract</td>
+<td>Pytest collects <code>test_envs/tests/pytest/test_cases</code></td>
 </tr>
 <tr>
 <td style="text-align: right;">3</td>
-<td><code>--test-id</code> keeps one TEST ID when provided</td>
+<td><code>conftest.py</code> validates the CT marker and numbered Fixture contract</td>
 </tr>
 <tr>
 <td style="text-align: right;">4</td>
-<td><code>--fixture-mode</code> overrides the marker or uses its default mode</td>
+<td><code>--test-id</code> keeps one TEST ID when provided</td>
 </tr>
 <tr>
 <td style="text-align: right;">5</td>
-<td>The Fixture connects its interface and equipment before <code>yield</code></td>
+<td><code>--fixture-mode</code> overrides the marker or uses its default mode</td>
 </tr>
 <tr>
 <td style="text-align: right;">6</td>
-<td>The Test Case executes assertions and updates <code>ct_result</code></td>
+<td>The Fixture connects its interface and equipment before <code>yield</code></td>
 </tr>
 <tr>
 <td style="text-align: right;">7</td>
-<td>Fixture cleanup disconnects resources in reverse order</td>
+<td>The Test Case executes assertions and updates <code>ct_result</code></td>
 </tr>
 <tr>
 <td style="text-align: right;">8</td>
+<td>Fixture cleanup disconnects resources in reverse order</td>
+</tr>
+<tr>
+<td style="text-align: right;">9</td>
 <td>The result hook stores normalized evidence by TEST ID and Execution ID</td>
 </tr>
 </tbody>
@@ -736,7 +746,7 @@ Canonical Markdown
 </tr>
 <tr>
 <td>DOCX reference</td>
-<td><code>test_reports/pandocs/reference.docx</code></td>
+<td><code>docx/reference.docx</code></td>
 </tr>
 </tbody>
 </table>

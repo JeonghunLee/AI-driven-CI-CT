@@ -579,6 +579,9 @@
 <p><br/></p>
 <h2 id="exposed-tools">Exposed Tools</h2>
 <p><br/></p>
+<p><div class="highlight"><pre><span></span><code>test_envs\mcp_server
+</code></pre></div>
+<br/></p>
 <table>
 <thead>
 <tr>
@@ -593,7 +596,7 @@
 </tr>
 <tr>
 <td><code>get_test_list_pytest</code></td>
-<td>Lists Pytest TEST IDs, source paths, fixture modes, and HIL availability</td>
+<td>Reads <code>test_catalog.json</code> and lists Pytest TEST IDs, source paths, fixture metadata, modes, and HIL availability</td>
 </tr>
 <tr>
 <td><code>get_test_list_unittest</code></td>
@@ -652,6 +655,10 @@
 <span class="p">}</span>
 </code></pre></div>
 <p><br/></p>
+<p><img alt="" src="imgs/vscode_mcp_00.png"/></p>
+<p><br/></p>
+<p>GitHub access uses the GitHub MCP already installed and authenticated in VS Code. This workspace file registers only <code>ai-driven-ci-ct</code>, preventing duplicate GitHub MCP tools or conflicting server definitions.</p>
+<p><br/></p>
 <p>Any MCP host that supports <code>stdio</code> can use the same Python command and repository working directory. Standard output is reserved for MCP protocol messages; test process output is captured and returned in the tool result.</p>
 <p><br/></p>
 <p>Set a unique <code>TEST_NAME</code> such as <code>local_01</code>, <code>local_02</code>, or <code>hil_lab_01</code> for each installed test server. Results created through this server record <code>test_request</code> as <code>mcp</code>.</p>
@@ -682,7 +689,10 @@
     MARKDOWN -. pandoc .-&gt; PANDOC[test_reports/pandocs]
     SERVER --&gt; RESPONSE[Structured MCP Result]</code></pre>
 <p><br/></p>
-<p><code>markdown</code> generates the canonical Markdown report. <code>update_mkdocs</code> separately copies that generated Markdown into <code>docs/tests</code>. Pandoc DOCX uses <code>test_reports/pandocs/reference.docx</code>.</p>
+<p><code>markdown</code> generates the canonical Markdown report. <code>update_mkdocs</code> separately copies that generated Markdown into <code>docs/tests</code>. Pandoc DOCX uses <code>docx/reference.docx</code>.</p>
+<p>The MCP Pytest allowlist is loaded from <code>test_envs/tests/pytest/test_cases/test_catalog.json</code>. Adding a Python CT case therefore requires no MCP source-code edit; run <code>python -m test_envs.tools.test_catalog</code> to register it.</p>
+<p><br/></p>
+<p>Local MCP remains an independent external test-control path. GitHub Issue Forms do not select Local MCP; Issue automation belongs to GitHub-hosted or GitHub Self-hosted runners.</p>
 <p><br/></p>
 <h2 id="hil-safety">HIL Safety</h2>
 <p><br/></p>

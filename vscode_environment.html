@@ -1048,6 +1048,16 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
             ],
             "problemMatcher": []
         },
+        {
+            "label": "SETUP 4: Register Pytest Test Catalog",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.test_catalog"
+            ],
+            "problemMatcher": []
+        },
         // Check Task Section
         // This section contains tasks for checking the environment and running the Ollama server.
         // Each task is labeled with a "CHECK" prefix for easy identification.
@@ -1323,6 +1333,19 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
       "justMyCode": true
     },
     {
+      "name": "SETUP 4: Register Pytest Test Catalog",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "test_envs.tools.configuration",
+      "args": ["config"],
+      "preLaunchTask": "SETUP 4: Register Pytest Test Catalog",
+      "console": "internalConsole",
+      "internalConsoleOptions": "neverOpen",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
       "name": "CHECK 1: Refresh Environment Check File",
       "type": "debugpy",
       "request": "launch",
@@ -1503,7 +1526,7 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <tr>
 <td><code>REPORT-Pandoc: Convert Latest Markdown to DOCX</code></td>
 <td><code>test_envs.tools.pandoc_reporter --latest --format docx</code></td>
-<td>Converts the latest Markdown to DOCX using <code>test_reports/pandocs/reference.docx</code></td>
+<td>Converts the latest Markdown to DOCX using <code>docx/reference.docx</code></td>
 <td><a href="#tasks-report">Tasks-Report</a></td>
 </tr>
 </tbody>
@@ -1568,6 +1591,12 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <td>Installs/checks Ollama and pulls the configured model</td>
 </tr>
 <tr>
+<td><code>SETUP 4: Register Pytest Test Catalog</code></td>
+<td><code>test_envs.tools.test_catalog</code></td>
+<td>None</td>
+<td>Reads Python CT markers, generates <code>test_catalog.json</code>, and synchronizes every static TEST ID picker</td>
+</tr>
+<tr>
 <td><code>CHECK 1: Refresh Environment Check File</code></td>
 <td><code>test_envs.tools.configuration</code></td>
 <td><code>check</code></td>
@@ -1590,7 +1619,7 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <p><br/></p>
 <p>The dedicated-terminal presentation is configured for Setup 1 and Check 3. Closing or stopping Check 3 ends the foreground server process owned by that Task.</p>
 <p><br/></p>
-<p>Setup 1 through Setup 3 and Check 1 are also exposed through <a href="#run-and-debug-setup-and-check">Run and Debug-Setup and Check</a>. In Run and Debug, each matching Task runs first through <code>preLaunchTask</code>.</p>
+<p>Setup 1 through Setup 4 and Check 1 are also exposed through <a href="#run-and-debug-setup-and-check">Run and Debug-Setup and Check</a>. In Run and Debug, each matching Task runs first through <code>preLaunchTask</code>.</p>
 <p><br/></p>
 <h3 id="tasks-test-case">Tasks-TEST CASE</h3>
 <p><br/></p>
@@ -1645,7 +1674,7 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <tr>
 <td><code>REPORT-Pandoc: Convert Latest Markdown to DOCX</code></td>
 <td><code>test_envs.tools.pandoc_reporter --latest --format docx</code></td>
-<td>Converts the latest Markdown to Word using <code>test_reports/pandocs/reference.docx</code></td>
+<td>Converts the latest Markdown to Word using <code>docx/reference.docx</code></td>
 </tr>
 </tbody>
 </table>
@@ -1708,8 +1737,8 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <tr>
 <td><code>testCaseId</code></td>
 <td><code>pickString</code></td>
-<td><code>CT-UART-001</code>, <code>CT-USB-001</code>, <code>CT-NETWORK-001</code></td>
-<td><code>CT-UART-001</code></td>
+<td>Generated from <code>test_catalog.json</code></td>
+<td>First registered TEST ID</td>
 <td><code>TEST CASE: TEST ID</code></td>
 </tr>
 <tr>
@@ -1722,6 +1751,7 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 </tbody>
 </table>
 <p>OS selection is not a Task or launch input. It is managed by <code>test_envs/configs/config.json</code> through the Setup 1 command.</p>
+<p>Run Setup 4 after adding or changing a <code>@pytest.mark.ct</code> test. VS Code must reload <code>.vscode/tasks.json</code> before a newly generated picker option appears.</p>
 <p><br/></p>
 <h2 id="testing">Testing</h2>
 <p><br/></p>

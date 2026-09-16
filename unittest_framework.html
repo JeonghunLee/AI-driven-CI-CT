@@ -1248,7 +1248,7 @@ docs/tests/unittest/index.md
     ├── Test Source
     └── Logs
 </code></pre></div>
-<p>The function table's <code>Pass</code> column is a simplified Boolean display: <code>PASS</code> when <code>test_functions[].pass</code> is true and <code>FAIL</code> otherwise. Use the JSON <code>status</code> field for the authoritative distinction between <code>FAIL</code>, <code>ERROR</code>, and <code>SKIP</code>; skipped functions are excluded from the Markdown Failed Functions table.</p>
+<p>The function table's <code>Pass</code> column is a simplified Boolean display: <code>PASS</code> when <code>test_functions[].pass</code> is true and <code>FAIL</code> otherwise. Use the JSON <code>status</code> field for the authoritative distinction between <code>FAIL</code>, <code>ERROR</code>, and <code>SKIP</code>; skipped functions are excluded from the Markdown Failed Functions section. Each failed function keeps its multiline error or traceback in a fenced <code>text</code> code block.</p>
 <p><br/></p>
 <h3 id="index-columns">Index columns</h3>
 <table>
@@ -1440,7 +1440,7 @@ MkDocs Results       Pandoc Report
 <tr>
 <td>Pandoc conversion</td>
 <td><code>test_envs.tools.pandoc_reporter</code></td>
-<td><code>test_reports/pandocs/unittest/&lt;execution-id&gt;_result.&lt;format&gt;</code>; DOCX uses <code>test_reports/pandocs/reference.docx</code></td>
+<td><code>test_reports/pandocs/unittest/&lt;execution-id&gt;_result.&lt;format&gt;</code>; DOCX uses <code>docx/reference.docx</code></td>
 </tr>
 </tbody>
 </table>

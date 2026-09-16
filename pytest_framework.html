@@ -337,6 +337,15 @@
 </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#generated-test-catalog">
+<span class="md-ellipsis">
+      
+        Generated Test Catalog
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#fixture-registry-and-metadata">
 <span class="md-ellipsis">
       
@@ -663,6 +672,15 @@
 <span class="md-ellipsis">
       
         CT Marker Contract
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#generated-test-catalog">
+<span class="md-ellipsis">
+      
+        Generated Test Catalog
       
     </span>
 </a>
@@ -1086,6 +1104,44 @@ but there are no matching <code>test_fixture_004_*.py</code> or <code>test_fixtu
 <li><code>fixture_mode</code> is <code>mock</code> or <code>hil</code>, and that mode is enabled in <code>FIXTURE_META</code>.</li>
 </ul>
 <p>An invalid contract raises a pytest collection/usage error before test execution.</p>
+<p><br/></p>
+<h2 id="generated-test-catalog">Generated Test Catalog</h2>
+<p><br/></p>
+<p><code>test_envs.tests.pytest.test_cases</code> Python files are the registration source. The catalog generator reads their <code>@pytest.mark.ct</code> decorators with Python AST; it does not import or execute the test modules.</p>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">test_catalog</span>
+</code></pre></div>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Catalog item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generated file</td>
+<td><code>test_envs/tests/pytest/test_cases/test_catalog.json</code></td>
+</tr>
+<tr>
+<td>Fields</td>
+<td><code>test_id</code>, <code>category</code>, <code>fixture_id</code>, <code>default_fixture_mode</code>, <code>test_prompt</code>, <code>test_path</code></td>
+</tr>
+<tr>
+<td>Validation</td>
+<td>Required literal fields, supported default mode, and unique TEST ID</td>
+</tr>
+<tr>
+<td>Synchronized consumers</td>
+<td>VS Code Task picker, Pytest Issue Form, and GitHub <code>workflow_dispatch</code> picker</td>
+</tr>
+<tr>
+<td>Runtime consumers</td>
+<td>MCP, GitHub request parser, and GitHub reporter</td>
+</tr>
+</tbody>
+</table>
+<p>The generated static VS Code and GitHub YAML selections must be committed together with a new test case. Runtime consumers reload the catalog and automatically regenerate it when it is missing or older than a Python test case.</p>
 <h2 id="fixture-registry-and-metadata">Fixture Registry and Metadata</h2>
 <p><br/></p>
 <p><code>fixture_registry()</code> imports every <code>fixture_*.py</code> module in the fixtures package and reads its <code>FIXTURE_META</code> mapping.    <br/>
@@ -1623,7 +1679,7 @@ MkDocs Results   Pandoc Report
 <tr>
 <td>Pandoc conversion</td>
 <td><code>test_envs.tools.pandoc_reporter</code></td>
-<td><code>test_reports/pandocs/pytest/test_cases/&lt;test-id&gt;/&lt;execution-id&gt;_result.&lt;format&gt;</code>; DOCX uses <code>test_reports/pandocs/reference.docx</code></td>
+<td><code>test_reports/pandocs/pytest/test_cases/&lt;test-id&gt;/&lt;execution-id&gt;_result.&lt;format&gt;</code>; DOCX uses <code>docx/reference.docx</code></td>
 </tr>
 </tbody>
 </table>
