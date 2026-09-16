@@ -22,6 +22,18 @@ def _named_table(name: Any, values: dict[str, Any]) -> str:
     return f"| {_safe(name)} | Value |\n|---|---|\n{rows or '| - | None |'}"
 
 
+def _fenced_text(value: Any, fallback: str = "No failure detail") -> str:
+    """Preserve multiline diagnostic text in a safe Markdown code fence."""
+    content = str(value).strip() or fallback
+    longest_backtick_run = max(
+        (len(match.group(0)) for match in re.finditer(r"`+", content)),
+        default=0,
+    )
+    # ```text  Failed messsage  ```
+    fence = "`" * max(3, longest_backtick_run + 1)
+    return f"{fence}text\n{content}\n{fence}"
+
+
 def _warning_severity(warning_count: int) -> str:
     if warning_count >= 6:
         return "CRITICAL"
@@ -504,12 +516,16 @@ Go Back to the [Pytest TEST All Index](./index.md)
             f"{float(item.get('duration', 0.0)):.6f} |"
             for item in result.test_functions
         ) or "| - | - | - | 0.000000 |"
-        failed_rows = "\n".join(
-            f"| {_safe(item.get('function', 'unknown'))} | {_safe(item.get('status', 'ERROR'))} | "
-            f"{_safe(item.get('failure', '')) or 'No failure detail'} |"
+        failed_rows = "\n\n".join(
+            f"#### `{_safe(item.get('function', 'unknown'))}`\n\n"
+            f"| Item | Value |\n"
+            f"|---|---|\n"
+            f"| Status | {_safe(item.get('status', 'ERROR'))} |\n\n"
+            f"{_fenced_text(item.get('failure', ''))}\n\n"
+            f"<br/>"
             for item in result.test_functions
             if not item.get("pass") and item.get("status") != "SKIP"
-        ) or "| - | - | None |"
+        ) or "None"
         execution_summary = _table(
             {
                 "Execution ID": result.execution_id,
@@ -554,8 +570,6 @@ Go Back to the [Pytest TEST All Index](./index.md)
 
 ### Failed Functions
 
-| Test Function | Status | Failure |
-|---|---|---|
 {failed_rows}
 
 ### Test Source

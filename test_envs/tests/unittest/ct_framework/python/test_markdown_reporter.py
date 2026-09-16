@@ -113,7 +113,7 @@ class MarkdownReporterTests(unittest.TestCase):
                     "pass": False,
                     "status": "FAIL",
                     "duration": 0.1,
-                    "failure": "device timeout",
+                    "failure": "device timeout\nport | COM3\n```nested fence```",
                 },
             ),
         )
@@ -127,7 +127,12 @@ class MarkdownReporterTests(unittest.TestCase):
         self.assertIn("| test_name |", text)
         self.assertIn("| test_environment |", text)
         self.assertIn("| test_request |", text)
-        self.assertIn("| test_device_timeout | FAIL | device timeout |", text)
+        self.assertIn("#### `test_device_timeout`", text)
+        self.assertIn("| Status | FAIL |", text)
+        self.assertIn(
+            "````text\ndevice timeout\nport | COM3\n```nested fence```\n````",
+            text,
+        )
         self.assertNotIn("Test ID", text)
         self.assertNotIn("Fixture mode", text)
         self.assertNotIn("Local LLM", text)

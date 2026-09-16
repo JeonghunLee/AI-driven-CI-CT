@@ -287,7 +287,7 @@ docs/tests/unittest/index.md
     └── Logs
 ```
 
-The function table's `Pass` column is a simplified Boolean display: `PASS` when `test_functions[].pass` is true and `FAIL` otherwise. Use the JSON `status` field for the authoritative distinction between `FAIL`, `ERROR`, and `SKIP`; skipped functions are excluded from the Markdown Failed Functions table.
+The function table's `Pass` column is a simplified Boolean display: `PASS` when `test_functions[].pass` is true and `FAIL` otherwise. Use the JSON `status` field for the authoritative distinction between `FAIL`, `ERROR`, and `SKIP`; skipped functions are excluded from the Markdown Failed Functions section. Each failed function keeps its multiline error or traceback in a fenced `text` code block.
 
 <br/>
 
