@@ -10,6 +10,11 @@
 
 <br/>
 
+```
+test_envs\mcp_server
+```
+<br/>
+
 | MCP tool | Purpose |
 |---|---|
 | `get_test_envs` | Checks OS, Python/venv, Ollama/model, Pandoc, and MCP permission flags |
@@ -59,6 +64,10 @@ The workspace configuration is stored in `.vscode/mcp.json`. Open the Command Pa
   }
 }
 ```
+
+<br/>
+
+![](./imgs/vscode_mcp_00.png)
 
 <br/>
 
