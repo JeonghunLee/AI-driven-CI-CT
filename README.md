@@ -333,7 +333,7 @@ test_reports/
 | Format | 명령 | 추가 요구사항 |
 |---|---|---|
 | HTML | `python -m test_envs.tools.pandoc_reporter --latest --format html` | Pandoc PATH |
-| DOCX | `python -m test_envs.tools.pandoc_reporter --latest --format docx` | Pandoc PATH + `docx/reference.docx` |
+| DOCX | `python -m test_envs.tools.pandoc_reporter --latest --format docx` | Pandoc PATH + `docx/reference/reference.docx` |
 | PDF | `python -m test_envs.tools.pandoc_reporter --latest --format pdf` | Pandoc PATH + PDF engine |
 
 ## 실제 장비 확장

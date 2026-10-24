@@ -127,7 +127,7 @@ flowchart TD
 
 <br/>
 
-`markdown` generates the canonical Markdown report. `update_mkdocs` separately copies that generated Markdown into `docs/tests`. Pandoc DOCX uses `docx/reference.docx`.
+`markdown` generates the canonical Markdown report. `update_mkdocs` separately copies that generated Markdown into `docs/tests`. Pandoc DOCX uses `docx/reference/reference.docx`.
 
 The MCP Pytest allowlist is loaded from `test_envs/tests/pytest/test_cases/test_catalog.json`. Adding a Python CT case therefore requires no MCP source-code edit; run `python -m test_envs.tools.test_catalog` to register it.
 

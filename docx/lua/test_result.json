@@ -1,0 +1,13 @@
+{
+  "test_id": "CT-UART-001",
+  "result": "PASS",
+  "execution_id": "20260909-001",
+  "timestamp": "2026-09-09T11:30:00",
+  "runner": "Windows",
+  "duration_ms": 1820,
+  "details": {
+    "interface": "UART",
+    "equipment": "Digilent",
+    "fixture_mode": "mock"
+  }
+}

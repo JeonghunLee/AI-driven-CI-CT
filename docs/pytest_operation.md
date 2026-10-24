@@ -175,7 +175,7 @@ Canonical Markdown
 | Canonical Markdown | `test_reports/markdown/pytest/test_cases/<test-id>/<execution-id>_result.md` |
 | MkDocs result | `docs/tests/pytest/` |
 | Pandoc output | `test_reports/pandocs/pytest/test_cases/<test-id>/` |
-| DOCX reference | `docx/reference.docx` |
+| DOCX reference | `docx/reference/reference.docx` |
 
 <br/>
 

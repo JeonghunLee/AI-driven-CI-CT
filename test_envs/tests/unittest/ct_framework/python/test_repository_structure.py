@@ -63,7 +63,7 @@ class RepositoryStructureTests(unittest.TestCase):
         ):
             self.assertTrue((root / relative).is_dir())
         self.assertFalse((root / "pandoc").exists())
-        self.assertTrue(Path("docx/reference.docx").is_file())
+        self.assertTrue(Path("docx/reference/reference.docx").is_file())
         self.assertFalse((root / "pandocs/reference.docx").exists())
         self.assertFalse(any((root / "markdown").glob("CT-*")))
         self.assertFalse((root / "results/unittest/.tmp").exists())

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import shutil
 import subprocess
 import sys
 import threading
@@ -11,7 +10,7 @@ from typing import Literal
 
 from test_envs.test_pipeline.pipeline import run as run_pipeline
 from test_envs.tools.configuration import build_check
-from test_envs.tools.pandoc_reporter import REFERENCE_DOC, convert
+from test_envs.tools.pandoc_reporter import REFERENCE_DOC, convert, pandoc_executable
 from test_envs.tools.result_normalizer import ResultStore
 from test_envs.tools.test_catalog import catalog_by_id, catalog_tests
 
@@ -94,9 +93,10 @@ def test_environment() -> dict[str, object]:
         "python": str(venv_python),
         "active": Path(sys.executable).resolve() == venv_python.resolve(),
     }
+    executable = pandoc_executable()
     check["pandoc"] = {
-        "installed": shutil.which("pandoc") is not None,
-        "executable": shutil.which("pandoc"),
+        "installed": executable is not None,
+        "executable": executable,
         "reference_docx": str(ROOT / REFERENCE_DOC),
         "reference_docx_available": (ROOT / REFERENCE_DOC).is_file(),
     }

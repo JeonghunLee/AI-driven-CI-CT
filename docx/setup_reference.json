@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "reference_docx": "docx/reference/reference.docx",
+  "editor": {
+    "instruction": "Open reference_docx in Word and edit its styles, headers, footers, margins, and table styles. Keep every reference DOCX under docx/reference/.",
+    "purpose": "Pandoc applies this DOCX as the style reference when creating test reports."
+  },
+  "pandoc": {
+    "docx_uses_reference_docx": true,
+    "html_uses_reference_docx": false,
+    "pytest_output_root": "test_reports/pandocs/pytest/test_cases",
+    "unittest_output_root": "test_reports/pandocs/unittest",
+    "add_doc_args": [
+      "--toc",
+      "--metadata-file=docx/lua/signature.yaml",
+      "--lua-filter=docx/lua/signature.lua",
+      "--lua-filter=docx/lua/information.lua",
+      "--lua-filter=docx/lua/test_result.lua",
+      "--lua-filter=docx/lua/table-width.lua",
+      "--number-sections",
+      "--resource-path=docs"
+    ]
+  }
+}
