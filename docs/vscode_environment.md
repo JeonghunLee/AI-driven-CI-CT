@@ -245,11 +245,43 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
             },
             "problemMatcher": []
         },
+        {
+            "label": "TEST AI Agent: Ollama MCP Workflow",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.mcp_server.ollama_workflow",
+                "--command",
+                "${input:ollamaTestCommand}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
         // Report Task Section
         // This section contains tasks for generating and converting test reports.
         // Each task is labeled with a "REPORT" prefix for easy identification.
         {
-            "label": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
+            "label": "REPORT-Mkdocs: Generate Latest Markdown",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.test_result",
+                "--docs"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "REPORT-Mkdocs: Generate Pending Markdown (All)",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -258,6 +290,11 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
                 "--pending",
                 "--docs"
             ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
             "problemMatcher": []
         },
         {
@@ -351,8 +388,8 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
     // End of tasks array
     // End of tasks section
 
-    // Inputs section (Test case and fixture mode inputs)
-    // "TEST CASE: TEST ID", and "TEST CASE: ALL"
+    // Inputs for TEST CASE Tasks and the Ollama MCP workflow Task
+    // "TEST CASE: TEST ID", "TEST CASE: ALL", and "TEST AI Agent: Ollama MCP Workflow"
     "inputs": [
         {
             "id": "testCaseId",
@@ -375,6 +412,19 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
                 "hil"
             ],
             "default": "marker"
+        },
+        {
+            "id": "ollamaTestCommand",
+            "type": "pickString",
+            "description": "Ollama MCP test rule",
+            "options": [
+                "default",
+                "all",
+                "uart",
+                "usb",
+                "network"
+            ],
+            "default": "default"
         }
     ]
 }
@@ -480,12 +530,12 @@ Connected VS Code feature: [Run and Debug](#run-and-debug)
     },
     // Reporting Section (Mkdocs Markdown and Pandoc(HTML/DOCX))
     {
-      "name": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
+      "name": "REPORT-Mkdocs: Generate Latest Markdown",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
       "module": "test_envs.tools.test_result",
-      "args": ["--pending", "--docs"],
+      "args": ["--docs"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
@@ -587,7 +637,7 @@ This configuration is a placeholder and is not part of the currently supported t
 
 | Launch configuration | Entry point and arguments | Purpose | Related Task |
 |---|---|---|---|
-| `REPORT-Mkdocs: Generate Markdown to Pytest/Unittest` | `test_envs.tools.test_result --pending --docs` | Generates pending Pytest and Unittest Markdown and publishes MkDocs result pages | [Tasks-Report](#tasks-report) |
+| `REPORT-Mkdocs: Generate Latest Markdown` | `test_envs.tools.test_result --docs` | Generates and publishes only the latest Pytest or Unittest result for fast feedback | [Tasks-Report](#tasks-report) |
 | `REPORT-Pandoc: Convert Latest Markdown to HTML` | `test_envs.tools.pandoc_reporter --latest --format html` | Converts the latest Markdown report to HTML | [Tasks-Report](#tasks-report) |
 | `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown to DOCX using `docx/reference/reference.docx` | [Tasks-Report](#tasks-report) |
 
@@ -634,7 +684,6 @@ Every Task has `type: process`, runs in the foreground, and has no `isBackground
 | `CHECK 1: Refresh Environment Check Files` | `test_envs.tools.configuration` | `check` | Regenerates `check_envs.json` and `check_ollama.json` |
 | `CHECK 2: Show Environment Configuration` | `test_envs.tools.configuration` | `config` | Prints the current project configuration |
 | `CHECK 3: Run Ollama Server (Foreground)` | `test_envs.test_pipeline.environment_setup` | `serve` | Runs an Ollama server owned by the terminal Task |
-| `TEST AI Agent: Ollama MCP Workflow` | `test_envs.mcp_server.ollama_workflow` | `--command ${input:ollamaTestCommand}` | Runs the command-selected allowlisted rule from `test_config.json` through the Ollama MCP workflow |
 
 <br/>
 
@@ -661,13 +710,26 @@ Both Tasks disable the pytest cache provider and execute `test_programs/pytest/t
 
 <br/>
 
+### Tasks-AI Agent
+
+<br/>
+
+| Task label | Entry point | Command input | Execution flow |
+|---|---|---|---|
+| `TEST AI Agent: Ollama MCP Workflow` | `test_envs.mcp_server.ollama_workflow` | `${input:ollamaTestCommand}` | Resolves the registered rule from `test_config.json`, runs allowlisted Pytest and Unittest targets, then creates Markdown and Pandoc DOCX/HTML reports |
+
+The Task prints progress for each selected Pytest TEST ID and Unittest scope. `all` runs every cataloged Pytest TEST ID and the complete Unittest scope; `default`, `uart`, `usb`, and `network` use their mapped YAML rules under `test_envs/configs/test_rules`.
+
+<br/>
+
 ### Tasks-Report 
 
 <br/>
 
 | Task label | Entry point | Function |
 |---|---|---|
-| `REPORT-Mkdocs: Generate Markdown to Pytest/Unittest` | `test_envs.tools.test_result --pending --docs` | Generates missing Markdown and publishes MkDocs pages |
+| `REPORT-Mkdocs: Generate Latest Markdown` | `test_envs.tools.test_result --docs` | Generates and publishes only the latest report for fast feedback |
+| `REPORT-Mkdocs: Generate Pending Markdown (All)` | `test_envs.tools.test_result --pending --docs` | Processes every missing report; use for bulk backfill rather than normal test execution |
 | `REPORT-Pandoc: Convert Latest Markdown to HTML` | `test_envs.tools.pandoc_reporter --latest --format html` | Converts the latest Markdown to HTML |
 | `REPORT-Pandoc: Convert Latest Markdown to DOCX` | `test_envs.tools.pandoc_reporter --latest --format docx` | Converts the latest Markdown to Word using `docx/reference/reference.docx` |
 
@@ -701,6 +763,7 @@ The `MkDocs: Serve Remote ` source label currently contains a trailing space.
 |---|---|---|---|---|
 | `testCaseId` | `pickString` | Generated from `test_catalog.json` | First registered TEST ID | `TEST CASE: TEST ID` |
 | `fixtureMode` | `pickString` | `marker`, `mock`, `hil` | `marker` | Both TEST CASE Tasks |
+| `ollamaTestCommand` | `pickString` | `default`, `all`, `uart`, `usb`, `network` | `default` | `TEST AI Agent: Ollama MCP Workflow` |
 
 OS selection is not a Task or launch input. It is managed by `test_envs/configs/config_env.json` through the Setup 1 command.
 
