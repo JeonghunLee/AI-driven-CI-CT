@@ -1,7 +1,6 @@
 version: 1
 
-# The MCP server executes only cataloged TEST IDs and declared Unittest scopes.
-# "all" is available for both test types; this default stays small for local use.
+# Default Ollama MCP workflow: a small, safe end-to-end test.
 agent:
   provider: ollama
   model: deepseek-r1:7b
@@ -9,13 +8,11 @@ agent:
 selection:
   pytest:
     mode: selected # all | selected
-    test_ids:
-      - CT-UART-001
+    test_ids: [CT-UART-001]
     fixture_mode: mock
   unittest:
     mode: selected # all | selected
-    scopes:
-      - ct_framework_python
+    scopes: [ct_framework_python]
 
 reports:
   markdown: true

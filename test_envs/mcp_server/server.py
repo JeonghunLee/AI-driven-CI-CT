@@ -69,15 +69,15 @@ def get_test_list_all() -> dict[str, object]:
 
 
 @mcp.tool()
-def get_ollama_test_plan() -> dict[str, object]:
-    """Read the allowlisted Ollama test workflow from test_envs/configs/test_ollama.yaml."""
-    return ollama_test_plan()
+def get_ollama_test_plan(command: str = "") -> dict[str, object]:
+    """Read a command-selected Ollama test rule registered in test_config.json without executing it."""
+    return ollama_test_plan(command)
 
 
 @mcp.tool()
-def run_ollama_test_workflow() -> dict[str, object]:
-    """Run the allowlisted Ollama workflow: select tests, then generate Markdown and DOCX/HTML reports."""
-    return run_ollama_test_plan()
+def run_ollama_test_workflow(command: str = "") -> dict[str, object]:
+    """Run the command-selected Ollama workflow: select tests, then generate Markdown and DOCX/HTML reports."""
+    return run_ollama_test_plan(command)
 
 
 @mcp.tool()

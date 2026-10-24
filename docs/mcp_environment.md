@@ -24,8 +24,8 @@ test_envs\mcp_server
 | `run_test_pytest` | Runs one allowlisted Pytest CT and returns its normalized result and report paths |
 | `run_test_unittest` | Runs all Unittest tests, CT Framework Python, or another allowlisted extension scope |
 | `run_test_all` | Runs `run_test_pytest` and `run_test_unittest` sequentially |
-| `get_ollama_test_plan` | Reads and validates `test_envs/configs/test_ollama.yaml` without executing it |
-| `run_ollama_test_workflow` | Runs the YAML's allowlisted Pytest and Unittest selections, then generates Markdown and optional DOCX/HTML reports |
+| `get_ollama_test_plan` | Reads and validates the command-selected YAML rule registered in `test_config.json` without executing it |
+| `run_ollama_test_workflow` | Runs the command-selected YAML rule's allowlisted Pytest and Unittest selections, then generates Markdown and optional DOCX/HTML reports |
 | `update_latest_result` | Reads the latest normalized result and log and updates Markdown or Pandoc DOCX/HTML outputs |
 | `update_mkdocs` | Publishes the latest generated Markdown into `docs/tests` |
 
@@ -61,7 +61,7 @@ The workspace configuration is stored in `.vscode/mcp.json`. Open the Command Pa
         "TEST_NAME": "local_01",
         "PYTEST_HIL_ALLOW": "false",
         "MKDOC_UPDATE": "false",
-        "OLLAMA_TEST_PLAN": "${workspaceFolder}/test_envs/configs/test_ollama.yaml"
+        "OLLAMA_TEST_CONFIG": "${workspaceFolder}/test_envs/configs/test_config.json"
       }
     }
   }
@@ -84,7 +84,7 @@ Any MCP host that supports `stdio` can use the same Python command and repositor
 
 Set a unique `TEST_NAME` such as `local_01`, `local_02`, or `hil_lab_01` for each installed test server. Results created through this server record `test_request` as `mcp`.
 
-`OLLAMA_TEST_PLAN` selects the YAML workflow used by `get_ollama_test_plan` and `run_ollama_test_workflow`. The default is `test_envs/configs/test_ollama.yaml`; use only plans containing allowlisted TEST IDs and declared Unittest scopes.
+`OLLAMA_TEST_CONFIG` selects `test_config.json`, which maps commands such as `default`, `all`, `uart`, `usb`, and `network` to YAML files under `test_rules/`. An AI Agent passes the command to `get_ollama_test_plan` or `run_ollama_test_workflow`; the MCP server rejects unregistered commands and any YAML target outside `test_rules/`.
 
 <br/>
 

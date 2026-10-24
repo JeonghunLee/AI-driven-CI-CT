@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "ollama": {
+    "default_command": "default",
+    "rules_directory": "test_rules",
+    "commands": {
+      "default": "test_ollama.yaml",
+      "all": "test_ollama_all.yaml",
+      "uart": "test_ollama.yaml",
+      "usb": "test_ollama_usb.yaml",
+      "network": "test_ollama_network.yaml"
+    }
+  }
+}

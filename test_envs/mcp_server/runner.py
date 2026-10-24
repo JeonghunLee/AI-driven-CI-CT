@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -24,7 +25,7 @@ CoverageMode = Literal["none", "terminal", "html"]
 PandocFormat = Literal["none", "docx", "html", "both"]
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_OLLAMA_TEST_PLAN_PATH = ROOT / "test_envs" / "configs" / "test_ollama.yaml"
+DEFAULT_OLLAMA_TEST_CONFIG_PATH = ROOT / "test_envs" / "configs" / "test_config.json"
 UNITTEST_SCOPES = {
     "all": "test_envs/tests/unittest",
     "ct_framework_python": "test_envs/tests/unittest/ct_framework/python",
@@ -88,9 +89,9 @@ def all_test_lists() -> dict[str, object]:
     }
 
 
-def ollama_test_plan() -> dict[str, Any]:
-    """Load and validate the Ollama MCP test plan without executing it."""
-    path = ollama_test_plan_path()
+def ollama_test_plan(command: str = "") -> dict[str, Any]:
+    """Load a command-selected Ollama MCP test rule without executing it."""
+    path = ollama_test_plan_path(command)
     try:
         raw = yaml.safe_load(path.read_text(encoding="utf-8"))
     except (OSError, yaml.YAMLError) as error:
@@ -100,22 +101,71 @@ def ollama_test_plan() -> dict[str, Any]:
     return _validate_ollama_test_plan(raw)
 
 
-def ollama_test_plan_path() -> Path:
-    configured = os.getenv("OLLAMA_TEST_PLAN", "").strip()
+def ollama_test_config_path() -> Path:
+    configured = os.getenv("OLLAMA_TEST_CONFIG", "").strip()
     if not configured:
-        return DEFAULT_OLLAMA_TEST_PLAN_PATH
+        return DEFAULT_OLLAMA_TEST_CONFIG_PATH
     path = Path(configured)
     return path if path.is_absolute() else ROOT / path
 
 
-def run_ollama_test_plan() -> dict[str, object]:
-    """Execute the allowlisted test and report workflow defined in test_ollama.yaml."""
-    plan = ollama_test_plan()
+def ollama_test_rules() -> dict[str, object]:
+    path = ollama_test_config_path()
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError(f"Invalid Ollama test configuration: {path}: {error}") from error
+    if not isinstance(raw, dict) or raw.get("version") != 1:
+        raise RuntimeError("Invalid Ollama test configuration: version must be 1")
+    ollama = raw.get("ollama")
+    if not isinstance(ollama, dict):
+        raise RuntimeError("Invalid Ollama test configuration: ollama must be a mapping")
+    commands = ollama.get("commands")
+    default_command = ollama.get("default_command")
+    rules_directory = ollama.get("rules_directory")
+    if (
+        not isinstance(commands, dict)
+        or not all(isinstance(key, str) and isinstance(value, str) for key, value in commands.items())
+        or not isinstance(default_command, str)
+        or default_command not in commands
+        or not isinstance(rules_directory, str)
+        or not rules_directory
+    ):
+        raise RuntimeError("Invalid Ollama test configuration: commands, default_command, and rules_directory are required")
+    return {
+        "default_command": default_command,
+        "rules_directory": rules_directory,
+        "commands": commands,
+    }
+
+
+def ollama_test_plan_path(command: str = "") -> Path:
+    rules = ollama_test_rules()
+    commands = rules["commands"]
+    if not isinstance(commands, dict):
+        raise RuntimeError("Invalid Ollama test configuration: commands must be a mapping")
+    default_command = rules["default_command"]
+    requested = command.strip().lower() or default_command
+    rule_name = commands.get(requested)
+    if not isinstance(rule_name, str):
+        raise ValueError(f"Ollama test command must be one of: {', '.join(sorted(commands))}")
+    if Path(rule_name).name != rule_name or Path(rule_name).suffix not in {".yaml", ".yml"}:
+        raise RuntimeError("Invalid Ollama test configuration: rule file must be a YAML filename")
+    rules_root = (ollama_test_config_path().parent / str(rules["rules_directory"])).resolve()
+    candidate = (rules_root / rule_name).resolve()
+    if rules_root not in candidate.parents:
+        raise RuntimeError("Invalid Ollama test configuration: rule must remain inside rules_directory")
+    return candidate
+
+
+def run_ollama_test_plan(command: str = "") -> dict[str, object]:
+    """Execute the allowlisted test and report workflow selected by test_config.json."""
+    plan = ollama_test_plan(command)
     ollama = build_check().get("ollama", {})
     if not isinstance(ollama, dict) or not ollama.get("available") or not ollama.get("selected_model_installed"):
-        raise RuntimeError("Ollama must be available with the selected model before running test_ollama.yaml")
+        raise RuntimeError("Ollama must be available with the selected model before running the selected test rule")
     if plan["agent"]["model"] != ollama.get("selected_model"):
-        raise RuntimeError("test_ollama.yaml agent.model must match config_ollama.json selected_model")
+        raise RuntimeError("Selected Ollama test rule agent.model must match config_ollama.json selected_model")
 
     selection = plan["selection"]
     reports = plan["reports"]
@@ -154,7 +204,8 @@ def run_ollama_test_plan() -> dict[str, object]:
             )
         )
     return {
-        "plan_path": _relative(ollama_test_plan_path()),
+        "command": command.strip().lower() or str(ollama_test_rules()["default_command"]),
+        "plan_path": _relative(ollama_test_plan_path(command)),
         "ollama_model": ollama.get("selected_model"),
         "selection": selection,
         "results": results,
@@ -180,7 +231,11 @@ def test_environment() -> dict[str, object]:
         "transport": "stdio",
         "pytest_hil_allow": _enabled("PYTEST_HIL_ALLOW"),
         "mkdoc_update": _enabled("MKDOC_UPDATE"),
-        "ollama_test_plan": _relative(ollama_test_plan_path()),
+        "ollama_test_config": _relative(ollama_test_config_path()),
+        "ollama_test_rules": {
+            name: _relative(ollama_test_plan_path(name))
+            for name in ollama_test_rules()["commands"]
+        },
     }
     return check
 

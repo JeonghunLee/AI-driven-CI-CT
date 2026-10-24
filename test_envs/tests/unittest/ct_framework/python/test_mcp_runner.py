@@ -10,6 +10,8 @@ from test_envs.mcp_server.runner import (
     _pytest_command,
     all_test_lists,
     ollama_test_plan,
+    ollama_test_plan_path,
+    ollama_test_rules,
     pytest_test_list,
     run_test,
     unittest_test_list,
@@ -79,6 +81,14 @@ class MCPRunnerTests(unittest.TestCase):
         self.assertEqual(plan["selection"]["unittest"]["scopes"], ["ct_framework_python"])
         self.assertTrue(plan["reports"]["markdown"])
         self.assertEqual(plan["reports"]["pandoc"], "both")
+
+    def test_ollama_test_config_selects_registered_rules(self) -> None:
+        rules = ollama_test_rules()
+        self.assertEqual(rules["default_command"], "default")
+        self.assertEqual(ollama_test_plan("usb")["selection"]["pytest"]["test_ids"], ["CT-USB-001"])
+        self.assertEqual(ollama_test_plan_path("network").name, "test_ollama_network.yaml")
+        with self.assertRaisesRegex(ValueError, "Ollama test command"):
+            ollama_test_plan("unknown")
 
 
 class MCPServerContractTests(unittest.IsolatedAsyncioTestCase):

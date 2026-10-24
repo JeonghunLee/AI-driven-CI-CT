@@ -1,0 +1,22 @@
+version: 1
+
+agent:
+  provider: ollama
+  model: deepseek-r1:7b
+
+selection:
+  pytest:
+    mode: selected
+    test_ids: [CT-USB-001]
+    fixture_mode: mock
+  unittest:
+    mode: selected
+    scopes: [ct_framework_python]
+
+reports:
+  markdown: true
+  pandoc: both
+
+execution:
+  coverage: none
+  timeout_seconds: 3600

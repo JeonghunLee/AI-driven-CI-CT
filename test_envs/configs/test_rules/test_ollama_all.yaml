@@ -1,0 +1,23 @@
+version: 1
+
+# Run every cataloged Pytest CT and the complete Unittest suite.
+agent:
+  provider: ollama
+  model: deepseek-r1:7b
+
+selection:
+  pytest:
+    mode: all
+    test_ids: []
+    fixture_mode: mock
+  unittest:
+    mode: all
+    scopes: []
+
+reports:
+  markdown: true
+  pandoc: both
+
+execution:
+  coverage: none
+  timeout_seconds: 3600

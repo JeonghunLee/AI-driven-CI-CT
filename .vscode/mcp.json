@@ -12,7 +12,7 @@
         "TEST_NAME": "local_01",
         "PYTEST_HIL_ALLOW": "false",
         "MKDOC_UPDATE": "false",
-        "OLLAMA_TEST_PLAN": "${workspaceFolder}/test_envs/configs/test_ollama.yaml"
+        "OLLAMA_TEST_CONFIG": "${workspaceFolder}/test_envs/configs/test_config.json"
       }
     }
   }
