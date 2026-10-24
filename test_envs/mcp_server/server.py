@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import base64
+from pathlib import Path
 from typing import Literal
 
 from mcp.server import MCPServer
+from mcp.types import Icon
 
 from test_envs.mcp_server.runner import (
     TestRequest,
@@ -17,8 +20,21 @@ from test_envs.mcp_server.runner import (
 )
 
 
+ROOT = Path(__file__).resolve().parents[2]
+SERVER_ICON = ROOT / "docx" / "imgs" / "logo.jpg"
+SERVER_ICON_DATA_URI = "data:image/jpeg;base64," + base64.b64encode(SERVER_ICON.read_bytes()).decode("ascii")
+
+
 mcp = MCPServer(
     "AI-driven CI-CT",
+    title="AI-driven CI/CT MCP Server",
+    icons=[
+        Icon(
+            src=SERVER_ICON_DATA_URI,
+            mimeType="image/jpeg",
+            sizes=["190x190"],
+        )
+    ],
     instructions=(
         "Inspect the environment and allowlisted tests before execution. "
         "Pytest HIL requires PYTEST_HIL_ALLOW=true. MkDocs publication requires MKDOC_UPDATE=true."

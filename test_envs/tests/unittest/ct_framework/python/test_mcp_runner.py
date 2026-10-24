@@ -73,6 +73,13 @@ class MCPRunnerTests(unittest.TestCase):
 
 
 class MCPServerContractTests(unittest.IsolatedAsyncioTestCase):
+    def test_server_advertises_the_workspace_logo(self) -> None:
+        initialization = mcp._lowlevel_server.create_initialization_options()
+
+        self.assertEqual(initialization.title, "AI-driven CI/CT MCP Server")
+        self.assertEqual(initialization.icons[0].mime_type, "image/jpeg")
+        self.assertTrue(initialization.icons[0].src.startswith("data:image/jpeg;base64,"))
+
     async def test_client_discovers_and_calls_test_inventory(self) -> None:
         async with Client(mcp) as client:
             tools = await client.list_tools()
