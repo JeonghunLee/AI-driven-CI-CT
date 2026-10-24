@@ -871,7 +871,7 @@
 <h2 id="architecture">Architecture</h2>
 <pre class="mermaid"><code>flowchart TD
     A[VS Extension Testing or pytest command] --&gt; B[pytest adapter]
-    B --&gt; C[test_envs/tests/unittest]
+    B --&gt; C[test_programs/unittest]
     C --&gt; D[Function-level reports]
     D --&gt; E[unittest conftest hooks]
     E --&gt; F[Execution Result JSON]
@@ -882,7 +882,7 @@
 <p>The unittest branch does not call Ollama, create a Local LLM log, add <code>test_analysis</code>, or evaluate Codex escalation.</p>
 <p><br/></p>
 <h2 id="repository-structure">Repository Structure</h2>
-<div class="highlight"><pre><span></span><code>test_envs/tests/unittest/
+<div class="highlight"><pre><span></span><code>test_programs/unittest/
 ├── conftest.py
 ├── ct_framework/
 │   └── python/
@@ -949,7 +949,7 @@
 <h2 id="execution">Execution</h2>
 <p><br/></p>
 <h3 id="project-command">Project command</h3>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">unittest</span>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">unittest</span>
 </code></pre></div>
 <p><br/></p>
 <h3 id="vs-code-testing">VS Code Testing</h3>
@@ -967,7 +967,7 @@
 </tr>
 <tr>
 <td>Discovery root</td>
-<td><code>test_envs/tests/unittest</code></td>
+<td><code>test_programs/unittest</code></td>
 </tr>
 <tr>
 <td>Native unittest adapter</td>
@@ -975,7 +975,7 @@
 </tr>
 <tr>
 <td>Result capture</td>
-<td><code>test_envs/tests/unittest/conftest.py</code></td>
+<td><code>test_programs/unittest/conftest.py</code></td>
 </tr>
 </tbody>
 </table>
@@ -987,7 +987,7 @@
         ↓
 `test_envs.tool_github.issue_parser` selects Unittest scope and runner
         ↓
-pytest test_envs/tests/unittest
+pytest test_programs/unittest
         ↓
 unittest conftest session result
         ↓
@@ -998,10 +998,10 @@ Markdown + Issue comment + uploaded evidence
 <p>The unified workflow uses the unittest pytest hook as the single result-capture path. It does not run Local LLM analysis for the resulting <code>category: unit</code> record.</p>
 <p><br/></p>
 <h2 id="result-capture-lifecycle">Result Capture Lifecycle</h2>
-<p>Source: <code>test_envs/tests/unittest/conftest.py</code></p>
+<p>Source: <code>test_programs/unittest/conftest.py</code></p>
 <p><br/></p>
 <h3 id="function-capture">Function capture</h3>
-<p>The <code>pytest_runtest_logreport</code> hook accepts only node IDs under <code>test_envs/tests/unittest/</code>. Results are stored by full pytest node ID and written in sorted order when the session finishes.</p>
+<p>The <code>pytest_runtest_logreport</code> hook accepts only node IDs under <code>test_programs/unittest/</code>. Results are stored by full pytest node ID and written in sorted order when the session finishes.</p>
 <table>
 <thead>
 <tr>

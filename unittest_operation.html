@@ -571,7 +571,7 @@
 </tr>
 <tr>
 <td>Result capture</td>
-<td><code>test_envs/tests/unittest/conftest.py</code></td>
+<td><code>test_programs/unittest/conftest.py</code></td>
 </tr>
 <tr>
 <td>Local LLM</td>
@@ -607,7 +607,7 @@ Write Result JSON and Result Log
 <tbody>
 <tr>
 <td style="text-align: right;">1</td>
-<td>The pytest adapter collects tests under <code>test_envs/tests/unittest</code></td>
+<td>The pytest adapter collects tests under <code>test_programs/unittest</code></td>
 </tr>
 <tr>
 <td style="text-align: right;">2</td>
@@ -634,12 +634,12 @@ Write Result JSON and Result Log
 <p><br/></p>
 <p>Run the complete Unittest area:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">unittest</span>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">unittest</span>
 </code></pre></div>
 <p><br/></p>
 <p>Run one test file:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">unittest</span><span class="p">/</span><span class="n">ct_framework</span><span class="p">/</span><span class="n">python</span><span class="p">/</span><span class="n">test_configuration</span><span class="p">.</span><span class="n">py</span>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">unittest</span><span class="p">/</span><span class="n">ct_framework</span><span class="p">/</span><span class="n">python</span><span class="p">/</span><span class="n">test_configuration</span><span class="p">.</span><span class="n">py</span>
 </code></pre></div>
 <p><br/></p>
 <p>VS Code Testing also discovers these tests through the pytest adapter. Native VS Code unittest discovery remains disabled to prevent duplicate nodes.</p>
@@ -648,7 +648,7 @@ Write Result JSON and Result Log
 <p><br/></p>
 <p>Run Unittest and print missing Python lines:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">unittest</span> <span class="p">-</span><span class="n">-cov</span><span class="p">=</span><span class="n">test_envs</span> <span class="p">-</span><span class="n">-cov-report</span><span class="p">=</span><span class="n">term-missing</span>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">unittest</span> <span class="p">-</span><span class="n">-cov</span><span class="p">=</span><span class="n">test_envs</span> <span class="p">-</span><span class="n">-cov-report</span><span class="p">=</span><span class="n">term-missing</span>
 </code></pre></div>
 <p><br/></p>
 <p><code>pytest-cov</code> stores coverage data in <code>.coverage</code>. Add <code>--cov-report=html</code> to generate an HTML report under <code>htmlcov/</code>.</p>

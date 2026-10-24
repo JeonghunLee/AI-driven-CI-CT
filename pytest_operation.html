@@ -575,7 +575,7 @@
 </tr>
 <tr>
 <td>Result capture</td>
-<td><code>test_envs/tests/pytest/conftest.py</code></td>
+<td><code>test_programs/pytest/conftest.py</code></td>
 </tr>
 <tr>
 <td>Local LLM</td>
@@ -623,7 +623,7 @@ Write Result JSON and Test Log
 </tr>
 <tr>
 <td style="text-align: right;">2</td>
-<td>Pytest collects <code>test_envs/tests/pytest/test_cases</code></td>
+<td>Pytest collects <code>test_programs/pytest/test_cases</code></td>
 </tr>
 <tr>
 <td style="text-align: right;">3</td>
@@ -667,17 +667,17 @@ Write Result JSON and Test Log
 <p><br/></p>
 <p>Run all CT Test Cases with their marker modes:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">marker</span>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">marker</span>
 </code></pre></div>
 <p><br/></p>
 <p>Force Mock mode:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">mock</span>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">mock</span>
 </code></pre></div>
 <p><br/></p>
 <p>Run one TEST ID:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-test-id</span> <span class="n">CT-UART</span><span class="p">-</span><span class="n">001</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">mock</span>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-test-id</span> <span class="n">CT-UART</span><span class="p">-</span><span class="n">001</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">mock</span>
 </code></pre></div>
 <p><br/></p>
 <p>The current executable CT Test Cases use Mock implementations. Selecting HIL fails explicitly where a physical Fixture implementation has not been completed.</p>
@@ -686,7 +686,7 @@ Write Result JSON and Test Log
 <p><br/></p>
 <p>Run CT Test Cases and print missing Python lines:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">mock</span> <span class="p">-</span><span class="n">-cov</span><span class="p">=</span><span class="n">test_envs</span> <span class="p">-</span><span class="n">-cov-report</span><span class="p">=</span><span class="n">term-missing</span>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">pytest</span><span class="p">/</span><span class="n">test_cases</span> <span class="p">-</span><span class="n">-fixture-mode</span><span class="p">=</span><span class="n">mock</span> <span class="p">-</span><span class="n">-cov</span><span class="p">=</span><span class="n">test_envs</span> <span class="p">-</span><span class="n">-cov-report</span><span class="p">=</span><span class="n">term-missing</span>
 </code></pre></div>
 <p><br/></p>
 <p><code>pytest-cov</code> stores coverage data in <code>.coverage</code>. Add <code>--cov-report=html</code> when an HTML report under <code>htmlcov/</code> is needed.</p>

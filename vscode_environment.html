@@ -322,6 +322,15 @@
 </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#tasks-ai-agent">
+<span class="md-ellipsis">
+      
+        Tasks-AI Agent
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#tasks-report">
 <span class="md-ellipsis">
       
@@ -745,6 +754,15 @@
 </a>
 </li>
 <li class="md-nav__item">
+<a class="md-nav__link" href="#tasks-ai-agent">
+<span class="md-ellipsis">
+      
+        Tasks-AI Agent
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#tasks-report">
 <span class="md-ellipsis">
       
@@ -929,8 +947,8 @@ Connected VS Code features: <a href="#testing">Testing</a> and <a href="#python-
 <span class="w">  </span><span class="nt">"python.testing.pytestArgs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">    </span><span class="s2">"-p"</span><span class="p">,</span>
 <span class="w">    </span><span class="s2">"no:cacheprovider"</span><span class="p">,</span>
-<span class="w">    </span><span class="s2">"test_envs/tests/pytest"</span><span class="p">,</span>
-<span class="w">    </span><span class="s2">"test_envs/tests/unittest"</span>
+<span class="w">    </span><span class="s2">"test_programs/pytest"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"test_programs/unittest"</span>
 <span class="w">  </span><span class="p">],</span>
 <span class="w">  </span><span class="nt">"python.testing.cwd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${workspaceFolder}"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"python.testing.autoTestDiscoverOnSaveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
@@ -1110,7 +1128,7 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
                 "pytest",
                 "-p",
                 "no:cacheprovider",
-                "test_envs/tests/pytest/test_cases",
+                "test_programs/pytest/test_cases",
                 "--fixture-mode",
                 "${input:fixtureMode}"
             ],
@@ -1129,7 +1147,7 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
                 "pytest",
                 "-p",
                 "no:cacheprovider",
-                "test_envs/tests/pytest/test_cases",
+                "test_programs/pytest/test_cases",
                 "--test-id",
                 "${input:testCaseId}",
                 "--fixture-mode",
@@ -1141,11 +1159,43 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
             },
             "problemMatcher": []
         },
+        {
+            "label": "TEST AI Agent: Ollama MCP Workflow",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.mcp_server.ollama_workflow",
+                "--command",
+                "${input:ollamaTestCommand}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
         // Report Task Section
         // This section contains tasks for generating and converting test reports.
         // Each task is labeled with a "REPORT" prefix for easy identification.
         {
-            "label": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
+            "label": "REPORT-Mkdocs: Generate Latest Markdown",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.tools.test_result",
+                "--docs"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "REPORT-Mkdocs: Generate Pending Markdown (All)",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -1154,6 +1204,11 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
                 "--pending",
                 "--docs"
             ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
             "problemMatcher": []
         },
         {
@@ -1247,8 +1302,8 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
     // End of tasks array
     // End of tasks section
 
-    // Inputs section (Test case and fixture mode inputs)
-    // "TEST CASE: TEST ID", and "TEST CASE: ALL"
+    // Inputs for TEST CASE Tasks and the Ollama MCP workflow Task
+    // "TEST CASE: TEST ID", "TEST CASE: ALL", and "TEST AI Agent: Ollama MCP Workflow"
     "inputs": [
         {
             "id": "testCaseId",
@@ -1271,6 +1326,19 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
                 "hil"
             ],
             "default": "marker"
+        },
+        {
+            "id": "ollamaTestCommand",
+            "type": "pickString",
+            "description": "Ollama MCP test rule",
+            "options": [
+                "default",
+                "all",
+                "uart",
+                "usb",
+                "network"
+            ],
+            "default": "default"
         }
     ]
 }
@@ -1372,12 +1440,12 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
     },
     // Reporting Section (Mkdocs Markdown and Pandoc(HTML/DOCX))
     {
-      "name": "REPORT-Mkdocs: Generate Markdown to Pytest/Unittest",
+      "name": "REPORT-Mkdocs: Generate Latest Markdown",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
       "module": "test_envs.tools.test_result",
-      "args": ["--pending", "--docs"],
+      "args": ["--docs"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}",
       "justMyCode": true
@@ -1512,9 +1580,9 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 </thead>
 <tbody>
 <tr>
-<td><code>REPORT-Mkdocs: Generate Markdown to Pytest/Unittest</code></td>
-<td><code>test_envs.tools.test_result --pending --docs</code></td>
-<td>Generates pending Pytest and Unittest Markdown and publishes MkDocs result pages</td>
+<td><code>REPORT-Mkdocs: Generate Latest Markdown</code></td>
+<td><code>test_envs.tools.test_result --docs</code></td>
+<td>Generates and publishes only the latest Pytest or Unittest result for fast feedback</td>
 <td><a href="#tasks-report">Tasks-Report</a></td>
 </tr>
 <tr>
@@ -1648,7 +1716,29 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 </tbody>
 </table>
 <p><br/></p>
-<p>Both Tasks disable the pytest cache provider and execute <code>test_envs/tests/pytest/test_cases</code>.</p>
+<p>Both Tasks disable the pytest cache provider and execute <code>test_programs/pytest/test_cases</code>.</p>
+<p><br/></p>
+<h3 id="tasks-ai-agent">Tasks-AI Agent</h3>
+<p><br/></p>
+<table>
+<thead>
+<tr>
+<th>Task label</th>
+<th>Entry point</th>
+<th>Command input</th>
+<th>Execution flow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TEST AI Agent: Ollama MCP Workflow</code></td>
+<td><code>test_envs.mcp_server.ollama_workflow</code></td>
+<td><code>${input:ollamaTestCommand}</code></td>
+<td>Resolves the registered rule from <code>test_config.json</code>, runs allowlisted Pytest and Unittest targets, then creates Markdown and Pandoc DOCX/HTML reports</td>
+</tr>
+</tbody>
+</table>
+<p>The Task prints progress for each selected Pytest TEST ID and Unittest scope. <code>all</code> runs every cataloged Pytest TEST ID and the complete Unittest scope; <code>default</code>, <code>uart</code>, <code>usb</code>, and <code>network</code> use their mapped YAML rules under <code>test_envs/configs/test_rules</code>.</p>
 <p><br/></p>
 <h3 id="tasks-report">Tasks-Report</h3>
 <p><br/></p>
@@ -1662,9 +1752,14 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 </thead>
 <tbody>
 <tr>
-<td><code>REPORT-Mkdocs: Generate Markdown to Pytest/Unittest</code></td>
+<td><code>REPORT-Mkdocs: Generate Latest Markdown</code></td>
+<td><code>test_envs.tools.test_result --docs</code></td>
+<td>Generates and publishes only the latest report for fast feedback</td>
+</tr>
+<tr>
+<td><code>REPORT-Mkdocs: Generate Pending Markdown (All)</code></td>
 <td><code>test_envs.tools.test_result --pending --docs</code></td>
-<td>Generates missing Markdown and publishes MkDocs pages</td>
+<td>Processes every missing report; use for bulk backfill rather than normal test execution</td>
 </tr>
 <tr>
 <td><code>REPORT-Pandoc: Convert Latest Markdown to HTML</code></td>
@@ -1748,6 +1843,13 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <td><code>marker</code></td>
 <td>Both TEST CASE Tasks</td>
 </tr>
+<tr>
+<td><code>ollamaTestCommand</code></td>
+<td><code>pickString</code></td>
+<td><code>default</code>, <code>all</code>, <code>uart</code>, <code>usb</code>, <code>network</code></td>
+<td><code>default</code></td>
+<td><code>TEST AI Agent: Ollama MCP Workflow</code></td>
+</tr>
 </tbody>
 </table>
 <p>OS selection is not a Task or launch input. It is managed by <code>test_envs/configs/config_env.json</code> through the Setup 1 command.</p>
@@ -1771,9 +1873,9 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <div class="highlight"><pre><span></span><code>VS Code Testing
 └── Microsoft Python extension
     └── pytest adapter
-        ├── test_envs/tests/pytest
+        ├── test_programs/pytest
         │   └── CT test cases: mock or hil
-        └── test_envs/tests/unittest
+        └── test_programs/unittest
             └── unittest.TestCase collected by pytest
 </code></pre></div>
 <p><br/></p>
@@ -1799,11 +1901,11 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 </tr>
 <tr>
 <td>CT root</td>
-<td><code>test_envs/tests/pytest</code></td>
+<td><code>test_programs/pytest</code></td>
 </tr>
 <tr>
 <td>unittest root</td>
-<td><code>test_envs/tests/unittest</code></td>
+<td><code>test_programs/unittest</code></td>
 </tr>
 <tr>
 <td>File pattern</td>
@@ -1886,7 +1988,7 @@ Build the unified Testing tree
 </tr>
 </tbody>
 </table>
-<p>The Testing panel supports running or debugging the full tree, a folder, a module, a class, or one test function. CT normalization is handled by <code>test_envs/tests/pytest/conftest.py</code>; unittest normalization is handled by <code>test_envs/tests/unittest/conftest.py</code>.</p>
+<p>The Testing panel supports running or debugging the full tree, a folder, a module, a class, or one test function. CT normalization is handled by <code>test_programs/pytest/conftest.py</code>; unittest normalization is handled by <code>test_programs/unittest/conftest.py</code>.</p>
 <p><br/></p>
 <h3 id="discovery-troubleshooting">Discovery troubleshooting</h3>
 <p><br/></p>

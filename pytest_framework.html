@@ -899,34 +899,34 @@ Every pytest CT execution resolves to one of two modes: <code>mock</code> or <co
 <tbody>
 <tr>
 <td>Test case</td>
-<td><code>test_envs/tests/pytest/test_cases/</code></td>
+<td><code>test_programs/pytest/test_cases/</code></td>
 <td>Scenario, assertions, CT marker, metrics/statistics</td>
 </tr>
 <tr>
 <td>Fixture composition</td>
-<td><code>test_envs/tests/pytest/fixtures/</code></td>
+<td><code>test_programs/pytest/fixtures/</code></td>
 <td>Tool selection, connection lifecycle, supported modes</td>
 </tr>
 <tr>
 <td>DUT interface</td>
-<td><code>test_envs/tests/pytest/test_interfaces/</code></td>
+<td><code>test_programs/pytest/test_interfaces/</code></td>
 <td><code>connect</code>, <code>disconnect</code>, <code>read</code>, <code>write</code>, <code>execute</code></td>
 </tr>
 <tr>
 <td>Test equipment</td>
-<td><code>test_envs/tests/pytest/test_equipments/</code></td>
+<td><code>test_programs/pytest/test_equipments/</code></td>
 <td>Measurement or DUT control</td>
 </tr>
 <tr>
 <td>Framework hooks</td>
-<td><code>test_envs/tests/pytest/conftest.py</code></td>
+<td><code>test_programs/pytest/conftest.py</code></td>
 <td>Registry, validation, selection, result/log generation</td>
 </tr>
 </tbody>
 </table>
 <h2 id="repository-structure">Repository Structure</h2>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code>test_envs/tests/
+<div class="highlight"><pre><span></span><code>test_programs/
 ├── pytest/                       # CT execution mode: mock or hil
 │   ├── test_cases/
 │   │   ├── test_fixture_001_uart_timing.py
@@ -1107,7 +1107,7 @@ but there are no matching <code>test_fixture_004_*.py</code> or <code>test_fixtu
 <p><br/></p>
 <h2 id="generated-test-catalog">Generated Test Catalog</h2>
 <p><br/></p>
-<p><code>test_envs.tests.pytest.test_cases</code> Python files are the registration source. The catalog generator reads their <code>@pytest.mark.ct</code> decorators with Python AST; it does not import or execute the test modules.</p>
+<p><code>test_programs.pytest.test_cases</code> Python files are the registration source. The catalog generator reads their <code>@pytest.mark.ct</code> decorators with Python AST; it does not import or execute the test modules.</p>
 <div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">test_envs</span><span class="p">.</span><span class="n">tools</span><span class="p">.</span><span class="n">test_catalog</span>
 </code></pre></div>
 <p><br/></p>
@@ -1121,7 +1121,7 @@ but there are no matching <code>test_fixture_004_*.py</code> or <code>test_fixtu
 <tbody>
 <tr>
 <td>Generated file</td>
-<td><code>test_envs/tests/pytest/test_cases/test_catalog.json</code></td>
+<td><code>test_programs/pytest/test_cases/test_catalog.json</code></td>
 </tr>
 <tr>
 <td>Fields</td>
@@ -1367,7 +1367,7 @@ Registry validation therefore applies even to fixture scaffolds that do not yet 
 <p><br/></p>
 <p>A future Wireshark CT extension can use this structure:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code>test_envs/tests/pytest/
+<div class="highlight"><pre><span></span><code>test_programs/pytest/
 ├── test_equipments/wireshark/{mock,hil}/
 ├── fixtures/fixture_006_network_wireshark.py
 └── test_cases/test_fixture_006_network_capture.py
@@ -1551,7 +1551,7 @@ It is used only for result fields such as <code>equipment_mode</code> when a fix
 <li>
 <p>pytest.ini
 <div class="highlight"><pre><span></span><code>[pytest]
-testpaths = test_envs/tests
+testpaths = test_programs
 python_files = test_*.py
 addopts = -ra
 markers =
@@ -1569,18 +1569,18 @@ Python Command Examples in venv   </p>
 <div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span>
 </code></pre></div></p>
 <p>pytest CT area only
-<div class="highlight"><pre><span></span><code>.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest -m ct -s
+<div class="highlight"><pre><span></span><code>.\.venv\Scripts\python.exe -m pytest test_programs/pytest -m ct -s
 </code></pre></div>
 Keep each test marker's default mode
-<div class="highlight"><pre><span></span><code>.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=marker
+<div class="highlight"><pre><span></span><code>.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --fixture-mode=marker
 </code></pre></div></p>
 <p>Force Mock mode
-<div class="highlight"><pre><span></span><code>.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=mock
+<div class="highlight"><pre><span></span><code>.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --fixture-mode=mock
 </code></pre></div></p>
 <p><strong>Select one TEST ID</strong> <br/>
 VSCode -&gt; Task <br/>
 VSCode -&gt; Testing
-<div class="highlight"><pre><span></span><code>.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --test-id CT-UART-001 --fixture-mode=mock
+<div class="highlight"><pre><span></span><code>.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --test-id CT-UART-001 --fixture-mode=mock
 </code></pre></div></p>
 <p><br/></p>
 <p>For the current three CT test cases,  <br/>
@@ -1598,7 +1598,7 @@ forcing <code>--fixture-mode=hil</code> fails with an explicit “HIL implementa
 <tbody>
 <tr>
 <td>Testing path</td>
-<td><code>test_envs/tests/pytest</code></td>
+<td><code>test_programs/pytest</code></td>
 </tr>
 <tr>
 <td>Debug configuration</td>

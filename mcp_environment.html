@@ -672,18 +672,20 @@
 <p><br/></p>
 <p>Set a unique <code>TEST_NAME</code> such as <code>local_01</code>, <code>local_02</code>, or <code>hil_lab_01</code> for each installed test server. Results created through this server record <code>test_request</code> as <code>mcp</code>.</p>
 <p><code>OLLAMA_TEST_CONFIG</code> selects <code>test_config.json</code>, which maps commands such as <code>default</code>, <code>all</code>, <code>uart</code>, <code>usb</code>, and <code>network</code> to YAML files under <code>test_rules/</code>. An AI Agent passes the command to <code>get_ollama_test_plan</code> or <code>run_ollama_test_workflow</code>; the MCP server rejects unregistered commands and any YAML target outside <code>test_rules/</code>.</p>
+<p>VS Code exposes the same execution path as the <code>TEST AI Agent: Ollama MCP Workflow</code> task. Its picker supplies a registered command to <code>python -m test_envs.mcp_server.ollama_workflow --command &lt;command&gt;</code>.</p>
+<p>The CLI and VS Code Task print progress for each selected Pytest TEST ID and Unittest scope, including completion status and report generation. The MCP tool response remains structured and returns the same final result paths.</p>
 <p><br/></p>
 <h2 id="connection-test">Connection Test</h2>
 <p><br/></p>
 <p>Run the protocol contract tests without starting a child process:</p>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">unittest</span><span class="p">/</span><span class="n">ct_framework</span><span class="p">/</span><span class="n">python</span><span class="p">/</span><span class="n">test_mcp_runner</span><span class="p">.</span><span class="n">py</span> <span class="n">-k</span> <span class="s2">"not stdio"</span> <span class="n">-vv</span>
+<div class="highlight"><pre><span></span><code><span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">unittest</span><span class="p">/</span><span class="n">ct_framework</span><span class="p">/</span><span class="n">python</span><span class="p">/</span><span class="n">test_mcp_runner</span><span class="p">.</span><span class="n">py</span> <span class="n">-k</span> <span class="s2">"not stdio"</span> <span class="n">-vv</span>
 </code></pre></div>
 <p><br/></p>
 <p>Run the optional integration test that launches the server as an external <code>stdio</code> process:</p>
 <p><br/></p>
 <div class="highlight"><pre><span></span><code><span class="nv">$env:AI_CT_RUN_STDIO_TEST</span> <span class="p">=</span> <span class="s2">"true"</span>
-<span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_envs</span><span class="p">/</span><span class="n">tests</span><span class="p">/</span><span class="n">unittest</span><span class="p">/</span><span class="n">ct_framework</span><span class="p">/</span><span class="n">python</span><span class="p">/</span><span class="n">test_mcp_runner</span><span class="p">.</span><span class="n">py</span> <span class="n">-k</span> <span class="n">stdio</span> <span class="n">-vv</span>
+<span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">python</span><span class="p">.</span><span class="n">exe</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">-p</span> <span class="n">no</span><span class="p">:</span><span class="n">cacheprovider</span> <span class="n">test_programs</span><span class="p">/</span><span class="n">unittest</span><span class="p">/</span><span class="n">ct_framework</span><span class="p">/</span><span class="n">python</span><span class="p">/</span><span class="n">test_mcp_runner</span><span class="p">.</span><span class="n">py</span> <span class="n">-k</span> <span class="n">stdio</span> <span class="n">-vv</span>
 </code></pre></div>
 <p><br/></p>
 <h2 id="result-flow">Result Flow</h2>
@@ -700,7 +702,7 @@
     SERVER --&gt; RESPONSE[Structured MCP Result]</code></pre>
 <p><br/></p>
 <p><code>markdown</code> generates the canonical Markdown report. <code>update_mkdocs</code> separately copies that generated Markdown into <code>docs/tests</code>. Pandoc DOCX uses <code>docx/reference/reference.docx</code>.</p>
-<p>The MCP Pytest allowlist is loaded from <code>test_envs/tests/pytest/test_cases/test_catalog.json</code>. Adding a Python CT case therefore requires no MCP source-code edit; run <code>python -m test_envs.tools.test_catalog</code> to register it.</p>
+<p>The MCP Pytest allowlist is loaded from <code>test_programs/pytest/test_cases/test_catalog.json</code>. Adding a Python CT case therefore requires no MCP source-code edit; run <code>python -m test_envs.tools.test_catalog</code> to register it.</p>
 <p><br/></p>
 <p>Local MCP remains an independent external test-control path. GitHub Issue Forms do not select Local MCP; Issue automation belongs to GitHub-hosted or GitHub Self-hosted runners.</p>
 <p><br/></p>
