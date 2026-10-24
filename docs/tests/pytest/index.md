@@ -15,9 +15,9 @@ Find **Test ID** History for the test results below .
 
 | Category | Test ID | Mode | Latest | Execution Count |
 |---|---|---|---|---:|
-| communication | [`CT-NETWORK-001`](CT-NETWORK-001.md) | mock | 2026-10-24 | 97 |
-| timing | [`CT-UART-001`](CT-UART-001.md) | mock | 2026-10-24 | 105 |
-| unknown | [`CT-USB-001`](CT-USB-001.md) | unknown | unknown | 93 |
+| communication | [`CT-NETWORK-001`](CT-NETWORK-001.md) | mock | 2026-10-25 | 97 |
+| timing | [`CT-UART-001`](CT-UART-001.md) | mock | 2026-10-25 | 105 |
+| communication | [`CT-USB-001`](CT-USB-001.md) | mock | 2026-10-25 | 93 |
 
 ## Recent Executions
 
