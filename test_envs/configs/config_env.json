@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "os": "auto",
+  "time": {
+    "timezone": "Asia/Seoul",
+    "utc_offset_hours": 9
+  }
+}

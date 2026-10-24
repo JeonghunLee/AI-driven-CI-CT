@@ -166,7 +166,7 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
         // This section contains tasks for checking the environment and running the Ollama server.
         // Each task is labeled with a "CHECK" prefix for easy identification.
         {
-            "label": "CHECK 1: Refresh Environment Check File",
+            "label": "CHECK 1: Refresh Environment Check Files",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -454,13 +454,13 @@ Connected VS Code feature: [Run and Debug](#run-and-debug)
       "justMyCode": true
     },
     {
-      "name": "CHECK 1: Refresh Environment Check File",
+      "name": "CHECK 1: Refresh Environment Check Files",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
       "module": "test_envs.tools.configuration",
       "args": ["config"],
-      "preLaunchTask": "CHECK 1: Refresh Environment Check File",
+      "preLaunchTask": "CHECK 1: Refresh Environment Check Files",
       "console": "internalConsole",
       "internalConsoleOptions": "neverOpen",
       "cwd": "${workspaceFolder}",
@@ -551,7 +551,7 @@ Source: `.vscode/launch.json`
 | `SETUP 1: Select Operating System` | System `python` | Same label | Selects the project operating system, then displays the resulting configuration | [Tasks-Setup and Check](#tasks-setup-and-check) |
 | `SETUP 2: Install Python Virtual Environment` | System `python` | Same label | Creates `.venv`, then displays the resulting configuration | [Tasks-Setup and Check](#tasks-setup-and-check) |
 | `SETUP 3: Install Ollama and Local LLM` | Project Python | Same label | Installs or checks Ollama and the configured model, then displays the resulting configuration | [Tasks-Setup and Check](#tasks-setup-and-check) |
-| `CHECK 1: Refresh Environment Check File` | Project Python | Same label | Refreshes `check.json`, then displays the resulting configuration | [Tasks-Setup and Check](#tasks-setup-and-check) |
+| `CHECK 1: Refresh Environment Check Files` | Project Python | Same label | Refreshes `check_envs.json` and `check_ollama.json`, then displays the resulting configuration | [Tasks-Setup and Check](#tasks-setup-and-check) |
 
 <br/>
 
@@ -631,7 +631,7 @@ Every Task has `type: process`, runs in the foreground, and has no `isBackground
 | `SETUP 2: Install Python Virtual Environment` | `test_envs.test_pipeline.environment_setup` | `python` | Creates `.venv` and installs dependencies |
 | `SETUP 3: Install Ollama and Local LLM` | `test_envs.test_pipeline.environment_setup` | `ollama` | Installs/checks Ollama and pulls the configured model |
 | `SETUP 4: Register Pytest Test Catalog` | `test_envs.tools.test_catalog` | None | Reads Python CT markers, generates `test_catalog.json`, and synchronizes every static TEST ID picker |
-| `CHECK 1: Refresh Environment Check File` | `test_envs.tools.configuration` | `check` | Regenerates `check.json` |
+| `CHECK 1: Refresh Environment Check Files` | `test_envs.tools.configuration` | `check` | Regenerates `check_envs.json` and `check_ollama.json` |
 | `CHECK 2: Show Environment Configuration` | `test_envs.tools.configuration` | `config` | Prints the current project configuration |
 | `CHECK 3: Run Ollama Server (Foreground)` | `test_envs.test_pipeline.environment_setup` | `serve` | Runs an Ollama server owned by the terminal Task |
 
@@ -701,7 +701,7 @@ The `MkDocs: Serve Remote ` source label currently contains a trailing space.
 | `testCaseId` | `pickString` | Generated from `test_catalog.json` | First registered TEST ID | `TEST CASE: TEST ID` |
 | `fixtureMode` | `pickString` | `marker`, `mock`, `hil` | `marker` | Both TEST CASE Tasks |
 
-OS selection is not a Task or launch input. It is managed by `test_envs/configs/config.json` through the Setup 1 command.
+OS selection is not a Task or launch input. It is managed by `test_envs/configs/config_env.json` through the Setup 1 command.
 
 Run Setup 4 after adding or changing a `@pytest.mark.ct` test. VS Code must reload `.vscode/tasks.json` before a newly generated picker option appears.
 

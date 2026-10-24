@@ -15,8 +15,12 @@ class RepositoryStructureTests(unittest.TestCase):
 
     def test_configuration_structure(self) -> None:
         root = Path("test_envs/configs")
-        self.assertTrue((root / "config.json").is_file())
-        self.assertTrue((root / "check.json").is_file())
+        self.assertTrue((root / "config_env.json").is_file())
+        self.assertTrue((root / "config_ollama.json").is_file())
+        self.assertFalse((root / "config.json").exists())
+        self.assertTrue((root / "check_envs.json").is_file())
+        self.assertTrue((root / "check_ollama.json").is_file())
+        self.assertFalse((root / "check.json").exists())
         self.assertFalse((root / "unittest").exists())
         self.assertFalse((root / "pytest").exists())
 

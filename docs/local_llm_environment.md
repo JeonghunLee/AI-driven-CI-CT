@@ -21,8 +21,8 @@ The current Local LLM integration uses Ollama to analyze Pytest CT results. Unit
 | Default model | `deepseek-r1:7b` |
 | Analysis target | Pytest CT result and logs |
 | Unittest analysis | Not used |
-| Configuration | `test_envs/configs/config.json` → `ollama` |
-| Runtime status | `test_envs/configs/check.json` → `ollama` |
+| Configuration | `test_envs/configs/config_ollama.json` |
+| Runtime status | `test_envs/configs/check_ollama.json` → `ollama` |
 | Analysis log | `test_reports/local_llm/<execution-id>_local_llm.log` |
 
 <br/>
@@ -83,7 +83,7 @@ With the current `max_retry: 3`, the analyzer can make up to four total attempts
 
 <br/>
 
-Source: `test_envs/configs/config.json`
+Source: `test_envs/configs/config_ollama.json`
 
 <br/>
 
@@ -119,7 +119,7 @@ Source: `test_envs/configs/config.json`
 
 <br/>
 
-Source: `test_envs/configs/check.json`
+Source: `test_envs/configs/check_ollama.json`
 
 <br/>
 
@@ -136,7 +136,7 @@ Source: `test_envs/configs/check.json`
 
 <br/>
 
-Refresh this generated status instead of manually editing `check.json`.
+Refresh this generated status instead of manually editing `check_ollama.json`.
 
 <br/>
 
@@ -181,7 +181,7 @@ Refresh the complete project environment status:
 | VS Code entry | Purpose |
 |---|---|
 | `SETUP 3: Install Ollama and Local LLM` | Installs or detects Ollama and pulls the selected model |
-| `CHECK 1: Refresh Environment Check File` | Refreshes Python and Ollama status in `check.json` |
+| `CHECK 1: Refresh Environment Check Files` | Refreshes Python status in `check_envs.json` and Ollama status in `check_ollama.json` |
 | `CHECK 3: Run Ollama Server (Foreground)` | Runs the local Ollama server in its Task terminal |
 
 <br/>
@@ -217,7 +217,7 @@ The Local LLM log records the execution ID, TEST ID, model, endpoint, timeout, r
 | Rule | Reason |
 |---|---|
 | Create `.venv` before Local LLM setup | Setup and analysis tools run with project Python |
-| Configure the model in `config.json` | Model selection is project-owned |
+| Configure the model in `config_ollama.json` | Model selection is project-owned |
 | Run the local server before pulling or analyzing | `/api/tags`, `/api/pull`, and `/api/generate` require a reachable endpoint |
 | Keep the server in the foreground Task | Process ownership and shutdown remain visible |
 | Use Local LLM analysis only for Pytest | This is the currently implemented reporting path |
@@ -345,7 +345,7 @@ In another terminal:
 <br/>
 
 ```text
-Resolve config.json OS and Ollama settings
+Resolve config_env.json OS settings and config_ollama.json Ollama settings
                 ↓
 Verify configured OS matches the host OS
                 ↓
@@ -359,7 +359,7 @@ Read /api/tags model inventory
                 ↓
 Pull the configured selected_model through /api/pull
                 ↓
-Refresh check.json
+Refresh check_envs.json and check_ollama.json
 ```
 
 <br/>
@@ -371,8 +371,10 @@ Refresh check.json
 ```text
 test_envs/
 ├── configs/
-│   ├── config.json                 # Endpoint, model, prompt, timeout, and retry
-│   └── check.json                  # Executable, server, and model inventory status
+│   ├── config_env.json             # Selected OS and timezone
+│   ├── config_ollama.json          # Endpoint, model, prompt, timeout, and retry
+│   ├── check_envs.json             # OS and Python runtime status
+│   └── check_ollama.json           # Ollama executable, server, and model inventory status
 ├── test_pipeline/
 │   └── environment_setup.py        # Install Ollama, run server, and pull model
 └── tools/

@@ -66,11 +66,11 @@ See [VS Code Environment](vscode_environment.md) for Settings, Run and Debug, Ru
 
 <br/>
 
-### config.json
+### config_env.json and config_ollama.json
 
 <br/>
 
-`test_envs/configs/config.json` stores user-selected project configuration.
+`test_envs/configs/config_env.json` stores the selected OS and timezone. `test_envs/configs/config_ollama.json` stores the Ollama endpoint, model, prompt, timeout, and retry configuration.
 
 <br/>
 
@@ -83,11 +83,11 @@ See [VS Code Environment](vscode_environment.md) for Settings, Run and Debug, Ru
 
 <br/>
 
-### check.json
+### check_envs.json
 
 <br/>
 
-`test_envs/configs/check.json` records detected runtime status.
+`test_envs/configs/check_envs.json` records detected OS and Python runtime status. Ollama status is written separately to `test_envs/configs/check_ollama.json`.
 
 <br/>
 
@@ -100,7 +100,7 @@ See [VS Code Environment](vscode_environment.md) for Settings, Run and Debug, Ru
 
 <br/>
 
-`check.json` is generated data. Change `config.json` and rerun the check command instead of manually editing `check.json`.
+Both check files are generated data. Change `config_env.json` or `config_ollama.json` and rerun the check command instead of manually editing them.
 
 <br/>
 
@@ -114,7 +114,7 @@ See [VS Code Environment](vscode_environment.md) for Settings, Run and Debug, Ru
 | Use system Python for Setup 1 and Setup 2 | The project environment may not exist yet |
 | Use `.venv` Python after setup | Keeps project dependencies isolated from global packages |
 | Keep `.venv` out of Git | It is reproducible from `requirements.txt` |
-| Do not manually edit `check.json` | It is regenerated from detected runtime state |
+| Do not manually edit `check_envs.json` or `check_ollama.json` | They are regenerated from detected runtime state |
 
 <br/>
 
@@ -265,7 +265,7 @@ Upgrade pip
         ↓
 Install requirements.txt
         ↓
-Refresh test_envs/configs/check.json
+Refresh test_envs/configs/check_envs.json and test_envs/configs/check_ollama.json
 ```
 
 <br/>
@@ -301,8 +301,10 @@ The authoritative package versions are defined in `requirements.txt`.
 ```text
 test_envs/
 ├── configs/
-│   ├── config.json                 # Selected OS, timezone, and Ollama settings
-│   └── check.json                  # Detected environment status
+│   ├── config_env.json             # Selected OS and timezone
+│   ├── config_ollama.json          # Ollama settings
+│   ├── check_envs.json             # Detected OS and Python status
+│   └── check_ollama.json           # Detected Ollama status
 ├── tests/
 │   ├── fixtures/
 │   │   └── junit.xml               # Shared result fixture

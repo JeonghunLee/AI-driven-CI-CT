@@ -61,7 +61,7 @@
         // This section contains tasks for checking the environment and running the Ollama server.
         // Each task is labeled with a "CHECK" prefix for easy identification.
         {
-            "label": "CHECK 1: Refresh Environment Check File",
+            "label": "CHECK 1: Refresh Environment Check Files",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [

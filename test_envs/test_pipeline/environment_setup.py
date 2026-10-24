@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen, urlretrieve
 
 from test_envs.tools.local_llm import runtime_status, selected_model, selected_url
-from test_envs.tools.configuration import configured_os, write_check
+from test_envs.tools.configuration import configured_os, write_checks
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE_ROOT = ROOT.parent
@@ -148,8 +148,8 @@ def _setup_model(url: str, model: str) -> None:
 
 
 def _refresh_check_file() -> None:
-    path = write_check()
-    print(f"Environment check updated: {path}", flush=True)
+    paths = write_checks()
+    print(f"Environment checks updated: {paths['envs']}, {paths['ollama']}", flush=True)
 
 
 def serve_ollama(platform: str = "config") -> None:
@@ -171,15 +171,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Set up local CI/CT development dependencies")
     subparsers = parser.add_subparsers(dest="command", required=True)
     python_setup = subparsers.add_parser("python", help="Create .venv and install Python dependencies")
-    python_setup.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/config.json")
+    python_setup.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/config_env.json")
     ollama = subparsers.add_parser("ollama", help="Install Ollama, start it, and pull the selected Local LLM")
     ollama.add_argument(
         "--model",
-        help="Ollama model override; defaults to OLLAMA_MODEL or test_envs/configs/config.json",
+        help="Ollama model override; defaults to OLLAMA_MODEL or test_envs/configs/config_ollama.json",
     )
-    ollama.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/config.json")
+    ollama.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/config_env.json")
     serve = subparsers.add_parser("serve", help="Run the local Ollama server in the foreground")
-    serve.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/config.json")
+    serve.add_argument("--platform", choices=PLATFORMS, default="config", help="Target platform; config uses test_envs/configs/config_env.json")
     args = parser.parse_args()
     if args.command == "python":
         setup_python(args.platform)

@@ -11,7 +11,7 @@ def main() -> None:
     parser.add_argument("--pending", action="store_true", help="Generate every missing Execution ID")
     parser.add_argument("--docs", action="store_true", help="Also copy the report into docs/tests")
     parser.add_argument("--source-review", action="store_true")
-    parser.add_argument("--model", help="Override test_envs/configs/config.json for this report")
+    parser.add_argument("--model", help="Override test_envs/configs/config_ollama.json for this report")
     args = parser.parse_args()
     if args.pending:
         output = generate_pending_markdown(

@@ -21,9 +21,9 @@ nav:
   - TEST Operation:       
     - Pytest: pytest_operation.md 
     - Unittest: unittest_operation.md
-  - TEST Results:
-    - Pytest: tests/pytest/index.md
-    - Unittest: tests/unittest/index.md
+#  - TEST Results:
+#    - Pytest: tests/pytest/index.md
+#    - Unittest: tests/unittest/index.md
   - Go To My Profile Page: https://jeonghunlee.github.io/project_ai.html#ai-driven-embedded-continuous-testing
 
 plugins:

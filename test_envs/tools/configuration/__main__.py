@@ -5,7 +5,7 @@ import json
 import os
 import sys
 
-from . import SUPPORTED_OS, load_config, set_configured_os, write_check
+from . import SUPPORTED_OS, build_check, load_config, set_configured_os, write_checks
 
 
 def _ensure_system_python() -> None:
@@ -20,7 +20,7 @@ def _ensure_system_python() -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Manage project environment configuration")
     parser.add_argument("command", choices=["config", "check", "set-os", "select-os"], nargs="?", default="check")
-    parser.add_argument("--os", choices=SUPPORTED_OS, help="Operating system stored in test_envs/configs/config.json")
+    parser.add_argument("--os", choices=SUPPORTED_OS, help="Operating system stored in test_envs/configs/config_env.json")
     args = parser.parse_args()
     if args.command == "config":
         value = load_config()
@@ -43,9 +43,9 @@ def main() -> None:
         path = set_configured_os(selected)
         value = {"config_file": str(path), "os": selected}
     else:
-        path = write_check()
-        value = json.loads(path.read_text(encoding="utf-8"))
-        value["check_file"] = str(path)
+        paths = write_checks()
+        value = build_check()
+        value["check_files"] = {name: str(path) for name, path in paths.items()}
     print(json.dumps(value, indent=2, ensure_ascii=False))
 
 

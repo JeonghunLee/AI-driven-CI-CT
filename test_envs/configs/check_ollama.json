@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-10-24T19:52:12.953100+09:00",
+  "ollama": {
+    "installed": true,
+    "executable": "C:\\Users\\ahyuo\\AppData\\Local\\Programs\\Ollama\\ollama.EXE",
+    "version": "ollama version is 0.34.2",
+    "available": true,
+    "endpoint": "http://127.0.0.1:11434",
+    "selected_model": "deepseek-r1:7b",
+    "selected_model_installed": true,
+    "supported_models": [
+      {
+        "name": "deepseek-r1:7b",
+        "model": "deepseek-r1:7b",
+        "modified_at": "2026-10-24T17:57:08.2334184+09:00",
+        "size": 4683075440,
+        "digest": "755ced02ce7befdb13b7ca74e1e4d08cddba4986afdb63a480f2c93d3140383f",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen2",
+          "families": [
+            "qwen2"
+          ],
+          "parameter_size": "7.6B",
+          "quantization_level": "Q4_K_M",
+          "context_length": 131072,
+          "embedding_length": 3584
+        },
+        "capabilities": [
+          "tools",
+          "thinking",
+          "completion"
+        ]
+      }
+    ]
+  }
+}

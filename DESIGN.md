@@ -89,7 +89,7 @@ Source: `.vscode/launch.json`
 | 2 | `SETUP 2: Install Python Virtual Environment` | Task delegation | `preLaunchTask` | `.venv` creation, dependency installation |
 | 3 | `SETUP 3: Install Ollama and Local LLM` | Task delegation | `preLaunchTask` | Ollama installation, selected model pull |
 | 4 | `SETUP 4: Register Pytest Test Catalog` | Task delegation | `preLaunchTask` | Generate the shared TEST ID catalog and static pickers |
-| 5 | `CHECK 1: Refresh Environment Check File` | Task delegation | `preLaunchTask` | Environment check |
+| 5 | `CHECK 1: Refresh Environment Check Files` | Task delegation | `preLaunchTask` | Environment checks |
 | 6 | `Run 3: Extension Module` | `.venv` Python | `test_envs.tools.extension_runner` | Future module execution |
 | 7 | `Test Result: Generate Pending Markdown` | `.venv` Python | `test_envs.tools.test_result --pending --docs` | Missing Execution ID analysis, Markdown generation |
 
@@ -119,7 +119,7 @@ Source: `.vscode/launch.json`
 
 | Setup input | Options | Default | Validation |
 |---|---|---|---|
-| `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `test_envs/configs/config.json` |
+| `targetOS` | `auto`, `windows`, `linux`, `macos` | `auto` | Stored in `test_envs/configs/config_env.json` |
 
 | VS Code Python path | Value |
 |---|---|
@@ -229,7 +229,7 @@ Source: `.vscode/tasks.json`
 | SETUP | `SETUP 2: Install Python Virtual Environment` |
 | SETUP | `SETUP 3: Install Ollama and Local LLM` |
 | SETUP | `SETUP 4: Register Pytest Test Catalog` |
-| CHECK | `CHECK 1: Refresh Environment Check File` |
+| CHECK | `CHECK 1: Refresh Environment Check Files` |
 | CHECK | `CHECK 2: Show Environment Configuration` |
 | CHECK | `CHECK 3: Run Ollama Server (Foreground)` |
 | TEST CASE | `TEST CASE: ALL` |
@@ -407,8 +407,8 @@ Execution ID
 
 | Time field | Config source | Rule |
 |---|---|---|
-| Timezone name | `test_envs/configs/config.json` → `time.timezone` | `Asia/Seoul` |
-| UTC offset | `test_envs/configs/config.json` → `time.utc_offset_hours` | SeoulTime correction |
+| Timezone name | `test_envs/configs/config_env.json` → `time.timezone` | `Asia/Seoul` |
+| UTC offset | `test_envs/configs/config_env.json` → `time.utc_offset_hours` | SeoulTime correction |
 | Date·Time | `configured_now()` | Config value required |
 
 ### 7.2 Execution Artifacts
@@ -599,10 +599,10 @@ test_functions[]
 | Runtime | Ollama |
 | Default endpoint | `http://127.0.0.1:11434` |
 | Environment variable | `OLLAMA_URL` |
-| Configured model | `test_envs/configs/config.json` → `ollama.selected_model` |
+| Configured model | `test_envs/configs/config_ollama.json` → `selected_model` |
 | Model variable | `OLLAMA_MODEL` |
-| Project config | `test_envs/configs/config.json` |
-| Environment check | `test_envs/configs/check.json` |
+| Project configuration | `test_envs/configs/config_env.json`, `test_envs/configs/config_ollama.json` |
+| Environment checks | `test_envs/configs/check_envs.json`, `test_envs/configs/check_ollama.json` |
 | Selection priority | CLI → Environment → Config |
 | Missing model | Configuration error |
 | Config selection | `ollama.selected_model` |
@@ -626,7 +626,8 @@ test_functions[]
 Model config schema:
 
 ```text
-test_envs/configs/config.json
+test_envs/configs/config_env.json
+test_envs/configs/config_ollama.json
 ├── version
 ├── os
 ├── time
@@ -643,7 +644,8 @@ test_envs/configs/config.json
 Environment check schema:
 
 ```text
-test_envs/configs/check.json
+test_envs/configs/check_envs.json
+test_envs/configs/check_ollama.json
 ├── generated_at
 ├── os
 │   ├── configured
@@ -882,8 +884,10 @@ Excluded from GitHub Issue:
 │       └── unittest/                # Markdown only
 ├── test_envs/
 │   ├── configs/
-│   │   ├── config.json
-│   │   └── check.json
+│   │   ├── config_env.json
+│   │   ├── config_ollama.json
+│   │   ├── check_envs.json
+│   │   └── check_ollama.json
 │   ├── tests/
 │   │   ├── pytest/
 │   │   └── unittest/

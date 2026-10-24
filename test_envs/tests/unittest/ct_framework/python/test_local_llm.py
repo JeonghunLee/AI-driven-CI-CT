@@ -28,7 +28,7 @@ class LocalLLMTests(unittest.TestCase):
 
     def test_missing_configured_model_is_rejected(self) -> None:
         with patch("test_envs.tools.local_llm.load_config", return_value={}), patch.dict(os.environ, {}, clear=True):
-            with self.assertRaisesRegex(RuntimeError, "test_envs/configs/config.json"):
+            with self.assertRaisesRegex(RuntimeError, "test_envs/configs/config_ollama.json"):
                 selected_model()
 
     def test_internal_json_model_is_used_when_environment_is_missing(self) -> None:

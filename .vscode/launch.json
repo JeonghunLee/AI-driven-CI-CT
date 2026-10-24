@@ -56,13 +56,13 @@
       "justMyCode": true
     },
     {
-      "name": "CHECK 1: Refresh Environment Check File",
+      "name": "CHECK 1: Refresh Environment Check Files",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
       "module": "test_envs.tools.configuration",
       "args": ["config"],
-      "preLaunchTask": "CHECK 1: Refresh Environment Check File",
+      "preLaunchTask": "CHECK 1: Refresh Environment Check Files",
       "console": "internalConsole",
       "internalConsoleOptions": "neverOpen",
       "cwd": "${workspaceFolder}",

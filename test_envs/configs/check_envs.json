@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-10-24T19:52:12.803638+09:00",
+  "os": {
+    "configured": "auto",
+    "detected": "windows",
+    "name": "Windows-11-10.0.26200-SP0"
+  },
+  "python": {
+    "installed": true,
+    "executable": "D:\\works\\projects\\AI-driven-CI-CT\\.venv\\Scripts\\python.exe",
+    "version": "3.14.3"
+  }
+}

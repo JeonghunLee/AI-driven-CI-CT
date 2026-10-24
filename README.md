@@ -61,8 +61,10 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 │   └── tests/{pytest,unittest}/
 ├── test_envs/
 │   ├── configs/
-│   │   ├── config.json
-│   │   └── check.json
+│   │   ├── config_env.json
+│   │   ├── config_ollama.json
+│   │   ├── check_envs.json
+│   │   └── check_ollama.json
 │   ├── tests/
 │   ├── mcp_server/{runner.py,server.py}
 │   ├── tool_github/{github_reporter,issue_parser.py}
@@ -107,7 +109,7 @@ python -m test_envs.test_pipeline.environment_setup python --platform config
 
 | Run and Debug Setup | 실행 방식 |
 |---|---|
-| Setup 1 | OS selection → `test_envs/configs/config.json` |
+| Setup 1 | OS selection → `test_envs/configs/config_env.json` |
 | Setup 2 | `preLaunchTask` → Python setup Task |
 | Setup 3 | `preLaunchTask` → Ollama setup Task |
 | Setup 4 | `preLaunchTask` → Pytest catalog registration Task |
@@ -126,7 +128,7 @@ python -m test_envs.test_pipeline.environment_setup python --platform config
 |---|---|
 | Default | `auto` |
 | Options | `auto`, `windows`, `linux`, `macos` |
-| Config source | `test_envs/configs/config.json` → `os` |
+| Config source | `test_envs/configs/config_env.json` → `os` |
 | Host mismatch | Setup stop |
 | Setup 1·2 Python | `python` |
 | Setup 3+ Python | `${config:python.defaultInterpreterPath}` |
@@ -171,11 +173,13 @@ python -m test_envs.test_pipeline.environment_setup python --platform config
 
 ```text
 test_envs/configs/
-├── config.json
-└── check.json
+├── config_env.json
+├── config_ollama.json
+├── check_envs.json
+└── check_ollama.json
 ```
 
-### `test_envs/configs/config.json`
+### `test_envs/configs/config_env.json` and `config_ollama.json`
 
 ```json
 {
@@ -215,10 +219,10 @@ test_envs/configs/
 |---:|---|
 | 1 | CLI `--model` |
 | 2 | `OLLAMA_MODEL` |
-| 3 | `test_envs/configs/config.json` |
+| 3 | `test_envs/configs/config_ollama.json` |
 | Missing | Configuration error |
 
-### `test_envs/configs/check.json`
+### `test_envs/configs/check_envs.json` and `check_ollama.json`
 
 | Check | Field |
 |---|---|
@@ -269,8 +273,8 @@ test_envs/configs/
 
 | Time field | 설정 | 처리 |
 |---|---|---|
-| Timezone | `config.json` → `time.timezone` | SeoulTime 이름 |
-| UTC offset | `config.json` → `time.utc_offset_hours` | SeoulTime 보정값 |
+| Timezone | `config_env.json` → `time.timezone` | SeoulTime 이름 |
+| UTC offset | `config_env.json` → `time.utc_offset_hours` | SeoulTime 보정값 |
 | Date·Time | `configured_now()` | Config 값 적용 |
 | Microseconds | `%f` | 6자리 |
 

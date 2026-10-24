@@ -179,11 +179,11 @@ flowchart TD
 
 <br/>
 
-Codex can use the local `ai-driven-ci-ct` MCP server as a direct test-control interface. The agent first inspects the environment and allowlisted inventory, selects an approved test or scope, then receives the normalized result and generated report paths as structured tool output.
+Codex or an Ollama-powered AI Agent can use the local `ai-driven-ci-ct` MCP server as a direct test-control interface. The agent first inspects the environment and allowlisted inventory, selects an approved test or scope, then receives the normalized result and generated report paths as structured tool output. Ollama supplies the local model reasoning; the MCP server performs the allowlisted test execution.
 
 ```mermaid
 flowchart TD
-    AGENT[Codex AI Agent]
+    AGENT[Codex or Ollama AI Agent]
     ENV[get_test_envs]
     INVENTORY[get_test_list_pytest / get_test_list_unittest]
     SELECT[Select allowlisted TEST ID or Unittest scope]
@@ -204,12 +204,13 @@ flowchart TD
 | AI Agent capability | MCP boundary |
 |---|---|
 | Inspect readiness | Reads OS, venv, Ollama, Pandoc, and permission status before execution |
+| Automate with Ollama | An Ollama-powered agent can inspect the catalog, choose an approved test, call the MCP test tool, and review the structured result |
 | Choose a test | Uses only cataloged Pytest TEST IDs and declared Unittest scopes |
 | Run and review | Starts an allowlisted operation and receives status, logs, and report paths without parsing terminal output |
 | Use Local LLM analysis | Pytest report generation can invoke the configured local Ollama model; unittest does not invoke Local LLM analysis |
 | Keep safety controls | HIL remains blocked until `PYTEST_HIL_ALLOW=true`; MkDocs publication remains blocked until `MKDOC_UPDATE=true` |
 
-This is a local MCP path, separate from GitHub Issue and GitHub Actions execution.
+This is a local MCP path, separate from GitHub Issue and GitHub Actions execution. Ollama does not receive unrestricted shell access: test execution remains limited to the MCP server's cataloged Pytest TEST IDs and declared Unittest scopes.
 
 <br/>
 
@@ -383,7 +384,7 @@ flowchart TD
 │   ├── reference/reference.docx
 │   └── setup_reference.json
 ├── test_envs/
-│   ├── configs/{config.json,check.json}
+│   ├── configs/{config_env.json,config_ollama.json,check_envs.json,check_ollama.json}
 │   ├── mcp_server/{__main__.py,server.py,runner.py}
 │   ├── test_pipeline/{environment_setup.py,pipeline.py}
 │   ├── tool_github/{issue_parser.py,github_reporter/}
@@ -431,8 +432,8 @@ flowchart TD
 
 | Scope | Path |
 |---|---|
-| Project config | `test_envs/configs/config.json` |
-| Environment check | `test_envs/configs/check.json` |
+| Project configuration | `test_envs/configs/config_env.json`, `test_envs/configs/config_ollama.json` |
+| Environment checks | `test_envs/configs/check_envs.json`, `test_envs/configs/check_ollama.json` |
 | pytest | `test_envs/tests/pytest` |
 | unittest | `test_envs/tests/unittest` |
 | Results | `test_reports/results` |
@@ -516,7 +517,7 @@ Pytest Markdown + MkDocs
 | Item | Path / rule |
 |---|---|
 | Runtime | Ollama |
-| Configuration | `test_envs/configs/config.json → ollama` |
+| Configuration | `test_envs/configs/config_ollama.json` |
 | Analysis payload | Pytest result JSON → `test_analysis` |
 | Diagnostic log | `test_reports/local_llm/<execution-id>_local_llm.log` |
 | Unittest Local LLM log | Not generated |

@@ -18,11 +18,12 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
         self.launch = load_jsonc(".vscode/launch.json")
         self.tasks = load_jsonc(".vscode/tasks.json")
         self.settings = load_jsonc(".vscode/settings.json")
-        self.config = json.loads(Path("test_envs/configs/config.json").read_text(encoding="utf-8"))
+        self.env_config = json.loads(Path("test_envs/configs/config_env.json").read_text(encoding="utf-8"))
+        self.ollama_config = json.loads(Path("test_envs/configs/config_ollama.json").read_text(encoding="utf-8"))
 
     def test_selected_preset_has_model_name(self) -> None:
-        self.assertIn(self.config["os"], ["auto", "windows", "linux", "macos"])
-        self.assertTrue(self.config["ollama"]["selected_model"])
+        self.assertIn(self.env_config["os"], ["auto", "windows", "linux", "macos"])
+        self.assertTrue(self.ollama_config["selected_model"])
 
     def test_launch_setup_delegates_to_foreground_tasks(self) -> None:
         expected = {
@@ -30,7 +31,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             "SETUP 2: Install Python Virtual Environment": "SETUP 2: Install Python Virtual Environment",
             "SETUP 3: Install Ollama and Local LLM": "SETUP 3: Install Ollama and Local LLM",
             "SETUP 4: Register Pytest Test Catalog": "SETUP 4: Register Pytest Test Catalog",
-            "CHECK 1: Refresh Environment Check File": "CHECK 1: Refresh Environment Check File",
+            "CHECK 1: Refresh Environment Check Files": "CHECK 1: Refresh Environment Check Files",
         }
         configurations = {item["name"]: item for item in self.launch["configurations"]}
         for name, task in expected.items():
@@ -60,7 +61,7 @@ class VSCodeLocalLLMContractTests(unittest.TestCase):
             setup["args"],
             ["-m", "test_envs.test_pipeline.environment_setup", "ollama"],
         )
-        self.assertTrue(any("Check File" in item["label"] for item in self.tasks["tasks"]))
+        self.assertTrue(any("Check Files" in item["label"] for item in self.tasks["tasks"]))
 
     def test_ollama_server_task_is_foreground_process(self) -> None:
         task = next(

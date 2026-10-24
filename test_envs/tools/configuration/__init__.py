@@ -15,19 +15,19 @@ from urllib.request import urlopen
 ROOT = Path(__file__).resolve().parents[2]
 WORKSPACE_ROOT = ROOT.parent
 CONFIG_DIR = ROOT / "configs"
-CONFIG_PATH = CONFIG_DIR / "config.json"
-CHECK_PATH = CONFIG_DIR / "check.json"
+ENV_CONFIG_PATH = CONFIG_DIR / "config_env.json"
+OLLAMA_CONFIG_PATH = CONFIG_DIR / "config_ollama.json"
+CHECK_ENVS_PATH = CONFIG_DIR / "check_envs.json"
+CHECK_OLLAMA_PATH = CONFIG_DIR / "check_ollama.json"
 VSCODE_SETTINGS_PATH = WORKSPACE_ROOT / ".vscode" / "settings.json"
 SUPPORTED_OS = ("auto", "windows", "linux", "macos")
 
 
 def config_path() -> Path:
-    override = os.getenv("LOCAL_LLM_CONFIG")
-    return Path(override) if override else CONFIG_PATH
+    return ENV_CONFIG_PATH
 
 
-def load_config() -> dict[str, Any]:
-    path = config_path()
+def _load_json_config(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
@@ -37,15 +37,42 @@ def load_config() -> dict[str, Any]:
     return value
 
 
+def env_config_path() -> Path:
+    override = os.getenv("TEST_ENV_CONFIG")
+    return Path(override) if override else ENV_CONFIG_PATH
+
+
+def ollama_config_path() -> Path:
+    override = os.getenv("LOCAL_LLM_CONFIG")
+    return Path(override) if override else OLLAMA_CONFIG_PATH
+
+
+def load_env_config() -> dict[str, Any]:
+    return _load_json_config(env_config_path())
+
+
+def load_ollama_config() -> dict[str, Any]:
+    return _load_json_config(ollama_config_path())
+
+
+def load_config() -> dict[str, Any]:
+    """Return the combined configuration for existing runtime consumers."""
+    if os.getenv("LOCAL_LLM_CONFIG"):
+        return load_ollama_config()
+    value = load_env_config().copy()
+    value["ollama"] = load_ollama_config()
+    return value
+
+
 def configured_os() -> str:
-    value = load_config().get("os", "auto")
+    value = load_env_config().get("os", "auto")
     if not isinstance(value, str) or value not in SUPPORTED_OS:
         raise RuntimeError(f"Invalid configured OS: {value!r}")
     return value
 
 
 def configured_timezone() -> timezone:
-    value = load_config().get("time", {})
+    value = load_env_config().get("time", {})
     if not isinstance(value, dict):
         raise RuntimeError("Invalid project configuration: time must be an object")
     name = value.get("timezone", "Asia/Seoul")
@@ -64,12 +91,12 @@ def configured_now() -> datetime:
 def set_configured_os(value: str) -> Path:
     if value not in SUPPORTED_OS:
         raise ValueError(f"Invalid configured OS: {value!r}")
-    config = load_config()
+    config = load_env_config()
     config["os"] = value
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    CONFIG_PATH.write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    ENV_CONFIG_PATH.write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     sync_vscode_interpreter(value)
-    return CONFIG_PATH
+    return ENV_CONFIG_PATH
 
 
 def vscode_interpreter_path(value: str) -> str:
@@ -138,17 +165,8 @@ def _ollama_inventory(url: str) -> tuple[bool, list[dict[str, Any]], str | None]
         return False, [], str(error)
 
 
-def build_check() -> dict[str, Any]:
-    config = load_config()
-    ollama = config.get("ollama", {})
-    if not isinstance(ollama, dict):
-        raise RuntimeError("Invalid project configuration: ollama must be an object")
-    url = str(ollama.get("url", "http://127.0.0.1:11434")).rstrip("/")
-    selected_model = str(ollama.get("selected_model", ""))
-    executable = _ollama_executable()
-    available, models, error = _ollama_inventory(url)
-    model_names = [str(model.get("name") or model.get("model") or "") for model in models]
-    result: dict[str, Any] = {
+def build_envs_check() -> dict[str, Any]:
+    return {
         "generated_at": configured_now().isoformat(),
         "os": {
             "configured": configured_os(),
@@ -160,6 +178,18 @@ def build_check() -> dict[str, Any]:
             "executable": sys.executable,
             "version": platform.python_version(),
         },
+    }
+
+
+def build_ollama_check() -> dict[str, Any]:
+    ollama = load_ollama_config()
+    url = str(ollama.get("url", "http://127.0.0.1:11434")).rstrip("/")
+    selected_model = str(ollama.get("selected_model", ""))
+    executable = _ollama_executable()
+    available, models, error = _ollama_inventory(url)
+    model_names = [str(model.get("name") or model.get("model") or "") for model in models]
+    result: dict[str, Any] = {
+        "generated_at": configured_now().isoformat(),
         "ollama": {
             "installed": executable is not None,
             "executable": executable,
@@ -176,25 +206,37 @@ def build_check() -> dict[str, Any]:
     return result
 
 
-def write_check() -> Path:
+def build_check() -> dict[str, Any]:
+    """Return the combined runtime state used by MCP and GitHub reporting."""
+    return build_envs_check() | build_ollama_check()
+
+
+def write_checks() -> dict[str, Path]:
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    CHECK_PATH.write_text(json.dumps(build_check(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    return CHECK_PATH
+    CHECK_ENVS_PATH.write_text(json.dumps(build_envs_check(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    CHECK_OLLAMA_PATH.write_text(json.dumps(build_ollama_check(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return {"envs": CHECK_ENVS_PATH, "ollama": CHECK_OLLAMA_PATH}
 
 
 __all__ = [
-    "CHECK_PATH",
-    "CONFIG_PATH",
+    "CHECK_ENVS_PATH",
+    "CHECK_OLLAMA_PATH",
+    "ENV_CONFIG_PATH",
+    "OLLAMA_CONFIG_PATH",
     "SUPPORTED_OS",
     "build_check",
+    "build_envs_check",
+    "build_ollama_check",
     "config_path",
     "configured_now",
     "configured_os",
     "configured_timezone",
     "detected_os",
     "load_config",
+    "load_env_config",
+    "load_ollama_config",
     "set_configured_os",
     "sync_vscode_interpreter",
     "vscode_interpreter_path",
-    "write_check",
+    "write_checks",
 ]
