@@ -10,8 +10,10 @@ from mcp.types import Icon
 from test_envs.mcp_server.runner import (
     TestRequest,
     all_test_lists,
+    ollama_test_plan,
     pytest_test_list,
     run_all_tests,
+    run_ollama_test_plan,
     run_test,
     test_environment,
     unittest_test_list,
@@ -64,6 +66,18 @@ def get_test_list_unittest() -> dict[str, object]:
 def get_test_list_all() -> dict[str, object]:
     """List all Pytest and Unittest targets plus coverage and report options."""
     return all_test_lists()
+
+
+@mcp.tool()
+def get_ollama_test_plan() -> dict[str, object]:
+    """Read the allowlisted Ollama test workflow from test_envs/configs/test_ollama.yaml."""
+    return ollama_test_plan()
+
+
+@mcp.tool()
+def run_ollama_test_workflow() -> dict[str, object]:
+    """Run the allowlisted Ollama workflow: select tests, then generate Markdown and DOCX/HTML reports."""
+    return run_ollama_test_plan()
 
 
 @mcp.tool()

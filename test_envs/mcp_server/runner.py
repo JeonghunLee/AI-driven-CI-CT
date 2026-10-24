@@ -6,7 +6,9 @@ import sys
 import threading
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
+
+import yaml
 
 from test_envs.test_pipeline.pipeline import run as run_pipeline
 from test_envs.tools.configuration import build_check
@@ -22,6 +24,7 @@ CoverageMode = Literal["none", "terminal", "html"]
 PandocFormat = Literal["none", "docx", "html", "both"]
 
 ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_OLLAMA_TEST_PLAN_PATH = ROOT / "test_envs" / "configs" / "test_ollama.yaml"
 UNITTEST_SCOPES = {
     "all": "test_envs/tests/unittest",
     "ct_framework_python": "test_envs/tests/unittest/ct_framework/python",
@@ -85,6 +88,79 @@ def all_test_lists() -> dict[str, object]:
     }
 
 
+def ollama_test_plan() -> dict[str, Any]:
+    """Load and validate the Ollama MCP test plan without executing it."""
+    path = ollama_test_plan_path()
+    try:
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as error:
+        raise RuntimeError(f"Invalid Ollama test plan: {path}: {error}") from error
+    if not isinstance(raw, dict):
+        raise RuntimeError("Invalid Ollama test plan: root must be a mapping")
+    return _validate_ollama_test_plan(raw)
+
+
+def ollama_test_plan_path() -> Path:
+    configured = os.getenv("OLLAMA_TEST_PLAN", "").strip()
+    if not configured:
+        return DEFAULT_OLLAMA_TEST_PLAN_PATH
+    path = Path(configured)
+    return path if path.is_absolute() else ROOT / path
+
+
+def run_ollama_test_plan() -> dict[str, object]:
+    """Execute the allowlisted test and report workflow defined in test_ollama.yaml."""
+    plan = ollama_test_plan()
+    ollama = build_check().get("ollama", {})
+    if not isinstance(ollama, dict) or not ollama.get("available") or not ollama.get("selected_model_installed"):
+        raise RuntimeError("Ollama must be available with the selected model before running test_ollama.yaml")
+    if plan["agent"]["model"] != ollama.get("selected_model"):
+        raise RuntimeError("test_ollama.yaml agent.model must match config_ollama.json selected_model")
+
+    selection = plan["selection"]
+    reports = plan["reports"]
+    execution = plan["execution"]
+    pytest_plan = selection["pytest"]
+    unittest_plan = selection["unittest"]
+    pytest_ids = list(catalog_by_id()) if pytest_plan["mode"] == "all" else pytest_plan["test_ids"]
+    unittest_scopes = ["all"] if unittest_plan["mode"] == "all" else unittest_plan["scopes"]
+    results: dict[str, list[dict[str, object]]] = {"pytest": [], "unittest": []}
+
+    for test_id in pytest_ids:
+        results["pytest"].append(
+            run_test(
+                TestRequest(
+                    test_type="pytest",
+                    test_id=test_id,
+                    fixture_mode=pytest_plan["fixture_mode"],
+                    coverage=execution["coverage"],
+                    markdown=reports["markdown"],
+                    pandoc=reports["pandoc"],
+                ),
+                execution["timeout_seconds"],
+            )
+        )
+    for scope in unittest_scopes:
+        results["unittest"].append(
+            run_test(
+                TestRequest(
+                    test_type="unittest",
+                    unittest_scope=scope,
+                    coverage=execution["coverage"],
+                    markdown=reports["markdown"],
+                    pandoc=reports["pandoc"],
+                ),
+                execution["timeout_seconds"],
+            )
+        )
+    return {
+        "plan_path": _relative(ollama_test_plan_path()),
+        "ollama_model": ollama.get("selected_model"),
+        "selection": selection,
+        "results": results,
+    }
+
+
 def test_environment() -> dict[str, object]:
     check = build_check()
     venv_python = ROOT / ".venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
@@ -104,6 +180,7 @@ def test_environment() -> dict[str, object]:
         "transport": "stdio",
         "pytest_hil_allow": _enabled("PYTEST_HIL_ALLOW"),
         "mkdoc_update": _enabled("MKDOC_UPDATE"),
+        "ollama_test_plan": _relative(ollama_test_plan_path()),
     }
     return check
 
@@ -273,6 +350,62 @@ def _pytest_command(request: TestRequest) -> list[str]:
     elif request.coverage == "html":
         command.extend(["--cov=test_envs", "--cov-report=term-missing", "--cov-report=html"])
     return command
+
+
+def _validate_ollama_test_plan(raw: dict[str, Any]) -> dict[str, Any]:
+    if raw.get("version") != 1:
+        raise RuntimeError("Invalid Ollama test plan: version must be 1")
+    agent = raw.get("agent")
+    selection = raw.get("selection")
+    reports = raw.get("reports")
+    execution = raw.get("execution")
+    if not all(isinstance(value, dict) for value in (agent, selection, reports, execution)):
+        raise RuntimeError("Invalid Ollama test plan: agent, selection, reports, and execution must be mappings")
+    if agent.get("provider") != "ollama" or not isinstance(agent.get("model"), str) or not agent["model"].strip():
+        raise RuntimeError("Invalid Ollama test plan: agent must configure provider 'ollama' and a model")
+    pytest_plan = selection.get("pytest")
+    unittest_plan = selection.get("unittest")
+    if not isinstance(pytest_plan, dict) or not isinstance(unittest_plan, dict):
+        raise RuntimeError("Invalid Ollama test plan: pytest and unittest selections are required")
+    pytest_mode = pytest_plan.get("mode")
+    unittest_mode = unittest_plan.get("mode")
+    if pytest_mode not in {"all", "selected"} or unittest_mode not in {"all", "selected"}:
+        raise RuntimeError("Invalid Ollama test plan: selection mode must be all or selected")
+    pytest_ids = pytest_plan.get("test_ids", [])
+    unittest_scopes = unittest_plan.get("scopes", [])
+    if not isinstance(pytest_ids, list) or not all(isinstance(item, str) for item in pytest_ids):
+        raise RuntimeError("Invalid Ollama test plan: pytest test_ids must be a string list")
+    if not isinstance(unittest_scopes, list) or not all(isinstance(item, str) for item in unittest_scopes):
+        raise RuntimeError("Invalid Ollama test plan: unittest scopes must be a string list")
+    test_ids = catalog_by_id()
+    if pytest_mode == "selected" and (not pytest_ids or any(item not in test_ids for item in pytest_ids)):
+        raise RuntimeError("Invalid Ollama test plan: pytest test_ids must be allowlisted and non-empty")
+    if unittest_mode == "selected" and (not unittest_scopes or any(item not in UNITTEST_SCOPES for item in unittest_scopes)):
+        raise RuntimeError("Invalid Ollama test plan: unittest scopes must be declared and non-empty")
+    fixture_mode = pytest_plan.get("fixture_mode", "marker")
+    coverage = execution.get("coverage", "none")
+    pandoc = reports.get("pandoc", "none")
+    timeout_seconds = execution.get("timeout_seconds", 3600)
+    if fixture_mode not in {"marker", "mock", "hil"}:
+        raise RuntimeError("Invalid Ollama test plan: unsupported fixture_mode")
+    if coverage not in {"none", "terminal", "html"}:
+        raise RuntimeError("Invalid Ollama test plan: unsupported coverage")
+    if pandoc not in {"none", "docx", "html", "both"}:
+        raise RuntimeError("Invalid Ollama test plan: unsupported Pandoc format")
+    if not isinstance(reports.get("markdown"), bool):
+        raise RuntimeError("Invalid Ollama test plan: reports.markdown must be true or false")
+    if isinstance(timeout_seconds, bool) or not isinstance(timeout_seconds, int) or not 1 <= timeout_seconds <= 3600:
+        raise RuntimeError("Invalid Ollama test plan: timeout_seconds must be between 1 and 3600")
+    return {
+        "version": 1,
+        "agent": {"provider": "ollama", "model": agent["model"].strip()},
+        "selection": {
+            "pytest": {"mode": pytest_mode, "test_ids": pytest_ids, "fixture_mode": fixture_mode},
+            "unittest": {"mode": unittest_mode, "scopes": unittest_scopes},
+        },
+        "reports": {"markdown": reports["markdown"], "pandoc": pandoc},
+        "execution": {"coverage": coverage, "timeout_seconds": timeout_seconds},
+    }
 
 
 def _validate(request: TestRequest, timeout_seconds: int) -> None:

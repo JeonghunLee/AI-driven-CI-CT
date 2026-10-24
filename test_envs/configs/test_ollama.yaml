@@ -1,0 +1,26 @@
+version: 1
+
+# The MCP server executes only cataloged TEST IDs and declared Unittest scopes.
+# "all" is available for both test types; this default stays small for local use.
+agent:
+  provider: ollama
+  model: deepseek-r1:7b
+
+selection:
+  pytest:
+    mode: selected # all | selected
+    test_ids:
+      - CT-UART-001
+    fixture_mode: mock
+  unittest:
+    mode: selected # all | selected
+    scopes:
+      - ct_framework_python
+
+reports:
+  markdown: true
+  pandoc: both # none | docx | html | both
+
+execution:
+  coverage: none # none | terminal | html
+  timeout_seconds: 3600

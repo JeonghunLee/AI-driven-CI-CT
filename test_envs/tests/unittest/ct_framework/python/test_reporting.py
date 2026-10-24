@@ -29,8 +29,9 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(load_markdown_report(result, root), path.read_text(encoding="utf-8"))
 
     def test_issue_comment_contains_summary_and_evidence(self) -> None:
-        result = ResultRecord("CT-001", "FAIL", "timing", 1.25, metrics={"jitter": 0.03})
-        comment = render_comment(result, Analysis("Threshold exceeded", "timing", 0.9, "test"))
+        with patch.dict("os.environ", {"TEST_REQUEST": "local_vscode"}):
+            result = ResultRecord("CT-001", "FAIL", "timing", 1.25, metrics={"jitter": 0.03})
+            comment = render_comment(result, Analysis("Threshold exceeded", "timing", 0.9, "test"))
         self.assertIn("**Result: FAIL**", comment)
         self.assertIn("| Test envs | Value |", comment)
         self.assertIn("| test_environment | local |", comment)

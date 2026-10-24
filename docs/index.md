@@ -201,6 +201,23 @@ flowchart TD
     class SELECT safety
 ```
 
+The optional Ollama MCP test plan, `test_envs/configs/test_ollama.yaml`, drives a fixed, allowlisted workflow. `selected` runs only the listed Pytest TEST IDs and Unittest scopes; changing either mode to `all` runs the corresponding catalog or declared scope. Run `get_ollama_test_plan` to inspect it, then `run_ollama_test_workflow` to execute it.
+
+```mermaid
+flowchart TD
+    PLAN[test_ollama.yaml] --> SELECT{1. Select test type and mode}
+    SELECT --> PYTEST[Pytest: all or selected TEST IDs]
+    SELECT --> UNITTEST[Unittest: all or selected scopes]
+    PYTEST --> LOG[2. Test log and normalized result]
+    UNITTEST --> LOG
+    LOG --> MARKDOWN[Markdown report]
+    MARKDOWN --> FORMAT{3. Pandoc output}
+    FORMAT --> DOCX[DOCX]
+    FORMAT --> HTML[HTML]
+    PYTEST --> OLLAMA[Ollama result analysis]
+    OLLAMA --> MARKDOWN
+```
+
 | AI Agent capability | MCP boundary |
 |---|---|
 | Inspect readiness | Reads OS, venv, Ollama, Pandoc, and permission status before execution |
@@ -384,7 +401,7 @@ flowchart TD
 │   ├── reference/reference.docx
 │   └── setup_reference.json
 ├── test_envs/
-│   ├── configs/{config_env.json,config_ollama.json,check_envs.json,check_ollama.json}
+│   ├── configs/{config_env.json,config_ollama.json,check_envs.json,check_ollama.json,test_ollama.yaml}
 │   ├── mcp_server/{__main__.py,server.py,runner.py}
 │   ├── test_pipeline/{environment_setup.py,pipeline.py}
 │   ├── tool_github/{issue_parser.py,github_reporter/}

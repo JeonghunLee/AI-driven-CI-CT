@@ -9,6 +9,7 @@ from test_envs.mcp_server.runner import TestRequest as MCPTestRequest
 from test_envs.mcp_server.runner import (
     _pytest_command,
     all_test_lists,
+    ollama_test_plan,
     pytest_test_list,
     run_test,
     unittest_test_list,
@@ -71,6 +72,14 @@ class MCPRunnerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "test_id"):
             run_test(request)
 
+    def test_ollama_test_plan_uses_allowlisted_targets_and_reports(self) -> None:
+        plan = ollama_test_plan()
+        self.assertEqual(plan["agent"]["provider"], "ollama")
+        self.assertEqual(plan["selection"]["pytest"]["test_ids"], ["CT-UART-001"])
+        self.assertEqual(plan["selection"]["unittest"]["scopes"], ["ct_framework_python"])
+        self.assertTrue(plan["reports"]["markdown"])
+        self.assertEqual(plan["reports"]["pandoc"], "both")
+
 
 class MCPServerContractTests(unittest.IsolatedAsyncioTestCase):
     def test_server_advertises_the_workspace_logo(self) -> None:
@@ -92,6 +101,8 @@ class MCPServerContractTests(unittest.IsolatedAsyncioTestCase):
                 "get_test_list_pytest",
                 "get_test_list_unittest",
                 "get_test_list_all",
+                "get_ollama_test_plan",
+                "run_ollama_test_workflow",
                 "run_test_pytest",
                 "run_test_unittest",
                 "run_test_all",

@@ -7,3 +7,4 @@ pyserial>=3.5,<4.0
 pyusb>=1.2,<2.0
 mcp>=2.0,<3.0
 pypandoc-binary>=1.17,<2.0
+PyYAML>=6.0,<7.0
