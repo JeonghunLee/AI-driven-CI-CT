@@ -1,0 +1,209 @@
+import json
+import unittest
+from pathlib import Path
+
+from test_envs.tools.test_catalog import catalog_tests
+
+
+def load_jsonc(path: str) -> dict[str, object]:
+    text = Path(path).read_text(encoding="utf-8")
+    without_line_comments = "\n".join(
+        line for line in text.splitlines() if not line.lstrip().startswith("//")
+    )
+    return json.loads(without_line_comments)
+
+
+class VSCodeLocalLLMContractTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.launch = load_jsonc(".vscode/launch.json")
+        self.tasks = load_jsonc(".vscode/tasks.json")
+        self.settings = load_jsonc(".vscode/settings.json")
+        self.env_config = json.loads(Path("test_envs/configs/config_env.json").read_text(encoding="utf-8"))
+        self.ollama_config = json.loads(Path("test_envs/configs/config_ollama.json").read_text(encoding="utf-8"))
+
+    def test_selected_preset_has_model_name(self) -> None:
+        self.assertIn(self.env_config["os"], ["auto", "windows", "linux", "macos"])
+        self.assertTrue(self.ollama_config["selected_model"])
+
+    def test_launch_setup_delegates_to_foreground_tasks(self) -> None:
+        expected = {
+            "SETUP 1: Select Operating System": "SETUP 1: Select Operating System",
+            "SETUP 2: Install Python Virtual Environment": "SETUP 2: Install Python Virtual Environment",
+            "SETUP 3: Install Ollama and Local LLM": "SETUP 3: Install Ollama and Local LLM",
+            "SETUP 4: Register Pytest Test Catalog": "SETUP 4: Register Pytest Test Catalog",
+            "CHECK 1: Refresh Environment Check Files": "CHECK 1: Refresh Environment Check Files",
+        }
+        configurations = {item["name"]: item for item in self.launch["configurations"]}
+        for name, task in expected.items():
+            configuration = configurations[name]
+            self.assertEqual(configuration["preLaunchTask"], task)
+            self.assertEqual(configuration["module"], "test_envs.tools.configuration")
+            self.assertEqual(configuration["args"], ["config"])
+            self.assertNotEqual(configuration["module"], "test_envs.test_pipeline.environment_setup")
+        self.assertEqual([item["id"] for item in self.launch["inputs"]], ["fixtureMode"])
+
+    def test_python_setup_uses_platform_picker(self) -> None:
+        task = next(
+            item for item in self.tasks["tasks"]
+            if item["label"] == "SETUP 2: Install Python Virtual Environment"
+        )
+        self.assertEqual(
+            task["args"],
+            ["-m", "test_envs.test_pipeline.environment_setup", "python"],
+        )
+
+    def test_task_setup_uses_internal_model_config(self) -> None:
+        setup = next(
+            item for item in self.tasks["tasks"]
+            if item["label"] == "SETUP 3: Install Ollama and Local LLM"
+        )
+        self.assertEqual(
+            setup["args"],
+            ["-m", "test_envs.test_pipeline.environment_setup", "ollama"],
+        )
+        self.assertTrue(any("Check Files" in item["label"] for item in self.tasks["tasks"]))
+
+    def test_ollama_server_task_is_foreground_process(self) -> None:
+        task = next(
+            item for item in self.tasks["tasks"]
+            if item["label"] == "CHECK 3: Run Ollama Server (Foreground)"
+        )
+        self.assertEqual(task["type"], "process")
+        self.assertNotIn("isBackground", task)
+        self.assertEqual(
+            task["args"],
+            ["-m", "test_envs.test_pipeline.environment_setup", "serve"],
+        )
+
+    def test_vscode_json_contains_no_os_metadata(self) -> None:
+        self.assertEqual(
+            [item["id"] for item in self.tasks["inputs"]],
+            ["testCaseId", "fixtureMode", "ollamaTestCommand"],
+        )
+        self.assertNotIn("targetOS", {item["id"] for item in self.tasks["inputs"]})
+        for configuration in self.launch["configurations"]:
+            expected_python = (
+                "python"
+                if configuration["name"].startswith(("SETUP 1", "SETUP 2"))
+                else "${config:python.defaultInterpreterPath}"
+            )
+            self.assertEqual(configuration["python"], expected_python)
+            self.assertNotIn("windows", configuration)
+            self.assertNotIn("linux", configuration)
+            self.assertNotIn("osx", configuration)
+        for task in self.tasks["tasks"]:
+            self.assertNotIn("windows", task)
+            self.assertNotIn("linux", task)
+            self.assertNotIn("osx", task)
+            if task["label"].startswith("Git:"):
+                continue
+            expected_command = (
+                "python"
+                if task["label"].startswith(("SETUP 1", "SETUP 2"))
+                else "${config:python.defaultInterpreterPath}"
+            )
+            self.assertEqual(task["command"], expected_command)
+
+    def test_python_tasks_run_as_managed_processes(self) -> None:
+        python_tasks = [
+            task for task in self.tasks["tasks"]
+            if not task["label"].startswith("Git:")
+        ]
+        for task in python_tasks:
+            self.assertEqual(task["type"], "process")
+            self.assertNotIn("isBackground", task)
+
+    def test_git_tasks_remain_shell_commands(self) -> None:
+        git_tasks = [
+            task for task in self.tasks["tasks"]
+            if task["label"].startswith("Git:")
+        ]
+        self.assertEqual(
+            {task["label"] for task in git_tasks},
+            {"Git: Show Local Config", "Git: Show Remotes"},
+        )
+        for task in git_tasks:
+            self.assertEqual(task["type"], "shell")
+            self.assertTrue(task["command"].startswith("git "))
+
+    def test_setup_1_uses_system_python(self) -> None:
+        launch = next(
+            item for item in self.launch["configurations"]
+            if item["name"] == "SETUP 1: Select Operating System"
+        )
+        task = next(
+            item for item in self.tasks["tasks"]
+            if item["label"] == "SETUP 1: Select Operating System"
+        )
+        self.assertEqual(launch["python"], "python")
+        self.assertEqual(task["command"], "python")
+        self.assertNotIn(".venv", json.dumps(launch))
+        self.assertNotIn(".venv", json.dumps(task))
+
+    def test_vscode_testing_uses_project_venv_and_pytest(self) -> None:
+        self.assertEqual(
+            self.settings["python.defaultInterpreterPath"],
+            "${workspaceFolder}/.venv/Scripts/python.exe",
+        )
+        self.assertTrue(self.settings["python.testing.pytestEnabled"])
+        self.assertFalse(self.settings["python.testing.unittestEnabled"])
+        self.assertEqual(
+            self.settings["python.testing.pytestArgs"],
+            ["-p", "no:cacheprovider", "test_programs/pytest", "test_programs/unittest"],
+        )
+
+    def test_test_case_tasks_support_all_and_test_id(self) -> None:
+        tasks = [item for item in self.tasks["tasks"] if item["label"].startswith("TEST CASE:")]
+        self.assertEqual(
+            [item["label"] for item in tasks],
+            [
+                "TEST CASE: ALL",
+                "TEST CASE: TEST ID",
+            ],
+        )
+        self.assertTrue(tasks[0]["group"]["isDefault"])
+        self.assertFalse(tasks[1]["group"]["isDefault"])
+        self.assertIn("${input:testCaseId}", tasks[1]["args"])
+        for task in tasks:
+            self.assertIn("--fixture-mode", task["args"])
+            self.assertIn("${input:fixtureMode}", task["args"])
+
+    def test_test_case_id_picker_matches_ct_markers(self) -> None:
+        picker = next(item for item in self.tasks["inputs"] if item["id"] == "testCaseId")
+        test_ids = [test["test_id"] for test in catalog_tests()]
+
+        self.assertEqual(picker["type"], "pickString")
+        self.assertEqual(picker["options"], test_ids)
+        self.assertIn(picker["default"], test_ids)
+
+    def test_fixture_mode_picker_supports_override(self) -> None:
+        picker = next(item for item in self.tasks["inputs"] if item["id"] == "fixtureMode")
+        self.assertEqual(picker["options"], ["marker", "mock", "hil"])
+        self.assertEqual(picker["default"], "marker")
+
+    def test_ai_agent_ollama_task_uses_registered_rule_picker(self) -> None:
+        task = next(
+            item for item in self.tasks["tasks"]
+            if item["label"] == "TEST AI Agent: Ollama MCP Workflow"
+        )
+        picker = next(item for item in self.tasks["inputs"] if item["id"] == "ollamaTestCommand")
+        self.assertEqual(
+            task["args"],
+            [
+                "-m",
+                "test_envs.mcp_server.ollama_workflow",
+                "--command",
+                "${input:ollamaTestCommand}",
+            ],
+        )
+        self.assertEqual(picker["options"], ["default", "all", "uart", "usb", "network"])
+        self.assertEqual(picker["default"], "default")
+
+    def test_report_tasks_include_html_and_docx(self) -> None:
+        labels = {item["label"] for item in self.tasks["tasks"]}
+        self.assertIn("REPORT-Pandoc: Convert Latest Markdown to HTML", labels)
+        self.assertIn("REPORT-Pandoc: Convert Latest Markdown to DOCX", labels)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -86,6 +86,10 @@ Set a unique `TEST_NAME` such as `local_01`, `local_02`, or `hil_lab_01` for eac
 
 `OLLAMA_TEST_CONFIG` selects `test_config.json`, which maps commands such as `default`, `all`, `uart`, `usb`, and `network` to YAML files under `test_rules/`. An AI Agent passes the command to `get_ollama_test_plan` or `run_ollama_test_workflow`; the MCP server rejects unregistered commands and any YAML target outside `test_rules/`.
 
+VS Code exposes the same execution path as the `TEST AI Agent: Ollama MCP Workflow` task. Its picker supplies a registered command to `python -m test_envs.mcp_server.ollama_workflow --command <command>`.
+
+The CLI and VS Code Task print progress for each selected Pytest TEST ID and Unittest scope, including completion status and report generation. The MCP tool response remains structured and returns the same final result paths.
+
 <br/>
 
 ## Connection Test
@@ -97,7 +101,7 @@ Run the protocol contract tests without starting a child process:
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_envs/tests/unittest/ct_framework/python/test_mcp_runner.py -k "not stdio" -vv
+.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_programs/unittest/ct_framework/python/test_mcp_runner.py -k "not stdio" -vv
 ```
 
 <br/>
@@ -108,7 +112,7 @@ Run the optional integration test that launches the server as an external `stdio
 
 ```powershell
 $env:AI_CT_RUN_STDIO_TEST = "true"
-.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_envs/tests/unittest/ct_framework/python/test_mcp_runner.py -k stdio -vv
+.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_programs/unittest/ct_framework/python/test_mcp_runner.py -k stdio -vv
 ```
 
 <br/>
@@ -134,7 +138,7 @@ flowchart TD
 
 `markdown` generates the canonical Markdown report. `update_mkdocs` separately copies that generated Markdown into `docs/tests`. Pandoc DOCX uses `docx/reference/reference.docx`.
 
-The MCP Pytest allowlist is loaded from `test_envs/tests/pytest/test_cases/test_catalog.json`. Adding a Python CT case therefore requires no MCP source-code edit; run `python -m test_envs.tools.test_catalog` to register it.
+The MCP Pytest allowlist is loaded from `test_programs/pytest/test_cases/test_catalog.json`. Adding a Python CT case therefore requires no MCP source-code edit; run `python -m test_envs.tools.test_catalog` to register it.
 
 <br/>
 

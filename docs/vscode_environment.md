@@ -67,8 +67,8 @@ Connected VS Code features: [Testing](#testing) and [Python Extension](#python-e
   "python.testing.pytestArgs": [
     "-p",
     "no:cacheprovider",
-    "test_envs/tests/pytest",
-    "test_envs/tests/unittest"
+    "test_programs/pytest",
+    "test_programs/unittest"
   ],
   "python.testing.cwd": "${workspaceFolder}",
   "python.testing.autoTestDiscoverOnSaveEnabled": true,
@@ -214,7 +214,7 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
                 "pytest",
                 "-p",
                 "no:cacheprovider",
-                "test_envs/tests/pytest/test_cases",
+                "test_programs/pytest/test_cases",
                 "--fixture-mode",
                 "${input:fixtureMode}"
             ],
@@ -233,7 +233,7 @@ Connected VS Code feature: [Run Tasks](#run-tasks)
                 "pytest",
                 "-p",
                 "no:cacheprovider",
-                "test_envs/tests/pytest/test_cases",
+                "test_programs/pytest/test_cases",
                 "--test-id",
                 "${input:testCaseId}",
                 "--fixture-mode",
@@ -634,6 +634,7 @@ Every Task has `type: process`, runs in the foreground, and has no `isBackground
 | `CHECK 1: Refresh Environment Check Files` | `test_envs.tools.configuration` | `check` | Regenerates `check_envs.json` and `check_ollama.json` |
 | `CHECK 2: Show Environment Configuration` | `test_envs.tools.configuration` | `config` | Prints the current project configuration |
 | `CHECK 3: Run Ollama Server (Foreground)` | `test_envs.test_pipeline.environment_setup` | `serve` | Runs an Ollama server owned by the terminal Task |
+| `TEST AI Agent: Ollama MCP Workflow` | `test_envs.mcp_server.ollama_workflow` | `--command ${input:ollamaTestCommand}` | Runs the command-selected allowlisted rule from `test_config.json` through the Ollama MCP workflow |
 
 <br/>
 
@@ -656,7 +657,7 @@ Setup 1 through Setup 4 and Check 1 are also exposed through [Run and Debug-Setu
 
 <br/>
 
-Both Tasks disable the pytest cache provider and execute `test_envs/tests/pytest/test_cases`.
+Both Tasks disable the pytest cache provider and execute `test_programs/pytest/test_cases`.
 
 <br/>
 
@@ -727,9 +728,9 @@ Run Setup 4 after adding or changing a `@pytest.mark.ct` test. VS Code must relo
 VS Code Testing
 └── Microsoft Python extension
     └── pytest adapter
-        ├── test_envs/tests/pytest
+        ├── test_programs/pytest
         │   └── CT test cases: mock or hil
-        └── test_envs/tests/unittest
+        └── test_programs/unittest
             └── unittest.TestCase collected by pytest
 ```
 
@@ -740,8 +741,8 @@ VS Code Testing
 | Adapter | pytest only |
 | Interpreter | Project `.venv` |
 | Working directory | Workspace root |
-| CT root | `test_envs/tests/pytest` |
-| unittest root | `test_envs/tests/unittest` |
+| CT root | `test_programs/pytest` |
+| unittest root | `test_programs/unittest` |
 | File pattern | `test_*.py` from `pytest.ini` |
 | Automatic discovery | Enabled on save |
 | Cache provider | Disabled |
@@ -783,7 +784,7 @@ Build the unified Testing tree
 | pytest CT | TEST ID | Final mode is `mock` or `hil` | `<execution-id>_result.json` + `<execution-id>_test.log` |
 | unittest | Test function | Fixture mode is not used | `<execution-id>_result.json` + `<execution-id>_result.log` |
 
-The Testing panel supports running or debugging the full tree, a folder, a module, a class, or one test function. CT normalization is handled by `test_envs/tests/pytest/conftest.py`; unittest normalization is handled by `test_envs/tests/unittest/conftest.py`.
+The Testing panel supports running or debugging the full tree, a folder, a module, a class, or one test function. CT normalization is handled by `test_programs/pytest/conftest.py`; unittest normalization is handled by `test_programs/unittest/conftest.py`.
 
 <br/>
 

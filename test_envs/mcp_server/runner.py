@@ -7,7 +7,7 @@ import sys
 import threading
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Callable, Literal
 
 import yaml
 
@@ -27,12 +27,12 @@ PandocFormat = Literal["none", "docx", "html", "both"]
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OLLAMA_TEST_CONFIG_PATH = ROOT / "test_envs" / "configs" / "test_config.json"
 UNITTEST_SCOPES = {
-    "all": "test_envs/tests/unittest",
-    "ct_framework_python": "test_envs/tests/unittest/ct_framework/python",
-    "python": "test_envs/tests/unittest/python",
-    "c_cpp": "test_envs/tests/unittest/c_cpp",
-    "firmware": "test_envs/tests/unittest/firmware",
-    "common": "test_envs/tests/unittest/common",
+    "all": "test_programs/unittest",
+    "ct_framework_python": "test_programs/unittest/ct_framework/python",
+    "python": "test_programs/unittest/python",
+    "c_cpp": "test_programs/unittest/c_cpp",
+    "firmware": "test_programs/unittest/firmware",
+    "common": "test_programs/unittest/common",
 }
 _RUN_LOCK = threading.Lock()
 
@@ -158,7 +158,10 @@ def ollama_test_plan_path(command: str = "") -> Path:
     return candidate
 
 
-def run_ollama_test_plan(command: str = "") -> dict[str, object]:
+def run_ollama_test_plan(
+    command: str = "",
+    progress: Callable[[str], None] | None = None,
+) -> dict[str, object]:
     """Execute the allowlisted test and report workflow selected by test_config.json."""
     plan = ollama_test_plan(command)
     ollama = build_check().get("ollama", {})
@@ -175,34 +178,43 @@ def run_ollama_test_plan(command: str = "") -> dict[str, object]:
     pytest_ids = list(catalog_by_id()) if pytest_plan["mode"] == "all" else pytest_plan["test_ids"]
     unittest_scopes = ["all"] if unittest_plan["mode"] == "all" else unittest_plan["scopes"]
     results: dict[str, list[dict[str, object]]] = {"pytest": [], "unittest": []}
+    notify = progress or (lambda message: None)
+    total = len(pytest_ids) + len(unittest_scopes)
+    current = 0
+    notify(f"Workflow started: {total} test request(s), Pandoc={reports['pandoc']}")
 
     for test_id in pytest_ids:
-        results["pytest"].append(
-            run_test(
-                TestRequest(
-                    test_type="pytest",
-                    test_id=test_id,
-                    fixture_mode=pytest_plan["fixture_mode"],
-                    coverage=execution["coverage"],
-                    markdown=reports["markdown"],
-                    pandoc=reports["pandoc"],
-                ),
-                execution["timeout_seconds"],
-            )
+        current += 1
+        notify(f"[{current}/{total}] Pytest {test_id}: running test, Ollama analysis, and reports")
+        result = run_test(
+            TestRequest(
+                test_type="pytest",
+                test_id=test_id,
+                fixture_mode=pytest_plan["fixture_mode"],
+                coverage=execution["coverage"],
+                markdown=reports["markdown"],
+                pandoc=reports["pandoc"],
+            ),
+            execution["timeout_seconds"],
         )
+        results["pytest"].append(result)
+        notify(f"[{current}/{total}] Pytest {test_id}: {result.get('status', 'UNKNOWN')}")
     for scope in unittest_scopes:
-        results["unittest"].append(
-            run_test(
-                TestRequest(
-                    test_type="unittest",
-                    unittest_scope=scope,
-                    coverage=execution["coverage"],
-                    markdown=reports["markdown"],
-                    pandoc=reports["pandoc"],
-                ),
-                execution["timeout_seconds"],
-            )
+        current += 1
+        notify(f"[{current}/{total}] Unittest {scope}: running test and reports")
+        result = run_test(
+            TestRequest(
+                test_type="unittest",
+                unittest_scope=scope,
+                coverage=execution["coverage"],
+                markdown=reports["markdown"],
+                pandoc=reports["pandoc"],
+            ),
+            execution["timeout_seconds"],
         )
+        results["unittest"].append(result)
+        notify(f"[{current}/{total}] Unittest {scope}: {result.get('status', 'UNKNOWN')}")
+    notify("Workflow completed")
     return {
         "command": command.strip().lower() or str(ollama_test_rules()["default_command"]),
         "plan_path": _relative(ollama_test_plan_path(command)),
@@ -388,7 +400,7 @@ def _pytest_command(request: TestRequest) -> list[str]:
     if request.test_type == "pytest":
         command.extend(
             [
-                "test_envs/tests/pytest/test_cases",
+                "test_programs/pytest/test_cases",
                 "--test-id",
                 request.test_id,
                 "--fixture-mode",

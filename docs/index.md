@@ -452,8 +452,8 @@ flowchart TD
 |---|---|
 | Project configuration | `test_envs/configs/config_env.json`, `test_envs/configs/config_ollama.json` |
 | Environment checks | `test_envs/configs/check_envs.json`, `test_envs/configs/check_ollama.json` |
-| pytest | `test_envs/tests/pytest` |
-| unittest | `test_envs/tests/unittest` |
+| pytest | `test_programs/pytest` |
+| unittest | `test_programs/unittest` |
 | Results | `test_reports/results` |
 | Local LLM logs | `test_reports/local_llm` |
 | Markdown | `test_reports/markdown/pytest/test_cases`, `test_reports/markdown/unittest` |

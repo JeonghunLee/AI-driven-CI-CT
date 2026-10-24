@@ -24,7 +24,7 @@ The unittest area validates the CT framework and provides extension points for p
 ```mermaid
 flowchart TD
     A[VS Extension Testing or pytest command] --> B[pytest adapter]
-    B --> C[test_envs/tests/unittest]
+    B --> C[test_programs/unittest]
     C --> D[Function-level reports]
     D --> E[unittest conftest hooks]
     E --> F[Execution Result JSON]
@@ -41,7 +41,7 @@ The unittest branch does not call Ollama, create a Local LLM log, add `test_anal
 ## Repository Structure
 
 ```text
-test_envs/tests/unittest/
+test_programs/unittest/
 ├── conftest.py
 ├── ct_framework/
 │   └── python/
@@ -86,7 +86,7 @@ test_envs/tests/unittest/
 ### Project command
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_envs/tests/unittest
+.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_programs/unittest
 ```
 
 <br/>
@@ -96,9 +96,9 @@ test_envs/tests/unittest/
 | Setting | Value |
 |---|---|
 | Adapter | pytest |
-| Discovery root | `test_envs/tests/unittest` |
+| Discovery root | `test_programs/unittest` |
 | Native unittest adapter | Disabled |
-| Result capture | `test_envs/tests/unittest/conftest.py` |
+| Result capture | `test_programs/unittest/conftest.py` |
 
 Running `python -m unittest` bypasses the pytest hooks and therefore does not generate this framework's normalized result or log.
 
@@ -113,7 +113,7 @@ unittest_request.yml Issue
         ↓
 `test_envs.tool_github.issue_parser` selects Unittest scope and runner
         ↓
-pytest test_envs/tests/unittest
+pytest test_programs/unittest
         ↓
 unittest conftest session result
         ↓
@@ -128,13 +128,13 @@ The unified workflow uses the unittest pytest hook as the single result-capture 
 
 ## Result Capture Lifecycle
 
-Source: `test_envs/tests/unittest/conftest.py`
+Source: `test_programs/unittest/conftest.py`
 
 <br/>
 
 ### Function capture
 
-The `pytest_runtest_logreport` hook accepts only node IDs under `test_envs/tests/unittest/`. Results are stored by full pytest node ID and written in sorted order when the session finishes.
+The `pytest_runtest_logreport` hook accepts only node IDs under `test_programs/unittest/`. Results are stored by full pytest node ID and written in sorted order when the session finishes.
 
 | pytest phase | Condition | Function status | Failure detail |
 |---|---|---|---|

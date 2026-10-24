@@ -36,18 +36,18 @@ flowchart TD
 
 | Layer | Location | Responsibility |
 |---|---|---|
-| Test case | `test_envs/tests/pytest/test_cases/` | Scenario, assertions, CT marker, metrics/statistics |
-| Fixture composition | `test_envs/tests/pytest/fixtures/` | Tool selection, connection lifecycle, supported modes |
-| DUT interface | `test_envs/tests/pytest/test_interfaces/` | `connect`, `disconnect`, `read`, `write`, `execute` |
-| Test equipment | `test_envs/tests/pytest/test_equipments/` | Measurement or DUT control |
-| Framework hooks | `test_envs/tests/pytest/conftest.py` | Registry, validation, selection, result/log generation |
+| Test case | `test_programs/pytest/test_cases/` | Scenario, assertions, CT marker, metrics/statistics |
+| Fixture composition | `test_programs/pytest/fixtures/` | Tool selection, connection lifecycle, supported modes |
+| DUT interface | `test_programs/pytest/test_interfaces/` | `connect`, `disconnect`, `read`, `write`, `execute` |
+| Test equipment | `test_programs/pytest/test_equipments/` | Measurement or DUT control |
+| Framework hooks | `test_programs/pytest/conftest.py` | Registry, validation, selection, result/log generation |
 
 ## Repository Structure
 
 <br/>
 
 ```text
-test_envs/tests/
+test_programs/
 ├── pytest/                       # CT execution mode: mock or hil
 │   ├── test_cases/
 │   │   ├── test_fixture_001_uart_timing.py
@@ -149,7 +149,7 @@ An invalid contract raises a pytest collection/usage error before test execution
 
 <br/>
 
-`test_envs.tests.pytest.test_cases` Python files are the registration source. The catalog generator reads their `@pytest.mark.ct` decorators with Python AST; it does not import or execute the test modules.
+`test_programs.pytest.test_cases` Python files are the registration source. The catalog generator reads their `@pytest.mark.ct` decorators with Python AST; it does not import or execute the test modules.
 
 ```powershell
 .\.venv\Scripts\python.exe -m test_envs.tools.test_catalog
@@ -159,7 +159,7 @@ An invalid contract raises a pytest collection/usage error before test execution
 
 | Catalog item | Value |
 |---|---|
-| Generated file | `test_envs/tests/pytest/test_cases/test_catalog.json` |
+| Generated file | `test_programs/pytest/test_cases/test_catalog.json` |
 | Fields | `test_id`, `category`, `fixture_id`, `default_fixture_mode`, `test_prompt`, `test_path` |
 | Validation | Required literal fields, supported default mode, and unique TEST ID |
 | Synchronized consumers | VS Code Task picker, Pytest Issue Form, and GitHub `workflow_dispatch` picker |
@@ -290,7 +290,7 @@ A future Wireshark CT extension can use this structure:
 <br/>
 
 ```text
-test_envs/tests/pytest/
+test_programs/pytest/
 ├── test_equipments/wireshark/{mock,hil}/
 ├── fixtures/fixture_006_network_wireshark.py
 └── test_cases/test_fixture_006_network_capture.py
@@ -420,7 +420,7 @@ Statistics are written to `EQUIPMENT`; metrics are written to `INTERFACE`.
 * pytest.ini
 ```
 [pytest]
-testpaths = test_envs/tests
+testpaths = test_programs
 python_files = test_*.py
 addopts = -ra
 markers =
@@ -439,23 +439,23 @@ All configured tests under pytest.ini testpaths
 
 pytest CT area only
 ```
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest -m ct -s
+.\.venv\Scripts\python.exe -m pytest test_programs/pytest -m ct -s
 ```
 Keep each test marker's default mode
 ```
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=marker
+.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --fixture-mode=marker
 ```
 
 Force Mock mode
 ```
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=mock
+.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --fixture-mode=mock
 ```
 
 **Select one TEST ID**     
 VSCode -> Task   
 VSCode -> Testing
 ```
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --test-id CT-UART-001 --fixture-mode=mock
+.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --test-id CT-UART-001 --fixture-mode=mock
 ```
 
 <br/>
@@ -471,7 +471,7 @@ forcing `--fixture-mode=hil` fails with an explicit “HIL implementation is req
 
 | Item | Value |
 |---|---|
-| Testing path | `test_envs/tests/pytest` |
+| Testing path | `test_programs/pytest` |
 | Debug configuration | Not currently configured in `launch.json` |
 | All-test task | `TEST CASE: ALL` |
 | TEST ID task | `TEST CASE: TEST ID` |

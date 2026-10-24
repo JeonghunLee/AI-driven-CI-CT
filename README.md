@@ -141,9 +141,9 @@ python -m test_envs.test_pipeline.environment_setup python --platform config
 
 | Adapter | Discovery path | Implementation |
 |---|---|---|
-| pytest | `test_envs/tests/pytest` | pytest |
-| pytest | `test_envs/tests/unittest` | `unittest.TestCase` |
-| CT framework unittest | `test_envs/tests/unittest/ct_framework/python` | pytest |
+| pytest | `test_programs/pytest` | pytest |
+| pytest | `test_programs/unittest` | `unittest.TestCase` |
+| CT framework unittest | `test_programs/unittest/ct_framework/python` | pytest |
 
 | TEST Task | Scope | VS Code group |
 |---|---|---|
@@ -155,7 +155,7 @@ python -m test_envs.test_pipeline.environment_setup python --platform config
 | 작업 | 명령 |
 |---|---|
 | 전체 TEST | `python -m pytest` |
-| CT | `python -m pytest test_envs/tests/pytest -m ct -s` |
+| CT | `python -m pytest test_programs/pytest -m ct -s` |
 | Pytest catalog registration | `python -m test_envs.tools.test_catalog` |
 | Latest Markdown | `python -m test_envs.tools.test_result` |
 | Pending Markdown | `python -m test_envs.tools.test_result --pending` |
@@ -256,7 +256,7 @@ test_envs/configs/
 
 | Identifier | 적용 대상 | 정의 위치·시점 | 용도 | 형식 |
 |---|---|---|---|---|
-| TEST ID | pytest only | `test_envs/tests/pytest/test_cases` | Test case 식별 | `CT-<TARGET>-<NNN>` |
+| TEST ID | pytest only | `test_programs/pytest/test_cases` | Test case 식별 | `CT-<TARGET>-<NNN>` |
 | Execution ID | pytest, unittest | Execution result 생성 시점 | Result 구분자 | `YYYYMMDD_HHMMSS_ffffff` |
 
 | Runner | Primary key | TEST ID |
@@ -344,11 +344,11 @@ test_reports/
 
 | Layer | Path |
 |---|---|
-| Test Case | `test_envs/tests/pytest/test_cases/` |
-| Equipment Controller | `test_envs/tests/pytest/test_equipments/` |
-| DUT Interface | `test_envs/tests/pytest/test_interfaces/` |
-| Fixture composition | `test_envs/tests/pytest/fixtures/` |
-| Fixture registration / result lifecycle | `test_envs/tests/pytest/conftest.py` |
+| Test Case | `test_programs/pytest/test_cases/` |
+| Equipment Controller | `test_programs/pytest/test_equipments/` |
+| DUT Interface | `test_programs/pytest/test_interfaces/` |
+| Fixture composition | `test_programs/pytest/fixtures/` |
+| Fixture registration / result lifecycle | `test_programs/pytest/conftest.py` |
 | CT marker | `@pytest.mark.ct(...)` |
 | Result fixture | `ct_result` |
 
@@ -367,7 +367,7 @@ test_reports/
 | TEST CASE registration | 값 |
 |---|---|
 | Source | `@pytest.mark.ct` |
-| Generated catalog | `test_envs/tests/pytest/test_cases/test_catalog.json` |
+| Generated catalog | `test_programs/pytest/test_cases/test_catalog.json` |
 | Catalog command | `python -m test_envs.tools.test_catalog` |
 | Synchronized selection | VS Code Tasks, Pytest Issue Form, GitHub workflow dispatch, MCP, Issue parser, GitHub reporter |
 | Validation | `pytest_collection_modifyitems` |

@@ -21,7 +21,7 @@ Framework structure and Fixture contracts are documented in [Pytest CT Framework
 | Test registration | `python -m test_envs.tools.test_catalog` generates the shared TEST ID catalog |
 | Test composition | Numbered Fixture with interfaces and equipment |
 | Runtime mode | `mock` or `hil` |
-| Result capture | `test_envs/tests/pytest/conftest.py` |
+| Result capture | `test_programs/pytest/conftest.py` |
 | Local LLM | Used during Report generation |
 | Coverage | `pytest-cov` or VS Code Testing Coverage |
 
@@ -56,7 +56,7 @@ Write Result JSON and Test Log
 | Step | Operation |
 |---:|---|
 | 1 | Setup 4 reads Python CT markers and generates `test_catalog.json` plus static TEST ID choices |
-| 2 | Pytest collects `test_envs/tests/pytest/test_cases` |
+| 2 | Pytest collects `test_programs/pytest/test_cases` |
 | 3 | `conftest.py` validates the CT marker and numbered Fixture contract |
 | 4 | `--test-id` keeps one TEST ID when provided |
 | 5 | `--fixture-mode` overrides the marker or uses its default mode |
@@ -90,7 +90,7 @@ Run all CT Test Cases with their marker modes:
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=marker
+.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --fixture-mode=marker
 ```
 
 <br/>
@@ -100,7 +100,7 @@ Force Mock mode:
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=mock
+.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --fixture-mode=mock
 ```
 
 <br/>
@@ -110,7 +110,7 @@ Run one TEST ID:
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --test-id CT-UART-001 --fixture-mode=mock
+.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --test-id CT-UART-001 --fixture-mode=mock
 ```
 
 <br/>
@@ -128,7 +128,7 @@ Run CT Test Cases and print missing Python lines:
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest test_envs/tests/pytest/test_cases --fixture-mode=mock --cov=test_envs --cov-report=term-missing
+.\.venv\Scripts\python.exe -m pytest test_programs/pytest/test_cases --fixture-mode=mock --cov=test_envs --cov-report=term-missing
 ```
 
 <br/>

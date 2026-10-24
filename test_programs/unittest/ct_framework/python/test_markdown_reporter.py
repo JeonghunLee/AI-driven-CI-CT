@@ -1,0 +1,250 @@
+import unittest
+from pathlib import Path
+
+from test_envs.tools.local_llm import Analysis
+from test_envs.tools.mkdocs_reporter import MarkdownReporter, _warning_severity
+from test_envs.tools.result_normalizer import ResultRecord, ResultStore
+
+
+class MarkdownReporterTests(unittest.TestCase):
+    def test_markdown_first_report_contains_required_sections(self) -> None:
+        root = Path("test_programs/.tmp/ct_framework/markdown-reporter")
+        result = ResultRecord(
+            "CT-MD-001",
+            "PASS",
+            "timing",
+            0.2,
+            description="UART timing",
+            environment="test",
+            test_envs={
+                "test_os": "windows",
+                "test_name": "local_01",
+                "test_environment": "local",
+                "test_request": "local_vscode",
+                "description": "test_environment information",
+            },
+            configuration={
+                "category": "timing",
+                "fixture_id": "FIXTURE-001",
+                "fixture_mode": "mock",
+            },
+            fixture_id="FIXTURE-001",
+            equipment="Saleae",
+            equipment_mode="mock",
+            interface="UART",
+            interface_mode="mock",
+            metrics={"jitter": 0.001},
+        )
+        ResultStore(root).save(result)
+        path = MarkdownReporter(root).generate(
+            result,
+            Analysis(
+                "Stable",
+                "information_security",
+                0.85,
+                "ollama/deepseek-r1:7b",
+                warnings=[{"severity": "Important", "message": "Review configuration."}],
+                recommendations="Improve error handling.",
+                prompt="Analyze the test result.",
+            ),
+        )
+        text = path.read_text(encoding="utf-8")
+        self.assertEqual(
+            path,
+            root / "markdown/pytest/test_cases/CT-MD-001" / f"{result.execution_id}_result.md",
+        )
+        self.assertIn("## Local LLM Analysis", text)
+        self.assertIn("### LLM Test Prompt", text)
+        self.assertIn("### Test Result", text)
+        self.assertIn("### Test Summary", text)
+        self.assertIn("### Test Source", text)
+        self.assertIn("### Test configs", text)
+        self.assertIn("| Test envs | Value |", text)
+        self.assertIn("| test_os | windows |", text)
+        self.assertIn("| test_name | local_01 |", text)
+        self.assertIn("| test_environment | local |", text)
+        self.assertIn("| test_request | local_vscode |", text)
+        self.assertNotIn("| description |", text)
+        self.assertIn("| Commit |", text)
+        self.assertIn("| Branch |", text)
+        self.assertNotIn("## Test history", text)
+        self.assertIn("| Test Item | Value |", text)
+        self.assertIn("| Test ID | CT-MD-001 |", text)
+        self.assertIn("| Fixture ID | FIXTURE-001 |", text)
+        self.assertIn("<br/>", text)
+        self.assertIn("| FIXTURE-001 | Value |", text)
+        self.assertIn("| Interface | UART |", text)
+        self.assertIn("| Equipment | Saleae |", text)
+        self.assertIn("| Equipment mode | mock |", text)
+        self.assertIn("| Interface mode | mock |", text)
+        self.assertIn("| Status | enabled |", text)
+        self.assertIn("| **Status** | PASS |", text)
+        self.assertIn("| **Severity** | LOW |", text)
+        self.assertIn("| **Warnings** | 1 |", text)
+        self.assertIn("| **Needs Escalation** | OFF |", text)
+        self.assertIn("| Recommendations | Improve error handling. |", text)
+
+    def test_warning_count_controls_severity(self) -> None:
+        expected = {
+            0: "LOW",
+            1: "LOW",
+            2: "MEDIUM",
+            3: "MEDIUM",
+            4: "HIGH",
+            5: "HIGH",
+            6: "CRITICAL",
+            20: "CRITICAL",
+        }
+        for warning_count, severity in expected.items():
+            with self.subTest(warning_count=warning_count):
+                self.assertEqual(_warning_severity(warning_count), severity)
+
+    def test_unittest_markdown_lists_failed_functions(self) -> None:
+        result = ResultRecord(
+            "unittest",
+            "FAIL",
+            "unit",
+            0.1,
+            execution_id="20260101_020304_123456",
+            test_functions=(
+                {
+                    "path": "test_programs/unittest/python/test_device.py",
+                    "function": "test_device_timeout",
+                    "pass": False,
+                    "status": "FAIL",
+                    "duration": 0.1,
+                    "failure": "device timeout\nport | COM3\n```nested fence```",
+                },
+            ),
+        )
+        text = MarkdownReporter("test_programs/.tmp/ct_framework/unit-render").render(
+            result,
+            Analysis("Failure detected", "unittest", 1.0, "test"),
+        )
+        self.assertIn("| 0 | test_device_timeout | FAIL |", text)
+        self.assertIn("| Test envs | Value |", text)
+        self.assertIn("| test_os |", text)
+        self.assertIn("| test_name |", text)
+        self.assertIn("| test_environment |", text)
+        self.assertIn("| test_request |", text)
+        self.assertIn("#### `test_device_timeout`", text)
+        self.assertIn("| Status | FAIL |", text)
+        self.assertIn(
+            "````text\ndevice timeout\nport | COM3\n```nested fence```\n````",
+            text,
+        )
+        self.assertNotIn("Test ID", text)
+        self.assertNotIn("Fixture mode", text)
+        self.assertNotIn("Local LLM", text)
+
+    def test_mkdocs_publish_preserves_each_execution(self) -> None:
+        reports_root = Path("test_programs/.tmp/ct_framework/multi-execution-reports")
+        docs_root = Path("test_programs/.tmp/ct_framework/multi-execution-docs")
+        reporter = MarkdownReporter(reports_root, docs_root)
+        root_index = Path(docs_root) / "index.md"
+        root_index.parent.mkdir(parents=True, exist_ok=True)
+        root_index.write_text("# System Overview", encoding="utf-8")
+        analysis = Analysis("Stable", "passed", 1.0, "test")
+        first = ResultRecord("CT-MD-HISTORY", "PASS", "timing", 0.1, execution_id="20260101-000001")
+        second = ResultRecord(
+            "CT-MD-HISTORY",
+            "FAIL",
+            "timing",
+            0.2,
+            test_mode="hil",
+            execution_id="20260101-000002",
+        )
+
+        ResultStore(reports_root).save(first)
+        reporter.generate(first, analysis, publish_docs=True)
+        ResultStore(reports_root).save(second)
+        reporter.generate(second, analysis, publish_docs=True)
+
+        unit_result = ResultRecord(
+            "UNIT-INTERNAL-001",
+            "PASS",
+            "unit",
+            0.05,
+            description="test_result_parser",
+            execution_id="20260101-000003",
+            test_functions=(
+                {
+                    "path": "test_programs/unittest/python/test_result_parser.py",
+                    "function": "test_result_parser",
+                    "pass": True,
+                    "status": "PASS",
+                    "duration": 0.05,
+                    "failure": "",
+                },
+            ),
+        )
+        ResultStore(reports_root).save(unit_result)
+        unit_path = reporter.generate(unit_result, analysis, publish_docs=True)
+        self.assertEqual(
+            unit_path,
+            reports_root / "markdown/unittest/20260101-000003_result.md",
+        )
+
+        base = Path(docs_root) / "tests" / "pytest"
+        self.assertTrue((base / "CT-MD-HISTORY__20260101-000001.md").exists())
+        self.assertTrue((base / "CT-MD-HISTORY__20260101-000002.md").exists())
+        latest = (base / "CT-MD-HISTORY.md").read_text(encoding="utf-8")
+        self.assertIn("| FAIL | 0.200 | local |", latest)
+        self.assertIn("## Test History", latest)
+        self.assertIn("| Date | Time | Execution ID | Commit | Branch |", latest)
+        history = latest.partition("## Test History")[2]
+        self.assertIn(f"| {first.commit[:7]} |", history)
+        self.assertNotIn(f"| {first.commit} |", history)
+        self.assertNotIn("## Execution documents", latest)
+        self.assertIn(
+            "[20260101-000001](CT-MD-HISTORY__20260101-000001.md)",
+            latest,
+        )
+        self.assertIn("20260101-000001", latest)
+        self.assertIn("20260101-000002", latest)
+        pytest_index = (Path(docs_root) / "tests/pytest/index.md").read_text(encoding="utf-8")
+        unittest_index = (Path(docs_root) / "tests/unittest/index.md").read_text(encoding="utf-8")
+        self.assertIn("<br/>", pytest_index)
+        self.assertIn("| Category | Test ID | Mode | Latest | Execution Count |", pytest_index)
+        self.assertIn("| timing | [`CT-MD-HISTORY`](CT-MD-HISTORY.md) | hil |", pytest_index)
+        self.assertIn(second.timestamp.partition("T")[0], pytest_index)
+        self.assertIn("20260101-000001", pytest_index)
+        self.assertIn("20260101-000002", pytest_index)
+        self.assertIn("| Execution ID | Category | Test ID |", pytest_index)
+        self.assertIn(
+            "| [`20260101-000002`](CT-MD-HISTORY__20260101-000002.md) | timing | `CT-MD-HISTORY` |",
+            pytest_index,
+        )
+        self.assertIn("# Pytest Results Index", pytest_index)
+        self.assertIn("# Unittest Results Index", unittest_index)
+        self.assertIn(
+            "| Unittest Function Count | Pass | Latest |",
+            unittest_index,
+        )
+        self.assertIn("| 1 | PASS |", unittest_index)
+        self.assertIn(
+            f"[{unit_result.timestamp.partition('T')[0]}](20260101-000003.md)",
+            unittest_index,
+        )
+        self.assertIn("| Execution ID | Result | Tests | Passed | Failed |", unittest_index)
+        self.assertIn(
+            "| [`20260101-000003`](20260101-000003.md) | PASS | 1 | 1 | 0 |",
+            unittest_index,
+        )
+        unit_document = Path(docs_root) / "tests/unittest/20260101-000003.md"
+        self.assertTrue(unit_document.exists())
+        unit_text = unit_document.read_text(encoding="utf-8")
+        self.assertIn("# unittest Result", unit_text)
+        self.assertIn("## Test Summary", unit_text)
+        self.assertIn("* PATH0: `test_programs/unittest/python`", unit_text)
+        self.assertNotIn("PATH1", unit_text)
+        self.assertIn("| 0 | test_result_parser | PASS |", unit_text)
+        self.assertIn("### Failed Functions", unit_text)
+        self.assertIn("| Result json | 20260101-000003_result.json |", unit_text)
+        self.assertNotIn("Local LLM", unit_text)
+        self.assertNotIn("| Test ID | Mode |", unittest_index)
+        self.assertEqual(root_index.read_text(encoding="utf-8"), "# System Overview")
+
+
+if __name__ == "__main__":
+    unittest.main()

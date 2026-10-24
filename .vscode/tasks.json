@@ -109,7 +109,7 @@
                 "pytest",
                 "-p",
                 "no:cacheprovider",
-                "test_envs/tests/pytest/test_cases",
+                "test_programs/pytest/test_cases",
                 "--fixture-mode",
                 "${input:fixtureMode}"
             ],
@@ -128,7 +128,7 @@
                 "pytest",
                 "-p",
                 "no:cacheprovider",
-                "test_envs/tests/pytest/test_cases",
+                "test_programs/pytest/test_cases",
                 "--test-id",
                 "${input:testCaseId}",
                 "--fixture-mode",
@@ -137,6 +137,27 @@
             "group": {
                 "kind": "test",
                 "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "TEST AI Agent: Ollama MCP Workflow",
+            "type": "process",
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-m",
+                "test_envs.mcp_server.ollama_workflow",
+                "--command",
+                "${input:ollamaTestCommand}"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
             },
             "problemMatcher": []
         },
@@ -282,6 +303,19 @@
                 "hil"
             ],
             "default": "marker"
+        },
+        {
+            "id": "ollamaTestCommand",
+            "type": "pickString",
+            "description": "Ollama MCP test rule",
+            "options": [
+                "default",
+                "all",
+                "uart",
+                "usb",
+                "network"
+            ],
+            "default": "default"
         }
     ]
 }

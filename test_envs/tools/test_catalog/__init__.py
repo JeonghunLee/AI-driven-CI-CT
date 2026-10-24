@@ -10,7 +10,7 @@ from test_envs.tools.configuration import configured_now
 
 
 ROOT = Path(__file__).resolve().parents[3]
-TEST_CASE_ROOT = ROOT / "test_envs" / "tests" / "pytest" / "test_cases"
+TEST_CASE_ROOT = ROOT / "test_programs" / "pytest" / "test_cases"
 CATALOG_PATH = TEST_CASE_ROOT / "test_catalog.json"
 TASKS_PATH = ROOT / ".vscode" / "tasks.json"
 PYTEST_ISSUE_TEMPLATE_PATH = ROOT / ".github" / "ISSUE_TEMPLATE" / "pytest_request.yml"

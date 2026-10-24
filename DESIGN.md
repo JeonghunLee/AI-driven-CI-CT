@@ -34,8 +34,8 @@ VS Code
 │   ├── Current Python Debug
 │   └── Current pytest Debug
 ├── Testing
-│   ├── test_envs/tests/pytest
-│   └── test_envs/tests/unittest
+│   ├── test_programs/pytest
+│   └── test_programs/unittest
 └── Tasks
     ├── Setup / Check
     ├── Foreground Ollama Server
@@ -198,8 +198,8 @@ Source: `.vscode/settings.json`
 |---|---|
 | Interpreter | `${workspaceFolder}/.venv` |
 | Adapter | pytest |
-| pytest path 1 | `test_envs/tests/pytest` |
-| pytest path 2 | `test_envs/tests/unittest` |
+| pytest path 1 | `test_programs/pytest` |
+| pytest path 2 | `test_programs/unittest` |
 | unittest implementation | Standard `unittest.TestCase` |
 | unittest execution | VS Code Testing / pytest |
 | VS Code pytest cache | `-p no:cacheprovider` |
@@ -207,9 +207,9 @@ Source: `.vscode/settings.json`
 ```text
 VS Code Testing
 └── pytest adapter
-    ├── test_envs/tests/pytest
+    ├── test_programs/pytest
     │   └── Integration / Functional / Hardware CT
-    └── test_envs/tests/unittest
+    └── test_programs/unittest
         └── Standard unittest.TestCase
 ```
 
@@ -259,7 +259,7 @@ Source: `.vscode/tasks.json`
 | Test case registration | Value |
 |---|---|
 | Source | `@pytest.mark.ct` |
-| Generated registry | `test_envs/tests/pytest/test_cases/test_catalog.json` |
+| Generated registry | `test_programs/pytest/test_cases/test_catalog.json` |
 | Generator | `python -m test_envs.tools.test_catalog` |
 | Generated fields | TEST ID, category, Fixture ID, default Fixture mode, prompt, source path |
 | Static consumers | VS Code Task picker, Pytest Issue Form, GitHub workflow dispatch |
@@ -274,8 +274,8 @@ Source: `.vscode/tasks.json`
 
 | Tool implementation | Path | IDs |
 |---|---|---|
-| Equipment | `test_envs/tests/pytest/test_equipments/` | `fpga`, `saleae`, `digilent` |
-| Interface | `test_envs/tests/pytest/test_interfaces/` | `uart`, `usb`, `jtag`, `network` |
+| Equipment | `test_programs/pytest/test_equipments/` | `fpga`, `saleae`, `digilent` |
+| Interface | `test_programs/pytest/test_interfaces/` | `uart`, `usb`, `jtag`, `network` |
 
 | Mode | Tool path | Result field |
 |---|---|---|
@@ -288,7 +288,7 @@ Source: `.vscode/tasks.json`
 | `@pytest.mark.ct:fixture_mode` | `test_mode`, `interface_mode`, `equipment_mode` |
 
 ```text
-test_envs/tests/
+test_programs/
 ├── pytest/
 │   ├── test_cases/
 │   │   ├── test_fixture_001_uart_timing.py
@@ -323,12 +323,12 @@ test_envs/tests/
 
 | Directory | Scope |
 |---|---|
-| `test_envs/tests/pytest` | Integration, functional, hardware, interface, regression |
-| `test_envs/tests/unittest/ct_framework/python` | CT framework unit tests |
-| `test_envs/tests/unittest/python` | Product Python unit-test extension |
-| `test_envs/tests/unittest/c_cpp` | C/C++ unit-test extension |
-| `test_envs/tests/unittest/firmware` | Firmware unit-test extension |
-| `test_envs/tests/unittest/common` | Shared unit-test assets |
+| `test_programs/pytest` | Integration, functional, hardware, interface, regression |
+| `test_programs/unittest/ct_framework/python` | CT framework unit tests |
+| `test_programs/unittest/python` | Product Python unit-test extension |
+| `test_programs/unittest/c_cpp` | C/C++ unit-test extension |
+| `test_programs/unittest/firmware` | Firmware unit-test extension |
+| `test_programs/unittest/common` | Shared unit-test assets |
 
 ### 6.2 Fixture-to-Test Mapping
 
@@ -373,7 +373,7 @@ execute()
 
 | Identifier | Scope | Definition | Purpose | Format | Example |
 |---|---|---|---|---|---|
-| TEST ID | pytest only | `test_envs/tests/pytest/test_cases` definition | Test case identification | `CT-<TARGET>-<NNN>` | `CT-NETWORK-001` |
+| TEST ID | pytest only | `test_programs/pytest/test_cases` definition | Test case identification | `CT-<TARGET>-<NNN>` | `CT-NETWORK-001` |
 | Execution ID | pytest, unittest | Execution result generation | Result delimiter | `YYYYMMDD_HHMMSS_ffffff` | `20260819_094832_960333` |
 
 | Runner | Primary key | TEST ID |
@@ -934,8 +934,8 @@ Tasks: Environment Setup
               │
               ▼
 VS Code Testing
-├── test_envs/tests/pytest
-└── test_envs/tests/unittest
+├── test_programs/pytest
+└── test_programs/unittest
               │
               ▼
 Result + Log + Measurement + Warning

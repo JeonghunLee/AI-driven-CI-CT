@@ -6,7 +6,7 @@ pytest-cache-files-*/
 htmlcov/
 .venv/
 site/
-test_envs/tests/.tmp/
+test_programs/.tmp/
 test_reports/results/pytest/test_cases/*
 !test_reports/results/pytest/test_cases/.gitkeep
 test_reports/results/unittest/*

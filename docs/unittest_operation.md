@@ -20,7 +20,7 @@ Framework structure and result contracts are documented in [Unittest Framework](
 | Primary identifier | Execution ID |
 | TEST ID and Fixture ID | Not used |
 | Mock/HIL mode | Not used |
-| Result capture | `test_envs/tests/unittest/conftest.py` |
+| Result capture | `test_programs/unittest/conftest.py` |
 | Local LLM | Not used |
 | Coverage | `pytest-cov` or VS Code Testing Coverage |
 
@@ -46,7 +46,7 @@ Write Result JSON and Result Log
 
 | Step | Operation |
 |---:|---|
-| 1 | The pytest adapter collects tests under `test_envs/tests/unittest` |
+| 1 | The pytest adapter collects tests under `test_programs/unittest` |
 | 2 | The result hook observes setup, call, and teardown reports |
 | 3 | Each function becomes `PASS`, `FAIL`, `ERROR`, or `SKIP` |
 | 4 | `pytest_sessionfinish` aggregates function results into one execution |
@@ -67,7 +67,7 @@ Run the complete Unittest area:
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_envs/tests/unittest
+.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_programs/unittest
 ```
 
 <br/>
@@ -77,7 +77,7 @@ Run one test file:
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_envs/tests/unittest/ct_framework/python/test_configuration.py
+.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_programs/unittest/ct_framework/python/test_configuration.py
 ```
 
 <br/>
@@ -95,7 +95,7 @@ Run Unittest and print missing Python lines:
 <br/>
 
 ```powershell
-.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_envs/tests/unittest --cov=test_envs --cov-report=term-missing
+.\.venv\Scripts\python.exe -m pytest -p no:cacheprovider test_programs/unittest --cov=test_envs --cov-report=term-missing
 ```
 
 <br/>

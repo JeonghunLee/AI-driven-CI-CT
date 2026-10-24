@@ -120,10 +120,10 @@ def request_configuration(values: dict[str, str]) -> dict[str, str]:
             raise ValueError("GitHub-hosted Runner does not support Pytest HIL; select Self-hosted Runner")
     unittest_target = _first_line(
         values.get("Unittest Target", values.get("unittest_target", "")),
-        "test_envs/tests/unittest",
+        "test_programs/unittest",
     )
     if unittest_target.upper() == "N/A":
-        unittest_target = "test_envs/tests/unittest"
+        unittest_target = "test_programs/unittest"
     return {
         "test_type": test_type,
         "test_id": test_id,
