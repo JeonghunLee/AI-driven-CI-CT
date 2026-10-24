@@ -9,10 +9,10 @@
 <link href="local_llm_environment.html" rel="prev"/>
 <link href="pytest_framework.html" rel="next"/>
 <link href="imgs/logo.jpg" rel="icon"/>
-<meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.8.0" name="generator"/>
 <title>Setup MCP - AI-driven CI/CT</title>
-<link href="assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
-<link href="assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<link href="assets/stylesheets/main.57a0d79d.min.css" rel="stylesheet"/>
+<link href="assets/stylesheets/palette.fb2fffe2.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/iframe-worker/shim"></script>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
@@ -204,7 +204,7 @@
 <span class="md-ellipsis">
     
   
-    Setup LLM
+    Setup Ollama LLM
   
 
     
@@ -689,7 +689,7 @@
     MARKDOWN -. pandoc .-&gt; PANDOC[test_reports/pandocs]
     SERVER --&gt; RESPONSE[Structured MCP Result]</code></pre>
 <p><br/></p>
-<p><code>markdown</code> generates the canonical Markdown report. <code>update_mkdocs</code> separately copies that generated Markdown into <code>docs/tests</code>. Pandoc DOCX uses <code>docx/reference.docx</code>.</p>
+<p><code>markdown</code> generates the canonical Markdown report. <code>update_mkdocs</code> separately copies that generated Markdown into <code>docs/tests</code>. Pandoc DOCX uses <code>docx/reference/reference.docx</code>.</p>
 <p>The MCP Pytest allowlist is loaded from <code>test_envs/tests/pytest/test_cases/test_catalog.json</code>. Adding a Python CT case therefore requires no MCP source-code edit; run <code>python -m test_envs.tools.test_catalog</code> to register it.</p>
 <p><br/></p>
 <p>Local MCP remains an independent external test-control path. GitHub Issue Forms do not select Local MCP; Issue automation belongs to GitHub-hosted or GitHub Self-hosted runners.</p>
@@ -722,7 +722,7 @@
 </main>
 <footer class="md-footer">
 <nav aria-label="하단/푸터" class="md-footer__inner md-grid">
-<a aria-label="이전: Setup LLM" class="md-footer__link md-footer__link--prev" href="local_llm_environment.html">
+<a aria-label="이전: Setup Ollama LLM" class="md-footer__link md-footer__link--prev" href="local_llm_environment.html">
 <div class="md-footer__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
 </div>
@@ -731,7 +731,7 @@
                 이전
               </span>
 <div class="md-ellipsis">
-                Setup LLM
+                Setup Ollama LLM
               </div>
 </div>
 </a>
@@ -771,8 +771,8 @@
 <div class="md-dialog__inner md-typeset"></div>
 </div>
 <div class="md-progress" data-md-component="progress" role="progressbar"></div>
-<script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["toc.follow", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.tooltips", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
-<script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+<script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["toc.follow", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.tooltips", "content.code.copy"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+<script src="assets/javascripts/bundle.c21346df.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 <script src="https://unpkg.com/mermaid@11.12.0/dist/mermaid.min.js"></script>
 <script src="javascripts/mermaid-init.js"></script>
