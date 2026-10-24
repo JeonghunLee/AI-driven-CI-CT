@@ -983,9 +983,9 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <p><br/></p>
 <h3 id="ai-agent-based-mcp-flow">AI Agent-based MCP flow</h3>
 <p><br/></p>
-<p>Codex can use the local <code>ai-driven-ci-ct</code> MCP server as a direct test-control interface. The agent first inspects the environment and allowlisted inventory, selects an approved test or scope, then receives the normalized result and generated report paths as structured tool output.</p>
+<p>Codex or an Ollama-powered AI Agent can use the local <code>ai-driven-ci-ct</code> MCP server as a direct test-control interface. The agent first inspects the environment and allowlisted inventory, selects an approved test or scope, then receives the normalized result and generated report paths as structured tool output. Ollama supplies the local model reasoning; the MCP server performs the allowlisted test execution.</p>
 <pre class="mermaid"><code>flowchart TD
-    AGENT[Codex AI Agent]
+    AGENT[Codex or Ollama AI Agent]
     ENV[get_test_envs]
     INVENTORY[get_test_list_pytest / get_test_list_unittest]
     SELECT[Select allowlisted TEST ID or Unittest scope]
@@ -1001,6 +1001,20 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 
     classDef safety fill:#fff3bf,stroke:#f08c00,stroke-width:2px,color:#5f3d00
     class SELECT safety</code></pre>
+<p><code>test_envs/configs/test_config.json</code> maps an AI Agent command to an allowlisted YAML rule under <code>test_envs/configs/test_rules/</code>. For example, <code>default</code>, <code>uart</code>, <code>usb</code>, <code>network</code>, and <code>all</code> select their registered rule; <code>selected</code> runs listed Pytest TEST IDs and Unittest scopes, while <code>all</code> runs the corresponding catalog or declared scope. Run <code>get_ollama_test_plan(command="usb")</code> to inspect a selection, then <code>run_ollama_test_workflow(command="usb")</code> to execute it.</p>
+<pre class="mermaid"><code>flowchart TD
+    CONFIG[test_config.json command map] --&gt; PLAN[test_rules/*.yaml]
+    PLAN --&gt; SELECT{1. Select test type and mode}
+    SELECT --&gt; PYTEST[Pytest: all or selected TEST IDs]
+    SELECT --&gt; UNITTEST[Unittest: all or selected scopes]
+    PYTEST --&gt; LOG[2. Test log and normalized result]
+    UNITTEST --&gt; LOG
+    LOG --&gt; MARKDOWN[Markdown report]
+    MARKDOWN --&gt; FORMAT{3. Pandoc output}
+    FORMAT --&gt; DOCX[DOCX]
+    FORMAT --&gt; HTML[HTML]
+    PYTEST --&gt; OLLAMA[Ollama result analysis]
+    OLLAMA --&gt; MARKDOWN</code></pre>
 <table>
 <thead>
 <tr>
@@ -1012,6 +1026,10 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 <tr>
 <td>Inspect readiness</td>
 <td>Reads OS, venv, Ollama, Pandoc, and permission status before execution</td>
+</tr>
+<tr>
+<td>Automate with Ollama</td>
+<td>An Ollama-powered agent can inspect the catalog, choose an approved test, call the MCP test tool, and review the structured result</td>
 </tr>
 <tr>
 <td>Choose a test</td>
@@ -1031,7 +1049,7 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </tr>
 </tbody>
 </table>
-<p>This is a local MCP path, separate from GitHub Issue and GitHub Actions execution.</p>
+<p>This is a local MCP path, separate from GitHub Issue and GitHub Actions execution. Ollama does not receive unrestricted shell access: test execution remains limited to the MCP server's cataloged Pytest TEST IDs and declared Unittest scopes.</p>
 <p><br/></p>
 <h3 id="github-actions-based-flow">GitHub Actions-based flow</h3>
 <p><br/></p>
@@ -1283,7 +1301,7 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 │   ├── reference/reference.docx
 │   └── setup_reference.json
 ├── test_envs/
-│   ├── configs/{config.json,check.json}
+│   ├── configs/{config_env.json,config_ollama.json,check_envs.json,check_ollama.json,test_config.json,test_rules/}
 │   ├── mcp_server/{__main__.py,server.py,runner.py}
 │   ├── test_pipeline/{environment_setup.py,pipeline.py}
 │   ├── tool_github/{issue_parser.py,github_reporter/}
@@ -1373,12 +1391,12 @@ then automatically update the analysis report in the <strong>MkDocs documentatio
 </thead>
 <tbody>
 <tr>
-<td>Project config</td>
-<td><code>test_envs/configs/config.json</code></td>
+<td>Project configuration</td>
+<td><code>test_envs/configs/config_env.json</code>, <code>test_envs/configs/config_ollama.json</code></td>
 </tr>
 <tr>
-<td>Environment check</td>
-<td><code>test_envs/configs/check.json</code></td>
+<td>Environment checks</td>
+<td><code>test_envs/configs/check_envs.json</code>, <code>test_envs/configs/check_ollama.json</code></td>
 </tr>
 <tr>
 <td>pytest</td>
@@ -1562,7 +1580,7 @@ Pytest Markdown + MkDocs
 </tr>
 <tr>
 <td>Configuration</td>
-<td><code>test_envs/configs/config.json → ollama</code></td>
+<td><code>test_envs/configs/config_ollama.json</code></td>
 </tr>
 <tr>
 <td>Analysis payload</td>

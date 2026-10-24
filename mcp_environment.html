@@ -619,6 +619,14 @@
 <td>Runs <code>run_test_pytest</code> and <code>run_test_unittest</code> sequentially</td>
 </tr>
 <tr>
+<td><code>get_ollama_test_plan</code></td>
+<td>Reads and validates the command-selected YAML rule registered in <code>test_config.json</code> without executing it</td>
+</tr>
+<tr>
+<td><code>run_ollama_test_workflow</code></td>
+<td>Runs the command-selected YAML rule's allowlisted Pytest and Unittest selections, then generates Markdown and optional DOCX/HTML reports</td>
+</tr>
+<tr>
 <td><code>update_latest_result</code></td>
 <td>Reads the latest normalized result and log and updates Markdown or Pandoc DOCX/HTML outputs</td>
 </tr>
@@ -648,7 +656,8 @@
 <span class="w">      </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">"TEST_NAME"</span><span class="p">:</span><span class="w"> </span><span class="s2">"local_01"</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">"PYTEST_HIL_ALLOW"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">"MKDOC_UPDATE"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span>
+<span class="w">        </span><span class="nt">"MKDOC_UPDATE"</span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"OLLAMA_TEST_CONFIG"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${workspaceFolder}/test_envs/configs/test_config.json"</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
@@ -662,6 +671,7 @@
 <p>Any MCP host that supports <code>stdio</code> can use the same Python command and repository working directory. Standard output is reserved for MCP protocol messages; test process output is captured and returned in the tool result.</p>
 <p><br/></p>
 <p>Set a unique <code>TEST_NAME</code> such as <code>local_01</code>, <code>local_02</code>, or <code>hil_lab_01</code> for each installed test server. Results created through this server record <code>test_request</code> as <code>mcp</code>.</p>
+<p><code>OLLAMA_TEST_CONFIG</code> selects <code>test_config.json</code>, which maps commands such as <code>default</code>, <code>all</code>, <code>uart</code>, <code>usb</code>, and <code>network</code> to YAML files under <code>test_rules/</code>. An AI Agent passes the command to <code>get_ollama_test_plan</code> or <code>run_ollama_test_workflow</code>; the MCP server rejects unregistered commands and any YAML target outside <code>test_rules/</code>.</p>
 <p><br/></p>
 <h2 id="connection-test">Connection Test</h2>
 <p><br/></p>

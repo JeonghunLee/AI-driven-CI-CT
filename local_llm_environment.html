@@ -833,11 +833,11 @@
 </tr>
 <tr>
 <td>Configuration</td>
-<td><code>test_envs/configs/config.json</code> → <code>ollama</code></td>
+<td><code>test_envs/configs/config_ollama.json</code></td>
 </tr>
 <tr>
 <td>Runtime status</td>
-<td><code>test_envs/configs/check.json</code> → <code>ollama</code></td>
+<td><code>test_envs/configs/check_ollama.json</code> → <code>ollama</code></td>
 </tr>
 <tr>
 <td>Analysis log</td>
@@ -917,7 +917,7 @@ Write Local LLM log and Pytest Markdown report
 <p><br/></p>
 <h3 id="ollama-configuration">Ollama Configuration</h3>
 <p><br/></p>
-<p>Source: <code>test_envs/configs/config.json</code></p>
+<p>Source: <code>test_envs/configs/config_ollama.json</code></p>
 <p><br/></p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"ollama"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -965,7 +965,7 @@ Write Local LLM log and Pytest Markdown report
 <p><br/></p>
 <h3 id="ollama-status">Ollama Status</h3>
 <p><br/></p>
-<p>Source: <code>test_envs/configs/check.json</code></p>
+<p>Source: <code>test_envs/configs/check_ollama.json</code></p>
 <p><br/></p>
 <table>
 <thead>
@@ -1010,7 +1010,7 @@ Write Local LLM log and Pytest Markdown report
 </tbody>
 </table>
 <p><br/></p>
-<p>Refresh this generated status instead of manually editing <code>check.json</code>.</p>
+<p>Refresh this generated status instead of manually editing <code>check_ollama.json</code>.</p>
 <p><br/></p>
 <h2 id="runtime-inspection">Runtime Inspection</h2>
 <p><br/></p>
@@ -1044,8 +1044,8 @@ Write Local LLM log and Pytest Markdown report
 <td>Installs or detects Ollama and pulls the selected model</td>
 </tr>
 <tr>
-<td><code>CHECK 1: Refresh Environment Check File</code></td>
-<td>Refreshes Python and Ollama status in <code>check.json</code></td>
+<td><code>CHECK 1: Refresh Environment Check Files</code></td>
+<td>Refreshes Python status in <code>check_envs.json</code> and Ollama status in <code>check_ollama.json</code></td>
 </tr>
 <tr>
 <td><code>CHECK 3: Run Ollama Server (Foreground)</code></td>
@@ -1104,7 +1104,7 @@ Write Local LLM log and Pytest Markdown report
 <td>Setup and analysis tools run with project Python</td>
 </tr>
 <tr>
-<td>Configure the model in <code>config.json</code></td>
+<td>Configure the model in <code>config_ollama.json</code></td>
 <td>Model selection is project-owned</td>
 </tr>
 <tr>
@@ -1267,7 +1267,7 @@ Write Local LLM log and Pytest Markdown report
 <p><br/></p>
 <h3 id="installation-flow">Installation Flow</h3>
 <p><br/></p>
-<div class="highlight"><pre><span></span><code>Resolve config.json OS and Ollama settings
+<div class="highlight"><pre><span></span><code>Resolve config_env.json OS settings and config_ollama.json Ollama settings
                 ↓
 Verify configured OS matches the host OS
                 ↓
@@ -1281,15 +1281,17 @@ Read /api/tags model inventory
                 ↓
 Pull the configured selected_model through /api/pull
                 ↓
-Refresh check.json
+Refresh check_envs.json and check_ollama.json
 </code></pre></div>
 <p><br/></p>
 <h2 id="full-local-llm-structure">Full Local LLM Structure</h2>
 <p><br/></p>
 <div class="highlight"><pre><span></span><code>test_envs/
 ├── configs/
-│   ├── config.json                 # Endpoint, model, prompt, timeout, and retry
-│   └── check.json                  # Executable, server, and model inventory status
+│   ├── config_env.json             # Selected OS and timezone
+│   ├── config_ollama.json          # Endpoint, model, prompt, timeout, and retry
+│   ├── check_envs.json             # OS and Python runtime status
+│   └── check_ollama.json           # Ollama executable, server, and model inventory status
 ├── test_pipeline/
 │   └── environment_setup.py        # Install Ollama, run server, and pull model
 └── tools/

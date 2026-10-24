@@ -1062,7 +1062,7 @@ Connected VS Code feature: <a href="#run-tasks">Run Tasks</a>
         // This section contains tasks for checking the environment and running the Ollama server.
         // Each task is labeled with a "CHECK" prefix for easy identification.
         {
-            "label": "CHECK 1: Refresh Environment Check File",
+            "label": "CHECK 1: Refresh Environment Check Files",
             "type": "process",
             "command": "${config:python.defaultInterpreterPath}",
             "args": [
@@ -1346,13 +1346,13 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
       "justMyCode": true
     },
     {
-      "name": "CHECK 1: Refresh Environment Check File",
+      "name": "CHECK 1: Refresh Environment Check Files",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
       "module": "test_envs.tools.configuration",
       "args": ["config"],
-      "preLaunchTask": "CHECK 1: Refresh Environment Check File",
+      "preLaunchTask": "CHECK 1: Refresh Environment Check Files",
       "console": "internalConsole",
       "internalConsoleOptions": "neverOpen",
       "cwd": "${workspaceFolder}",
@@ -1461,10 +1461,10 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <td><a href="#tasks-setup-and-check">Tasks-Setup and Check</a></td>
 </tr>
 <tr>
-<td><code>CHECK 1: Refresh Environment Check File</code></td>
+<td><code>CHECK 1: Refresh Environment Check Files</code></td>
 <td>Project Python</td>
 <td>Same label</td>
-<td>Refreshes <code>check.json</code>, then displays the resulting configuration</td>
+<td>Refreshes <code>check_envs.json</code> and <code>check_ollama.json</code>, then displays the resulting configuration</td>
 <td><a href="#tasks-setup-and-check">Tasks-Setup and Check</a></td>
 </tr>
 </tbody>
@@ -1597,10 +1597,10 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 <td>Reads Python CT markers, generates <code>test_catalog.json</code>, and synchronizes every static TEST ID picker</td>
 </tr>
 <tr>
-<td><code>CHECK 1: Refresh Environment Check File</code></td>
+<td><code>CHECK 1: Refresh Environment Check Files</code></td>
 <td><code>test_envs.tools.configuration</code></td>
 <td><code>check</code></td>
-<td>Regenerates <code>check.json</code></td>
+<td>Regenerates <code>check_envs.json</code> and <code>check_ollama.json</code></td>
 </tr>
 <tr>
 <td><code>CHECK 2: Show Environment Configuration</code></td>
@@ -1750,7 +1750,7 @@ Connected VS Code feature: <a href="#run-and-debug">Run and Debug</a>
 </tr>
 </tbody>
 </table>
-<p>OS selection is not a Task or launch input. It is managed by <code>test_envs/configs/config.json</code> through the Setup 1 command.</p>
+<p>OS selection is not a Task or launch input. It is managed by <code>test_envs/configs/config_env.json</code> through the Setup 1 command.</p>
 <p>Run Setup 4 after adding or changing a <code>@pytest.mark.ct</code> test. VS Code must reload <code>.vscode/tasks.json</code> before a newly generated picker option appears.</p>
 <p><br/></p>
 <h2 id="testing">Testing</h2>

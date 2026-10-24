@@ -245,19 +245,19 @@
 <nav aria-label="Configuration and Status" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#configjson">
+<a class="md-nav__link" href="#config_envjson-and-config_ollamajson">
 <span class="md-ellipsis">
       
-        config.json
+        config_env.json and config_ollama.json
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#checkjson">
+<a class="md-nav__link" href="#check_envsjson">
 <span class="md-ellipsis">
       
-        check.json
+        check_envs.json
       
     </span>
 </a>
@@ -585,19 +585,19 @@
 <nav aria-label="Configuration and Status" class="md-nav">
 <ul class="md-nav__list">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#configjson">
+<a class="md-nav__link" href="#config_envjson-and-config_ollamajson">
 <span class="md-ellipsis">
       
-        config.json
+        config_env.json and config_ollama.json
       
     </span>
 </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#checkjson">
+<a class="md-nav__link" href="#check_envsjson">
 <span class="md-ellipsis">
       
-        check.json
+        check_envs.json
       
     </span>
 </a>
@@ -851,9 +851,9 @@
 <p><br/></p>
 <h2 id="configuration-and-status">Configuration and Status</h2>
 <p><br/></p>
-<h3 id="configjson">config.json</h3>
+<h3 id="config_envjson-and-config_ollamajson">config_env.json and config_ollama.json</h3>
 <p><br/></p>
-<p><code>test_envs/configs/config.json</code> stores user-selected project configuration.</p>
+<p><code>test_envs/configs/config_env.json</code> stores the selected OS and timezone. <code>test_envs/configs/config_ollama.json</code> stores the Ollama endpoint, model, prompt, timeout, and retry configuration.</p>
 <p><br/></p>
 <table>
 <thead>
@@ -882,9 +882,9 @@
 </tbody>
 </table>
 <p><br/></p>
-<h3 id="checkjson">check.json</h3>
+<h3 id="check_envsjson">check_envs.json</h3>
 <p><br/></p>
-<p><code>test_envs/configs/check.json</code> records detected runtime status.</p>
+<p><code>test_envs/configs/check_envs.json</code> records detected OS and Python runtime status. Ollama status is written separately to <code>test_envs/configs/check_ollama.json</code>.</p>
 <p><br/></p>
 <table>
 <thead>
@@ -913,7 +913,7 @@
 </tbody>
 </table>
 <p><br/></p>
-<p><code>check.json</code> is generated data. Change <code>config.json</code> and rerun the check command instead of manually editing <code>check.json</code>.</p>
+<p>Both check files are generated data. Change <code>config_env.json</code> or <code>config_ollama.json</code> and rerun the check command instead of manually editing them.</p>
 <p><br/></p>
 <h2 id="usage-rules">Usage Rules</h2>
 <p><br/></p>
@@ -942,8 +942,8 @@
 <td>It is reproducible from <code>requirements.txt</code></td>
 </tr>
 <tr>
-<td>Do not manually edit <code>check.json</code></td>
-<td>It is regenerated from detected runtime state</td>
+<td>Do not manually edit <code>check_envs.json</code> or <code>check_ollama.json</code></td>
+<td>They are regenerated from detected runtime state</td>
 </tr>
 </tbody>
 </table>
@@ -1079,7 +1079,7 @@ Upgrade pip
         ↓
 Install requirements.txt
         ↓
-Refresh test_envs/configs/check.json
+Refresh test_envs/configs/check_envs.json and test_envs/configs/check_ollama.json
 </code></pre></div>
 <p><br/></p>
 <p>An existing <code>.venv</code> is reused. The command still installs <code>requirements.txt</code> again, so it can be rerun after dependency changes.</p>
@@ -1131,8 +1131,10 @@ Refresh test_envs/configs/check.json
 <p><br/></p>
 <div class="highlight"><pre><span></span><code>test_envs/
 ├── configs/
-│   ├── config.json                 # Selected OS, timezone, and Ollama settings
-│   └── check.json                  # Detected environment status
+│   ├── config_env.json             # Selected OS and timezone
+│   ├── config_ollama.json          # Ollama settings
+│   ├── check_envs.json             # Detected OS and Python status
+│   └── check_ollama.json           # Detected Ollama status
 ├── tests/
 │   ├── fixtures/
 │   │   └── junit.xml               # Shared result fixture
